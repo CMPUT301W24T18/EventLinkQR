@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">EventLinkQR</string>
+
+    <string name="all_string">All</string>
+    <string name="Checked_in_string">Checked In</string>
+    <string name="Not_checked_in_string">Not Checked In</string>
+    <string name="Attendees_string">Attendees</string>
+    <string name="search_attendees_string">Search attendees</string>
 </resources>
