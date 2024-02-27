@@ -6,4 +6,9 @@
     <string name="Not_checked_in_string">Not Checked In</string>
     <string name="Attendees_string">Attendees</string>
     <string name="search_attendees_string">Search attendees</string>
+    <string name="My_events_string">My Events</string>
+    <string name="Create_event_string">Create event</string>
+    <string name="Home_string">Home</string>
+    <string name="Scan_string">Scan</string>
+    <string name="Profile_string">Profile</string>
 </resources>

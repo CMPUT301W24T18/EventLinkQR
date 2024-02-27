@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".OrganizerMainActivity">
+
+
+    <TextView
+        android:id="@+id/my_event_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/My_events_string"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/event_list_id"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/create_event_button_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:text="@string/Create_event_string"
+        android:textColor="@color/black" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/org_home_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:text="@string/Home_string"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:icon="@drawable/ic_home"
+            app:iconGravity="top"
+            app:iconTint="@color/black" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/org_scan_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:text="@string/Scan_string"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:icon="@drawable/ic_camera"
+            app:iconGravity="top"
+            app:iconTint="@color/black" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/org_profile_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:text="@string/Profile_string"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:icon="@drawable/ic_profile"
+            app:iconGravity="top"
+            app:iconTint="@color/black" />
+    </RelativeLayout>
+
+</LinearLayout>
