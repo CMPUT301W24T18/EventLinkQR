@@ -12,6 +12,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventLinkQR"
         tools:targetApi="31">
+
+        <!--
+            Note: You must put our maps API key in your local.properties file. For security,
+            this file is NOT tracked on GitHub, to get this API key check the discord or ask
+            Lynden.
+
+            In local.properties, add the line:
+            MAPS_API_KEY=AIz...
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_maps">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
