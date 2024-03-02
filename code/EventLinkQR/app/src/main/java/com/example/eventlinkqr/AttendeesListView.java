@@ -33,7 +33,7 @@ public class AttendeesListView extends AppCompatActivity {
 
         attendeesViewPager.setAdapter(attendeesViewAdapter);
 
-        // Sets the action when clicking a tab
+        /** Sets the action when clicking a tab*/
         attendeesTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
