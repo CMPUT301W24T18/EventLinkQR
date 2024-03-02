@@ -28,7 +28,7 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
     private List<LatLng> locations = generatePoints(new LatLng(53.5461, -113.4938), 30);
 
     /**
-     * This is just chatGPT code to generate random points until Firebase is setup
+     * OpenAI, 2024, ChatGPT, LatLng random point generator within a given radius
      * @param center
      * @param numberOfPoints
      * @return List<LatLng> randomPoints
@@ -72,10 +72,9 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
 
 
     /**
-     * Much of this came from the example on
-     * developers.google.com/maps/documentation/android-sdk/start
-     *
-     * @param googleMap
+     * Configures the Google Map camera bounds based on a list of locations.
+     * This implementation is adapted from the Google Maps Android API documentation.
+     * Source: https://developers.google.com/maps/documentation/android-sdk/start
      */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
