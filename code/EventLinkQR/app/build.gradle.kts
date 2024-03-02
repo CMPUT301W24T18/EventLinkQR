@@ -45,7 +45,6 @@ dependencies {
 
     testImplementation("org.mockito:mockito-core:5.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
-    testImplementation("org.robolectric:robolectric:4.7.3")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
 
