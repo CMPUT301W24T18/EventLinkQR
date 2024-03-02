@@ -5,29 +5,34 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.eventlinkqr.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class OrganizerEventStatsActivity extends AppCompatActivity implements OnMapReadyCallback {
+/** This activity is the page where organizers can track event statistics.
+ * In the current state it is very barebones and serves as a home for our map fragment.
+ * */
+public class OrganizerEventStats extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap myMap;
 
     //This is a hardcoded location set around edmonton. Later we'll pull this from firebase
     private List<LatLng> locations = generatePoints(new LatLng(53.5461, -113.4938), 30);
 
-    //This is just chatGPT code to generate random points until Firebase is setup
+    /**
+     * This is just chatGPT code to generate random points until Firebase is setup
+     * @param center
+     * @param numberOfPoints
+     * @return List<LatLng> randomPoints
+     */
     @NonNull
     private List<LatLng> generatePoints(LatLng center, int numberOfPoints) {
         List<LatLng> randomPoints = new ArrayList<>();
@@ -66,6 +71,12 @@ public class OrganizerEventStatsActivity extends AppCompatActivity implements On
     }
 
 
+    /**
+     * Much of this came from the example on
+     * developers.google.com/maps/documentation/android-sdk/start
+     *
+     * @param googleMap
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         myMap = googleMap;
@@ -81,11 +92,19 @@ public class OrganizerEventStatsActivity extends AppCompatActivity implements On
             builder.include(location);
         }
 
-
         LatLngBounds bounds = builder.build();
 
         //This padding helps ensure points are visually inside of the map, not just on the boarder
         int padding = 200;
-        myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPreviewContainer);
+        if (mapFragment != null && mapFragment.getView() != null) {
+            mapFragment.getView().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+                // Now that the layout has occurred, move the camera
+                if (myMap != null) {
+                    myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+                }
+            });
+        }
     }
+
 }
