@@ -11,4 +11,14 @@
     <string name="Home_string">Home</string>
     <string name="Scan_string">Scan</string>
     <string name="Profile_string">Profile</string>
+    <string name="event_name_string">Event Name</string>
+    <string name="enter_string">Enter</string>
+    <string name="event_description_string">Description</string>
+    <string name="description_hint_string">Ex: topics, schedule, etc…</string>
+    <string name="location_hint_string">Ex: 123 Main st</string>
+
+    <string name="event_category_string">Category</string>
+    <string name="date_time_string">Date and Time</string>
+    <string name="event_location_string">Location</string>
+    <string name="allow_geo_string">Enable Geolocation Tracking</string>
 </resources>

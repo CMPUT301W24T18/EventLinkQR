@@ -7,12 +7,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
-// source
+
+/**
+ * Class that creates the organizer view and keep-s track of events
+ */
 //https://www.youtube.com/watch?v=LXl7D57fgOQ
 public class AttendeesListView extends AppCompatActivity {
 
+    /** the tab layout that will allow to navigate though  all three lists of attendees*/
     TabLayout attendeesTabLayout;
+
+    /** view pager that allows to swipe across the tabs*/
     ViewPager2 attendeesViewPager;
+
+    /** the adapter that allows listviews to be displayed with a tab layout*/
     AttendeesViewAdapter attendeesViewAdapter;
 
     @Override
@@ -25,6 +33,7 @@ public class AttendeesListView extends AppCompatActivity {
 
         attendeesViewPager.setAdapter(attendeesViewAdapter);
 
+        // Sets the action when clicking a tab
         attendeesTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

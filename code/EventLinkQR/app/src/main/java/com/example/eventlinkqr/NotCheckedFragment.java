@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * This class serves to display the list of attendees that signed up for the current event, but have not yet checked in
+ */
 public class NotCheckedFragment extends Fragment {
     ArrayAdapter<String> attendeesAdapter;
     ArrayList<String> dataList;

@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Fragment for the list of attendees that have checked in to the event
+ */
 public class CheckedAttendeesFragment extends Fragment {
 
     ArrayAdapter<String> attendeesAdapter;
