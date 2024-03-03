@@ -110,6 +110,11 @@ public class AttendeeProfileActivity extends AppCompatActivity {
             etPhoneNumber.setText(attendee.getPhone_number());
             etHomepage.setText(attendee.getHomepage());
         }
+        else{
+            etName.setText("attendee.getName()");
+            etPhoneNumber.setText("666");
+            etHomepage.setText("gdghdg");
+        }
     }
 
     private void updateAttendeeProfile(Attendee updatedAttendee) {

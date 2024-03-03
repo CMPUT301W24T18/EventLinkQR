@@ -50,8 +50,8 @@ public class AttendeeArrayAdapter {
     }
 
     public Attendee getAttendeeByUUID(String uuid) {
-        Log.d("AttendeeFound0", "No attendee found with UUID: ");
         for (int i = 0; i < getCount(); i++) {
+            Log.d("AttendeeFound0", "No attendee found with UUID: " + getItem(i).getName());
             Attendee attendee = getItem(i);
             Log.d("AttendeeFound1", "No attendee found with UUID: " + attendee.getName());
             if (attendee.getUuid().equals(uuid)) {

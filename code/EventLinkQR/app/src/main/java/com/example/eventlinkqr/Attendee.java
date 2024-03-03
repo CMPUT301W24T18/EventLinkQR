@@ -8,10 +8,6 @@ public class Attendee {
 
     private String name;
 
-    public String getUuid() {
-        return uuid;
-    }
-
     private String uuid;
 
     private String phone_number;
@@ -45,7 +41,9 @@ public class Attendee {
         this.homepage = homepage;
     }
 
-
+    public String getUuid() {
+        return uuid;
+    }
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
