@@ -21,4 +21,5 @@
     <string name="date_time_string">Date and Time</string>
     <string name="event_location_string">Location</string>
     <string name="allow_geo_string">Enable Geolocation Tracking</string>
+    <string name="details_string">Details</string>
 </resources>

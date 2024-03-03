@@ -5,12 +5,13 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".AttendeesListView">
+    tools:context=".OrgAttendeesPage">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/org_attendees_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationIcon="@android:drawable/ic_menu_close_clear_cancel">
+        app:navigationIcon="?attr/actionModeCloseDrawable">
 
         <TextView
             android:id="@+id/attendees_toolBar"
@@ -18,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text= "@string/Attendees_string"
+            android:text="@string/Attendees_string"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
