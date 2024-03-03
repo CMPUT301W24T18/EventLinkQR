@@ -54,9 +54,9 @@ public class QRCodeScanner {
      * @param barcodeText Text to be hashed
      * @return Hashed text in hex format
      */
-    private static String hashBarcodeText(String barcodeText) {
+    public static String hashBarcodeText(String barcodeText) {
         // See example in official docs: https://docs.oracle.com/javase/8/docs/api/java/security/MessageDigest.html
-        MessageDigest md = null;
+        MessageDigest md;
         try {
             md = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
