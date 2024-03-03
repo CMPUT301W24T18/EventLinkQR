@@ -94,12 +94,33 @@
         android:layout_below="@id/LocationPermission"
         android:layout_alignParentEnd="true" />
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="120dp"
+    <!-- Layout for Save and Back buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_below="@id/switchLocation"
-        android:layout_alignParentEnd="true"
-        android:text="Save" />
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Back" />
+
+        <Button
+            android:id="@+id/btnResetApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reset App Data"/>
+    </LinearLayout>
 
 </LinearLayout>

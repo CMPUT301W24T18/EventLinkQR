@@ -8,7 +8,13 @@ public class Attendee {
 
     private String name;
 
-    private int phone_number;
+    public String getUuid() {
+        return uuid;
+    }
+
+    private String uuid;
+
+    private String phone_number;
 
     private String homepage;
 
@@ -23,11 +29,11 @@ public class Attendee {
         this.name = name;
     }
 
-    public int getPhone_number() {
+    public String getPhone_number() {
         return phone_number;
     }
 
-    public void setPhone_number(int phone_number) {
+    public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
     }
 
@@ -39,12 +45,8 @@ public class Attendee {
         this.homepage = homepage;
     }
 
-//    public BufferedImage getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(BufferedImage image) {
-//        this.image = image;
-//    }
 
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 }
