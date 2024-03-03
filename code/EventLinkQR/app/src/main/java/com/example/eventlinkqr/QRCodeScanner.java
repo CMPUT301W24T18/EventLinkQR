@@ -2,10 +2,14 @@ package com.example.eventlinkqr;
 
 import android.content.Context;
 
+import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.function.Consumer;
 
 /** Encapsulate Google MLKit QR code scanning and create QR Code objects. There should only be one
@@ -33,9 +37,53 @@ public class QRCodeScanner {
         scanner.startScan()
                 .addOnSuccessListener(barcode -> {
                     String barcodeText = barcode.getRawValue();
+
+                    // If the scanned code is not in QR Code format, hash it
+                    if (barcodeText != null && barcode.getFormat() != Barcode.FORMAT_QR_CODE) {
+                        barcodeText = hashBarcodeText(barcodeText);
+                    }
+
                     QRCode code = new QRCode(barcodeText);
                     successCallback.accept(code);
                 })
                 .addOnFailureListener(failureCallback::accept);
+    }
+
+    /**
+     * Hash provided text using SHA-256 algorithm
+     * @param barcodeText Text to be hashed
+     * @return Hashed text in hex format
+     */
+    private static String hashBarcodeText(String barcodeText) {
+        // See example in official docs: https://docs.oracle.com/javase/8/docs/api/java/security/MessageDigest.html
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Get the hash
+        byte[] barcodeTextBytes = md.digest(barcodeText.getBytes(StandardCharsets.UTF_8));
+
+        return byteArrayToHex(barcodeTextBytes);
+    }
+
+    /**
+     * OpenAI, 2024, ChatGPT, Byte array to hex string
+     * Converts a byte array to a hexadecimal string.
+     * @param byteArray The byte array to be converted.
+     * @return A string representing the hexadecimal representation of the byte array.
+     */
+    private static String byteArrayToHex(byte[] byteArray) {
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : byteArray) {
+            String hex = Integer.toHexString(0xFF & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 }
