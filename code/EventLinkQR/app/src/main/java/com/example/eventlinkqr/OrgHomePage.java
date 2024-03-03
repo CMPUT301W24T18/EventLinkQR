@@ -18,8 +18,8 @@ import java.util.Arrays;
 public class OrgHomePage extends Fragment {
 
     ListView eventList;
-    ArrayAdapter<String> eventsAdapter;
-    ArrayList<String> dataList;
+    EventArrayAdapter eventsAdapter;
+    ArrayList<Event> dataList;
     Button createEventButton;
 
 
@@ -38,8 +38,8 @@ public class OrgHomePage extends Fragment {
         String [] events = {"event1", "event2", "event3", "event4", "event5"};
 
         dataList = new ArrayList<>();
-        dataList.addAll(Arrays.asList(events));
-        eventsAdapter = new ArrayAdapter<>( view.getContext(), R.layout.org_events_content, dataList);
+        //dataList.addAll(Arrays.asList(events));
+        eventsAdapter = new EventArrayAdapter(view.getContext(), dataList);
 
         eventList.setAdapter(eventsAdapter);
 
