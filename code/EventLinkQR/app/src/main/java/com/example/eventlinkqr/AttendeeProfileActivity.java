@@ -14,135 +14,143 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.UUID;
 
+/**
+ * Activity for managing an attendee's profile.
+ */
 public class AttendeeProfileActivity extends AppCompatActivity {
+    // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
     private Button btnSave, btnBack;
-    private Switch switchLocation; // Assuming you will use this for location permission
-    private String uuid;
-    private AttendeeArrayAdapter attendeeArrayAdapter;
+    private Switch switchLocation; // Used for location permission
+    private String uuid; // Unique identifier for the attendee
+    private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.attendee);
+        setContentView(R.layout.attendee); // Set the content view
 
+        // Initialize UI components
         etName = findViewById(R.id.etFullName);
         etPhoneNumber = findViewById(R.id.phoneNumberEdit);
         etHomepage = findViewById(R.id.homepageEdit);
         btnSave = findViewById(R.id.btnSave);
         btnBack = findViewById(R.id.btnBack);
-        switchLocation = findViewById(R.id.switchLocation); // Your switch for location
+        switchLocation = findViewById(R.id.switchLocation);
 
-        attendeeArrayAdapter = AttendeeArrayAdapter.getInstance();
+        attendeeArrayAdapter = AttendeeArrayAdapter.getInstance(); // Get the singleton instance of the adapter
 
-        checkUUIDAndLoadProfile();
+        checkUUIDAndLoadProfile(); // Check UUID and load profile data
 
-        btnSave.setOnClickListener(view -> {
-            saveProfile();
-        });
+        btnSave.setOnClickListener(view -> saveProfile()); // Save profile on button click
+        btnBack.setOnClickListener(view -> finish()); // Finish activity on back button click
 
-        btnBack.setOnClickListener(view -> {
-            finish();
-        });
-
+        // Reset App Data button
         Button btnResetApp = findViewById(R.id.btnResetApp);
-        btnResetApp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetAppData();
-            }
-        });
-
+        btnResetApp.setOnClickListener(view -> resetAppData()); // Reset app data on button click
     }
 
+    /**
+     * Checks UUID and loads profile data.
+     */
     private void checkUUIDAndLoadProfile() {
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         Intent intent = getIntent();
-        uuid = intent.getStringExtra("UUID");
-        Log.d("UUIDAdapter1", "Attendee List: " + uuid);
+        uuid = intent.getStringExtra("UUID"); // Get UUID from intent
 
         if (uuid == null) {
             // New profile: generate a new UUID
             uuid = UUID.randomUUID().toString();
-            Log.d("UUIDAdapter2", "Attendee List: " + uuid);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("UUID", uuid);
             editor.apply();
         } else {
             // Existing profile: load it
-            Log.d("UUIDAdapter3", "Attendee List: " + uuid);
             loadProfile(uuid);
         }
     }
 
+    /**
+     * Saves the profile data entered by the user.
+     */
     private void saveProfile() {
+        // Extract data from UI components
         String name = etName.getText().toString();
         String phoneNumber = etPhoneNumber.getText().toString();
         String homepage = etHomepage.getText().toString();
-        boolean locationPermission = switchLocation.isChecked();
 
+        // Create a new Attendee object and set its properties
         Attendee attendee = new Attendee();
         attendee.setName(name);
         attendee.setPhone_number(phoneNumber);
         attendee.setHomepage(homepage);
-        attendee.setUuid(uuid); // Set UUID for this attendee
+        attendee.setUuid(uuid);
 
         if (!attendeeArrayAdapter.containsUUID(uuid)) {
+            // Add new attendee to the adapter
             attendeeArrayAdapter.addAttendee(attendee);
             // Redirect to AttendeeMainActivity after first-time profile creation
-            Intent intent = new Intent(AttendeeProfileActivity.this, AttendeeMainActivity.class);
-            startActivity(intent);
-            Toast.makeText(this, "Profile Saved", Toast.LENGTH_SHORT).show();
-            finish(); // Close current activity
+            redirectToMainActivity();
         } else {
-            // Update existing profile
+            // Update existing attendee profile
             updateAttendeeProfile(attendee);
-            Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
-            // Optionally, show a message or do something else but don't redirect
         }
     }
 
+    /**
+     * Redirects to AttendeeMainActivity.
+     */
+    private void redirectToMainActivity() {
+        Intent intent = new Intent(AttendeeProfileActivity.this, AttendeeMainActivity.class);
+        startActivity(intent);
+        Toast.makeText(this, "Profile Saved", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    /**
+     * Loads the profile data for a given UUID.
+     * @param uuid The UUID of the attendee.
+     */
     private void loadProfile(String uuid) {
         Attendee attendee = attendeeArrayAdapter.getAttendeeByUUID(uuid);
-//        Log.d("AttendeeExist", "Attendee List: " + attendee.getName());
         if (attendee != null) {
+            // Set attendee data to UI components
             etName.setText(attendee.getName());
             etPhoneNumber.setText(attendee.getPhone_number());
             etHomepage.setText(attendee.getHomepage());
         }
-        else{
-            etName.setText("attendee.getName()");
-            etPhoneNumber.setText("666");
-            etHomepage.setText("gdghdg");
-        }
     }
 
+    /**
+     * Updates the profile of an existing attendee.
+     * @param updatedAttendee The attendee with updated information.
+     */
     private void updateAttendeeProfile(Attendee updatedAttendee) {
         for (int i = 0; i < attendeeArrayAdapter.getCount(); i++) {
             Attendee attendee = attendeeArrayAdapter.getItem(i);
             if (attendee.getUuid().equals(uuid)) {
+                // Update attendee data
                 attendee.setName(updatedAttendee.getName());
                 attendee.setPhone_number(updatedAttendee.getPhone_number());
                 attendee.setHomepage(updatedAttendee.getHomepage());
-
-                Log.d("AttendeeArrayAdapter", "Attendee List: " + attendee.getName());
-
-                // Handle location permission update as well
                 break;
             }
         }
+        Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Resets the app data, removing the UUID from SharedPreferences.
+     */
     public void resetAppData() {
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove("UUID"); // Clear only the UUID
         editor.apply();
 
+        // Redirect to LandingPage
         Intent intent = new Intent(this, LandingPage.class);
         startActivity(intent);
         finish();
     }
-
-
 }
