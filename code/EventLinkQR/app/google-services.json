@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "14173716344",
+    "project_id": "databaseeventlinkqr",
+    "storage_bucket": "databaseeventlinkqr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14173716344:android:e7fd2ef7f15bdea149d28d",
+        "android_client_info": {
+          "package_name": "com.example.eventlinkqr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwEIOACCgpnTqVxY6UFxXIYzCecgRr9SA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
