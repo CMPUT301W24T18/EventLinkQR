@@ -8,29 +8,22 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 /**
  * This class serves as a custom adapter for the tab layout on the attendees list page
  */
-public class AttendeesViewAdapter extends FragmentStateAdapter {
-    public AttendeesViewAdapter(@NonNull FragmentActivity fragmentactivity) {
-        super(fragmentactivity);
+public class AttendeesViewAdapter extends FragmentStateAdapter{
+
+    public AttendeesViewAdapter(FragmentActivity fragmentActivity) {
+        super(fragmentActivity);
     }
+
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-
-        // select the fragment to be displayed based on the selected tab
-        switch(position){
-            case 0:
-                return new AllAttendeesFragment();
-            case 1:
-                return new CheckedAttendeesFragment();
-            case 2:
-                return new NotCheckedFragment();
-            default:
-                return new AllAttendeesFragment();
-        }
+        // Create and return your fragment instance for each tab
+        return AttendeesTabFragment.newInstance(position);
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        // Return the number of tabs
+        return 3; // Three tabs in this example
     }
 }

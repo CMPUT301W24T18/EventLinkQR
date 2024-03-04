@@ -11,22 +11,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * custom adapter to display the desired info about the event on screen
+ */
 public class EventArrayAdapter extends ArrayAdapter<Event> {
+    private ArrayList<Event> events;
+    private Context context;
     public EventArrayAdapter(@NonNull Context context, ArrayList<Event> events) {
         super(context, 0, events);
+        this.events = events;
+        this.context = context;
     }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertview, @NonNull ViewGroup parent){
-        View view;
+
+        View view = convertview;
+
         if(convertview == null){
-            view = LayoutInflater.from (getContext()).inflate(R.layout.org_events_content, parent, false);
-        }else{
-            view = convertview;
+            view = LayoutInflater.from(context).inflate(R.layout.org_events_content, parent, false);
         }
 
-        Event event = getItem(position);
+        Event event = events.get(position);
 
         //Map all the TextViews
         TextView eventName = view.findViewById(R.id.event_title);
@@ -36,7 +45,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
 
         //Set the value of all the TextViews
         eventName.setText(event.getName());
-        eventDate.setText(event.getDate());
+        eventDate.setText(event.getDescription());
         return view;
     }
 }

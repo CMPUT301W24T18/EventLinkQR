@@ -1,6 +1,7 @@
 package com.example.eventlinkqr;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Singleton class to manage the Firebase Realtime Database instance.
@@ -10,14 +11,15 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class DatabaseManager {
     private static DatabaseManager instance; // Singleton instance of DatabaseManager
-    private final FirebaseDatabase database; // Instance of FirebaseDatabase
+    private final FirebaseFirestore database; // Instance of FirebaseDatabase
+
 
     /**
      * Private constructor to prevent instantiation from outside the class.
      * Initializes the FirebaseDatabase instance.
      */
     private DatabaseManager() {
-        database = FirebaseDatabase.getInstance();
+        database = FirebaseFirestore.getInstance();
     }
 
     /**
@@ -43,7 +45,7 @@ public class DatabaseManager {
      *
      * @return The FirebaseDatabase instance for database operations.
      */
-    public FirebaseDatabase getDatabase() {
+    public FirebaseFirestore getDatabase() {
         return database;
     }
 }

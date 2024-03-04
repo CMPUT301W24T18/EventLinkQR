@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
+/**
+ * this class takes care of taking in the input for a new event and adding it to the data
+ */
 public class OrgCreateEventFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

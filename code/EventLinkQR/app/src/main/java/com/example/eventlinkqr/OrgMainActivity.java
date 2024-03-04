@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
@@ -16,16 +15,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class OrgMainActivity extends AppCompatActivity {
     MaterialButton homeButton, profileButton, scanButton;
-
     FragmentContainerView navController;
+    FirebaseFirestore db;
+    DatabaseManager databaseManager;
 
-
+    private Event currentEvent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.org_main);
         homeButton = findViewById(R.id.org_home_button);
         navController = findViewById(R.id.org_nav_controller);
+
+        databaseManager = DatabaseManager.getInstance();
+
+        db = databaseManager.getDatabase();
 
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,5 +38,13 @@ public class OrgMainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public Event getCurrentEvent() {
+        return currentEvent;
+    }
+
+    public void setCurrentEvent(Event currentEvent) {
+        this.currentEvent = currentEvent;
     }
 }

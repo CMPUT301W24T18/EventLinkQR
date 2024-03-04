@@ -1,5 +1,8 @@
 package com.example.eventlinkqr;
 
+/**
+ * This class contains all necessary data for an event instance
+ */
 public class Event {
     private QRCode qr;
     private String name;
@@ -17,6 +20,11 @@ public class Event {
         this.date = date;
         this.location = location;
         this.geoTracking = geoTracking;
+    }
+
+    public Event(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public QRCode getQr() {
