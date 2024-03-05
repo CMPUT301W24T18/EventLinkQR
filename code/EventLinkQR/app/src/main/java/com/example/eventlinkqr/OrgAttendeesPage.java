@@ -23,17 +23,11 @@ import com.google.android.material.tabs.TabLayoutMediator;
 //https://www.youtube.com/watch?v=LXl7D57fgOQ
 public class OrgAttendeesPage extends Fragment {
 
+    /** the title for each tab*/
     private static final String[] TAB_TITLES = {"All", "Checked In", "Not Checked In"};
-    private static final String ARG_TAB_POSITION = "TAB_POSITION";
 
-    @NonNull
-    public static OrgAttendeesPage newInstance(int tabPosition) {
-        OrgAttendeesPage fragment = new OrgAttendeesPage();
-        Bundle args = new Bundle();
-        args.putInt(ARG_TAB_POSITION, tabPosition);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    /** the toolbar for the page*/
+    private Toolbar orgAttendeesToolbar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -45,11 +39,20 @@ public class OrgAttendeesPage extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // the tool bar on top of the page
+        orgAttendeesToolbar = view.findViewById(R.id.org_attendees_tool_bar);
+
         // the tab layout that will allow to navigate though  all three lists of attendees
         TabLayout attendeesTabLayout = view.findViewById(R.id.attendees_tab_layout);
 
         // view pager that allows to swipe across the tabs
         ViewPager2 attendeesViewPager = view.findViewById(R.id.attendees_view_pager);
+
+        // make the back button return to the evnt page
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(orgAttendeesToolbar);
+        orgAttendeesToolbar.setNavigationOnClickListener(v ->
+                Navigation.findNavController(view).navigate(R.id.action_attendeesPage_to_orgEventFragment));
+        orgAttendeesToolbar.setTitle(null);
 
         AttendeesViewAdapter pagerAdapter = new AttendeesViewAdapter(requireActivity());
         attendeesViewPager.setAdapter(pagerAdapter);

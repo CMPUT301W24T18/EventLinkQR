@@ -17,7 +17,7 @@ public class AttendeesViewAdapter extends FragmentStateAdapter{
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        // Create and return your fragment instance for each tab
+        // Create and return fragment instance for each tab
         return AttendeesTabFragment.newInstance(position);
     }
 

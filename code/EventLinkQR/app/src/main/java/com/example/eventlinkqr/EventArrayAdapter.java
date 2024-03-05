@@ -44,6 +44,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         assert event != null;
 
         //Set the value of all the TextViews
+        // this is a basic implementation that will be updated later on
         eventName.setText(event.getName());
         eventDate.setText(event.getDescription());
         return view;
