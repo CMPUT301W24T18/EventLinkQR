@@ -28,7 +28,7 @@ public class OrgMainActivity extends AppCompatActivity {
         navController = findViewById(R.id.org_nav_controller);
         databaseManager = DatabaseManager.getInstance();
 
-        db = databaseManager.getFirestoreDatabase();
+        db = databaseManager.getFirebaseFirestore();
 
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override

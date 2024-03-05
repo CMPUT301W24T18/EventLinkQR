@@ -10,9 +10,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * to the Firebase Realtime Database.
  */
 public class DatabaseManager {
-    private static DatabaseManager instance; // Singleton instance of DatabaseManager
-    private final FirebaseDatabase database; // Instance of FirebaseDatabase
-    private final FirebaseFirestore firestoreDatabase; // Instance of FirebaseFirestore
+
+    /** Singleton instance of DatabaseManager */
+    private static volatile DatabaseManager instance;
+
+    /** Instance of FirebaseDatabase */
+    private final FirebaseDatabase firebaseDatabase;
+
+    /** Instance of Firestore database */
+    private final FirebaseFirestore firebaseFirestore;
 
 
     /**
@@ -20,9 +26,9 @@ public class DatabaseManager {
      * Initializes the FirebaseDatabase instance.
      */
     private DatabaseManager() {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
-        database = FirebaseDatabase.getInstance();
-        firestoreDatabase = FirebaseFirestore.getInstance();
     }
 
     /**
@@ -48,15 +54,15 @@ public class DatabaseManager {
      *
      * @return The FirebaseDatabase instance for database operations.
      */
-    public FirebaseDatabase getDatabase() {
-        return database;
+    public FirebaseDatabase getFirebaseDatabase() {
+        return firebaseDatabase;
     }
 
     /**
-     * Provides access to the FirebaseFirstore instance
+     * Provides access to the FirebaseFirestore instance.
      * @return The FirebaseFirestore instance for database operations.
      */
-    public FirebaseFirestore getFirestoreDatabase() {
-        return firestoreDatabase;
+    public FirebaseFirestore getFirebaseFirestore() {
+        return firebaseFirestore;
     }
 }
