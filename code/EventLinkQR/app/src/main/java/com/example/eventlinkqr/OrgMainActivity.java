@@ -18,15 +18,14 @@ public class OrgMainActivity extends AppCompatActivity {
     private FragmentContainerView navController;
     private FirebaseFirestore db;
     private DatabaseManager databaseManager;
-
     private Event currentEvent;
+    private String organizerName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.org_main);
         homeButton = findViewById(R.id.org_home_button);
         navController = findViewById(R.id.org_nav_controller);
-
         databaseManager = DatabaseManager.getInstance();
 
         db = databaseManager.getFirestoreDatabase();
@@ -57,10 +56,34 @@ public class OrgMainActivity extends AppCompatActivity {
     }
 
     /**
-     * sets the curretn event
+     * sets the current event
      * @param currentEvent the new current event
      */
     public void setCurrentEvent(Event currentEvent) {
         this.currentEvent = currentEvent;
+    }
+
+    /**
+     * sets the name of the organizer
+     * @param organizerName the name of the organizer
+     */
+    public void setOrganizerName(String organizerName) {
+        this.organizerName = organizerName;
+    }
+
+    /**
+     * gets the name of the organizer
+     * @return the name of the organizer
+     */
+    public String getOrganizerName() {
+        return organizerName;
+    }
+
+    /**
+     * makes the buttons at the bottom of the activity visible
+     * Used when the organizer successfully logs into the app
+     */
+    public void setButtonsVisible(){
+        findViewById(R.id.org_main_buttons).setVisibility(View.VISIBLE);
     }
 }

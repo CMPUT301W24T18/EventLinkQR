@@ -19,6 +19,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class OrgHomePage extends Fragment {
 
@@ -74,15 +75,18 @@ public class OrgHomePage extends Fragment {
             if (querySnapshots != null) {
                 dataList.clear();
                 for (QueryDocumentSnapshot doc: querySnapshots) {
-                    String eventName = doc.getId();
-                    //https://stackoverflow.com/questions/67846416/firestore-timestamp-returning-objects-are-not-valid-as-react-child-found-obje
-                    Timestamp time = (Timestamp)(doc.get("dateAndTime"));
-                    assert time != null;
-                    Date date = time.toDate();
-                    String eventDate = date.toString();
-                    Log.d("Firestore", String.format("Event(%s, %s) fetched", eventName,
-                            eventDate));
-                    dataList.add(new Event(eventName, eventDate));
+                    // add event to the list if the current organizer is its organizer
+                    if(Objects.equals(doc.getString("organizer"), ((OrgMainActivity) requireActivity()).getOrganizerName())) {
+                        String eventName = doc.getId();
+                        //https://stackoverflow.com/questions/67846416/firestore-timestamp-returning-objects-are-not-valid-as-react-child-found-obje
+                        Timestamp time = (Timestamp) (doc.get("dateAndTime"));
+                        assert time != null;
+                        Date date = time.toDate();
+                        String eventDate = date.toString();
+                        Log.d("Firestore", String.format("Event(%s, %s) fetched", eventName,
+                                eventDate));
+                        dataList.add(new Event(eventName, eventDate));
+                    }
                 }
                 eventsAdapter.notifyDataSetChanged();
             }

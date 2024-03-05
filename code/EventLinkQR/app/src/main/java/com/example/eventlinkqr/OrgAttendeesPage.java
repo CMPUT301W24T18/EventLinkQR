@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,23 +12,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.QuerySnapshot;
 
 /**
  * Class that creates the organizer view and keep-s track of events
  */
 //https://www.youtube.com/watch?v=LXl7D57fgOQ
-public class OrgAttendeesPage extends Fragment {
+public class OrgAttendeesPage extends Fragment  {
 
     /** the title for each tab*/
     private static final String[] TAB_TITLES = {"All", "Checked In", "Not Checked In"};
 
     /** the toolbar for the page*/
     private Toolbar orgAttendeesToolbar;
+
+    /** TextView of the count of checked in attendees for the current event*/
+    private TextView checkedInCountView;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -39,6 +45,12 @@ public class OrgAttendeesPage extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // text view to display count of checked in attendees
+        checkedInCountView = view.findViewById(R.id.checked_in_count);
+
+        // update the count of checked in attendees
+        updateCheckInCount();
+
         // the tool bar on top of the page
         orgAttendeesToolbar = view.findViewById(R.id.org_attendees_tool_bar);
 
@@ -48,7 +60,7 @@ public class OrgAttendeesPage extends Fragment {
         // view pager that allows to swipe across the tabs
         ViewPager2 attendeesViewPager = view.findViewById(R.id.attendees_view_pager);
 
-        // make the back button return to the evnt page
+        // make the back button return to the event page
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgAttendeesToolbar);
         orgAttendeesToolbar.setNavigationOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_attendeesPage_to_orgEventFragment));
@@ -63,4 +75,36 @@ public class OrgAttendeesPage extends Fragment {
         ).attach();
     }
 
+    /**
+     * Updates the count of the attendees that have checked in to the event
+     */
+    public void updateCheckInCount() {
+
+        // get reference to the attendees of the current event in the database
+        CollectionReference eventRef = ((OrgMainActivity) requireActivity()).getDb().collection("Events")
+                .document(((OrgMainActivity) requireActivity()).getCurrentEvent().getName()).collection("attendees");
+
+        // find all attendees that have checked in
+        eventRef.whereEqualTo("checkedIn", true)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Retrieve the query snapshot
+                        QuerySnapshot querySnapshot = task.getResult();
+
+                        // Get the count of documents with the specified field value
+                        int count = querySnapshot.size();
+
+                        // set the textview
+                        checkedInCountView.setText("Total checked in attendees: " + count);
+
+                    } else {
+                        // Handle errors
+                        Exception exception = task.getException();
+                        if (exception != null) {
+                            exception.printStackTrace();
+                        }
+                    }
+                });
+    }
 }

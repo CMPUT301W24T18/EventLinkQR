@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:id="@+id/org_attendees_page"
     tools:context=".OrgAttendeesPage">
 
     <androidx.appcompat.widget.Toolbar
@@ -34,6 +35,15 @@
         android:queryHint="@string/search_attendees_string"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/checked_in_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Total checked in attendees"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/attendees_tab_layout"

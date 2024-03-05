@@ -16,10 +16,13 @@
     <string name="event_description_string">Description</string>
     <string name="description_hint_string">Ex: topics, schedule, etc…</string>
     <string name="location_hint_string">Ex: 123 Main st</string>
-
     <string name="event_category_string">Category</string>
     <string name="date_time_string">Date and Time</string>
     <string name="event_location_string">Location</string>
     <string name="allow_geo_string">Enable Geolocation Tracking</string>
     <string name="details_string">Details</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="sign_up_string">Sign up</string>
+    <string name="sign_in_string">Sign in</string>
 </resources>
