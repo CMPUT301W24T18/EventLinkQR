@@ -28,10 +28,10 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 console.log(`Found ${eventDocData.attendees.length} attendees for eventId: ${eventId}`);
                 // Retrieve tokens for each attendee
                 const attendeesTokensPromises = eventDocData.attendees.map(async (userId) => {
-                    const userDoc = await admin.firestore().collection('user_testing').doc(userId).get();
-                    if (userDoc.exists && userDoc.data().token) {
+                    const userDoc = await admin.firestore().collection('attendees_testing').doc(userId).get();
+                    if (userDoc.exists && userDoc.data().fcmToken) {
                         console.log(`Token found for userId: ${userId}`);
-                        tokens.push(userDoc.data().token);
+                        tokens.push(userDoc.data().fcmToken);
                     } else {
                         console.log(`No token found for userId: ${userId}`);
                     }

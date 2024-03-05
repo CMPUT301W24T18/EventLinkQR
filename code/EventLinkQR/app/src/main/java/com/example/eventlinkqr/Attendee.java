@@ -16,9 +16,23 @@ public class Attendee {
     private String uuid;         // Unique identifier for the attendee.
     private String phone_number; // Phone number of the attendee.
     private String homepage;     // Homepage URL of the attendee.
+    private String fcmToken; // FCM Token for the user
+
+    public Attendee(String uuid, String name, String phoneNumber, String homepage, String fcmToken) {
+        this.fcmToken = fcmToken;
+        this.uuid = uuid;
+        this.name = name;
+        this.homepage = homepage;
+        this.phone_number = phoneNumber;
+    }
 
     // Uncomment and import BufferedImage if you wish to add image handling.
     // private BufferedImage image;
+
+
+    // No-argument constructor required for Firebase deserialization
+    public Attendee() {
+    }
 
     /**
      * Gets the attendee's name.
@@ -86,4 +100,7 @@ public class Attendee {
 
     // Add methods for image handling here if needed.
     // Ensure you import and handle BufferedImage appropriately.
+
+    public String getFcmToken() { return fcmToken; }
+    public void setFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
 }
