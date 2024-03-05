@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * to the Firebase Realtime Database.
  */
 public class DatabaseManager {
+
     /** Singleton instance of DatabaseManager */
     private static volatile DatabaseManager instance;
 
@@ -19,6 +20,7 @@ public class DatabaseManager {
     /** Instance of Firestore database */
     private final FirebaseFirestore firebaseFirestore;
 
+
     /**
      * Private constructor to prevent instantiation from outside the class.
      * Initializes the FirebaseDatabase instance.
@@ -26,6 +28,7 @@ public class DatabaseManager {
     private DatabaseManager() {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+
     }
 
     /**
