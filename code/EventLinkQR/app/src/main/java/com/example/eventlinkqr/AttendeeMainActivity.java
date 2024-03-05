@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import com.google.android.material.button.MaterialButton;
@@ -49,5 +50,14 @@ public class AttendeeMainActivity extends Activity {
             // Start the AttendeeProfileActivity
             startActivity(intent);
         });
+
+        notificationButton.setOnClickListener(view -> {
+            // Create an intent to start NotificationActivity
+            Intent intent = new Intent(AttendeeMainActivity.this, NotificationDisplayActivity
+
+                    .class);
+            startActivity(intent);
+        });
+
     }
 }
