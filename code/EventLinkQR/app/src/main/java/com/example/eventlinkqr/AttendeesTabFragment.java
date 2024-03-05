@@ -21,11 +21,11 @@ import java.util.ArrayList;
  * initializes the value that will be displayed on the selected tab in the attendees page
  */
 public class AttendeesTabFragment extends Fragment {
-    ArrayAdapter<String> attendeesAdapter;
-    ArrayList<String> dataList;
-    ListView attendeesList;
-    CollectionReference eventRef;
-    Event event;
+    private ArrayAdapter<String> attendeesAdapter;
+    private ArrayList<String> dataList;
+    private ListView attendeesList;
+    private CollectionReference eventRef;
+    private Event event;
     private static final String ARG_TAB_POSITION = "TAB_POSITION";
 
     /**
@@ -44,7 +44,6 @@ public class AttendeesTabFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View view =  super.onCreateView(inflater, container, savedInstanceState);
         // Create ArrayAdapter for the ListView
         View view = inflater.inflate(R.layout.attendees_tab, container, false);
         attendeesList = view.findViewById(R.id.attendees_listview);
@@ -53,7 +52,7 @@ public class AttendeesTabFragment extends Fragment {
         int tabPosition = getArguments().getInt(ARG_TAB_POSITION, 0);
         event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
 
-        eventRef = ((OrgMainActivity) requireActivity()).db.collection("Events")
+        eventRef = ((OrgMainActivity) requireActivity()).getDb().collection("Events")
                 .document(event.getName()).collection("attendees");
 
         dataList = new ArrayList<>();

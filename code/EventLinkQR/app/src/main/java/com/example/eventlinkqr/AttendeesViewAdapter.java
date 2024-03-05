@@ -24,6 +24,6 @@ public class AttendeesViewAdapter extends FragmentStateAdapter{
     @Override
     public int getItemCount() {
         // Return the number of tabs
-        return 3; // Three tabs in this example
+        return 3;
     }
 }

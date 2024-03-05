@@ -18,8 +18,8 @@ import androidx.navigation.Navigation;
  * takes care of the event page on the organizer activity
  */
 public class OrgEventFragment extends Fragment {
-    Button detailsButton, attendeesButton;
-    Toolbar orgEventToolBar;
+    private Button detailsButton, attendeesButton;
+    private Toolbar orgEventToolBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -23,7 +23,6 @@
         </activity>
 
         <activity android:name=".OrgMainActivity"/>
-        <activity android:name=".OrgAttendeesPage"/>
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode_ui" />

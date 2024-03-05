@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -12,7 +13,8 @@ import androidx.fragment.app.Fragment;
  */
 public class OrgCreateEventFragment extends Fragment {
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.org_create_event_page, container, false);
 

@@ -14,10 +14,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * Class for handling the organizer UI and storing all needed data for the Organizer
  */
 public class OrgMainActivity extends AppCompatActivity {
-    MaterialButton homeButton, profileButton, scanButton;
-    FragmentContainerView navController;
-    FirebaseFirestore db;
-    DatabaseManager databaseManager;
+    private MaterialButton homeButton, profileButton, scanButton;
+    private FragmentContainerView navController;
+    private FirebaseFirestore db;
+    private DatabaseManager databaseManager;
 
     private Event currentEvent;
     @Override
@@ -29,7 +29,7 @@ public class OrgMainActivity extends AppCompatActivity {
 
         databaseManager = DatabaseManager.getInstance();
 
-        db = databaseManager.getDatabase();
+        db = databaseManager.getFirestoreDatabase();
 
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,10 +40,26 @@ public class OrgMainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * getter for the database
+     * @return the database
+     */
+    public FirebaseFirestore getDb() {
+        return db;
+    }
+
+    /**
+     * gets the current event on display
+     * @return the current event
+     */
     public Event getCurrentEvent() {
         return currentEvent;
     }
 
+    /**
+     * sets the curretn event
+     * @param currentEvent the new current event
+     */
     public void setCurrentEvent(Event currentEvent) {
         this.currentEvent = currentEvent;
     }

@@ -22,10 +22,10 @@ import java.util.Date;
 
 public class OrgHomePage extends Fragment {
 
-    ListView eventList;
-    EventArrayAdapter eventsAdapter;
-    ArrayList<Event> dataList;
-    Button createEventButton;
+    private ListView eventList;
+    private EventArrayAdapter eventsAdapter;
+    private ArrayList<Event> dataList;
+    private Button createEventButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,10 +39,9 @@ public class OrgHomePage extends Fragment {
         View view = inflater.inflate(R.layout.org_home_page, container, false);
         eventList = view.findViewById(R.id.event_list_view);
         createEventButton= view.findViewById(R.id.create_event_button);
-        //String [] events = {"event1", "event2", "event3", "event4", "event5"};
 
-        CollectionReference eventsRef = ((OrgMainActivity) requireActivity()).db.collection("Events");
-        //eventsRef = ((OrgMainActivity) requireActivity()).db.collection("Events");
+        // get the reference to the collection of events
+        CollectionReference eventsRef = ((OrgMainActivity) requireActivity()).getDb().collection("Events");
         dataList = new ArrayList<>();
         eventsAdapter = new EventArrayAdapter(view.getContext(), dataList);
 
