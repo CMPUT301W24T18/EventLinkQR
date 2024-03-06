@@ -70,7 +70,7 @@ public class EventManager extends Manager {
      * @param attendeeCallback The callback to be invoked when the event attendees change
      */
     public static void addEventAttendeeSnapshotCallback(String eventName, boolean checkedIn, Consumer<List<String>> attendeeCallback) {
-        getCollection().document(eventName).collection("Attendees").where(Filter.arrayContains("checkedIn", checkedIn)).addSnapshotListener((querySnapshots, error) -> {
+        getCollection().document(eventName).collection("attendees").where(Filter.arrayContains("checkedIn", checkedIn)).addSnapshotListener((querySnapshots, error) -> {
             if (error != null) {
                 Log.e("Firestore", error.toString());
                 return;
@@ -87,7 +87,7 @@ public class EventManager extends Manager {
      * @param document The document to generate the event from
      * @return The event
      */
-    public static Event fromDocument(DocumentSnapshot document) {
+    private static Event fromDocument(DocumentSnapshot document) {
         Event e =  new Event(
                 document.get("name", String.class),
                 document.get("description", String.class),
