@@ -53,9 +53,7 @@ public class AttendeeMainActivity extends Activity {
 
         notificationButton.setOnClickListener(view -> {
             // Create an intent to start NotificationActivity
-            Intent intent = new Intent(AttendeeMainActivity.this, NotificationDisplayActivity
-
-                    .class);
+            Intent intent = new Intent(AttendeeMainActivity.this, NotificationDisplayActivity.class);
             startActivity(intent);
         });
 

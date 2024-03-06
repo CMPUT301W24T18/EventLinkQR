@@ -6,6 +6,8 @@ import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import android.content.SharedPreferences;
 import android.util.Log;
 
 
@@ -25,6 +27,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String messageBody = remoteMessage.getData().get("body"); // Ensure your data message includes 'body'
             if (title != null && messageBody != null) {
                 showNotification(title, messageBody);
+                storeNotification(title, messageBody);
             }
         }
     }
@@ -49,6 +52,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
     }
+
+    private void storeNotification(String title, String messageBody) {
+        SharedPreferences sharedPref = getSharedPreferences("MyAppNotifications", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        // Create a unique key for each notification using the current time
+        String key = String.valueOf(System.currentTimeMillis());
+        String notificationData = title + "|" + messageBody; // Combine title and message
+
+        // Log the key and notification data
+        Log.d(TAG, "Stored notification - Key: " + key + ", Data: " + notificationData);
+
+        editor.putString(key, notificationData);
+        editor.apply();
+    }
+
+
 
 
     @Override
