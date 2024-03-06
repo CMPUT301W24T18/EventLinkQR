@@ -2,31 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
 
-    <!-- Notifications Header -->
     <TextView
-        android:id="@+id/tvNotificationsHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Notifications"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="24sp"
-        android:padding="16dp" />
-
-    <!-- ListView for displaying notifications -->
-    <ListView
-        android:id="@+id/lvNotifications"
+        android:id="@+id/tvFullNotificationTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tvNotificationsHeader"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
-        android:layout_above="@+id/button_layout"
-        android:padding="8dp"/>
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Notification Title"
+        android:paddingBottom="8dp"/>
 
-    <!-- Back Button -->
+    <TextView
+        android:id="@+id/tvFullNotificationMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Notification Message"
+        android:layout_below="@+id/tvFullNotificationTitle"
+        android:layout_above="@+id/button_layout"
+        android:padding="8dp"
+        />
+
+    <!-- Add more views here as needed -->
 
     <LinearLayout
         android:id="@+id/button_layout"
@@ -39,19 +39,19 @@
         >
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/attendee_home_button"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:minWidth="88dip"
-            android:text="Home"
-            android:textColor="@color/black"
-            android:textSize="9sp"
-            app:icon="@drawable/ic_home"
-            app:iconGravity="top"
-            app:iconTint="@color/black" />
+                    android:id="@+id/attendee_home_button"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:minWidth="88dip"
+                    android:text="Home"
+                    android:textColor="@color/black"
+                    android:textSize="9sp"
+                    app:icon="@drawable/ic_home"
+                    app:iconGravity="top"
+                    app:iconTint="@color/black" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/attendee_scan_button"
@@ -98,5 +98,5 @@
     </LinearLayout>
 
 
-</RelativeLayout>
 
+</RelativeLayout>

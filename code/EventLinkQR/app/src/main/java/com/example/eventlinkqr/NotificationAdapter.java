@@ -1,6 +1,7 @@
 package com.example.eventlinkqr;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,21 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         titleView.setText(notification.getTitle());
         descriptionView.setText(notification.getDescription());
         timestampView.setText(notification.getTimestamp());
+
+        // Inside your NotificationAdapter's getView() method, add an OnClickListener to the convertView
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create an intent to start the NotificationDetailActivity
+                Intent intent = new Intent(getContext(), NotificationDetailActivity.class);
+                // Pass the notification details to the activity
+                intent.putExtra("title", notification.getTitle());
+                intent.putExtra("message", notification.getDescription());
+                // Start the activity
+                getContext().startActivity(intent);
+            }
+        });
+
 
         return convertView;
     }
