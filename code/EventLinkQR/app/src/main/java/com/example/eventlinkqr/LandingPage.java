@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -50,35 +49,11 @@ public class LandingPage extends AppCompatActivity {
                         Log.w(TAG, "Fetching FCM registration token failed", task.getException());
                         return;
                     }
-
-
                     // Get new FCM registration token
                     String token = task.getResult();
-
-
                     // Log and toast
                     Log.d(TAG, "FCM Token: " + token);
                 });
-
-
-//        Button btnOpenCreateNotification = findViewById(R.id.btnOpenCreateNotification);
-//        btnOpenCreateNotification.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, NotificationCreationActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//
-//        Button btnOpenDisplayNotifications = findViewById(R.id.btnOpenDisplayNotifications);
-//        btnOpenDisplayNotifications.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, NotificationDisplayActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -91,8 +66,6 @@ public class LandingPage extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
             Log.d("NotificationChannel", "Channel created");
-
-
         }
 
     }

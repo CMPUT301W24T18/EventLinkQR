@@ -7,23 +7,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-
+/**
+ * An activity that allows organizers to create and send notifications.
+ * This page is intended for the event organizers to be able to send out notifications related
+ * to their events. The actual implementation of sending notifications is not yet completed.
+ */
 public class NotificationCreationActivity extends AppCompatActivity {
-
 
     private static final int REQUEST_CODE = 101;
     private static final String TAG = "NotificationCreation"; // Added for logging

@@ -38,7 +38,7 @@ public class AttendeeMainActivity extends Activity {
         eventListView = findViewById(R.id.event_list_view);
 
         homeButton.setOnClickListener(view -> {
-            // Create an intent to start NotificationActivity
+            // Create an intent to start AttendeeMainActivity
             Intent intent = new Intent(AttendeeMainActivity.this, AttendeeMainActivity.class);
             startActivity(intent);
         });

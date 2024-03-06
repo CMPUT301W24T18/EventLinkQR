@@ -6,13 +6,19 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.button.MaterialButton;
 
+/**
+ * Activity to display the details of a notification.
+ */
 public class NotificationDetailActivity extends AppCompatActivity {
 
+    // Buttons for navigation
     MaterialButton homeButton, scanButton, profileButton, notificationButton;
 
+    /**
+     * Called when the activity is starting.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,25 +28,26 @@ public class NotificationDetailActivity extends AppCompatActivity {
         String title = getIntent().getStringExtra("title");
         String message = getIntent().getStringExtra("message");
 
-        // Set the data to the views
+        // Set the title and message to their respective TextViews
         TextView tvTitle = findViewById(R.id.tvFullNotificationTitle);
         tvTitle.setText(title);
-
         TextView tvMessage = findViewById(R.id.tvFullNotificationMessage);
         tvMessage.setText(message);
 
+        // Initialize buttons
         homeButton = findViewById(R.id.attendee_home_button);
         scanButton = findViewById(R.id.attendee_scan_button);
         profileButton = findViewById(R.id.attendee_profile_button);
         notificationButton = findViewById(R.id.attendee_notification_button);
 
+        // Home button click listener
         homeButton.setOnClickListener(view -> {
-            // Create an intent to start NotificationActivity
+            // Create an intent to start AttendeeMainActivity
             Intent intent = new Intent(NotificationDetailActivity.this, AttendeeMainActivity.class);
             startActivity(intent);
         });
 
-        // Set a click listener for the profile button
+        // Profile button click listener
         profileButton.setOnClickListener(view -> {
             // Create an intent to start AttendeeProfileActivity
             Intent intent = new Intent(NotificationDetailActivity.this, AttendeeProfileActivity.class);
@@ -55,6 +62,7 @@ public class NotificationDetailActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Notification button click listener
         notificationButton.setOnClickListener(view -> {
             // Create an intent to start NotificationActivity
             Intent intent = new Intent(NotificationDetailActivity.this, NotificationDisplayActivity.class);
