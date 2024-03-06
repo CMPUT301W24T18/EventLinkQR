@@ -55,7 +55,8 @@ public class LandingPage extends AppCompatActivity {
                     Log.d(TAG, "FCM Token: " + token);
                 });
 
-
+        // Check for Android Oreo (API 26) or newer to create a notification channel as it is mandatory for notifications on these versions. 
+        // For older versions, no channel is required.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
