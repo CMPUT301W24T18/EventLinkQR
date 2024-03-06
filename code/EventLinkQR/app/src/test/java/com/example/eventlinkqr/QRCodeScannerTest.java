@@ -32,7 +32,7 @@ public class QRCodeScannerTest {
     @Mock
     private GmsBarcodeScanner mockScanner;
     @Mock
-    private Consumer<QRCode> mockSuccessConsumer;
+    private Consumer<String> mockSuccessConsumer;
     @Mock
     private Consumer<Exception> mockFailuerConsumer;
     @Mock

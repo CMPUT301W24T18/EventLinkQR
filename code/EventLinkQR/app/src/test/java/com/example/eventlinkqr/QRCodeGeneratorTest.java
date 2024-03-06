@@ -22,7 +22,7 @@ public class QRCodeGeneratorTest {
 
     @BeforeEach
     public void setup() {
-        code = new QRCode("test");
+        code = new QRCode("test", QRCode.CHECK_IN_TYPE, "event");
     }
 
     @Test
