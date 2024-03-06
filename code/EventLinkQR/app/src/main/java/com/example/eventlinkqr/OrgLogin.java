@@ -96,7 +96,7 @@ public class OrgLogin extends Fragment {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(getContext(), "This function is not ready yet", Toast.LENGTH_SHORT).show();
             }
         });
 
