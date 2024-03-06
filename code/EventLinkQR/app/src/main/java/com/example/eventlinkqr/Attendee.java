@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-
 /**
  * This class represents an attendee in the event management system.
  * It holds information such as the attendee's name, unique identifier (UUID),
@@ -18,6 +17,15 @@ public class Attendee {
     private String homepage;     // Homepage URL of the attendee.
     private String fcmToken; // FCM Token for the user
 
+/**
+ * Constructs an Attendee object with the specified details.
+ *
+ * @param uuid The unique identifier for the attendee.
+ * @param name The name of the attendee.
+ * @param phoneNumber The phone number of the attendee.
+ * @param homepage The homepage URL of the attendee.
+ * @param fcmToken The Firebase Cloud Messaging token associated with the attendee's device.
+ */
     public Attendee(String uuid, String name, String phoneNumber, String homepage, String fcmToken) {
         this.fcmToken = fcmToken;
         this.uuid = uuid;
@@ -98,9 +106,19 @@ public class Attendee {
         this.uuid = uuid;
     }
 
+    /**
+     * Gets the FCM Token of the attendee.
+     * @return The FCM token of the attendee.
+     */
+    public String getFcmToken() { return fcmToken; }
+
+    /**
+     * Sets the FCM Token for the attendee.
+     * @param FCM token The UUID to set for the attendee.
+     */
+    public void setFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
+
+    
     // Add methods for image handling here if needed.
     // Ensure you import and handle BufferedImage appropriately.
-
-    public String getFcmToken() { return fcmToken; }
-    public void setFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
 }
