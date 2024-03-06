@@ -1,23 +1,24 @@
 package com.example.eventlinkqr;
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.UUID;
 
 /**
  * Activity for managing an attendee's profile.
  */
 public class AttendeeProfileActivity extends AppCompatActivity {
+    private static final String TAG = "AttendeeProfile";
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
     private Button btnSave, btnBack;
@@ -42,7 +43,7 @@ public class AttendeeProfileActivity extends AppCompatActivity {
 
         checkUUIDAndLoadProfile(); // Check UUID and load profile data
 
-        btnSave.setOnClickListener(view -> saveProfile()); // Save profile on button click
+        btnSave.setOnClickListener(view -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
         btnBack.setOnClickListener(view -> finish()); // Finish activity on back button click
 
         // Reset App Data button
@@ -71,30 +72,42 @@ public class AttendeeProfileActivity extends AppCompatActivity {
     }
 
     /**
+     * Fetches the current FCM token. Upon successful retrieval, calls {@code saveProfile} to save the
+     * attendee's profile data along with the token.
+     */
+    private void fetchAndUpdateFCMToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    // Get new FCM registration token
+                    String token = task.getResult();
+
+                    // Proceed to save profile with the FCM token
+                    saveProfile(token);
+                });
+    }
+
+    /**
      * Saves the profile data entered by the user.
      */
-    private void saveProfile() {
+    private void saveProfile(String fcmToken) {
         // Extract data from UI components
         String name = etName.getText().toString();
         String phoneNumber = etPhoneNumber.getText().toString();
         String homepage = etHomepage.getText().toString();
 
-        // Create a new Attendee object and set its properties
-        Attendee attendee = new Attendee();
-        attendee.setName(name);
-        attendee.setPhone_number(phoneNumber);
-        attendee.setHomepage(homepage);
-        attendee.setUuid(uuid);
+        Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken);
 
-        if (!attendeeArrayAdapter.containsUUID(uuid)) {
-            // Add new attendee to the adapter
-            attendeeArrayAdapter.addAttendee(attendee);
-            // Redirect to AttendeeMainActivity after first-time profile creation
-            redirectToMainActivity();
-        } else {
-            // Update existing attendee profile
-            updateAttendeeProfile(attendee);
-        }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("attendees_testing").document(uuid).set(attendee)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Profile Saved", Toast.LENGTH_SHORT).show();
+                    redirectToMainActivity();
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Error saving profile", Toast.LENGTH_SHORT).show());
     }
 
     /**
@@ -108,35 +121,21 @@ public class AttendeeProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * Loads the profile data for a given UUID.
-     * @param uuid The UUID of the attendee.
+     * Loads an attendee's profile from Firestore based on the provided UUID.
+     * @param uuid The unique identifier for the attendee.
      */
     private void loadProfile(String uuid) {
-        Attendee attendee = attendeeArrayAdapter.getAttendeeByUUID(uuid);
-        if (attendee != null) {
-            // Set attendee data to UI components
-            etName.setText(attendee.getName());
-            etPhoneNumber.setText(attendee.getPhone_number());
-            etHomepage.setText(attendee.getHomepage());
-        }
-    }
-
-    /**
-     * Updates the profile of an existing attendee.
-     * @param updatedAttendee The attendee with updated information.
-     */
-    private void updateAttendeeProfile(Attendee updatedAttendee) {
-        for (int i = 0; i < attendeeArrayAdapter.getCount(); i++) {
-            Attendee attendee = attendeeArrayAdapter.getItem(i);
-            if (attendee.getUuid().equals(uuid)) {
-                // Update attendee data
-                attendee.setName(updatedAttendee.getName());
-                attendee.setPhone_number(updatedAttendee.getPhone_number());
-                attendee.setHomepage(updatedAttendee.getHomepage());
-                break;
-            }
-        }
-        Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("attendees_testing").document(uuid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                    if (attendee != null) {
+                        etName.setText(attendee.getName());
+                        etPhoneNumber.setText(attendee.getPhone_number());
+                        etHomepage.setText(attendee.getHomepage());
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "Error loading profile", e));
     }
 
     /**
