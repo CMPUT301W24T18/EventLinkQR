@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Class for handling the organizer UI and storing all needed data for the Organizer
@@ -16,8 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class OrgMainActivity extends AppCompatActivity {
     private MaterialButton homeButton, profileButton, scanButton;
     private FragmentContainerView navController;
-    private FirebaseFirestore db;
-    private DatabaseManager databaseManager;
     private Event currentEvent;
     private String organizerName;
     @Override
@@ -26,25 +23,11 @@ public class OrgMainActivity extends AppCompatActivity {
         setContentView(R.layout.org_main);
         homeButton = findViewById(R.id.org_home_button);
         navController = findViewById(R.id.org_nav_controller);
-        databaseManager = DatabaseManager.getInstance();
 
-        db = databaseManager.getFirebaseFirestore();
-
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(navController).navigate(R.id.org_home_page);
-            }
+        homeButton.setOnClickListener(v -> {
+            Navigation.findNavController(navController).navigate(R.id.org_home_page);
         });
 
-    }
-
-    /**
-     * getter for the database
-     * @return the database
-     */
-    public FirebaseFirestore getDb() {
-        return db;
     }
 
     /**
