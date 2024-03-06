@@ -23,8 +23,8 @@ public class EventManager extends Manager {
      * @param attendeeName The name of the attendee to check in
      * @param eventId The id of the event to check into
      */
-    public static void checkIn(String attendeeName, String eventId) {
-        getCollection().document(eventId).collection("attendees").document(attendeeName).update("checkedIn", true);
+    public static Task<Void> checkIn(String attendeeName, String eventId) {
+        return getCollection().document(eventId).collection("attendees").document(attendeeName).update("checkedIn", true);
     }
 
     /**
@@ -87,12 +87,12 @@ public class EventManager extends Manager {
      * @param document The document to generate the event from
      * @return The event
      */
-    private static Event fromDocument(DocumentSnapshot document) {
+    public static Event fromDocument(DocumentSnapshot document) {
         Event e =  new Event(
                 document.get("name", String.class),
                 document.get("description", String.class),
                 document.get("category", String.class),
-                document.get("dateAndTime", Timestamp.class).toString(),
+                document.get("dateAndTime", Timestamp.class),
                 document.get("location", String.class),
                 document.get("geoTracking", Boolean.class));
         e.setId(document.getId());

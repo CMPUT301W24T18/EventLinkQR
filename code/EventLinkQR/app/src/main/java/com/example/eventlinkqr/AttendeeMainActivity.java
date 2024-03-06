@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import com.google.android.material.button.MaterialButton;
 
 /**
@@ -15,8 +17,11 @@ import com.google.android.material.button.MaterialButton;
 public class AttendeeMainActivity extends Activity {
 
     // UI components: buttons and a list view
-    MaterialButton scanButton, profileButton, notificationButton;
-    ListView eventListView;
+    private MaterialButton scanButton, profileButton, notificationButton;
+    private ListView eventListView;
+
+    /** QRCode scanner for scanning codes */
+    private QRCodeScanner scanner;
 
     /**
      * Called when the activity is starting.
@@ -26,6 +31,9 @@ public class AttendeeMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        scanner = new QRCodeScanner(this);
+
         // Set the content view to the attendee main layout
         setContentView(R.layout.attendee_main_layout);
 
@@ -35,6 +43,13 @@ public class AttendeeMainActivity extends Activity {
         notificationButton = findViewById(R.id.attendee_notification_button);
         eventListView = findViewById(R.id.event_list_view);
 
+        setupProfileButton();
+
+        setupScanButton();
+    }
+
+    /** Initialize onClick listener for the profile button*/
+    private void setupProfileButton() {
         // Set a click listener for the profile button
         profileButton.setOnClickListener(view -> {
             // Create an intent to start AttendeeProfileActivity
@@ -46,8 +61,28 @@ public class AttendeeMainActivity extends Activity {
             if (uuid != null) {
                 intent.putExtra("UUID", uuid);
             }
+
             // Start the AttendeeProfileActivity
             startActivity(intent);
+        });
+    }
+
+    /** Initialize the onClick listener for the scan button */
+    private void setupScanButton() {
+        scanButton.setOnClickListener(v -> {
+            scanner.codeFromScan(codeText -> {
+                QRCodeManager.fetchQRCode(codeText).addOnSuccessListener(code -> {
+                    if (code.getCodeType() == QRCode.CHECK_IN_TYPE) {
+                        EventManager.checkIn("David", code.getEventId()).addOnSuccessListener(x -> {
+                            Toast.makeText(this,"Checked In", Toast.LENGTH_SHORT).show();
+                        }).addOnFailureListener(x -> {
+                            Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                });
+            }, e -> {
+                Toast.makeText(this, "Invalid QR Code", Toast.LENGTH_SHORT).show();
+            });
         });
     }
 }
