@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -16,6 +17,13 @@
         android:paddingHorizontal="16dp"
         android:paddingTop="16dp" />
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvNotificationsHeader"
+        android:layout_above="@+id/button_layout">
+
     <!-- ListView for displaying notifications -->
     <ListView
         android:id="@+id/lvNotifications"
@@ -25,8 +33,10 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
         android:layout_above="@+id/button_layout"
-        android:padding="8dp"/>
+        android:padding="8dp"
+        tools:ignore="MissingClass" />
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <!-- Back Button -->
 
     <LinearLayout

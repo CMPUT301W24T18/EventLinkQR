@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Timestamp;
@@ -31,7 +32,7 @@ public class NotificationDisplayActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private List<String> notificationList = new ArrayList<>();
-
+    private SwipeRefreshLayout swipeRefreshLayout;
     MaterialButton homeButton, scanButton, profileButton, notificationButton;
 
     @Override
@@ -42,6 +43,18 @@ public class NotificationDisplayActivity extends AppCompatActivity {
         listView = findViewById(R.id.lvNotifications);
         List<Notification> notifications = new ArrayList<>();
         listView.setAdapter(adapter);
+
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Call fetchNotifications here
+                getCurrentFcmToken(); // This will fetch the token and refresh notifications
+
+                swipeRefreshLayout.setRefreshing(false); // This will stop the refresh animation
+            }
+        });
 
         // Get current FCM token and fetch notifications
         getCurrentFcmToken();
