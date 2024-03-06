@@ -79,8 +79,6 @@ public class NotificationDisplayActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void fetchNotifications(String token) {
         FirebaseFirestore.getInstance().collection("userNotifications").document(token)
                 .get().addOnSuccessListener(documentSnapshot -> {

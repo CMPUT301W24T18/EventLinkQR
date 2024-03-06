@@ -13,7 +13,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textSize="24sp"
-        android:padding="16dp" />
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp" />
 
     <!-- ListView for displaying notifications -->
     <ListView
