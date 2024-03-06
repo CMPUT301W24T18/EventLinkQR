@@ -12,10 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * initializes the value that will be displayed on the selected tab in the attendees page
@@ -24,7 +23,6 @@ public class AttendeesTabFragment extends Fragment {
     private ArrayAdapter<String> attendeesAdapter;
     private ArrayList<String> dataList;
     private ListView attendeesList;
-    private CollectionReference eventRef;
     private Event event;
     private static final String ARG_TAB_POSITION = "TAB_POSITION";
 
@@ -52,9 +50,6 @@ public class AttendeesTabFragment extends Fragment {
         int tabPosition = getArguments().getInt(ARG_TAB_POSITION, 0);
         event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
 
-        eventRef = ((OrgMainActivity) requireActivity()).getDb().collection("Events")
-                .document(event.getName()).collection("attendees");
-
         dataList = new ArrayList<>();
 
         // generate data from the database
@@ -80,61 +75,22 @@ public class AttendeesTabFragment extends Fragment {
      * @param tabPosition the position of the tab
      */
     private void generateDataForTab(int tabPosition) {
+        Consumer<List<String>> attendeeNamesCallback = attendeeNames -> {
+            dataList.clear();
+            dataList.addAll(attendeeNames);
+            attendeesAdapter.notifyDataSetChanged();
+        };
 
         // select what data is shown
         switch (tabPosition) {
             case 0:
-                eventRef.addSnapshotListener((querySnapshots, error) -> {
-
-                    // add all attendees to the list
-                    if (error != null) {
-                        Log.e("Firestore", error.toString());
-                        return;
-                    }
-                    if (querySnapshots != null) {
-                        for (QueryDocumentSnapshot doc: querySnapshots) {
-                            String fieldValue = doc.getString("name");
-                            dataList.add(fieldValue);
-                        }
-                    }
-                    attendeesAdapter.notifyDataSetChanged();
-                });
+                EventManager.addEventAttendeeSnapshotCallback(event.getId(), attendeeNamesCallback);
                 break;
             case 1:
-                eventRef.addSnapshotListener((querySnapshots, error) -> {
-                // add all attendees that have checked in
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (querySnapshots != null) {
-                    for (QueryDocumentSnapshot doc: querySnapshots) {
-                        if(Boolean.TRUE.equals(doc.getBoolean("checkedIn"))) {
-                            String fieldValue = doc.getString("name");
-                            dataList.add(fieldValue);
-                        }
-                    }
-                }
-                attendeesAdapter.notifyDataSetChanged();
-                });
+                EventManager.addEventAttendeeSnapshotCallback(event.getId(), true, attendeeNamesCallback);
                 break;
             case 2:
-                eventRef.addSnapshotListener((querySnapshots, error) -> {
-                    // add all attendees that haven't checked in
-                    if (error != null) {
-                        Log.e("Firestore", error.toString());
-                        return;
-                    }
-                    if (querySnapshots != null) {
-                        for (QueryDocumentSnapshot doc: querySnapshots) {
-                            if(Boolean.FALSE.equals(doc.getBoolean("checkedIn"))) {
-                                String fieldValue = doc.getString("name");
-                                dataList.add(fieldValue);
-                            }
-                        }
-                    }
-                    attendeesAdapter.notifyDataSetChanged();
-                });
+                EventManager.addEventAttendeeSnapshotCallback(event.getId(), false, attendeeNamesCallback);
                 break;
         }
     }

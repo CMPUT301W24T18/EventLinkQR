@@ -7,6 +7,7 @@ public class Event {
     /** All the attributes of an event*/
     private QRCode qr;
     private String name, description, category, date, location;
+    private String id;
     private Boolean geoTracking;
 
     /**
@@ -93,5 +94,21 @@ public class Event {
      */
     public Boolean getGeoTracking() {
         return geoTracking;
+    }
+
+    /**
+     * get the event's id
+     * @return event's id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * set the event's id
+     * @param id event id
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 }

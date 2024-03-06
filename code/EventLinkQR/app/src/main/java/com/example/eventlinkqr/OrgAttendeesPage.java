@@ -34,6 +34,8 @@ public class OrgAttendeesPage extends Fragment  {
     /** TextView of the count of checked in attendees for the current event*/
     private TextView checkedInCountView;
 
+    private Event event;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -44,6 +46,8 @@ public class OrgAttendeesPage extends Fragment  {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
 
         // text view to display count of checked in attendees
         checkedInCountView = view.findViewById(R.id.checked_in_count);
@@ -79,32 +83,9 @@ public class OrgAttendeesPage extends Fragment  {
      * Updates the count of the attendees that have checked in to the event
      */
     public void updateCheckInCount() {
-
-        // get reference to the attendees of the current event in the database
-        CollectionReference eventRef = ((OrgMainActivity) requireActivity()).getDb().collection("Events")
-                .document(((OrgMainActivity) requireActivity()).getCurrentEvent().getName()).collection("attendees");
-
-        // find all attendees that have checked in
-        eventRef.whereEqualTo("checkedIn", true)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Retrieve the query snapshot
-                        QuerySnapshot querySnapshot = task.getResult();
-
-                        // Get the count of documents with the specified field value
-                        int count = querySnapshot.size();
-
-                        // set the textview
-                        checkedInCountView.setText("Total checked in attendees: " + count);
-
-                    } else {
-                        // Handle errors
-                        Exception exception = task.getException();
-                        if (exception != null) {
-                            exception.printStackTrace();
-                        }
-                    }
-                });
+        EventManager.addEventAttendeeSnapshotCallback(event.getId(), true, attendeeNames -> {
+            int count = attendeeNames.size();
+            checkedInCountView.setText("Total checked in attendees: " + count);
+        });
     }
 }

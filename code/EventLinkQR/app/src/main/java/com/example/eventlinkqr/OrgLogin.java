@@ -13,12 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.Objects;
-
 /**
  * this class handles the signin page for the organizer, including the password and email validation
  */
@@ -42,8 +36,6 @@ public class OrgLogin extends Fragment {
         signInButton = view.findViewById(R.id.org_signin_button);
         signUpButton = view.findViewById(R.id.org_signup_button);
 
-        CollectionReference organizersRef = ((OrgMainActivity) requireActivity()).getDb().collection("Organizers");
-
         signInButton.setOnClickListener(v -> {
 
             // get the email and password the user entered
@@ -54,50 +46,22 @@ public class OrgLogin extends Fragment {
                 // send message if either field is empty
                 Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
             }else{
-                // look for organizers that have the email the user entered
-                organizersRef.whereEqualTo("email", email)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                // Retrieve the query snapshot
-                                QuerySnapshot querySnapshot = task.getResult();
-                                if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                                    // organizer with the matching email
-                                    DocumentSnapshot doc = querySnapshot.getDocuments().get(0);
+                OrganizerManager.signIn(email, password).addOnSuccessListener(name -> {
+                    // make the bottom buttons visible
+                    ((OrgMainActivity) requireActivity()).setButtonsVisible();
 
-                                    // set the name of the organizer for future queries and go to the home page
-                                    if(Objects.equals(password, doc.getString("password"))){
-
-                                        // make the bottom buttons visible
-                                        ((OrgMainActivity) requireActivity()).setButtonsVisible();
-
-                                        ((OrgMainActivity) requireActivity()).setOrganizerName(doc.getString("name"));
-                                        Navigation.findNavController(view).navigate(R.id.action_orgLogin_to_org_home_page);
-                                    }else{
-                                        // send wrong password message
-                                        Toast.makeText(getContext(), "Wrong password", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    // send invalid email message
-                                    Toast.makeText(getContext(), "Invalid email", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                // Handle errors
-                                Exception exception = task.getException();
-                                if (exception != null) {
-                                    exception.printStackTrace();
-                                }
-                            }
-                        });
+                    ((OrgMainActivity) requireActivity()).setOrganizerName(name);
+                    Navigation.findNavController(view).navigate(R.id.action_orgLogin_to_org_home_page);
+                }).addOnFailureListener(name -> {
+                    // send invalid email message
+                    Toast.makeText(getContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
+                });
             }
         });
 
         // redirects to the organizer sign up page
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        signUpButton.setOnClickListener(v -> {
 
-            }
         });
 
 
