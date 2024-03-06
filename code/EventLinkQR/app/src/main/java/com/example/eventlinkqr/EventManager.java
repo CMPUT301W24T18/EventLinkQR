@@ -89,7 +89,6 @@ public class EventManager extends Manager {
      */
     private static Event fromDocument(DocumentSnapshot document) {
         Event e =  new Event(
-                new QRCode("Test"),
                 document.get("name", String.class),
                 document.get("description", String.class),
                 document.get("category", String.class),

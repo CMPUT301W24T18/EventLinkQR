@@ -25,7 +25,7 @@ public class QRCodeTest {
 
     @BeforeEach
     public void setup() {
-        code = new QRCode(TEST_CODE_TEXT);
+        code = new QRCode(TEST_CODE_TEXT, QRCode.CHECK_IN_TYPE, "event");
     }
 
     @Test
@@ -45,7 +45,7 @@ public class QRCodeTest {
 
     @Test
     public void testToBitmapThrows() {
-        QRCode emptyCode = new QRCode("");
+        QRCode emptyCode = new QRCode("", QRCode.CHECK_IN_TYPE, "event");
 
         try (MockedStatic<QRCodeGenerator> mockedQRCodeGen = mockStatic(QRCodeGenerator.class)) {
             mockedQRCodeGen.when(() -> QRCodeGenerator.imageFromQRCode(eq(emptyCode), eq(WIDTH), eq(HEIGHT)))

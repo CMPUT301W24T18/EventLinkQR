@@ -4,15 +4,27 @@ import android.graphics.Bitmap;
 
 /** Representation of a QR Code that is used in the app. */
 public class QRCode {
+    public static final int CHECK_IN_TYPE = 1;
+    public static final int PROMOTIONAL_TYPE = 2;
+
+
     /** The text encoded in the QR Code */
-    private final String codeText;
+    private String codeText;
+
+    private int codeType;
+
+    private String eventId;
 
     /**
-     * Create a new QRCode from text
-     * @param codeText The text to be encoded.
+     * Create a QR Code object from data that can be retrieved from the firestore.
+     * @param codeText Text encoded in the QR Code
+     * @param codeType Type of the QR Code (Check in, Promotional)
+     * @param eventId Id of the event that this code is associated with.
      */
-    public QRCode(String codeText) {
+    public QRCode(String codeText, int codeType, String eventId) {
         this.codeText = codeText;
+        this.codeType = codeType;
+        this.eventId = eventId;
     }
 
     /**
@@ -21,6 +33,46 @@ public class QRCode {
      */
     public String getCodeText() {
         return codeText;
+    }
+
+    /**
+     * Set the text encoded in the QR Code
+     * @param codeText Encoded text
+     */
+    public void setCodeText(String codeText) {
+        this.codeText = codeText;
+    }
+
+    /**
+     * Get the type of the code
+     * @return Either CHECK_IN_TYPE or PROMOTIONAL_TYPE
+     */
+    public int getCodeType() {
+        return codeType;
+    }
+
+    /**
+     * Set the type of the code
+     * @param codeType Either CHECK_IN_TYPE or PROMOTIONAL_TYPE
+     */
+    public void setCodeType(int codeType) {
+        this.codeType = codeType;
+    }
+
+    /**
+     * Get the id of the event that this code belongs to
+     * @return The event id
+     */
+    public String getEventId() {
+        return eventId;
+    }
+
+    /**
+     * Set the id for the event that this belongs to
+     * @param event The event id
+     */
+    public void setEventId(String event) {
+        this.eventId = event;
     }
 
     /**
