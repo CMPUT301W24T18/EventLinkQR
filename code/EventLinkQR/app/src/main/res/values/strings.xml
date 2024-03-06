@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">EventLinkQR</string>
+    <string name="prompt">Upload your image here</string>
+    <string name="upload">Upload</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_image">Choose Image</string>
+    <string name="editProfilImg">Edit Profile Img</string>
 </resources>
