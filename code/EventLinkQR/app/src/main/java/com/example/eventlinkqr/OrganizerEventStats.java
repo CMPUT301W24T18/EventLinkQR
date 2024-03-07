@@ -1,6 +1,7 @@
 package com.example.eventlinkqr;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,8 +15,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /** This activity is the page where organizers can track event statistics.
  * In the current state it is very barebones and serves as a home for our map fragment.
@@ -25,12 +24,14 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
     private GoogleMap myMap;
     private Event event;
     private ArrayList<LatLng> locations;
-
-
+    private TextView textViewTotalAttendees;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_organizer_event_stats);
+        setContentView(R.layout.org_event_stats);
+
+        // Initialize the text view for the total number of attendees
+        textViewTotalAttendees = findViewById(R.id.textViewTotalAttendance);
 
         // If the event has geolocation tracking, we'll set up the map
         event = (Event) getIntent().getSerializableExtra("event");
@@ -50,6 +51,11 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
             mapFragment.getMapAsync(this);
         }
 
+        // Set the total number of attendees
+        assert event != null;
+        int totalAttendees = event.getTotalAttendees();
+        String displayTotalAttendees = "Total Attendance\n" + totalAttendees;
+        textViewTotalAttendees.setText(displayTotalAttendees);
     }
 
     /**

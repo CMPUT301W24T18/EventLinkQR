@@ -156,4 +156,12 @@ public class Event {
     public ArrayList<LatLng> getCheckInLocations() {
         return checkInLocations;
     }
+
+    public int getTotalAttendees() {
+        if (checkedInAttendees == null || checkedInAttendees.isEmpty()) {
+            return 0;
+        } else {
+            return checkedInAttendees.size();
+        }
+    }
 }
