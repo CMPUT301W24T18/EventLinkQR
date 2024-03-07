@@ -67,12 +67,6 @@ public class AttendeeMainActivity extends Activity {
             startActivity(intent);
         });
 
-//        notificationButton.setOnClickListener(view -> {
-//            // Create an intent to start NotificationActivity
-//            Intent intent = new Intent(AttendeeMainActivity.this, NotificationDisplayActivity.class);
-//            startActivity(intent);
-//        });
-
         notificationButton.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
@@ -93,29 +87,65 @@ public class AttendeeMainActivity extends Activity {
 
     }
 
+//    private void showCustomPermissionDialog() {
+//        new AlertDialog.Builder(this)
+//                .setTitle("Enable Notifications")
+//                .setMessage("Notifications help you stay up to date with important events. Would you like to enable notifications for our app?")
+//                .setPositiveButton("Yes", (dialog, which) -> {
+//                    // Direct users to the app's system settings page
+//                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+//                    intent.setData(uri);
+//                    startActivity(intent);
+//                })
+//                .setNegativeButton("No", (dialog, which) -> {
+//                    // User chose not to enable notifications, proceed to NotificationDisplayActivity anyway
+//                    Intent intent = new Intent(this, NotificationDisplayActivity.class);
+//                    startActivity(intent);
+//                })
+//                .create().show();
+//    }
+
     private void showCustomPermissionDialog() {
+        if (!shouldPromptForNotificationPermission()) {
+            // User has already been prompted, proceed directly to NotificationDisplayActivity
+            Intent intent = new Intent(this, NotificationDisplayActivity.class);
+            startActivity(intent);
+            return;
+        }
+
         new AlertDialog.Builder(this)
                 .setTitle("Enable Notifications")
                 .setMessage("Notifications help you stay up to date with important events. Would you like to enable notifications for our app?")
                 .setPositiveButton("Yes", (dialog, which) -> {
+                    // Record that the user has been prompted
+                    SharedPreferences.Editor editor = getSharedPreferences("NotificationPrefs", MODE_PRIVATE).edit();
+                    editor.putBoolean("hasBeenPromptedForNotificationPermission", true);
+                    editor.apply();
+
                     // Direct users to the app's system settings page
                     Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                     Uri uri = Uri.fromParts("package", getPackageName(), null);
                     intent.setData(uri);
                     startActivity(intent);
-                    // Proceed to NotificationDisplayActivity after showing settings
-                    navigateToNotificationDisplayActivity();
                 })
                 .setNegativeButton("No", (dialog, which) -> {
-                    // User chose not to enable notifications, proceed to NotificationDisplayActivity anyway
-                    navigateToNotificationDisplayActivity();
+                    // Record that the user has been prompted
+                    SharedPreferences.Editor editor = getSharedPreferences("NotificationPrefs", MODE_PRIVATE).edit();
+                    editor.putBoolean("hasBeenPromptedForNotificationPermission", true);
+                    editor.apply();
+
+                    // User chose not to enable notifications, proceed to NotificationDisplayActivity
+                    Intent intent = new Intent(this, NotificationDisplayActivity.class);
+                    startActivity(intent);
                 })
                 .create().show();
     }
 
-    private void navigateToNotificationDisplayActivity() {
-        Intent intent = new Intent(this, NotificationDisplayActivity.class);
-        startActivity(intent);
+
+    private boolean shouldPromptForNotificationPermission() {
+        SharedPreferences prefs = getSharedPreferences("NotificationPrefs", MODE_PRIVATE);
+        return !prefs.contains("hasBeenPromptedForNotificationPermission");
     }
 
 }
