@@ -2,6 +2,7 @@ package com.example.eventlinkqr;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -57,6 +58,9 @@ public class QRCodeManagerTest {
             int codeType = 1;
             String eventId = "eventId";
 
+            DocumentReference mockEventReference = mock(DocumentReference.class);
+            when(mockFirestore.document("/Events/eventId")).thenReturn(mockEventReference);
+
             // Act
             Task<Void> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
 
@@ -66,7 +70,7 @@ public class QRCodeManagerTest {
             verify(mockDocumentReference).set(argumentCaptor.capture());
             Map<String, Object> capturedArgument = argumentCaptor.getValue();
             Assertions.assertEquals(codeType, capturedArgument.get("codeType"));
-            Assertions.assertEquals("/Events/" + eventId, capturedArgument.get("event"));
+            Assertions.assertEquals(mockEventReference, capturedArgument.get("event"));
         }
     }
 
