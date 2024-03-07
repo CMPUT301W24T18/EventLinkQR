@@ -26,4 +26,14 @@
     <string name="sign_up_string">Sign up</string>
     <string name="sign_in_string">Sign in</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="channel_name">notifications</string>
+    <string name="channel_description">this is a notification channel\n</string>
+    <string name="what_to_expect">What to expect</string>
+    <string name="save_publish_string">Save and Publish</string>
+    <string name="choose_make_qr_string">Make/choose QR Code</string>
+    <string name="prompt">Upload your image here</string>
+    <string name="upload">Upload</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_image">Choose Image</string>
+    <string name="editProfilImg">Edit Profile Img</string>
 </resources>

@@ -24,5 +24,13 @@ public class MainActivity extends AppCompatActivity {
         attendeeButton.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, AttendeeMainActivity.class));
         });
+
+        attendeeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, LandingPage.class));
+            }
+        });
+
     }
 }

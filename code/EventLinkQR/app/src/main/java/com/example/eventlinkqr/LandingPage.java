@@ -1,12 +1,19 @@
 package com.example.eventlinkqr;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LandingPage extends AppCompatActivity {
 
@@ -35,5 +42,32 @@ public class LandingPage extends AppCompatActivity {
             startActivity(intent);
             finish(); // Close the landing page activity
         }
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    // Get new FCM registration token
+                    String token = task.getResult();
+                    // Log and toast
+                    Log.d(TAG, "FCM Token: " + token);
+                });
+
+        // Check for Android Oreo (API 26) or newer to create a notification channel as it is mandatory for notifications on these versions. 
+        // For older versions, no channel is required.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("event_notifications", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+            Log.d("NotificationChannel", "Channel created");
+        }
+
     }
 }
