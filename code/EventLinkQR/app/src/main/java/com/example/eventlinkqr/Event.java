@@ -1,5 +1,9 @@
 package com.example.eventlinkqr;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+
 /**
  * This class contains all necessary data for an event instance
  */
@@ -9,6 +13,8 @@ public class Event {
     private String id;
     private Boolean geoTracking;
 
+    private ArrayList<Attendee> checkedInAttendees;
+    private ArrayList<LatLng> checkInLocations;
     /**
      * Event creator with all attributes
      * @param name the event's name
@@ -99,5 +105,39 @@ public class Event {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * check in an attendee to the event and add their location if geotracking is enabled
+     * @param attendee
+     * @param checkInLocation
+     * @return
+     */
+    public Boolean checkIn(Attendee attendee, LatLng checkInLocation){
+        //Check if the attendee is already checked in
+        if(checkedInAttendees.contains(attendee)){
+            return false;
+        } else {
+            checkedInAttendees.add(attendee);
+            if (geoTracking) {
+                checkInLocations.add(checkInLocation);
+            }
+            return true;
+        }
+    }
+
+    /**
+     * check in an attendee to the event without a location
+     * @param attendee
+     * @return
+     */
+    public Boolean checkIn(Attendee attendee){
+        //Check if the attendee is already checked in
+        if(checkedInAttendees.contains(attendee)){
+            return false;
+        } else {
+            checkedInAttendees.add(attendee);
+            return true;
+        }
     }
 }
