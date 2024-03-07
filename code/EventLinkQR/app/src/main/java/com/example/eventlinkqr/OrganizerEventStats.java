@@ -1,6 +1,7 @@
 package com.example.eventlinkqr;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,8 +14,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /** This activity is the page where organizers can track event statistics.
  * In the current state it is very barebones and serves as a home for our map fragment.
@@ -33,8 +42,35 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
         // Initialize the text view for the total number of attendees
         textViewTotalAttendees = findViewById(R.id.textViewTotalAttendance);
 
-        // If the event has geolocation tracking, we'll set up the map
-        event = (Event) getIntent().getSerializableExtra("event");
+        // Get the eventID from the intent
+        //String eventId = getIntent().getStringExtra("eventId");
+        String eventId = "event1";
+        EventManager.getEventById(eventId, event -> {
+            if (event != null) {
+                this.event = event;
+                Log.d("OrganizerEventStats", event.getName());
+            } else {
+                Log.d("OrganizerEventStats", "Event is null");
+            }
+        });
+
+
+
+        if (eventId != null) {
+            EventManager.getEventById(eventId, event -> {
+                if (event != null) {
+                    this.event = event; // Now you have your event object populated from Firestore
+                    // Proceed with other operations that depend on the event object
+                    // ...
+                    Log.d("OrganizerEventStats", event.getName());
+                } else {
+                    // Handle the case where the event is null (not found or error)
+                    // ...
+                    Log.d("OrganizerEventStats", "Event is null");
+                }
+            });
+        }
+
         if (event != null && event.getGeoTracking()) {
 
             locations = event.getCheckInLocations();
@@ -52,7 +88,10 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
         }
 
         // Set the total number of attendees
-        assert event != null;
+        if (this.event == null) {
+            Log.d("OrganizerEventStats", "Event is null");
+        }
+        assert this.event != null;
         int totalAttendees = event.getTotalAttendees();
         String displayTotalAttendees = "Total Attendance\n" + totalAttendees;
         textViewTotalAttendees.setText(displayTotalAttendees);

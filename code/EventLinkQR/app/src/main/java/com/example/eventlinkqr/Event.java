@@ -157,6 +157,10 @@ public class Event {
         return checkInLocations;
     }
 
+    public void setCheckInLocations(ArrayList<LatLng> checkInLocations) {
+        this.checkInLocations = checkInLocations;
+    }
+
     public int getTotalAttendees() {
         if (checkedInAttendees == null || checkedInAttendees.isEmpty()) {
             return 0;
