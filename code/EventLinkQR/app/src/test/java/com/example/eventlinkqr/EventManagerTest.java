@@ -50,9 +50,9 @@ public class EventManagerTest {
             when(mockCollectionReference.document("eventId")).thenReturn(mockDocumentReference);
 
             when(mockDocumentReference.collection("attendees")).thenReturn(mockCollectionReference);
-            when(mockCollectionReference.document("David")).thenReturn(mockDocumentReference);
+            when(mockCollectionReference.document("875779a8-9646-40ce-b245-882ebdb707ee")).thenReturn(mockDocumentReference);
 
-            when(mockDocumentReference.update(eq("checkedIn"), eq(true))).thenReturn(Tasks.forResult(null));
+            when(mockDocumentReference.set(any())).thenReturn(Tasks.forResult(null));
 
             Task<Void> result = EventManager.checkIn("875779a8-9646-40ce-b245-882ebdb707ee", "David", "eventId");
 
@@ -67,9 +67,9 @@ public class EventManagerTest {
             when(mockCollectionReference.document("eventId")).thenReturn(mockDocumentReference);
 
             when(mockDocumentReference.collection("attendees")).thenReturn(mockCollectionReference);
-            when(mockCollectionReference.document("David")).thenReturn(mockDocumentReference);
+            when(mockCollectionReference.document("875779a8-9646-40ce-b245-882ebdb707ee")).thenReturn(mockDocumentReference);
 
-            when(mockDocumentReference.update(eq("checkedIn"), eq(true))).thenReturn(Tasks.forException(new Exception()));
+            when(mockDocumentReference.set(any())).thenReturn(Tasks.forException(new Exception()));
 
             Task<Void> result = EventManager.checkIn("875779a8-9646-40ce-b245-882ebdb707ee", "David", "eventId");
 
