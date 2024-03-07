@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,9 @@ public class OrgEventFragment extends Fragment {
     /** All buttons and the toolbar that will be used on this page*/
     private Button detailsButton, attendeesButton;
     private Toolbar orgEventToolBar;
+    private TextView eventTitle, eventLocation, eventDescription;
+
+    private ImageView qrCodeImage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,10 @@ public class OrgEventFragment extends Fragment {
         View view = inflater.inflate(R.layout.org_event_page, container, false);
         detailsButton = view.findViewById(R.id.details_button);
         attendeesButton = view.findViewById(R.id.attendees_button);
+        eventTitle = view.findViewById(R.id.org_event_name);
+        eventLocation= view.findViewById(R.id.org_event_location);
+        eventDescription= view.findViewById(R.id.org_event_description);
+        qrCodeImage = view.findViewById(R.id.imageView);
 
         orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgEventToolBar);
@@ -49,6 +58,21 @@ public class OrgEventFragment extends Fragment {
         // temporary message since it is not yet completely implemented
         detailsButton.setOnClickListener(v ->
                 Toast.makeText(getContext(), "This function is not ready yet", Toast.LENGTH_SHORT).show());
+
+        Event event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+
+        // Set the values to be displayed
+        eventTitle.setText(event.getName());
+        eventLocation.setText(event.getLocation());
+        eventDescription.setText(event.getDescription());
+
+        QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {
+            try {
+                qrCodeImage.setImageBitmap(q.toBitmap(512, 512));
+            } catch (QRCodeGeneratorException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;

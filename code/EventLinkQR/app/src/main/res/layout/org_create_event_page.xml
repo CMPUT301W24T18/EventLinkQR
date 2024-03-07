@@ -8,9 +8,10 @@
     tools:context=".OrgCreateEventFragment">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/create_event_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationIcon="@android:drawable/ic_menu_close_clear_cancel">
+        app:navigationIcon="?attr/actionModeCloseDrawable">
 
         <TextView
             android:id="@+id/attendees_toolBar"
@@ -35,10 +36,10 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/event_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:layout_weight="1"
         android:hint="@string/enter_string"
         android:inputType="text" />
 
@@ -51,12 +52,13 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/event_description_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:layout_weight="3"
+        android:gravity="start"
         android:hint="@string/description_hint_string"
-        android:inputType="text" />
+        android:inputType="textMultiLine" />
 
     <TextView
         android:id="@+id/textView3"
@@ -67,9 +69,10 @@
         android:textStyle="bold" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/category_selector"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/textView4"
@@ -83,7 +86,7 @@
         android:id="@+id/editTextDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:layout_weight="1"
         android:inputType="date" />
 
     <TextView
@@ -95,18 +98,26 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/event_location_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:layout_weight="1"
         android:hint="@string/location_hint_string"
         android:inputType="text" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/allow_geo_string"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/new_event_geo_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/allow_geo_string"
+        android:layout_weight="1"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -115,16 +126,16 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/choose_qr_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="@string/choose_make_qr_string" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/publish_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="Button" />
+            android:text="@string/save_publish_string" />
     </RelativeLayout>
 </LinearLayout>

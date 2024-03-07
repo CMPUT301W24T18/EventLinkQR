@@ -44,7 +44,11 @@
         android:id="@+id/createEventFragment"
         android:name="com.example.eventlinkqr.OrgCreateEventFragment"
         android:label="create_event_page"
-        tools:layout="@layout/org_create_event_page" />
+        tools:layout="@layout/org_create_event_page" >
+        <action
+            android:id="@+id/action_createEventFragment_to_org_home_page"
+            app:destination="@id/org_home_page" />
+    </fragment>
     <fragment
         android:id="@+id/orgLogin"
         android:name="com.example.eventlinkqr.OrgLogin"
