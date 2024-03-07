@@ -48,7 +48,9 @@ public class AttendeeProfileActivity extends AppCompatActivity {
 
         // Reset App Data button
         Button btnResetApp = findViewById(R.id.btnResetApp);
-        btnResetApp.setOnClickListener(view -> resetAppData()); // Reset app data on button click
+
+        // Reset app data on button click
+        btnResetApp.setOnClickListener(view -> resetAppData());
     }
 
     /**
@@ -99,6 +101,20 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         String phoneNumber = etPhoneNumber.getText().toString();
         String homepage = etHomepage.getText().toString();
 
+        // Validate name is not null or empty
+        if (name == null || name.trim().isEmpty()) {
+            Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Validate phone number if provided, and ensure it is exactly 10 digits
+        if (!phoneNumber.isEmpty()) {
+            if (!phoneNumber.matches("\\d{10}")) {
+                Toast.makeText(this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
         Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -109,6 +125,8 @@ public class AttendeeProfileActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error saving profile", Toast.LENGTH_SHORT).show());
     }
+
+
 
     /**
      * Redirects to AttendeeMainActivity.
