@@ -140,4 +140,20 @@ public class Event {
             return true;
         }
     }
+
+    /**
+     * get the list of checked in attendees
+     * @return checkedInAttendees
+     */
+    public ArrayList<Attendee> getCheckedInAttendees() {
+        return checkedInAttendees;
+    }
+
+    /**
+     * get the list of check in locations
+     * @return checkInLocations
+     */
+    public ArrayList<LatLng> getCheckInLocations() {
+        return checkInLocations;
+    }
 }
