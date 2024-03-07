@@ -28,4 +28,7 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="channel_name">notifications</string>
     <string name="channel_description">this is a notification channel\n</string>
+    <string name="send_notification">Send Notification\n</string>
+    <string name="message_title">Message Title</string>
+    <string name="notification_message">Notification Message</string>
 </resources>

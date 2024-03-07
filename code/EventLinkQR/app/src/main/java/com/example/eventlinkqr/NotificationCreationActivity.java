@@ -33,42 +33,43 @@ public class NotificationCreationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_notification);
 
+        String eventId = getIntent().getStringExtra("eventId");
+
 // Temporarily commented out the notification sending functionality.
 // Initially created this page and added basic structure as a placeholder.
 // Currently testing notifications directly from the database. I will need to collaborate with Adrien for 
 // implementation of this feature, which I plan to address in the next PR. 
         
-//        final EditText titleInput = findViewById(R.id.etNotificationTitle);
-//        final EditText messageInput = findViewById(R.id.etNotificationMessage);
-//        Button sendButton = findViewById(R.id.btnCreateNotification);
+        final EditText titleInput = findViewById(R.id.etNotificationTitle);
+        final EditText messageInput = findViewById(R.id.etNotificationMessage);
+        Button sendButton = findViewById(R.id.btnCreateNotification);
 
 
-//        sendButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String eventId = "event1";
-//                String title = titleInput.getText().toString();
-//                String message = messageInput.getText().toString();
-//
-//
-//                // Prepare the notification data in a Map
-//                Map<String, Object> notification = new HashMap<>();
-//                notification.put("eventId", eventId);
-//                notification.put("heading", title);
-//                notification.put("description", message);
-//
-//
-//                // Save to Firestore
-//                FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                db.collection("notifications_testing").add(notification)
-//                        .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()))
-//                        .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-//
-//
-//
-//                finish(); // Close activity
-//            }
-//        });
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = titleInput.getText().toString();
+                String message = messageInput.getText().toString();
+
+
+                // Prepare the notification data in a Map
+                Map<String, Object> notification = new HashMap<>();
+                notification.put("eventId", eventId);
+                notification.put("heading", title);
+                notification.put("description", message);
+
+
+                // Save to Firestore
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("notifications_testing").add(notification)
+                        .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()))
+                        .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+
+
+
+                finish(); // Close activity
+            }
+        });
     }
 
 

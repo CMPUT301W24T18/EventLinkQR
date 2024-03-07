@@ -1,10 +1,12 @@
 package com.example.eventlinkqr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ public class OrgEventFragment extends Fragment {
     /** All buttons and the toolbar that will be used on this page*/
     private Button detailsButton, attendeesButton;
     private Toolbar orgEventToolBar;
+    private ImageView notificationSendIcon; // ImageView for sending notifications
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class OrgEventFragment extends Fragment {
         View view = inflater.inflate(R.layout.org_event_page, container, false);
         detailsButton = view.findViewById(R.id.details_button);
         attendeesButton = view.findViewById(R.id.attendees_button);
+        notificationSendIcon = view.findViewById(R.id.notification_send_icon); // Find the ImageView
 
         orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgEventToolBar);
@@ -50,6 +54,16 @@ public class OrgEventFragment extends Fragment {
         detailsButton.setOnClickListener(v ->
                 Toast.makeText(getContext(), "This function is not ready yet", Toast.LENGTH_SHORT).show());
 
+        // Set the onClickListener for the send notification icon
+        notificationSendIcon.setOnClickListener(v -> {
+            // Create an intent to start the NotificationCreationActivity
+            Intent intent = new Intent(getActivity(), NotificationCreationActivity.class);
+            Event currentEvent = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+            if(currentEvent != null) {
+                intent.putExtra("eventId", currentEvent.getId()); // Assuming the Event object has a method getId() that returns the event's ID
+            }
+            startActivity(intent);
+        });
         // Inflate the layout for this fragment
         return view;
     }
