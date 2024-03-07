@@ -62,6 +62,11 @@ public class AttendeeMainActivity extends Activity {
             startActivity(intent);
         });
 
+
+         // Handles the click event on the notification button. For devices running Android 13 (API level 33) or higher,
+         // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayActivity.
+         // If not, shows a custom dialog to guide users to enable notifications. For devices below Android 13, directly
+         // navigates to the NotificationDisplayActivity as permission checks are not required.
         notificationButton.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==

@@ -118,12 +118,7 @@ public class NotificationDisplayActivity extends AppCompatActivity {
             Intent intent = new Intent(NotificationDisplayActivity.this, NotificationDisplayActivity.class);
             startActivity(intent);
         });
-
-
     }
-
-
-
 
     /**
      * Fetches notifications from the Firebase Firestore database based on the current FCM token.
