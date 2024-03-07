@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -25,6 +26,7 @@ public class OrgMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.org_main);
         homeButton = findViewById(R.id.org_home_button);
+        profileButton = findViewById(R.id.org_profile_button);
         navController = findViewById(R.id.org_nav_controller);
         databaseManager = DatabaseManager.getInstance();
 
@@ -36,6 +38,15 @@ public class OrgMainActivity extends AppCompatActivity {
                 Navigation.findNavController(navController).navigate(R.id.org_home_page);
             }
         });
+
+
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(OrgMainActivity.this, AttendeeProfileActivity.class));
+            }
+        });
+
 
     }
 

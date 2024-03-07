@@ -34,6 +34,7 @@
 
 
         <activity android:name=".OrgMainActivity"/>
+        <activity android:name=".LandingPage"/>
 
         <activity
             android:name=".OrganizerEventStats"

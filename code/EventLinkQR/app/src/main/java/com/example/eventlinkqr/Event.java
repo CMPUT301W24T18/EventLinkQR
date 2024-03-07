@@ -5,13 +5,12 @@ package com.example.eventlinkqr;
  */
 public class Event {
     /** All the attributes of an event*/
-    private QRCode qr;
-    private String name, description, category, date, location;
+    private String name, description, category, date, location, qrData;
     private Boolean geoTracking;
 
     /**
      * Event creator with all attributes
-     * @param qr the event's QR code
+     * @param qr the event's QR code data
      * @param name the event's name
      * @param description the event's description
      * @param category the event's category
@@ -19,8 +18,8 @@ public class Event {
      * @param location the event's location
      * @param geoTracking whether the event has geolocation tracking or not
      */
-    public Event(QRCode qr, String name, String description, String category, String date, String location, Boolean geoTracking) {
-        this.qr = qr;
+    public Event(String qr, String name, String description, String category, String date, String location, Boolean geoTracking) {
+        this.qrData = qr;
         this.name = name;
         this.description = description;
         this.category = category;
@@ -40,11 +39,11 @@ public class Event {
     }
 
     /**
-     * gets the event's QR code
+     * gets the event's QR code data
      * @return the event's QR code
      */
-    public QRCode getQr() {
-        return qr;
+    public String getQrData() {
+        return qrData;
     }
 
     /**

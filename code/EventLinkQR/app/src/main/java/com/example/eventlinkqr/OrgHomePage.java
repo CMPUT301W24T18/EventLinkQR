@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
@@ -34,8 +35,8 @@ public class OrgHomePage extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.org_home_page, container, false);
         eventList = view.findViewById(R.id.event_list_view);
@@ -50,21 +51,14 @@ public class OrgHomePage extends Fragment {
 
 
         // switch to the event page
-        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((OrgMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
-                Navigation.findNavController(view).navigate(R.id.action_home_to_orgEventFragment);
-            }
+        eventList.setOnItemClickListener((parent, view1, position, id) -> {
+            ((OrgMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
+            Navigation.findNavController(view1).navigate(R.id.action_home_to_orgEventFragment);
         });
 
         // switch to the create event page
-        createEventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_home_page_to_createEventFragment);
-            }
-        });
+        createEventButton.setOnClickListener(v ->
+                Navigation.findNavController(view).navigate(R.id.action_home_page_to_createEventFragment));
 
         //add the data from the database into the events listview
         eventsRef.addSnapshotListener((querySnapshots, error) -> {
@@ -77,7 +71,7 @@ public class OrgHomePage extends Fragment {
                 for (QueryDocumentSnapshot doc: querySnapshots) {
                     // add event to the list if the current organizer is its organizer
                     if(Objects.equals(doc.getString("organizer"), ((OrgMainActivity) requireActivity()).getOrganizerName())) {
-                        String eventName = doc.getId();
+                        String eventName = doc.getString("name");
                         //https://stackoverflow.com/questions/67846416/firestore-timestamp-returning-objects-are-not-valid-as-react-child-found-obje
                         Timestamp time = (Timestamp) (doc.get("dateAndTime"));
                         assert time != null;
