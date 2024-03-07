@@ -55,8 +55,9 @@ public class UploadImageActivity extends AppCompatActivity {
         cancel_button = findViewById(R.id.button_cancel_upload);
         prompt = findViewById(R.id.prompt);
 
-        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage("Basia"); //(Attendee.getUuid);
-        imagePreview.setImageBitmap(deterministicBitmap);
+//        For Testing Purposes
+//        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage("Basia"); //(Attendee.getUuid);
+//        imagePreview.setImageBitmap(deterministicBitmap);
 
         chooseImage_button.setOnClickListener(view -> getImage.launch("image/*"));
 
@@ -65,7 +66,7 @@ public class UploadImageActivity extends AppCompatActivity {
             if (imageUri != null) {
                 ImageManager imageManager = new ImageManager();
 
-                String userId = "Basia"; //Attendee.getUuid();
+                String userId = ""; //Attendee.getUuid();
                 String fileName = "uploaded_image_" + System.currentTimeMillis() + ".jpg"; // Example file name
                 String imagePath = "users/" + userId + "/" + fileName;
 
