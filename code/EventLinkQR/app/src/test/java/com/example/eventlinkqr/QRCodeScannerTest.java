@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mockStatic;
@@ -31,7 +32,7 @@ public class QRCodeScannerTest {
     @Mock
     private GmsBarcodeScanner mockScanner;
     @Mock
-    private Consumer<QRCode> mockSuccessConsumer;
+    private Consumer<String> mockSuccessConsumer;
     @Mock
     private Consumer<Exception> mockFailuerConsumer;
     @Mock
@@ -54,5 +55,12 @@ public class QRCodeScannerTest {
 
         verify(mockTask, times(1)).addOnSuccessListener(any());
         verify(mockTask, times(1)).addOnFailureListener(any());
+    }
+
+    @Test
+    public void testHashBarcodeText() {
+        String testText = "ABC-1234-/+"; // Simulate barcode text
+        String hashedText = QRCodeScanner.hashBarcodeText(testText);
+        assertEquals(hashedText, "7fc2d719a8274ade368094cac41187122963a9a09ac299818132940730434fb1");
     }
 }
