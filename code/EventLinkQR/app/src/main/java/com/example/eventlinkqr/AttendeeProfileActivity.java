@@ -134,7 +134,6 @@ public class AttendeeProfileActivity extends AppCompatActivity {
     private void redirectToMainActivity() {
         Intent intent = new Intent(AttendeeProfileActivity.this, AttendeeMainActivity.class);
         startActivity(intent);
-        Toast.makeText(this, "Profile Saved", Toast.LENGTH_SHORT).show();
         finish();
     }
 

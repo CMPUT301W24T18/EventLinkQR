@@ -15,8 +15,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
+/**
+ * LandingPage is an AppCompatActivity that serves as the entry point of the app.
+ * It manages the initial setup and navigation based on whether the user has a UUID.
+ * The class also handles Firebase Messaging token retrieval and creates a notification channel
+ * for devices running Android Oreo (API 26) or higher.
+ */
+
+
 public class LandingPage extends AppCompatActivity {
 
+    /**
+     * Called when the activity is starting. This is where most initialization should go:
+     * calling setContentView(int) to inflate the activity's UI, using findViewById(int)
+     * to programmatically interact with widgets in the UI, setting up listeners, and
+     * initializing other activity-wide resources.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle). Otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +73,7 @@ public class LandingPage extends AppCompatActivity {
                     Log.d(TAG, "FCM Token: " + token);
                 });
 
-        // Check for Android Oreo (API 26) or newer to create a notification channel as it is mandatory for notifications on these versions. 
+        // Check for Android Oreo (API 26) or newer to create a notification channel as it is mandatory for notifications on these versions.
         // For older versions, no channel is required.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.channel_name);
