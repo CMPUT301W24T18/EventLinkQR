@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,10 +55,10 @@ public class QRCodeManagerTest {
             // Arrange
             String codeText = "sampleCode";
             int codeType = 1;
-            Event event = new Event("eventId", "event description", "category", Timestamp.now(), "location", true);
+            String eventId = "eventId";
 
             // Act
-            Task<Void> result = QRCodeManager.addQRCode(codeText, codeType, event);
+            Task<Void> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
 
             // Assert
             Assertions.assertTrue(result.isSuccessful());
@@ -67,7 +66,7 @@ public class QRCodeManagerTest {
             verify(mockDocumentReference).set(argumentCaptor.capture());
             Map<String, Object> capturedArgument = argumentCaptor.getValue();
             Assertions.assertEquals(codeType, capturedArgument.get("codeType"));
-            Assertions.assertEquals("/Event/" + event.getId(), capturedArgument.get("event"));
+            Assertions.assertEquals("/Events/" + eventId, capturedArgument.get("event"));
         }
     }
 
@@ -82,10 +81,11 @@ public class QRCodeManagerTest {
             // Arrange
             String codeText = "sampleCode";
             int codeType = 1;
-            Event event = new Event("eventId", "event description", "category", Timestamp.now(), "location", true);
+
+            String eventId = "eventId";
 
             // Act
-            Task<Void> result = QRCodeManager.addQRCode(codeText, codeType, event);
+            Task<Void> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
 
             // Assert
             Assertions.assertFalse(result.isSuccessful());

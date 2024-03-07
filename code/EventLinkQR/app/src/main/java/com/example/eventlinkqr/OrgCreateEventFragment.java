@@ -82,9 +82,9 @@ public class OrgCreateEventFragment extends Fragment {
             if(name.equals("") || description.equals("") || location.equals("") || category.equals("Category")){
                 // send wrong password message
                 Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 // create new event form data and add it toi the database using the event manager
-                Event newEvent = new Event(name, description, category, Timestamp.now().toDate().toString(), location, tracking);
+                Event newEvent = new Event(name, description, category, Timestamp.now(), location, tracking);
                 String organizer = ((OrgMainActivity) requireActivity()).getOrganizerName();
 
                 EventManager.createEvent(newEvent, organizer);

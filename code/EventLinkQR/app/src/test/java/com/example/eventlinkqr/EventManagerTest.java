@@ -106,7 +106,7 @@ public class EventManagerTest {
             when(mockCollectionReference.document(eq("eventName"))).thenReturn(mockDocumentReference);
             when(mockDocumentReference.collection(eq("attendees"))).thenReturn(mockCollectionReference);
             Query mockQuery = mock(Query.class);
-            when(mockCollectionReference.where(any())).thenReturn(mockQuery);
+            when(mockCollectionReference.whereEqualTo(eq("checkedIn"), any())).thenReturn(mockQuery);
             EventManager.addEventAttendeeSnapshotCallback("eventName", true, e -> {});
             verify(mockQuery, times(1)).addSnapshotListener(any());
         }

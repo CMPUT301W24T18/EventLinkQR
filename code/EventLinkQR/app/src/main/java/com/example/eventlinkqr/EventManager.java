@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,9 @@ public class EventManager extends Manager {
      * @param eventId The id of the event to check into
      */
     public static Task<Void> checkIn(String attendeeName, String eventId) {
-        return getCollection().document(eventId).collection("attendees").document(attendeeName).update("checkedIn", true);
+        Map<String, Object> attendee = new HashMap<>();
+        attendee.put("checkedIn", true);
+        return getCollection().document(eventId).collection("attendees").document(attendeeName).set(attendee);
     }
 
     /**
@@ -131,8 +134,12 @@ public class EventManager extends Manager {
         newEventData.put("organizer", organizer);
 
         getCollection().add(newEventData)
-            .addOnSuccessListener(documentReference ->
-                    Log.e("Firestore", "Event " + newEvent.getName() +" by "+ organizer +" successfully added"))
+            .addOnSuccessListener(documentReference -> {
+                    String eventId = documentReference.getId();
+                    // Automatically generate a QR Code for now. In the future support uploading custom.
+                    QRCodeManager.addQRCode("eventlinkqr:" + eventId, QRCode.CHECK_IN_TYPE, eventId);
+                    Log.e("Firestore", "Event " + newEvent.getName() +" by "+ organizer +" successfully added");
+            })
             .addOnFailureListener(e -> {
                 Log.e("Firestore", "Event failed to be added");
             });
