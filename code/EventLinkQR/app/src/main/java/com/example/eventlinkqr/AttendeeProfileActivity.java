@@ -108,8 +108,9 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         String name = etName.getText().toString();
         String phoneNumber = etPhoneNumber.getText().toString();
         String homepage = etHomepage.getText().toString();
+        Boolean locationEnabled = toggleLocation.isChecked();
 
-        Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken);
+        Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("attendees_testing").document(uuid).set(attendee)
@@ -143,6 +144,7 @@ public class AttendeeProfileActivity extends AppCompatActivity {
                         etName.setText(attendee.getName());
                         etPhoneNumber.setText(attendee.getPhone_number());
                         etHomepage.setText(attendee.getHomepage());
+                        toggleLocation.setChecked(attendee.getLocation_enabled());
                     }
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Error loading profile", e));
