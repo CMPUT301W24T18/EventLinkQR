@@ -2,13 +2,19 @@ package com.example.eventlinkqr;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -70,12 +76,12 @@ public class EventManager extends Manager {
      * @param attendeeCallback The callback to be invoked when the event attendees change
      */
     public static void addEventAttendeeSnapshotCallback(String eventName, boolean checkedIn, Consumer<List<String>> attendeeCallback) {
-        getCollection().document(eventName).collection("Attendees").where(Filter.arrayContains("checkedIn", checkedIn)).addSnapshotListener((querySnapshots, error) -> {
+        getCollection().document(eventName).collection("attendees").whereEqualTo("checkedIn", checkedIn).addSnapshotListener((querySnapshots, error) -> {
+            // add all attendees that have checked in
             if (error != null) {
                 Log.e("Firestore", error.toString());
                 return;
             }
-
             if (querySnapshots != null) {
                 attendeeCallback.accept(querySnapshots.getDocuments().stream().map(d -> d.getString("name")).collect(Collectors.toList()));
             }
@@ -105,5 +111,30 @@ public class EventManager extends Manager {
      */
     private static CollectionReference getCollection() {
         return getFirebase().collection(COLLECTION_PATH);
+    }
+
+    /**
+     * Adds a new event to the database
+     * @param newEvent the new event to be added to the database
+     */
+    public static void createEvent(Event newEvent, String organizer){
+        HashMap<String, Object> newEventData = new HashMap<>();
+        newEventData.put("name", newEvent.getName());
+        newEventData.put("description", newEvent.getDescription());
+        newEventData.put("category", newEvent.getCategory());
+        newEventData.put("location", newEvent.getLocation());
+
+        // will edit this when i create a proper date selector
+        newEventData.put("dateAndTime", Timestamp.now());
+
+        newEventData.put("geoTracking", newEvent.getGeoTracking());
+        newEventData.put("organizer", organizer);
+
+        getCollection().add(newEventData)
+            .addOnSuccessListener(documentReference ->
+                    Log.e("Firestore", "Event " + newEvent.getName() +" by "+ organizer +" successfully added"))
+            .addOnFailureListener(e -> {
+                Log.e("Firestore", "Event failed to be added");
+            });
     }
 }
