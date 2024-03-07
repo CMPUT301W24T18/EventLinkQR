@@ -25,6 +25,8 @@ import com.google.firebase.Timestamp;
  */
 public class OrgCreateEventFragment extends Fragment {
 
+    private String customQRString;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,7 +89,7 @@ public class OrgCreateEventFragment extends Fragment {
                 Event newEvent = new Event(name, description, category, Timestamp.now(), location, tracking);
                 String organizer = ((OrgMainActivity) requireActivity()).getOrganizerName();
 
-                EventManager.createEvent(newEvent, organizer);
+                EventManager.createEvent(newEvent, organizer, customQRString);
 
                 // return to the home page
                 Navigation.findNavController(view).navigate(R.id.action_createEventFragment_to_org_home_page);
@@ -96,8 +98,16 @@ public class OrgCreateEventFragment extends Fragment {
         });
 
         // send message since the function is not yet implemented
-        chooseQrButton.setOnClickListener(v ->
-                Toast.makeText(getContext(), "This function is not ready yet", Toast.LENGTH_SHORT).show());
+        chooseQrButton.setOnClickListener(v -> {
+            publishButton.setEnabled(false);
+            ((OrgMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {
+                this.customQRString = codeText;
+                publishButton.setEnabled(true);
+            }, e -> {
+                Toast.makeText(requireActivity(), "Code scan failed", Toast.LENGTH_SHORT).show();
+                publishButton.setEnabled(true);
+            });
+        });
 
     }
 
