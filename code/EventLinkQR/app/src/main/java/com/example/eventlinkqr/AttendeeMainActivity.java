@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Main activity class for attendees in the event management application.
@@ -23,6 +24,8 @@ public class AttendeeMainActivity extends Activity {
 
     /** QRCode scanner for scanning codes */
     private QRCodeScanner scanner;
+
+    private String profileName;
 
     /**
      * Called when the activity is starting.
@@ -44,6 +47,16 @@ public class AttendeeMainActivity extends Activity {
         profileButton = findViewById(R.id.attendee_profile_button);
         notificationButton = findViewById(R.id.attendee_notification_button);
         eventListView = findViewById(R.id.event_list_view);
+
+        // Retrieve UUID from SharedPreferences and pass it to the next activity
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String uuid = prefs.getString("UUID", null);
+
+        if (uuid != null) {
+            FirebaseFirestore.getInstance().collection("attendees_testing").document(uuid).get().addOnSuccessListener(d -> {
+                profileName = d.getString("name");
+            });
+        }
 
         homeButton.setOnClickListener(view -> {
             // Create an intent to start AttendeeMainActivity
@@ -88,7 +101,10 @@ public class AttendeeMainActivity extends Activity {
             scanner.codeFromScan(codeText -> {
                 QRCodeManager.fetchQRCode(codeText).addOnSuccessListener(code -> {
                     if (code.getCodeType() == QRCode.CHECK_IN_TYPE) {
-                        EventManager.checkIn("David", code.getEventId()).addOnSuccessListener(x -> {
+                        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                        String uuid = prefs.getString("UUID", null);
+
+                        EventManager.checkIn(uuid, profileName, code.getEventId()).addOnSuccessListener(x -> {
                             Toast.makeText(this,"Checked In", Toast.LENGTH_SHORT).show();
                         }).addOnFailureListener(x -> {
                             Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();

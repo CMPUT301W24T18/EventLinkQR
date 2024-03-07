@@ -33,10 +33,11 @@ public class EventManager extends Manager {
      * @param attendeeName The name of the attendee to check in
      * @param eventId      The id of the event to check into
      */
-    public static Task<Void> checkIn(String attendeeName, String eventId) {
+    public static Task<Void> checkIn(String uuid, String attendeeName, String eventId) {
         Map<String, Object> attendee = new HashMap<>();
+        attendee.put("name", attendeeName);
         attendee.put("checkedIn", true);
-        return getCollection().document(eventId).collection("attendees").document(attendeeName).set(attendee);
+        return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
     /**
