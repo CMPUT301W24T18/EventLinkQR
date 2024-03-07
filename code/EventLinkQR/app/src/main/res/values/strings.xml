@@ -31,4 +31,9 @@
     <string name="what_to_expect">What to expect</string>
     <string name="save_publish_string">Save and Publish</string>
     <string name="choose_make_qr_string">Make/choose QR Code</string>
+    <string name="prompt">Upload your image here</string>
+    <string name="upload">Upload</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_image">Choose Image</string>
+    <string name="editProfilImg">Edit Profile Img</string>
 </resources>
