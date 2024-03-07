@@ -17,13 +17,15 @@ public class OrgMainActivity extends AppCompatActivity {
     private FragmentContainerView navController;
     private Event currentEvent;
     private String organizerName;
+
+    private QRCodeScanner scanner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.org_main);
         homeButton = findViewById(R.id.org_home_button);
         navController = findViewById(R.id.org_nav_controller);
-
+        scanner = new QRCodeScanner(this);
         homeButton.setOnClickListener(v -> {
             Navigation.findNavController(navController).navigate(R.id.org_home_page);
         });
@@ -68,5 +70,13 @@ public class OrgMainActivity extends AppCompatActivity {
      */
     public void setButtonsVisible(){
         findViewById(R.id.org_main_buttons).setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Get the qrCode scanner
+     * @return The QRCode scanner
+     */
+    public QRCodeScanner getScanner() {
+        return scanner;
     }
 }

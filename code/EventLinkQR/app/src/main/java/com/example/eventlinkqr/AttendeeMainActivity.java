@@ -10,9 +10,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.ListView;
+import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Main activity class for attendees in the event management application.
@@ -20,8 +22,13 @@ import com.google.android.material.button.MaterialButton;
 public class AttendeeMainActivity extends Activity {
 
     // UI components: buttons and a list view
-    MaterialButton homeButton, scanButton, profileButton, notificationButton;
-    ListView eventListView;
+    private MaterialButton homeButton, scanButton, profileButton, notificationButton;
+    private ListView eventListView;
+
+    /** QRCode scanner for scanning codes */
+    private QRCodeScanner scanner;
+
+    private String profileName;
 
     /**
      * Called when the activity is starting.
@@ -31,6 +38,9 @@ public class AttendeeMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        scanner = new QRCodeScanner(this);
+
         // Set the content view to the attendee main layout
         setContentView(R.layout.attendee_main_layout);
 
@@ -41,12 +51,29 @@ public class AttendeeMainActivity extends Activity {
         notificationButton = findViewById(R.id.attendee_notification_button);
         eventListView = findViewById(R.id.event_list_view);
 
+        // Retrieve UUID from SharedPreferences and pass it to the next activity
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String uuid = prefs.getString("UUID", null);
+
+        if (uuid != null) {
+            FirebaseFirestore.getInstance().collection("attendees_testing").document(uuid).get().addOnSuccessListener(d -> {
+                profileName = d.getString("name");
+            });
+        }
+
         homeButton.setOnClickListener(view -> {
             // Create an intent to start AttendeeMainActivity
             Intent intent = new Intent(AttendeeMainActivity.this, AttendeeMainActivity.class);
             startActivity(intent);
         });
 
+        setupProfileButton();
+
+        setupScanButton();
+    }
+
+    /** Initialize onClick listener for the profile button*/
+    private void setupProfileButton() {
         // Set a click listener for the profile button
         profileButton.setOnClickListener(view -> {
             // Create an intent to start AttendeeProfileActivity
@@ -58,6 +85,7 @@ public class AttendeeMainActivity extends Activity {
             if (uuid != null) {
                 intent.putExtra("UUID", uuid);
             }
+
             // Start the AttendeeProfileActivity
             startActivity(intent);
         });
@@ -86,6 +114,29 @@ public class AttendeeMainActivity extends Activity {
         });
 
     }
+
+    /** Initialize the onClick listener for the scan button */
+    private void setupScanButton() {
+        scanButton.setOnClickListener(v -> {
+            scanner.codeFromScan(codeText -> {
+                QRCodeManager.fetchQRCode(codeText).addOnSuccessListener(code -> {
+                    if (code.getCodeType() == QRCode.CHECK_IN_TYPE) {
+                        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                        String uuid = prefs.getString("UUID", null);
+
+                        EventManager.checkIn(uuid, profileName, code.getEventId()).addOnSuccessListener(x -> {
+                            Toast.makeText(this,"Checked In", Toast.LENGTH_SHORT).show();
+                        }).addOnFailureListener(x -> {
+                            Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                });
+            }, e -> {
+                Toast.makeText(this, "Invalid QR Code", Toast.LENGTH_SHORT).show();
+            });
+        });
+    }
+}
 
     /**
      * Displays a custom dialog to request notification permission from the user.
