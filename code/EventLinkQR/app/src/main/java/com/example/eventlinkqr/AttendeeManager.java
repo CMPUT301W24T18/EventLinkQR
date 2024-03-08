@@ -9,7 +9,7 @@ public class AttendeeManager extends Manager {
     /**
      * The Firestore collection path for attendees
      */
-    private static final String COLLECTION_PATH = "Attendees";
+    private static final String COLLECTION_PATH = "Users";
 
 
     private static CollectionReference getCollection() {
