@@ -136,7 +136,7 @@ public class AttendeeMainActivity extends Activity {
             });
         });
     }
-}
+
 
     /**
      * Displays a custom dialog to request notification permission from the user.
