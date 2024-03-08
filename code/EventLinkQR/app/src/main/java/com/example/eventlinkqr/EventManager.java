@@ -31,7 +31,7 @@ public class EventManager extends Manager {
     private static final String COLLECTION_PATH = "Events";
 
     /**
-     * Check the given attendee into an event
+     * Check the given attendee into an event with no location
      *
      * @param attendeeName The name of the attendee to check in
      * @param eventId      The id of the event to check into
@@ -43,6 +43,20 @@ public class EventManager extends Manager {
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
+    /**
+     * Check the given attendee into an event with a location
+     *
+     * @param attendeeName The name of the attendee to check in
+     * @param eventId      The id of the event to check into
+     * @param location     The location of the check-in
+     */
+    public static Task<Void> checkIn(String uuid, String attendeeName, String eventId, LatLng location) {
+        Map<String, Object> attendee = new HashMap<>();
+        attendee.put("name", attendeeName);
+        attendee.put("checkedIn", true);
+        attendee.put("location", new GeoPoint(location.latitude, location.longitude));
+        return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
+    }
     /**
      * Add a callback to changes in the Events
      *

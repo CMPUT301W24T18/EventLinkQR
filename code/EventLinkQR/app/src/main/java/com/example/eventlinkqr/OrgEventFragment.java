@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,11 +56,19 @@ public class OrgEventFragment extends Fragment {
         attendeesButton.setOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_attendeesPage));
 
-        // temporary message since it is not yet completely implemented
-        detailsButton.setOnClickListener(v ->
-                Toast.makeText(getContext(), "This function is not ready yet", Toast.LENGTH_SHORT).show());
-
         Event event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+
+        // temporary message since it is not yet completely implemented
+        detailsButton.setOnClickListener(v -> {
+            if (event != null) {
+                Intent intent = new Intent(getActivity(), OrganizerEventStats.class);
+                intent.putExtra("eventId", event.getId()); // Replace "eventId" with the key you are using in OrganizerEventStats to retrieve the extra
+
+                startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), "Event details are not available", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Set the values to be displayed
         eventTitle.setText(event.getName());
