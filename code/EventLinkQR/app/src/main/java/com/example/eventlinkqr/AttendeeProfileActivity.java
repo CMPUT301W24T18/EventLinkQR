@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -21,7 +22,6 @@ public class AttendeeProfileActivity extends AppCompatActivity {
     private static final String TAG = "AttendeeProfile";
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
-    private Button btnSave, btnBack;
     private Switch switchLocation; // Used for location permission
     private String uuid; // Unique identifier for the attendee
     private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
@@ -35,20 +35,28 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         etName = findViewById(R.id.etFullName);
         etPhoneNumber = findViewById(R.id.phoneNumberEdit);
         etHomepage = findViewById(R.id.homepageEdit);
-        btnSave = findViewById(R.id.btnSave);
-        btnBack = findViewById(R.id.btnBack);
+        Button btnSave = findViewById(R.id.btnSave);
+        Button btnBack = findViewById(R.id.btnBack);
         switchLocation = findViewById(R.id.switchLocation);
+        Button switchAccount = findViewById(R.id.switch_account);
 
         attendeeArrayAdapter = AttendeeArrayAdapter.getInstance(); // Get the singleton instance of the adapter
 
         checkUUIDAndLoadProfile(); // Check UUID and load profile data
 
+        // return to the select page to switch account type
+        switchAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(AttendeeProfileActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
         btnSave.setOnClickListener(view -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
         btnBack.setOnClickListener(view -> finish()); // Finish activity on back button click
 
         // Reset App Data button
         Button btnResetApp = findViewById(R.id.btnResetApp);
-        btnResetApp.setOnClickListener(view -> resetAppData()); // Reset app data on button click
+
+        // Reset app data on button click
+        btnResetApp.setOnClickListener(view -> resetAppData());
     }
 
     /**
@@ -99,6 +107,20 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         String phoneNumber = etPhoneNumber.getText().toString();
         String homepage = etHomepage.getText().toString();
 
+        // Validate name is not null or empty
+        if (name == null || name.trim().isEmpty()) {
+            Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Validate phone number if provided, and ensure it is exactly 10 digits
+        if (!phoneNumber.isEmpty()) {
+            if (!phoneNumber.matches("\\d{10}")) {
+                Toast.makeText(this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
         Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -110,13 +132,14 @@ public class AttendeeProfileActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Toast.makeText(this, "Error saving profile", Toast.LENGTH_SHORT).show());
     }
 
+
+
     /**
      * Redirects to AttendeeMainActivity.
      */
     private void redirectToMainActivity() {
-        Intent intent = new Intent(AttendeeProfileActivity.this, AttendeeMainActivity.class);
+        Intent intent = new Intent(AttendeeProfileActivity.this, MainActivity.class);
         startActivity(intent);
-        Toast.makeText(this, "Profile Saved", Toast.LENGTH_SHORT).show();
         finish();
     }
 

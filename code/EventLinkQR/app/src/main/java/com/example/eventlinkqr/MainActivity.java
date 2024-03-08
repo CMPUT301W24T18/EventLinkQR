@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -25,12 +26,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, AttendeeMainActivity.class));
         });
 
-        attendeeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LandingPage.class));
-            }
-        });
+        adminButton.setOnClickListener(v ->
+                Toast.makeText(this, "You're not an admin", Toast.LENGTH_SHORT).show());
 
     }
 }

@@ -20,13 +20,27 @@ import androidx.core.content.ContextCompat;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
- * The LandingPage activity serves as the entry point to the attendee section.
- * It also handles the creation of notification channels and requesting notification permissions on Android Tiramisu (13) and above.
+ * LandingPage is an AppCompatActivity that serves as the entry point of the app.
+ * It manages the initial setup and navigation based on whether the user has a UUID.
+ * The class also handles Firebase Messaging token retrieval and creates a notification channel
+ * for devices running Android Oreo (API 26) or higher.
  */
-public class LandingPage extends AppCompatActivity {
 
+
+public class LandingPage extends AppCompatActivity {
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
+    /**
+     * Called when the activity is starting. This is where most initialization should go:
+     * calling setContentView(int) to inflate the activity's UI, using findViewById(int)
+     * to programmatically interact with widgets in the UI, setting up listeners, and
+     * initializing other activity-wide resources.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle). Otherwise, it is null.
+     */
+  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +81,7 @@ public class LandingPage extends AppCompatActivity {
                 startActivity(intent);
             });
         } else {
-            Intent intent = new Intent(LandingPage.this, AttendeeMainActivity.class);
+            Intent intent = new Intent(LandingPage.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
