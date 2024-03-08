@@ -3,10 +3,12 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +23,7 @@ public class AttendeeProfileActivity extends AppCompatActivity {
     private static final String TAG = "AttendeeProfile";
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
-    private Button btnSave, btnBack;
+    private Button btnSave, btnBack, photoButton;
     private Switch switchLocation; // Used for location permission
     private String uuid; // Unique identifier for the attendee
     private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
@@ -38,13 +40,27 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         btnBack = findViewById(R.id.btnBack);
         switchLocation = findViewById(R.id.switchLocation);
+        photoButton = findViewById(R.id.btnEditProfile);
 
         attendeeArrayAdapter = AttendeeArrayAdapter.getInstance(); // Get the singleton instance of the adapter
 
         checkUUIDAndLoadProfile(); // Check UUID and load profile data
 
         btnSave.setOnClickListener(view -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
-        btnBack.setOnClickListener(view -> finish()); // Finish activity on back button click
+        btnBack.setOnClickListener(view -> finish());// Finish activity on back button click
+
+        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
+
+
+        ImageView preview = findViewById(R.id.ivProfileImage);
+        preview.setImageBitmap(deterministicBitmap);
+
+        photoButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, UploadImageActivity.class);
+            intent.putExtra("origin", "Attendee");
+            intent.putExtra("uuid", uuid);
+            startActivity(intent);
+        });
 
         // Reset App Data button
         Button btnResetApp = findViewById(R.id.btnResetApp);
