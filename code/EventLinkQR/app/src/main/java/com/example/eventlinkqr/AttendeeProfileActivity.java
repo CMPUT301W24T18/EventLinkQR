@@ -130,7 +130,7 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("attendees_testing").document(uuid).set(attendee)
+        db.collection("Attendees").document(uuid).set(attendee)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Profile Saved", Toast.LENGTH_SHORT).show();
                     redirectToMainActivity();
@@ -155,7 +155,7 @@ public class AttendeeProfileActivity extends AppCompatActivity {
      */
     private void loadProfile(String uuid) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("attendees_testing").document(uuid).get()
+        db.collection("Attendees").document(uuid).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     Attendee attendee = documentSnapshot.toObject(Attendee.class);
                     if (attendee != null) {

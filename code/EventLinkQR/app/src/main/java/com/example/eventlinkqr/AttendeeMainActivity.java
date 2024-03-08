@@ -72,7 +72,7 @@ public class AttendeeMainActivity extends Activity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (uuid != null) {
-            FirebaseFirestore.getInstance().collection("attendees_testing").document(uuid).get().addOnSuccessListener(d -> {
+            FirebaseFirestore.getInstance().collection("Attendees").document(uuid).get().addOnSuccessListener(d -> {
                 profileName = d.getString("name");
             });
         }

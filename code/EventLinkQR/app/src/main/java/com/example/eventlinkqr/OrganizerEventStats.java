@@ -43,28 +43,25 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
         textViewTotalAttendees = findViewById(R.id.textViewTotalAttendance);
 
         // Get the eventID from the intent
-        //String eventId = getIntent().getStringExtra("eventId");
-        String eventId = "event1";
+        String eventId = getIntent().getStringExtra("eventId");
 
         Log.d("OrganizerEventStats", eventId);
 
-        if (eventId != null) {
-            EventManager.getEventById(eventId, event -> {
-                if (event != null) {
-                    this.event = event;
-                    locations = event.getCheckInLocations();
-                    runOnUiThread(() -> setupMap());
+        EventManager.getEventById(eventId, event -> {
+            if (event != null) {
+                this.event = event;
+                locations = event.getCheckInLocations();
+                runOnUiThread(() -> setupMap());
 
 
-                    int totalAttendees = event.getTotalAttendees();
-                    String displayTotalAttendees = "Total Attendance\n" + totalAttendees;
-                    textViewTotalAttendees.setText(displayTotalAttendees);
+                int totalAttendees = event.getTotalAttendees();
+                String displayTotalAttendees = "Total Attendance\n" + totalAttendees;
+                textViewTotalAttendees.setText(displayTotalAttendees);
 
-                } else {
-                    Log.d("OrganizerEventStats", "Event is null");
-                }
-            });
-        }
+            } else {
+                Log.d("OrganizerEventStats", "Event is null");
+            }
+        });
     }
 
     private void setupMap() {

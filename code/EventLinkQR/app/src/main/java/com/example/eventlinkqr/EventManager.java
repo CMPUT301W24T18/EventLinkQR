@@ -138,15 +138,18 @@ public class EventManager extends Manager {
          */
         ArrayList<com.google.android.gms.maps.model.LatLng> locations = new ArrayList<>();
         if (Boolean.TRUE.equals(document.getBoolean("geoTracking"))) {
-            List<GeoPoint> geoPoints = (List<GeoPoint>) document.get("locations"); //This cast is fine because we know the type of the field
-            Log.d("EventManager", "GeoPoints: " + geoPoints);
-            if (geoPoints != null && !geoPoints.isEmpty()) {
-                // Convert each GeoPoint to a LatLng and add to the locations list
-                for (GeoPoint gp : geoPoints) {
-                    locations.add(new LatLng(gp.getLatitude(), gp.getLongitude()));
+            List<DocumentReference> attendeeDocuments = (List<DocumentReference>) document.get("attendees"); //This cast is fine because we know the type of the field
+            if (attendeeDocuments != null) {
+                List<GeoPoint> geoPoints = attendeeDocuments.stream().map(d -> d.get().getResult().getGeoPoint("location")).collect(Collectors.toList());
+                Log.d("EventManager", "GeoPoints: " + geoPoints);
+                if (geoPoints != null && !geoPoints.isEmpty()) {
+                    // Convert each GeoPoint to a LatLng and add to the locations list
+                    for (GeoPoint gp : geoPoints) {
+                        locations.add(new LatLng(gp.getLatitude(), gp.getLongitude()));
+                    }
                 }
+                e.setCheckInLocations(locations);
             }
-            e.setCheckInLocations(locations);
         }
 
         return e;
