@@ -135,7 +135,9 @@ public class AttendeeMainActivity extends Activity {
                 Toast.makeText(this, "Invalid QR Code", Toast.LENGTH_SHORT).show();
             });
         });
-}
+
+    }
+
 
     /**
      * Displays a custom dialog to request notification permission from the user.

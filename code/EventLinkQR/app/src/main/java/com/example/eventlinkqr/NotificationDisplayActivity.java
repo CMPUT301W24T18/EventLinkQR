@@ -3,34 +3,21 @@ package com.example.eventlinkqr;
 import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Activity for displaying a list of notifications to the user.
- * This activity fetches notification data from a Firebase Firestore database and displays it using a custom adapter.
- * It also includes functionality to refresh the notifications list with a SwipeRefreshLayout
- * and navigate to other activities using MaterialButtons.
+ * An activity class for displaying notifications to the user.
+ * It retrieves notification data from a Firebase Firestore database and displays the notifications in a list.
+ * The class also supports pull-to-refresh functionality using a SwipeRefreshLayout and allows navigation
+ * to other activities through MaterialButtons.
  */
 public class NotificationDisplayActivity extends AppCompatActivity {
     /**
@@ -75,14 +62,13 @@ public class NotificationDisplayActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 // Call fetchNotifications here
-                getCurrentFcmToken(); // This will fetch the token and refresh notifications
-
+                fetchNotifications(); // This will fetch the token and refresh notifications
                 swipeRefreshLayout.setRefreshing(false); // This will stop the refresh animation
             }
         });
 
         // Get current FCM token and fetch notifications
-        getCurrentFcmToken();
+        fetchNotifications();
 
         // Initialize buttons
         homeButton = findViewById(R.id.attendee_home_button);
@@ -121,77 +107,25 @@ public class NotificationDisplayActivity extends AppCompatActivity {
     }
 
     /**
-     * Fetches notifications from the Firebase Firestore database based on the current FCM token.
-     * @param token The Firebase Cloud Messaging token used to identify the device/user.
+     * Fetches notifications from Firestore based on the current FCM token and updates the UI.
+     * It uses the NotificationManager class to retrieve notifications and handles success or error
+     * with appropriate actions.
      */
-    private void fetchNotifications(String token) {
-        FirebaseFirestore.getInstance().collection("userNotifications").document(token)
-                .get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists() && documentSnapshot.contains("notifications")) {
-                        List<Map<String, Object>> notificationsMapList = (List<Map<String, Object>>) documentSnapshot.get("notifications");
-                        if (notificationsMapList != null) {
-                            List<Notification> notifications = new ArrayList<>();
-                            Collections.reverse(notificationsMapList);
-                            for (Map<String, Object> notifMap : notificationsMapList) {
-                                String title = (String) notifMap.get("title");
-                                String body = (String) notifMap.get("body");
-
-                                Timestamp ts = (Timestamp) notifMap.get("timestamp"); // Cast to Timestamp
-                                Date notificationDate = ts.toDate(); // Convert Timestamp to Date
-                                String timeSinceNotification = getTimeSince(notificationDate);
-
-                                notifications.add(new Notification(title, body, timeSinceNotification));
-
-                            }
-                            NotificationAdapter adapter = new NotificationAdapter(NotificationDisplayActivity.this, notifications);
-                            listView.setAdapter(adapter);
-                        }
-                    }
-                }).addOnFailureListener(e -> Log.e(TAG, "Error fetching notifications", e));
-    }
-
-    /**
-     * Gets the current Firebase Cloud Messaging token and uses it to fetch notifications.
-     */
-    private void getCurrentFcmToken() {
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                return;
+    private void fetchNotifications() {
+        NotificationManager manager = new NotificationManager();
+        manager.fetchNotifications(new NotificationsFetchListener() {
+            @Override
+            public void onNotificationsFetched(List<Notification> notifications) {
+                NotificationAdapter adapter = new NotificationAdapter(NotificationDisplayActivity.this, notifications);
+                listView.setAdapter(adapter);
             }
 
-            // Get new FCM registration token
-            String token = task.getResult();
-
-            // Log and retrieve notifications using this token
-            Log.d(TAG, "FCM Token: " + token);
-            fetchNotifications(token);
+            @Override
+            public void onError(Exception e) {
+                Log.e(TAG, "Error fetching notifications", e);
+                // Will Handle error later
+            }
         });
     }
-
-    /**
-     * Calculates the time elapsed since a given past date.
-     * @param pastDate The date to calculate the time since from.
-     * @return A string representing the time elapsed since the given date, in an appropriate format (seconds, minutes, hours, or days).
-     */
-    private String getTimeSince(Date pastDate) {
-        long diff = new Date().getTime() - pastDate.getTime(); // Current time - notification time
-
-        long seconds = diff / 1000;
-        long minutes = seconds / 60;
-        long hours = minutes / 60;
-        long days = hours / 24;
-
-        if (days > 0) {
-            return days + "d";
-        } else if (hours > 0) {
-            return hours + "h";
-        } else if (minutes > 0) {
-            return minutes + "m";
-        } else {
-            return seconds + "s";
-        }
-    }
-
 }
 
