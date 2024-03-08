@@ -15,10 +15,8 @@ import java.util.ArrayList;
 
 public class OrgHomePage extends Fragment {
 
-    private ListView eventList;
     private EventArrayAdapter eventsAdapter;
     private ArrayList<Event> dataList;
-    private Button createEventButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,8 +28,8 @@ public class OrgHomePage extends Fragment {
             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.org_home_page, container, false);
-        eventList = view.findViewById(R.id.event_list_view);
-        createEventButton= view.findViewById(R.id.create_event_button);
+        ListView eventList = view.findViewById(R.id.event_list_view);
+        Button createEventButton = view.findViewById(R.id.create_event_button);
 
         dataList = new ArrayList<>();
         eventsAdapter = new EventArrayAdapter(view.getContext(), dataList);
@@ -57,7 +55,7 @@ public class OrgHomePage extends Fragment {
         });
 
         //add the data from the database into the events listview
-        EventManager.addEventSnapshotCallback(((OrgMainActivity) requireActivity()).getOrganizerName(), events -> {
+        EventManager.addEventSnapshotCallback(((OrgMainActivity) requireActivity()).getOrgUUID(), events -> {
             dataList.clear();
             dataList.addAll(events);
             eventsAdapter.notifyDataSetChanged();

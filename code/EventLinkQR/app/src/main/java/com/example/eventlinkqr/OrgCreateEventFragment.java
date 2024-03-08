@@ -87,7 +87,7 @@ public class OrgCreateEventFragment extends Fragment {
             } else {
                 // create new event form data and add it toi the database using the event manager
                 Event newEvent = new Event(name, description, category, Timestamp.now(), location, tracking);
-                String organizer = ((OrgMainActivity) requireActivity()).getOrganizerName();
+                String organizer = ((OrgMainActivity) requireActivity()).getOrgUUID();
 
                 EventManager.createEvent(newEvent, organizer, customQRString);
 

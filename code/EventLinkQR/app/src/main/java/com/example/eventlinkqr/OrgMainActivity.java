@@ -1,5 +1,7 @@
 package com.example.eventlinkqr;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,21 +15,31 @@ import com.google.android.material.button.MaterialButton;
  * Class for handling the organizer UI and storing all needed data for the Organizer
  */
 public class OrgMainActivity extends AppCompatActivity {
-    private MaterialButton homeButton, profileButton, scanButton;
     private FragmentContainerView navController;
     private Event currentEvent;
-    private String organizerName;
+    private String orgUUID;
 
     private QRCodeScanner scanner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.org_main);
-        homeButton = findViewById(R.id.org_home_button);
+        MaterialButton homeButton = findViewById(R.id.org_home_button);
+        MaterialButton switchAccountBtn = findViewById(R.id.org_profile_button);
         navController = findViewById(R.id.org_nav_controller);
         scanner = new QRCodeScanner(this);
+
+        //set the current
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        orgUUID = prefs.getString("UUID", null);
         homeButton.setOnClickListener(v -> {
             Navigation.findNavController(navController).navigate(R.id.org_home_page);
+        });
+
+        // return to the select page
+        switchAccountBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(OrgMainActivity.this, MainActivity.class);
+            startActivity(intent);
         });
 
     }
@@ -49,19 +61,11 @@ public class OrgMainActivity extends AppCompatActivity {
     }
 
     /**
-     * sets the name of the organizer
-     * @param organizerName the name of the organizer
-     */
-    public void setOrganizerName(String organizerName) {
-        this.organizerName = organizerName;
-    }
-
-    /**
-     * gets the name of the organizer
+     * gets the uuid of the organizer
      * @return the name of the organizer
      */
-    public String getOrganizerName() {
-        return organizerName;
+    public String getOrgUUID() {
+        return orgUUID;
     }
 
     /**
