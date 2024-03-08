@@ -20,10 +20,6 @@ import androidx.navigation.Navigation;
  * takes care of the event page on the organizer activity
  */
 public class OrgEventFragment extends Fragment {
-    /** All buttons and the toolbar that will be used on this page*/
-    private Button detailsButton, attendeesButton;
-    private Toolbar orgEventToolBar;
-    private TextView eventTitle, eventLocation, eventDescription;
 
     private ImageView qrCodeImage;
 
@@ -36,14 +32,15 @@ public class OrgEventFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.org_event_page, container, false);
-        detailsButton = view.findViewById(R.id.details_button);
-        attendeesButton = view.findViewById(R.id.attendees_button);
-        eventTitle = view.findViewById(R.id.org_event_name);
-        eventLocation= view.findViewById(R.id.org_event_location);
-        eventDescription= view.findViewById(R.id.org_event_description);
+        /** All buttons and the toolbar that will be used on this page*/
+        Button detailsButton = view.findViewById(R.id.details_button);
+        Button attendeesButton = view.findViewById(R.id.attendees_button);
+        TextView eventTitle = view.findViewById(R.id.org_event_name);
+        TextView eventLocation = view.findViewById(R.id.org_event_location);
+        TextView eventDescription = view.findViewById(R.id.org_event_description);
         qrCodeImage = view.findViewById(R.id.imageView);
 
-        orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
+        Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgEventToolBar);
         orgEventToolBar.setTitle(null);
 

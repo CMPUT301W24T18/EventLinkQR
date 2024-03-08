@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_weight="1"
         android:text="Profile"
         android:textSize="24sp" />
 
@@ -18,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="229dp"
         android:layout_below="@id/tvProfileHeader"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/btnEditProfile"
@@ -26,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ivProfileImage"
         android:layout_centerHorizontal="true"
+        android:layout_weight="1"
         android:text="Edit Profile Photo" />
 
     <TextView
@@ -34,17 +37,18 @@
         android:layout_height="34dp"
         android:layout_below="@id/btnEditProfile"
         android:layout_alignParentStart="true"
+        android:layout_weight="1"
         android:text="Full Name" />
 
     <EditText
         android:id="@+id/etFullName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Allison John (30 char max)"
-        android:maxLength="30"
+        android:layout_below="@id/btnEditProfile"
         android:layout_toEndOf="@id/tvFullNameLabel"
-        android:layout_below="@id/btnEditProfile" />
+        android:layout_weight="1"
+        android:hint="Allison TheRock Johnson"
+        android:inputType="textPersonName" />
 
     <TextView
         android:id="@+id/phoneNumber"
@@ -52,17 +56,18 @@
         android:layout_height="31dp"
         android:layout_below="@id/etFullName"
         android:layout_alignParentStart="true"
+        android:layout_weight="1"
         android:text="Phone Number" />
 
     <EditText
         android:id="@+id/phoneNumberEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:hint="1233456789"
-        android:maxLength="10"
+        android:layout_below="@id/etFullName"
         android:layout_toEndOf="@id/phoneNumber"
-        android:layout_below="@id/etFullName" />
+        android:layout_weight="1"
+        android:hint="1233456789"
+        android:inputType="textEmailAddress" />
 
     <TextView
         android:id="@+id/homepage"
@@ -70,16 +75,18 @@
         android:layout_height="33dp"
         android:layout_below="@id/phoneNumberEdit"
         android:layout_alignParentStart="true"
+        android:layout_weight="1"
         android:text="Homepage" />
 
     <EditText
         android:id="@+id/homepageEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:hint="Enter Homepage Link"
+        android:layout_below="@id/homepage"
         android:layout_toEndOf="@id/homepage"
-        android:layout_below="@id/homepage" />
+        android:layout_weight="1"
+        android:hint="Enter Homepage Link"
+        android:inputType="textMultiLine" />
 
     <TextView
         android:id="@+id/LocationPermission"
@@ -87,6 +94,7 @@
         android:layout_height="29dp"
         android:layout_below="@id/homepageEdit"
         android:layout_alignParentStart="true"
+        android:layout_weight="1"
         android:text="Location Permission" />
 
     <Switch
@@ -94,15 +102,24 @@
         android:layout_width="64dp"
         android:layout_height="37dp"
         android:layout_below="@id/LocationPermission"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_weight="1" />
 
     <!-- Layout for Save and Back buttons -->
+    <Button
+        android:id="@+id/switch_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Switch account type" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_below="@id/switchLocation"
-        android:gravity="center_horizontal">
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnSave"
@@ -122,7 +139,7 @@
             android:id="@+id/btnResetApp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reset App Data"/>
+            android:text="Reset App Data" />
     </LinearLayout>
 
 </LinearLayout>
