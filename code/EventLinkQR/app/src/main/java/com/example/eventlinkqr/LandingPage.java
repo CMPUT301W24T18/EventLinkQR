@@ -6,12 +6,16 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -24,6 +28,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class LandingPage extends AppCompatActivity {
+    private ActivityResultLauncher<String> requestPermissionLauncher;
 
     /**
      * Called when the activity is starting. This is where most initialization should go:
@@ -35,41 +40,65 @@ public class LandingPage extends AppCompatActivity {
      *                           being shut down then this Bundle contains the data it most
      *                           recently supplied in onSaveInstanceState(Bundle). Otherwise, it is null.
      */
+  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
 
+        initializeNotificationChannel();
+        handleCreateProfileButton();
+
+        // Initialize the permission request launcher
+        requestPermissionLauncher =
+                registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                    if (isGranted) {
+                        Log.d(TAG, "Notification permission granted");
+                    } else {
+                        Log.d(TAG, "Notification permission denied");
+                    }
+                });
+
+        // Request notification permission for Android Tiramisu and above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestNotificationPermission();
+        }
+    }
+
+    /**
+     * Handles the logic for the Create Profile button,
+     * directing users to the profile creation page if no UUID is found, or to the main activity if it exists.
+     */
+    private void handleCreateProfileButton() {
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String uuid = prefs.getString("UUID", null);
 
         Button createProfileButton = findViewById(R.id.createProfile);
 
         if (uuid == null) {
-            createProfileButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // User needs to create a profile
-                    Intent intent = new Intent(LandingPage.this, AttendeeProfileActivity.class);
-                    startActivity(intent);
-                }
+            createProfileButton.setOnClickListener(v -> {
+                Intent intent = new Intent(LandingPage.this, AttendeeProfileActivity.class);
+                startActivity(intent);
             });
         } else {
-            // UUID exists, go directly to AttendeeMainActivity
             Intent intent = new Intent(LandingPage.this, AttendeeMainActivity.class);
             startActivity(intent);
-            finish(); // Close the landing page activity
+            finish();
         }
+    }
 
+    /**
+     * Initializes the notification channel for the app,
+     * which is required for app notifications on Android Oreo and above.
+     */
+    private void initializeNotificationChannel() {
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         Log.w(TAG, "Fetching FCM registration token failed", task.getException());
                         return;
                     }
-                    // Get new FCM registration token
                     String token = task.getResult();
-                    // Log and toast
                     Log.d(TAG, "FCM Token: " + token);
                 });
 
@@ -81,11 +110,28 @@ public class LandingPage extends AppCompatActivity {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("event_notifications", name, importance);
             channel.setDescription(description);
-            // Register the channel with the system
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-            Log.d("NotificationChannel", "Channel created");
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
         }
+    }
 
+    /**
+     * Requests notification permission for Android Tiramisu (API level 33) and above. For these versions,
+     * the app must ask for POST_NOTIFICATIONS permission to display notifications. This method checks for
+     * permission and requests it if not already granted. For versions below Tiramisu, this permission is not
+     * required, and the method does not perform any action, ensuring backward compatibility.
+     */
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                // Permission is already granted
+            } else {
+                requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
     }
 }
+

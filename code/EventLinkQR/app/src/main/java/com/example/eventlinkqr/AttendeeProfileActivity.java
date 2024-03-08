@@ -164,6 +164,12 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         editor.remove("UUID"); // Clear only the UUID
         editor.apply();
 
+        // Also clear NotificationPrefs shared preferences
+        SharedPreferences notificationPrefs = getSharedPreferences("NotificationPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor notificationEditor = notificationPrefs.edit();
+        notificationEditor.clear(); // Clear all preferences related to notification
+        notificationEditor.apply();
+
         // Redirect to LandingPage
         Intent intent = new Intent(this, LandingPage.class);
         startActivity(intent);

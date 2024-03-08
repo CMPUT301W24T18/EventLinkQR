@@ -8,21 +8,21 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    private Button orgButton, adminButton, attendeeButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        orgButton = findViewById(R.id.button3);
-        attendeeButton = findViewById(R.id.button4);
-        adminButton = findViewById(R.id.button5);
+        Button orgButton = findViewById(R.id.button3);
+        Button attendeeButton = findViewById(R.id.button4);
+        Button adminButton = findViewById(R.id.button5);
 
-        orgButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        orgButton.setOnClickListener(v -> {
                 startActivity(new Intent(MainActivity.this, OrgMainActivity.class));
-            }
+        });
+
+        attendeeButton.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, AttendeeMainActivity.class));
         });
 
         attendeeButton.setOnClickListener(new View.OnClickListener() {
@@ -33,6 +33,4 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-//    Added comment
 }

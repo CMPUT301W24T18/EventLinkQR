@@ -1,11 +1,14 @@
 package com.example.eventlinkqr;
 
+import com.google.firebase.Timestamp;
+
 /**
  * This class contains all necessary data for an event instance
  */
 public class Event {
     /** All the attributes of an event*/
-    private String name, description, category, date, location;
+    private String name, description, category, location;
+    private Timestamp date;
     private String id;
     private Boolean geoTracking;
 
@@ -18,7 +21,7 @@ public class Event {
      * @param location the event's location
      * @param geoTracking whether the event has geolocation tracking or not
      */
-    public Event(String name, String description, String category, String date, String location, Boolean geoTracking) {
+    public Event(String name, String description, String category, Timestamp date, String location, Boolean geoTracking) {
         this.name = name;
         this.description = description;
         this.category = category;
@@ -65,7 +68,7 @@ public class Event {
      * gets the event's date
      * @return the event's date
      */
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 

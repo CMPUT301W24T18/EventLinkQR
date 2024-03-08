@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,8 @@ public class OrgEventFragment extends Fragment {
     private Toolbar orgEventToolBar;
     private TextView eventTitle, eventLocation, eventDescription;
 
+    private ImageView qrCodeImage;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,7 @@ public class OrgEventFragment extends Fragment {
         eventTitle = view.findViewById(R.id.org_event_name);
         eventLocation= view.findViewById(R.id.org_event_location);
         eventDescription= view.findViewById(R.id.org_event_description);
+        qrCodeImage = view.findViewById(R.id.imageView);
 
         orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgEventToolBar);
@@ -61,6 +65,14 @@ public class OrgEventFragment extends Fragment {
         eventTitle.setText(event.getName());
         eventLocation.setText(event.getLocation());
         eventDescription.setText(event.getDescription());
+
+        QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {
+            try {
+                qrCodeImage.setImageBitmap(q.toBitmap(512, 512));
+            } catch (QRCodeGeneratorException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;

@@ -6,6 +6,10 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,6 +19,7 @@ import org.junit.runner.RunWith;
  * This class contains tests for the AttendeeMainActivity of an Android application.
  * It verifies that the navigation within the activity works as expected.
  */
+@LargeTest
 @RunWith(AndroidJUnit4.class)
 public class AttendeeMainActivityTest {
 
@@ -39,5 +44,13 @@ public class AttendeeMainActivityTest {
         // Check if the AttendeeProfileActivity is started by looking for a unique view in that activity
         onView(ViewMatchers.withId(R.id.etFullName)) // Replace with a view ID unique to the AttendeeProfileActivity
                 .check(matches(ViewMatchers.isDisplayed()));
+      
+    @Test
+    public void openCamera() {
+        try (ActivityScenario<AttendeeMainActivity> activityScenario = ActivityScenario.launch(AttendeeMainActivity.class)) {
+            onView(withId(R.id.attendee_scan_button)).perform(click());
+
+            // Need to evaluate if this test is possible (it involves the Google QR Code scanner)
+        }
     }
 }
