@@ -68,12 +68,14 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         uuid = intent.getStringExtra("UUID"); // Get UUID from intent
 
         if (uuid == null) {
+            findViewById(R.id.switch_account).setVisibility(View.GONE);
             // New profile: generate a new UUID
             uuid = UUID.randomUUID().toString();
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("UUID", uuid);
             editor.apply();
         } else {
+            findViewById(R.id.switch_account).setVisibility(View.VISIBLE);
             // Existing profile: load it
             loadProfile(uuid);
         }
