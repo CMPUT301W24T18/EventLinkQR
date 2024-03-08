@@ -12,14 +12,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/** Class for managing database interaction for Notifications */
 public class NotificationManager {
     private static final String TAG = "NotificationManager";
     private final FirebaseFirestore db;
 
+    /**
+     * Initializes a new instance of the NotificationManager class.
+     * This constructor specifically initializes a Firestore instance for use in notification management.
+     */
     public NotificationManager() {
         db = FirebaseFirestore.getInstance();
     }
 
+    /**
+     * Sends a notification to the Firestore database under the "notifications_testing" collection.
+     * The notification includes details about the event, such as its ID, title, and description.
+     *
+     * @param eventId     The unique identifier of the event.
+     * @param title       The title of the notification to be sent.
+     * @param description The description of the notification to be sent.
+     */
     public void sendNotificationToDatabase(String eventId, String title, String description) {
         Map<String, Object> notificationData = new HashMap<>();
         notificationData.put("eventId", eventId);
@@ -31,7 +44,13 @@ public class NotificationManager {
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
-
+    /**
+     * Fetches notifications for the current user based on their Firebase Messaging token.
+     * Notifications are retrieved from the "userNotifications" document in Firestore.
+     * The method asynchronously returns a list of notifications to the provided listener.
+     *
+     * @param listener The listener that handles the fetched notifications or an error if one occurs.
+     */
     public void fetchNotifications(NotificationsFetchListener listener) {
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
@@ -42,7 +61,6 @@ public class NotificationManager {
 
                     // Get new FCM registration token
                     String token = task.getResult();
-
                     // Log and retrieve notifications using this token
                     Log.d(TAG, "FCM Token: " + token);
 

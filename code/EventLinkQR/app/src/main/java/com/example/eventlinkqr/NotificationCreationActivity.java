@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
-
 /**
  * An activity that allows organizers to create and send notifications.
  * This page is intended for the event organizers to be able to send out notifications related

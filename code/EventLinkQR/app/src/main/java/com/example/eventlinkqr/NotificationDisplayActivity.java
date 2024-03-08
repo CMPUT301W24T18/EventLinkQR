@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Activity for displaying a list of notifications to the user.
- * This activity fetches notification data from a Firebase Firestore database and displays it using a custom adapter.
- * It also includes functionality to refresh the notifications list with a SwipeRefreshLayout
- * and navigate to other activities using MaterialButtons.
+ * An activity class for displaying notifications to the user.
+ * It retrieves notification data from a Firebase Firestore database and displays the notifications in a list.
+ * The class also supports pull-to-refresh functionality using a SwipeRefreshLayout and allows navigation
+ * to other activities through MaterialButtons.
  */
 public class NotificationDisplayActivity extends AppCompatActivity {
     /**
@@ -107,8 +107,9 @@ public class NotificationDisplayActivity extends AppCompatActivity {
     }
 
     /**
-     * Fetches notifications from the Firebase Firestore database based on the current FCM token.
-     *
+     * Fetches notifications from Firestore based on the current FCM token and updates the UI.
+     * It uses the NotificationManager class to retrieve notifications and handles success or error
+     * with appropriate actions.
      */
     private void fetchNotifications() {
         NotificationManager manager = new NotificationManager();
