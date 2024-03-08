@@ -159,7 +159,7 @@ public class Event {
      * @return checkInLocations
      */
     public ArrayList<LatLng> getCheckInLocations() {
-        return checkInLocations;
+        return this.checkInLocations;
     }
 
     public void setCheckInLocations(ArrayList<LatLng> checkInLocations) {

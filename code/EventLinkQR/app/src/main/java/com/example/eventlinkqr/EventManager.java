@@ -122,9 +122,10 @@ public class EventManager extends Manager {
          * and that the checkInLocations field is not empty and that the type of the checkInLocations field is
          * a list of GeoPoints
          */
-        ArrayList<com.google.android.gms.maps.model.LatLng> locations = null;
+        ArrayList<com.google.android.gms.maps.model.LatLng> locations = new ArrayList<>();
         if (Boolean.TRUE.equals(document.getBoolean("geoTracking"))) {
-            List<GeoPoint> geoPoints = (List<GeoPoint>) document.get("checkInLocations"); //This cast is fine because we know the type of the field
+            List<GeoPoint> geoPoints = (List<GeoPoint>) document.get("locations"); //This cast is fine because we know the type of the field
+            Log.d("EventManager", "GeoPoints: " + geoPoints);
             if (geoPoints != null && !geoPoints.isEmpty()) {
                 // Convert each GeoPoint to a LatLng and add to the locations list
                 for (GeoPoint gp : geoPoints) {
@@ -152,7 +153,7 @@ public class EventManager extends Manager {
      * @param eventCallback The callback to be invoked with the Event object once it is retrieved
      */
     public static void getEventById(String eventId, Consumer<Event> eventCallback) {
-        getFirebase().collection("events_testing").document(eventId).get().addOnCompleteListener((Task<DocumentSnapshot> task) -> {
+        getCollection().document(eventId).get().addOnCompleteListener((Task<DocumentSnapshot> task) -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {

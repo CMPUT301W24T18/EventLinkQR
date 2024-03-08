@@ -25,7 +25,9 @@ public class AttendeeMainActivity extends Activity {
     private MaterialButton homeButton, scanButton, profileButton, notificationButton;
     private ListView eventListView;
 
-    /** QRCode scanner for scanning codes */
+    /**
+     * QRCode scanner for scanning codes
+     */
     private QRCodeScanner scanner;
 
     private String profileName;
@@ -72,7 +74,9 @@ public class AttendeeMainActivity extends Activity {
         setupScanButton();
     }
 
-    /** Initialize onClick listener for the profile button*/
+    /**
+     * Initialize onClick listener for the profile button
+     */
     private void setupProfileButton() {
         // Set a click listener for the profile button
         profileButton.setOnClickListener(view -> {
@@ -91,10 +95,10 @@ public class AttendeeMainActivity extends Activity {
         });
 
 
-         // Handles the click event on the notification button. For devices running Android 13 (API level 33) or higher,
-         // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayActivity.
-         // If not, shows a custom dialog to guide users to enable notifications. For devices below Android 13, directly
-         // navigates to the NotificationDisplayActivity as permission checks are not required.
+        // Handles the click event on the notification button. For devices running Android 13 (API level 33) or higher,
+        // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayActivity.
+        // If not, shows a custom dialog to guide users to enable notifications. For devices below Android 13, directly
+        // navigates to the NotificationDisplayActivity as permission checks are not required.
         notificationButton.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
@@ -115,7 +119,9 @@ public class AttendeeMainActivity extends Activity {
 
     }
 
-    /** Initialize the onClick listener for the scan button */
+    /**
+     * Initialize the onClick listener for the scan button
+     */
     private void setupScanButton() {
         scanButton.setOnClickListener(v -> {
             scanner.codeFromScan(codeText -> {
@@ -125,7 +131,7 @@ public class AttendeeMainActivity extends Activity {
                         String uuid = prefs.getString("UUID", null);
 
                         EventManager.checkIn(uuid, profileName, code.getEventId()).addOnSuccessListener(x -> {
-                            Toast.makeText(this,"Checked In", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
                         }).addOnFailureListener(x -> {
                             Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
                         });
@@ -136,7 +142,7 @@ public class AttendeeMainActivity extends Activity {
             });
         });
     }
-}
+
 
     /**
      * Displays a custom dialog to request notification permission from the user.

@@ -45,56 +45,38 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
         // Get the eventID from the intent
         //String eventId = getIntent().getStringExtra("eventId");
         String eventId = "event1";
-        EventManager.getEventById(eventId, event -> {
-            if (event != null) {
-                this.event = event;
-                Log.d("OrganizerEventStats", event.getName());
-            } else {
-                Log.d("OrganizerEventStats", "Event is null");
-            }
-        });
 
-
+        Log.d("OrganizerEventStats", eventId);
 
         if (eventId != null) {
             EventManager.getEventById(eventId, event -> {
                 if (event != null) {
-                    this.event = event; // Now you have your event object populated from Firestore
-                    // Proceed with other operations that depend on the event object
-                    // ...
-                    Log.d("OrganizerEventStats", event.getName());
+                    this.event = event;
+                    locations = event.getCheckInLocations();
+                    runOnUiThread(() -> setupMap());
+
+
+                    int totalAttendees = event.getTotalAttendees();
+                    String displayTotalAttendees = "Total Attendance\n" + totalAttendees;
+                    textViewTotalAttendees.setText(displayTotalAttendees);
+
                 } else {
-                    // Handle the case where the event is null (not found or error)
-                    // ...
                     Log.d("OrganizerEventStats", "Event is null");
                 }
             });
         }
+    }
 
-        if (event != null && event.getGeoTracking()) {
-
-            locations = event.getCheckInLocations();
-            //Set up the map fragment
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.mapPreviewContainer);
-            if (mapFragment == null) {
-                //If not found, we'll create it for now and add it to the FrameLayout
-                mapFragment = SupportMapFragment.newInstance();
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mapPreviewContainer, mapFragment)
-                        .commit();
-            }
-            mapFragment.getMapAsync(this);
+    private void setupMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapPreviewContainer);
+        if (mapFragment == null) {
+            mapFragment = SupportMapFragment.newInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.mapPreviewContainer, mapFragment)
+                    .commit();
         }
-
-        // Set the total number of attendees
-        if (this.event == null) {
-            Log.d("OrganizerEventStats", "Event is null");
-        }
-        assert this.event != null;
-        int totalAttendees = event.getTotalAttendees();
-        String displayTotalAttendees = "Total Attendance\n" + totalAttendees;
-        textViewTotalAttendees.setText(displayTotalAttendees);
+        mapFragment.getMapAsync(this);
     }
 
     /**
@@ -111,6 +93,7 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
+        Log.d("OrganizerEventStats", "Locations: " + locations.size());
         // Loop through the list of locations and add a marker for each one
         for (LatLng location : locations) {
             myMap.addMarker(new MarkerOptions().position(location));
