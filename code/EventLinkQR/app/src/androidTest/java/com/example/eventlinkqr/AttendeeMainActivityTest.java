@@ -44,7 +44,8 @@ public class AttendeeMainActivityTest {
         // Check if the AttendeeProfileActivity is started by looking for a unique view in that activity
         onView(ViewMatchers.withId(R.id.etFullName)) // Replace with a view ID unique to the AttendeeProfileActivity
                 .check(matches(ViewMatchers.isDisplayed()));
-      
+    }
+    
     @Test
     public void openCamera() {
         try (ActivityScenario<AttendeeMainActivity> activityScenario = ActivityScenario.launch(AttendeeMainActivity.class)) {
