@@ -55,6 +55,16 @@ public class UploadImageActivity extends AppCompatActivity {
         cancel_button = findViewById(R.id.button_cancel_upload);
         prompt = findViewById(R.id.prompt);
 
+        Intent intent = getIntent();
+        String origin = intent.getStringExtra("origin");
+        String uuid = intent.getStringExtra("uuid");
+        if(origin != null && uuid != null && origin.equals("Attendee")) {
+            // Call the method to generate a deterministic image
+            Bitmap deterministicImage = ImageManager.generateDeterministicImage(uuid);
+            imagePreview.setImageBitmap(deterministicImage);
+        }
+
+
 //        For Testing Purposes
 //        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage("Basia"); //(Attendee.getUuid);
 //        imagePreview.setImageBitmap(deterministicBitmap);

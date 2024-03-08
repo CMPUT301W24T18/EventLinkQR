@@ -72,7 +72,7 @@ public class AttendeeMainActivity extends Activity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (uuid != null) {
-            FirebaseFirestore.getInstance().collection("Attendees").document(uuid).get().addOnSuccessListener(d -> {
+            FirebaseFirestore.getInstance().collection("Users").document(uuid).get().addOnSuccessListener(d -> {
                 profileName = d.getString("name");
             });
         }
@@ -174,8 +174,6 @@ public class AttendeeMainActivity extends Activity {
             });
         });
     }
-
-
 
     /**
      * Displays a custom dialog to request notification permission from the user.

@@ -117,7 +117,7 @@ public class Attendee {
 
     /**
      * Sets the FCM Token for the attendee.
-     * @param FCM token The UUID to set for the attendee.
+     * @param fcmToken token The UUID to set for the attendee.
      */
     public void setFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
 

@@ -24,8 +24,7 @@
         android:id="@+id/org_main_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/org_home_button"
@@ -41,25 +40,12 @@
             app:iconTint="@color/black" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/org_scan_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:text="@string/Scan_string"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:icon="@drawable/ic_camera"
-            app:iconGravity="top"
-            app:iconTint="@color/black" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/org_profile_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:text="@string/Profile_string"
+            android:text="@string/account_select"
             android:textColor="@color/black"
             android:textSize="14sp"
             app:icon="@drawable/ic_profile"

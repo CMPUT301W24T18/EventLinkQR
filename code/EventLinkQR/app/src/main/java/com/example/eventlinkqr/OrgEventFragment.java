@@ -21,12 +21,8 @@ import androidx.navigation.Navigation;
  * takes care of the event page on the organizer activity
  */
 public class OrgEventFragment extends Fragment {
-    /** All buttons and the toolbar that will be used on this page*/
-    private Button detailsButton, attendeesButton;
-    private Toolbar orgEventToolBar;
-    private TextView eventTitle, eventLocation, eventDescription;
 
-    private ImageView qrCodeImage;
+  private ImageView qrCodeImage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,14 +33,18 @@ public class OrgEventFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.org_event_page, container, false);
-        detailsButton = view.findViewById(R.id.details_button);
-        attendeesButton = view.findViewById(R.id.attendees_button);
-        eventTitle = view.findViewById(R.id.org_event_name);
-        eventLocation= view.findViewById(R.id.org_event_location);
-        eventDescription= view.findViewById(R.id.org_event_description);
+
+        /** All buttons and the toolbar that will be used on this page*/
+        Button detailsButton = view.findViewById(R.id.details_button);
+        Button attendeesButton = view.findViewById(R.id.attendees_button);
+        ImageView notificationSendIcon = view.findViewById(R.id.notification_send_icon);
+        TextView eventTitle = view.findViewById(R.id.org_event_name);
+        TextView eventLocation = view.findViewById(R.id.org_event_location);
+        TextView eventDescription = view.findViewById(R.id.org_event_description);
         qrCodeImage = view.findViewById(R.id.imageView);
 
-        orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
+        Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
+
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgEventToolBar);
         orgEventToolBar.setTitle(null);
 
@@ -55,6 +55,17 @@ public class OrgEventFragment extends Fragment {
         // make the attendees button go to the attendees page
         attendeesButton.setOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_attendeesPage));
+
+        // Set the onClickListener for the send notification icon
+        notificationSendIcon.setOnClickListener(v -> {
+            // Create an intent to start the NotificationCreationActivity
+            Intent intent = new Intent(getActivity(), NotificationCreationActivity.class);
+            Event currentEvent = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+            if(currentEvent != null) {
+                intent.putExtra("eventId", currentEvent.getId()); // Assuming the Event object has a method getId() that returns the event's ID
+            }
+            startActivity(intent);
+        });
 
         Event event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
 

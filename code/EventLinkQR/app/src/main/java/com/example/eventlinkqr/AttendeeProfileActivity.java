@@ -4,10 +4,13 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +28,6 @@ public class AttendeeProfileActivity extends AppCompatActivity {
     private static final String TAG = "AttendeeProfile";
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
-    private Button btnSave, btnBack;
     private Switch toggleLocation; // Used for location permission
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String uuid; // Unique identifier for the attendee
@@ -40,10 +42,10 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         etName = findViewById(R.id.etFullName);
         etPhoneNumber = findViewById(R.id.phoneNumberEdit);
         etHomepage = findViewById(R.id.homepageEdit);
-        btnSave = findViewById(R.id.btnSave);
-        btnBack = findViewById(R.id.btnBack);
-        toggleLocation = findViewById(R.id.toggleLocation);
-
+        Button btnSave = findViewById(R.id.btnSave);
+        Button btnBack = findViewById(R.id.btnBack);
+        Button photoButton = findViewById(R.id.btnEditProfile);
+        Button switchAccount = findViewById(R.id.switch_account);
         // Set a listener for the location switch
         toggleLocation.setOnCheckedChangeListener((buttonView, isChecked) -> {
             onToggleLocationButtonClicked(isChecked);
@@ -53,8 +55,26 @@ public class AttendeeProfileActivity extends AppCompatActivity {
 
         checkUUIDAndLoadProfile(); // Check UUID and load profile data
 
+        // return to the select page to switch account type
+        switchAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(AttendeeProfileActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
         btnSave.setOnClickListener(view -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
-        btnBack.setOnClickListener(view -> finish()); // Finish activity on back button click
+        btnBack.setOnClickListener(view -> finish());// Finish activity on back button click
+
+        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
+
+
+        ImageView preview = findViewById(R.id.ivProfileImage);
+        preview.setImageBitmap(deterministicBitmap);
+
+        photoButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, UploadImageActivity.class);
+            intent.putExtra("origin", "Attendee");
+            intent.putExtra("uuid", uuid);
+            startActivity(intent);
+        });
 
         // Reset App Data button
         Button btnResetApp = findViewById(R.id.btnResetApp);
@@ -72,12 +92,14 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         uuid = intent.getStringExtra("UUID"); // Get UUID from intent
 
         if (uuid == null) {
+            findViewById(R.id.switch_account).setVisibility(View.GONE);
             // New profile: generate a new UUID
             uuid = UUID.randomUUID().toString();
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("UUID", uuid);
             editor.apply();
         } else {
+            findViewById(R.id.switch_account).setVisibility(View.VISIBLE);
             // Existing profile: load it
             loadProfile(uuid);
         }
@@ -130,7 +152,7 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Attendees").document(uuid).set(attendee)
+        db.collection("Users").document(uuid).set(attendee)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Profile Saved", Toast.LENGTH_SHORT).show();
                     redirectToMainActivity();
@@ -144,7 +166,7 @@ public class AttendeeProfileActivity extends AppCompatActivity {
      * Redirects to AttendeeMainActivity.
      */
     private void redirectToMainActivity() {
-        Intent intent = new Intent(AttendeeProfileActivity.this, AttendeeMainActivity.class);
+        Intent intent = new Intent(AttendeeProfileActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
@@ -155,7 +177,7 @@ public class AttendeeProfileActivity extends AppCompatActivity {
      */
     private void loadProfile(String uuid) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Attendees").document(uuid).get()
+        db.collection("Users").document(uuid).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     Attendee attendee = documentSnapshot.toObject(Attendee.class);
                     if (attendee != null) {
