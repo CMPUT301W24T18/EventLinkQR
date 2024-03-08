@@ -6,6 +6,7 @@ In order to fully test the app, you will need:
 - Maps API key.
   - This goes in local.properties with the format `MAPS_API_KEY=.....`
   - A member of the group will share this with trusted people who need it (TA, proff, etc...)
+  - This is the restricted file that you will need to be granted access to: https://docs.google.com/document/d/1eCfYxXtamlEcBtx8ANlv6Ah68maKh7L0V6MWnA2mLrY/edit?usp=sharing
 
 ## Documentation
 The wiki is where you will find links to documentation such as UML, UI Mockups, Story Board, and more! New documentation should also go in the `doc/` folder.
