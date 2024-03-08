@@ -41,7 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="Allison TheRock Johnson"
+        android:hint="Allison John (30 char max)"
+        android:maxLength="30"
         android:layout_toEndOf="@id/tvFullNameLabel"
         android:layout_below="@id/btnEditProfile" />
 
@@ -59,6 +60,7 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:hint="1233456789"
+        android:maxLength="10"
         android:layout_toEndOf="@id/phoneNumber"
         android:layout_below="@id/etFullName" />
 
