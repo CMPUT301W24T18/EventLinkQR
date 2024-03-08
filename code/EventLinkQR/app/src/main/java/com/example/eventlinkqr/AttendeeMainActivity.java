@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -12,9 +13,15 @@ import android.provider.Settings;
 import android.widget.ListView;
 import android.widget.Toast;
 import androidx.core.content.ContextCompat;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 /**
  * Main activity class for attendees in the event management application.
@@ -25,10 +32,17 @@ public class AttendeeMainActivity extends Activity {
     private MaterialButton homeButton, scanButton, profileButton, notificationButton;
     private ListView eventListView;
 
-    /** QRCode scanner for scanning codes */
+    private FusedLocationProviderClient fusedLocationClient;
+    /**
+     * QRCode scanner for scanning codes
+     */
     private QRCodeScanner scanner;
 
     private String profileName;
+
+    public interface LocationCallback {
+        void onLocationReceived(LatLng location);
+    }
 
     /**
      * Called when the activity is starting.
@@ -55,6 +69,8 @@ public class AttendeeMainActivity extends Activity {
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String uuid = prefs.getString("UUID", null);
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         if (uuid != null) {
             FirebaseFirestore.getInstance().collection("Users").document(uuid).get().addOnSuccessListener(d -> {
                 profileName = d.getString("name");
@@ -72,7 +88,9 @@ public class AttendeeMainActivity extends Activity {
         setupScanButton();
     }
 
-    /** Initialize onClick listener for the profile button*/
+    /**
+     * Initialize onClick listener for the profile button
+     */
     private void setupProfileButton() {
         // Set a click listener for the profile button
         profileButton.setOnClickListener(view -> {
@@ -91,10 +109,10 @@ public class AttendeeMainActivity extends Activity {
         });
 
 
-         // Handles the click event on the notification button. For devices running Android 13 (API level 33) or higher,
-         // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayActivity.
-         // If not, shows a custom dialog to guide users to enable notifications. For devices below Android 13, directly
-         // navigates to the NotificationDisplayActivity as permission checks are not required.
+        // Handles the click event on the notification button. For devices running Android 13 (API level 33) or higher,
+        // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayActivity.
+        // If not, shows a custom dialog to guide users to enable notifications. For devices below Android 13, directly
+        // navigates to the NotificationDisplayActivity as permission checks are not required.
         notificationButton.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
@@ -115,7 +133,9 @@ public class AttendeeMainActivity extends Activity {
 
     }
 
-    /** Initialize the onClick listener for the scan button */
+    /**
+     * Initialize the onClick listener for the scan button
+     */
     private void setupScanButton() {
         scanButton.setOnClickListener(v -> {
             scanner.codeFromScan(codeText -> {
@@ -124,8 +144,26 @@ public class AttendeeMainActivity extends Activity {
                         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
                         String uuid = prefs.getString("UUID", null);
 
+                        AttendeeManager.getAttendee(uuid, attendee -> {
+                            if(attendee.getLocation_enabled()) {
+                                getLastLocation(location -> {
+                                    EventManager.checkIn(uuid, profileName, code.getEventId(), location).addOnSuccessListener(x -> {
+                                        Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
+                                    }).addOnFailureListener(x -> {
+                                        Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
+                                    });
+                                });
+                            } else {
+                                EventManager.checkIn(uuid, profileName, code.getEventId()).addOnSuccessListener(x -> {
+                                    Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
+                                }).addOnFailureListener(x -> {
+                                    Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
+                                });
+                            }
+                        });
+
                         EventManager.checkIn(uuid, profileName, code.getEventId()).addOnSuccessListener(x -> {
-                            Toast.makeText(this,"Checked In", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
                         }).addOnFailureListener(x -> {
                             Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
                         });
@@ -135,9 +173,7 @@ public class AttendeeMainActivity extends Activity {
                 Toast.makeText(this, "Invalid QR Code", Toast.LENGTH_SHORT).show();
             });
         });
-
     }
-
 
     /**
      * Displays a custom dialog to request notification permission from the user.
@@ -192,6 +228,21 @@ public class AttendeeMainActivity extends Activity {
     private boolean shouldPromptForNotificationPermission() {
         SharedPreferences prefs = getSharedPreferences("NotificationPrefs", MODE_PRIVATE);
         return !prefs.contains("hasBeenPromptedForNotificationPermission");
+    }
+
+    private void getLastLocation(LocationCallback callback) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    LatLng location = new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude());
+                    callback.onLocationReceived(location);
+                } else {
+                    Toast.makeText(this, "Failed to get location", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

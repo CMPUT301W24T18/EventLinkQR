@@ -1,6 +1,12 @@
 package com.example.eventlinkqr;
 
+
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+
 import com.google.firebase.Timestamp;
+
 
 /**
  * This class contains all necessary data for an event instance
@@ -11,7 +17,9 @@ public class Event {
     private Timestamp date;
     private String id;
     private Boolean geoTracking;
-
+    private int checkedInAttendeesCount;
+    private ArrayList<Attendee> checkedInAttendees;
+    private ArrayList<LatLng> checkInLocations;
     /**
      * Event creator with all attributes
      * @param name the event's name
@@ -102,5 +110,75 @@ public class Event {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * check in an attendee to the event and add their location if geotracking is enabled
+     * @param attendee
+     * @param checkInLocation
+     * @return
+     */
+    public Boolean checkIn(Attendee attendee, LatLng checkInLocation){
+        //Check if the attendee is already checked in
+        if(checkedInAttendees.contains(attendee)){
+            return false;
+        } else {
+            checkedInAttendees.add(attendee);
+            if (geoTracking) {
+                checkInLocations.add(checkInLocation);
+            }
+            return true;
+        }
+    }
+
+    /**
+     * check in an attendee to the event without a location
+     * @param attendee
+     * @return
+     */
+    public Boolean checkIn(Attendee attendee){
+        //Check if the attendee is already checked in
+        if(checkedInAttendees.contains(attendee)){
+            return false;
+        } else {
+            checkedInAttendees.add(attendee);
+            return true;
+        }
+    }
+
+    /**
+     * get the list of checked in attendees
+     * @return checkedInAttendees
+     */
+    public ArrayList<Attendee> getCheckedInAttendees() {
+        return checkedInAttendees;
+    }
+
+    public int getCheckedInAttendeesCount() {
+        return checkedInAttendeesCount;
+    }
+
+    public void setCheckedInAttendeesCount(int count) {
+        checkedInAttendeesCount = count;
+    }
+
+    /**
+     * get the list of check in locations
+     * @return checkInLocations
+     */
+    public ArrayList<LatLng> getCheckInLocations() {
+        return this.checkInLocations;
+    }
+
+    public void setCheckInLocations(ArrayList<LatLng> checkInLocations) {
+        this.checkInLocations = checkInLocations;
+    }
+
+    public int getTotalAttendees() {
+        if (checkedInAttendees == null || checkedInAttendees.isEmpty()) {
+            return 0;
+        } else {
+            return checkedInAttendees.size();
+        }
     }
 }
