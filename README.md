@@ -4,6 +4,7 @@ CMPUT 301 Group Project: An Event Check-In System with QR code scanning.
 ## Running the app
 In order to fully test the app, you will need:
 - Maps API key.
+  - The google maps service needs authentication.  
   - This goes in local.properties with the format `MAPS_API_KEY=.....`
   - A member of the group will share this with trusted people who need it (TA, proff, etc...)
   - This is the restricted file that you will need to be granted access to: https://docs.google.com/document/d/1eCfYxXtamlEcBtx8ANlv6Ah68maKh7L0V6MWnA2mLrY/edit?usp=sharing
