@@ -21,7 +21,7 @@ exports.sendNotificationToEventAttendees = functions.firestore
 
             if (eventDocData && eventDocData.attendees) {
                 const attendeesTokensPromises = eventDocData.attendees.map(async (userId) => {
-                    const userDoc = await admin.firestore().collection('attendees_testing').doc(userId).get();
+                    const userDoc = await admin.firestore().collection('Users').doc(userId).get();
                     if (userDoc.exists && userDoc.data().fcmToken) {
                         const fcmToken = userDoc.data().fcmToken;
                         console.log(`Token found for userId: ${userId}`);
