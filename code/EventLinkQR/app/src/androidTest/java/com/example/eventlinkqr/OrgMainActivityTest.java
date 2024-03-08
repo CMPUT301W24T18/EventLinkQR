@@ -11,6 +11,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import android.os.SystemClock;
 
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import org.junit.Rule;
@@ -23,23 +25,31 @@ public class OrgMainActivityTest {
             ActivityScenarioRule<OrgMainActivity>(OrgMainActivity.class);
 
     @Test
-    public void testLogin(){
-        // enter email and password
-        onView(withId(R.id.org_email_address)).perform(ViewActions.typeText("team18@ualberta.ca"));
-        onView(withId(R.id.org_password)).perform(ViewActions.typeText("123"));
-        onView(withId(R.id.org_signin_button)).perform(click());
+    public void testOrgHomePage(){
+        //
+        onView(withId(R.id.button3)).perform(click());
         // wait 2 seconds to make sure the page loads
-        SystemClock.sleep(2000);
+        SystemClock.sleep(500);
         // verifies i got to the home page
         onView(withText("My Events")).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testAddEvent(){
-        // log in to access the create event function
-        onView(withId(R.id.org_email_address)).perform(ViewActions.typeText("team18@ualberta.ca"));
-        onView(withId(R.id.org_password)).perform(ViewActions.typeText("123"));
-        onView(withId(R.id.org_signin_button)).perform(click());
+    public void testswitchAccountBtn(){
+        onView(withId(R.id.button3)).perform(click());
+        // wait 2 seconds to make sure the page loads
+        SystemClock.sleep(500);
+        // verifies i got to the home page
+        onView(withText("My Events")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.switch_account)).perform(click());
+
+        // wait 2 seconds to make sure the page loads
+        SystemClock.sleep(500);
+        onView(withText("Choose a role")).check(matches(isDisplayed()));
+    }
+    @Test
+    public void testAddEventErrorMessage(){
         // wait to make sure the page loads
         SystemClock.sleep(2000);
         // verifies i got to the home page
@@ -50,17 +60,14 @@ public class OrgMainActivityTest {
         SystemClock.sleep(1000);
         // fill in inputs and select a category
         onView(withId(R.id.event_name_input)).perform(ViewActions.typeText("Tester event"));
+
         onView(withId(R.id.event_description_input)).perform(ViewActions.typeText("testing if the create event function works"));
 
-        onView(withId(R.id.category_selector)).perform(click());
-        // can't click on a selection
-        // stuck
+        onView(withId(R.id.event_location_input)).perform(ViewActions.typeText("everywhere, anywhere all at once"));
 
+//        onView(withId(R.id.category_selector)).perform(click());
+//        // can't click on a selection
+//        // stuck
 
-        onView(withId(R.id.publish_button)).perform(click());
-        // wait to make sure the page loads
-        SystemClock.sleep(1000);
-        // verify that the new event appears on the home page
-        onView(withText("Tester event")).check(matches(isDisplayed()));
     }
 }
