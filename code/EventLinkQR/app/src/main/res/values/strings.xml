@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">EventLinkQR</string>
-
     <string name="all_string">All</string>
     <string name="Checked_in_string">Checked In</string>
     <string name="Not_checked_in_string">Not Checked In</string>
@@ -28,6 +27,9 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="channel_name">notifications</string>
     <string name="channel_description">this is a notification channel\n</string>
+    <string name="send_notification">Send Notification\n</string>
+    <string name="message_title">Message Title</string>
+    <string name="notification_message">Notification Message</string>
     <string name="what_to_expect">What to expect</string>
     <string name="save_publish_string">Save and Publish</string>
     <string name="choose_make_qr_string">Scan Custom Code</string>
@@ -36,4 +38,5 @@
     <string name="cancel">Cancel</string>
     <string name="choose_image">Choose Image</string>
     <string name="editProfilImg">Edit Profile Img</string>
+    <string name="account_select">Select account type</string>
 </resources>

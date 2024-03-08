@@ -56,7 +56,7 @@ public class AttendeeMainActivity extends Activity {
         String uuid = prefs.getString("UUID", null);
 
         if (uuid != null) {
-            FirebaseFirestore.getInstance().collection("attendees_testing").document(uuid).get().addOnSuccessListener(d -> {
+            FirebaseFirestore.getInstance().collection("Users").document(uuid).get().addOnSuccessListener(d -> {
                 profileName = d.getString("name");
             });
         }
@@ -135,7 +135,9 @@ public class AttendeeMainActivity extends Activity {
                 Toast.makeText(this, "Invalid QR Code", Toast.LENGTH_SHORT).show();
             });
         });
-}
+
+    }
+
 
     /**
      * Displays a custom dialog to request notification permission from the user.

@@ -28,9 +28,6 @@ public class OrgAttendeesPage extends Fragment  {
     /** the title for each tab*/
     private static final String[] TAB_TITLES = {"All", "Checked In", "Not Checked In"};
 
-    /** the toolbar for the page*/
-    private Toolbar orgAttendeesToolbar;
-
     /** TextView of the count of checked in attendees for the current event*/
     private TextView checkedInCountView;
 
@@ -56,7 +53,8 @@ public class OrgAttendeesPage extends Fragment  {
         updateCheckInCount();
 
         // the tool bar on top of the page
-        orgAttendeesToolbar = view.findViewById(R.id.org_attendees_tool_bar);
+        /** the toolbar for the page*/
+        Toolbar orgAttendeesToolbar = view.findViewById(R.id.org_attendees_tool_bar);
 
         // the tab layout that will allow to navigate though  all three lists of attendees
         TabLayout attendeesTabLayout = view.findViewById(R.id.attendees_tab_layout);
