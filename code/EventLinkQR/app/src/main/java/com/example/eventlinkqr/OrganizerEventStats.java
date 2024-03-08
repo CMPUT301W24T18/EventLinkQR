@@ -44,7 +44,6 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
 
         // Get the eventID from the intent
         String eventId = getIntent().getStringExtra("eventId");
-
         Log.d("OrganizerEventStats", eventId);
 
         EventManager.getEventById(eventId, event -> {

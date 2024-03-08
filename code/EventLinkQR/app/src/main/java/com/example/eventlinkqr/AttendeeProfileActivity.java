@@ -46,6 +46,7 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         Button btnBack = findViewById(R.id.btnBack);
         Button photoButton = findViewById(R.id.btnEditProfile);
         Button switchAccount = findViewById(R.id.switch_account);
+        toggleLocation = findViewById(R.id.toggleLocation);
         // Set a listener for the location switch
         toggleLocation.setOnCheckedChangeListener((buttonView, isChecked) -> {
             onToggleLocationButtonClicked(isChecked);
