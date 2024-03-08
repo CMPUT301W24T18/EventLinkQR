@@ -17,7 +17,7 @@ public class Event {
     private Timestamp date;
     private String id;
     private Boolean geoTracking;
-
+    private int checkedInAttendeesCount;
     private ArrayList<Attendee> checkedInAttendees;
     private ArrayList<LatLng> checkInLocations;
     /**
@@ -152,6 +152,14 @@ public class Event {
      */
     public ArrayList<Attendee> getCheckedInAttendees() {
         return checkedInAttendees;
+    }
+
+    public int getCheckedInAttendeesCount() {
+        return checkedInAttendeesCount;
+    }
+
+    public void setCheckedInAttendeesCount(int count) {
+        checkedInAttendeesCount = count;
     }
 
     /**

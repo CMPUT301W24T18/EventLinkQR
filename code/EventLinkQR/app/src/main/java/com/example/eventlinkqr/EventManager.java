@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -71,7 +72,7 @@ public class EventManager extends Manager {
             }
 
             if (querySnapshots != null) {
-                eventCallback.accept(querySnapshots.getDocuments().stream().map(EventManager::fromDocument).collect(Collectors.toList()));
+                eventCallback.accept(querySnapshots.getDocuments().stream().map(d -> EventManager.fromDocument(d, null)).collect(Collectors.toList()));
             }
         });
     }
@@ -121,7 +122,7 @@ public class EventManager extends Manager {
      * @param document The document to generate the event from
      * @return The event
      */
-    private static Event fromDocument(DocumentSnapshot document) {
+    private static Event fromDocument(DocumentSnapshot document, QuerySnapshot attendees) {
         Event e = new Event(
                 document.get("name", String.class),
                 document.get("description", String.class),
@@ -129,6 +130,9 @@ public class EventManager extends Manager {
                 document.get("dateAndTime", Timestamp.class),
                 document.get("location", String.class),
                 document.get("geoTracking", Boolean.class));
+        if (attendees != null) {
+            e.setCheckedInAttendeesCount(attendees.size());
+        }
         e.setId(document.getId());
 
         /**
@@ -138,9 +142,8 @@ public class EventManager extends Manager {
          */
         ArrayList<com.google.android.gms.maps.model.LatLng> locations = new ArrayList<>();
         if (Boolean.TRUE.equals(document.getBoolean("geoTracking"))) {
-            List<DocumentReference> attendeeDocuments = (List<DocumentReference>) document.get("attendees"); //This cast is fine because we know the type of the field
-            if (attendeeDocuments != null) {
-                List<GeoPoint> geoPoints = attendeeDocuments.stream().map(d -> d.get().getResult().getGeoPoint("location")).collect(Collectors.toList());
+            if (attendees != null) {
+                List<GeoPoint> geoPoints = attendees.getDocuments().stream().map(d -> d.getGeoPoint("location")).filter(Objects::nonNull).collect(Collectors.toList());
                 Log.d("EventManager", "GeoPoints: " + geoPoints);
                 if (geoPoints != null && !geoPoints.isEmpty()) {
                     // Convert each GeoPoint to a LatLng and add to the locations list
@@ -150,6 +153,7 @@ public class EventManager extends Manager {
                 }
                 e.setCheckInLocations(locations);
             }
+
         }
 
         return e;
@@ -175,7 +179,9 @@ public class EventManager extends Manager {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     Log.d("Firestore", "DocumentSnapshot data: " + document.getData());
-                    eventCallback.accept(fromDocument(document));
+                    getCollection().document(eventId).collection("attendees").get().addOnSuccessListener(q -> {
+                        eventCallback.accept(fromDocument(document, q));
+                    });
                 } else {
                     Log.d("Firestore", "No such document");
                 }

@@ -53,9 +53,7 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
                 locations = event.getCheckInLocations();
                 runOnUiThread(() -> setupMap());
 
-
-                int totalAttendees = event.getTotalAttendees();
-                String displayTotalAttendees = "Total Attendance\n" + totalAttendees;
+                String displayTotalAttendees = "Total Attendance\n" + event.getCheckedInAttendeesCount();
                 textViewTotalAttendees.setText(displayTotalAttendees);
 
             } else {
@@ -90,7 +88,7 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
-        Log.d("OrganizerEventStats", "Locations: " + locations.size());
+
         // Loop through the list of locations and add a marker for each one
         for (LatLng location : locations) {
             myMap.addMarker(new MarkerOptions().position(location));
