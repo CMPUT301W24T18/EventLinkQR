@@ -29,7 +29,8 @@
         android:layout_below="@id/ivProfileImage"
         android:layout_centerHorizontal="true"
         android:layout_weight="1"
-        android:text="Edit Profile Photo" />
+        android:text="Edit Profile Photo"
+        android:enabled="false"/>
 
     <TextView
         android:id="@+id/tvFullNameLabel"
