@@ -1,22 +1,16 @@
 package com.example.eventlinkqr;
+import static android.content.ContentValues.TAG;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.UUID;
@@ -28,15 +22,14 @@ public class AttendeeProfileActivity extends AppCompatActivity {
     private static final String TAG = "AttendeeProfile";
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
-    private Switch toggleLocation; // Used for location permission
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private Switch switchLocation; // Used for location permission
     private String uuid; // Unique identifier for the attendee
     private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.attendee_profile); // Set the content view
+        setContentView(R.layout.attendee); // Set the content view
 
         // Initialize UI components
         etName = findViewById(R.id.etFullName);
@@ -44,13 +37,8 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         etHomepage = findViewById(R.id.homepageEdit);
         Button btnSave = findViewById(R.id.btnSave);
         Button btnBack = findViewById(R.id.btnBack);
-        Button photoButton = findViewById(R.id.btnEditProfile);
+        switchLocation = findViewById(R.id.switchLocation);
         Button switchAccount = findViewById(R.id.switch_account);
-        toggleLocation = findViewById(R.id.toggleLocation);
-        // Set a listener for the location switch
-        toggleLocation.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            onToggleLocationButtonClicked(isChecked);
-        });
 
         attendeeArrayAdapter = AttendeeArrayAdapter.getInstance(); // Get the singleton instance of the adapter
 
@@ -62,20 +50,7 @@ public class AttendeeProfileActivity extends AppCompatActivity {
             startActivity(intent);
         });
         btnSave.setOnClickListener(view -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
-        btnBack.setOnClickListener(view -> finish());// Finish activity on back button click
-
-        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
-
-
-        ImageView preview = findViewById(R.id.ivProfileImage);
-        preview.setImageBitmap(deterministicBitmap);
-
-        photoButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, UploadImageActivity.class);
-            intent.putExtra("origin", "Attendee");
-            intent.putExtra("uuid", uuid);
-            startActivity(intent);
-        });
+        btnBack.setOnClickListener(view -> finish()); // Finish activity on back button click
 
         // Reset App Data button
         Button btnResetApp = findViewById(R.id.btnResetApp);
@@ -93,14 +68,12 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         uuid = intent.getStringExtra("UUID"); // Get UUID from intent
 
         if (uuid == null) {
-            findViewById(R.id.switch_account).setVisibility(View.GONE);
             // New profile: generate a new UUID
             uuid = UUID.randomUUID().toString();
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("UUID", uuid);
             editor.apply();
         } else {
-            findViewById(R.id.switch_account).setVisibility(View.VISIBLE);
             // Existing profile: load it
             loadProfile(uuid);
         }
@@ -133,10 +106,6 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         String name = etName.getText().toString();
         String phoneNumber = etPhoneNumber.getText().toString();
         String homepage = etHomepage.getText().toString();
-        Boolean locationEnabled = toggleLocation.isChecked();
-
-
-        Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled);
 
         // Validate name is not null or empty
         if (name == null || name.trim().isEmpty()) {
@@ -151,6 +120,8 @@ public class AttendeeProfileActivity extends AppCompatActivity {
                 return;
             }
         }
+
+        Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Users").document(uuid).set(attendee)
@@ -185,7 +156,6 @@ public class AttendeeProfileActivity extends AppCompatActivity {
                         etName.setText(attendee.getName());
                         etPhoneNumber.setText(attendee.getPhone_number());
                         etHomepage.setText(attendee.getHomepage());
-                        toggleLocation.setChecked(attendee.getLocation_enabled());
                     }
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Error loading profile", e));
@@ -210,26 +180,5 @@ public class AttendeeProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LandingPage.class);
         startActivity(intent);
         finish();
-    }
-
-    /**
-     * Handles the location switch toggle and first time location permissions.
-     * @param isChecked The state of the switch
-     */
-    private void onToggleLocationButtonClicked(boolean isChecked) {
-        if (isChecked) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // First time enable location tracking, make a request for permission
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        LOCATION_PERMISSION_REQUEST_CODE);
-            } else {
-                // The switch is on and location permission is granted
-                Toast.makeText(this, "Location tracking enabled", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            // The switch is off
-            Toast.makeText(this, "Location tracking disabled", Toast.LENGTH_SHORT).show();
-        }
     }
 }

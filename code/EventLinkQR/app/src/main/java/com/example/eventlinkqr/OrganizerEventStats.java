@@ -1,8 +1,6 @@
 package com.example.eventlinkqr;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,16 +12,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Random;
 
 /** This activity is the page where organizers can track event statistics.
  * In the current state it is very barebones and serves as a home for our map fragment.
@@ -31,40 +23,45 @@ import java.util.Map;
 public class OrganizerEventStats extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap myMap;
-    private Event event;
-    private ArrayList<LatLng> locations;
-    private TextView textViewTotalAttendees;
+
+    //This is a hardcoded location set around edmonton. Later we'll pull this from firebase
+    private List<LatLng> locations = generatePoints(new LatLng(53.5461, -113.4938), 30);
+
+    /**
+     * OpenAI, 2024, ChatGPT, LatLng random point generator within a given radius
+     * @param center
+     * @param numberOfPoints
+     * @return List<LatLng> randomPoints
+     */
+    @NonNull
+    private List<LatLng> generatePoints(LatLng center, int numberOfPoints) {
+        List<LatLng> randomPoints = new ArrayList<>();
+        Random random = new Random();
+
+        double radius = 0.02;
+
+        for (int i = 0; i < numberOfPoints; i++) {
+            double randomLatOffset = radius * random.nextDouble();
+            double randomLngOffset = radius * random.nextDouble();
+
+            randomLatOffset *= random.nextBoolean() ? 1 : -1;
+            randomLngOffset *= random.nextBoolean() ? 1 : -1;
+
+            randomPoints.add(new LatLng(center.latitude + randomLatOffset, center.longitude + randomLngOffset));
+        }
+
+        return randomPoints;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.org_event_stats);
+        setContentView(R.layout.activity_organizer_event_stats);
 
-        // Initialize the text view for the total number of attendees
-        textViewTotalAttendees = findViewById(R.id.textViewTotalAttendance);
-
-        // Get the eventID from the intent
-        String eventId = getIntent().getStringExtra("eventId");
-        Log.d("OrganizerEventStats", eventId);
-
-        EventManager.getEventById(eventId, event -> {
-            if (event != null) {
-                this.event = event;
-                locations = event.getCheckInLocations();
-                runOnUiThread(() -> setupMap());
-
-                String displayTotalAttendees = "Total Attendance\n" + event.getCheckedInAttendeesCount();
-                textViewTotalAttendees.setText(displayTotalAttendees);
-
-            } else {
-                Log.d("OrganizerEventStats", "Event is null");
-            }
-        });
-    }
-
-    private void setupMap() {
+        //Set up the map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapPreviewContainer);
         if (mapFragment == null) {
+            //If not found, we'll create it for now and add it to the FrameLayout
             mapFragment = SupportMapFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.mapPreviewContainer, mapFragment)
@@ -72,6 +69,7 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
         }
         mapFragment.getMapAsync(this);
     }
+
 
     /**
      * Configures the Google Map camera bounds based on a list of locations.
@@ -86,7 +84,6 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
         myMap.getUiSettings().setZoomControlsEnabled(true);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
 
         // Loop through the list of locations and add a marker for each one
         for (LatLng location : locations) {

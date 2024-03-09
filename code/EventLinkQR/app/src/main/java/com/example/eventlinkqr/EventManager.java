@@ -12,15 +12,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Filter;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.QuerySnapshot;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -32,7 +28,7 @@ public class EventManager extends Manager {
     private static final String COLLECTION_PATH = "Events";
 
     /**
-     * Check the given attendee into an event with no location
+     * Check the given attendee into an event
      *
      * @param attendeeName The name of the attendee to check in
      * @param eventId      The id of the event to check into
@@ -44,20 +40,6 @@ public class EventManager extends Manager {
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
-    /**
-     * Check the given attendee into an event with a location
-     *
-     * @param attendeeName The name of the attendee to check in
-     * @param eventId      The id of the event to check into
-     * @param location     The location of the check-in
-     */
-    public static Task<Void> checkIn(String uuid, String attendeeName, String eventId, LatLng location) {
-        Map<String, Object> attendee = new HashMap<>();
-        attendee.put("name", attendeeName);
-        attendee.put("checkedIn", true);
-        attendee.put("location", new GeoPoint(location.latitude, location.longitude));
-        return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
-    }
     /**
      * Add a callback to changes in the Events
      *
@@ -72,7 +54,7 @@ public class EventManager extends Manager {
             }
 
             if (querySnapshots != null) {
-                eventCallback.accept(querySnapshots.getDocuments().stream().map(d -> EventManager.fromDocument(d, null)).collect(Collectors.toList()));
+                eventCallback.accept(querySnapshots.getDocuments().stream().map(EventManager::fromDocument).collect(Collectors.toList()));
             }
         });
     }
@@ -122,7 +104,7 @@ public class EventManager extends Manager {
      * @param document The document to generate the event from
      * @return The event
      */
-    private static Event fromDocument(DocumentSnapshot document, QuerySnapshot attendees) {
+    private static Event fromDocument(DocumentSnapshot document) {
         Event e = new Event(
                 document.get("name", String.class),
                 document.get("description", String.class),
@@ -130,32 +112,7 @@ public class EventManager extends Manager {
                 document.get("dateAndTime", Timestamp.class),
                 document.get("location", String.class),
                 document.get("geoTracking", Boolean.class));
-        if (attendees != null) {
-            e.setCheckedInAttendeesCount(attendees.size());
-        }
         e.setId(document.getId());
-
-        /**
-         * Make sure that the document has geoTracking enabled and that the checkInLocations field is not null
-         * and that the checkInLocations field is not empty and that the type of the checkInLocations field is
-         * a list of GeoPoints
-         */
-        ArrayList<com.google.android.gms.maps.model.LatLng> locations = new ArrayList<>();
-        if (Boolean.TRUE.equals(document.getBoolean("geoTracking"))) {
-            if (attendees != null) {
-                List<GeoPoint> geoPoints = attendees.getDocuments().stream().map(d -> d.getGeoPoint("location")).filter(Objects::nonNull).collect(Collectors.toList());
-                Log.d("EventManager", "GeoPoints: " + geoPoints);
-                if (geoPoints != null && !geoPoints.isEmpty()) {
-                    // Convert each GeoPoint to a LatLng and add to the locations list
-                    for (GeoPoint gp : geoPoints) {
-                        locations.add(new LatLng(gp.getLatitude(), gp.getLongitude()));
-                    }
-                }
-                e.setCheckInLocations(locations);
-            }
-
-        }
-
         return e;
     }
 
@@ -166,29 +123,6 @@ public class EventManager extends Manager {
      */
     private static CollectionReference getCollection() {
         return getFirebase().collection(COLLECTION_PATH);
-    }
-
-    /**
-     * Retrieve an event from its ID and use the provided callback to return the event object
-     * @param eventId The id of the event to retrieve
-     * @param eventCallback The callback to be invoked with the Event object once it is retrieved
-     */
-    public static void getEventById(String eventId, Consumer<Event> eventCallback) {
-        getCollection().document(eventId).get().addOnCompleteListener((Task<DocumentSnapshot> task) -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    Log.d("Firestore", "DocumentSnapshot data: " + document.getData());
-                    getCollection().document(eventId).collection("attendees").get().addOnSuccessListener(q -> {
-                        eventCallback.accept(fromDocument(document, q));
-                    });
-                } else {
-                    Log.d("Firestore", "No such document");
-                }
-            } else {
-                Log.d("Firestore", "get failed with ", task.getException());
-            }
-        });
     }
 
     /**
@@ -225,5 +159,15 @@ public class EventManager extends Manager {
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Event failed to be added");
                 });
+    }
+
+    /**
+     * Adds a new event to the database
+     *
+     * @param newEvent  the new event to be added to the database
+     * @param organizer the organizer of the event
+     */
+    public static void createEvent(Event newEvent, String organizer) {
+        EventManager.createEvent(newEvent, organizer, null);
     }
 }

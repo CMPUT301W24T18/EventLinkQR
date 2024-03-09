@@ -29,8 +29,7 @@
         android:layout_below="@id/ivProfileImage"
         android:layout_centerHorizontal="true"
         android:layout_weight="1"
-        android:text="Edit Profile Photo"
-        android:enabled="false"/>
+        android:text="Edit Profile Photo" />
 
     <TextView
         android:id="@+id/tvFullNameLabel"
@@ -99,7 +98,7 @@
         android:text="Location Permission" />
 
     <Switch
-        android:id="@+id/toggleLocation"
+        android:id="@+id/switchLocation"
         android:layout_width="64dp"
         android:layout_height="37dp"
         android:layout_below="@id/LocationPermission"
@@ -117,9 +116,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/toggleLocation"
-        android:gravity="center_horizontal">
+        android:layout_below="@id/switchLocation"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnSave"

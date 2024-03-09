@@ -53,12 +53,6 @@ public class AttendeeProfileActivityTest {
         // Wait for a bit to let the main activity reload
         Thread.sleep(2000); // Use with caution, just for debugging purposes
 
-
-        // Select attendee
-        onView(withId(R.id.button4)).perform(click());
-
-        Thread.sleep(2000); // Use with caution, just for debugging purposes
-
         // Navigate back to AttendeeProfileActivity
         onView(withId(R.id.attendee_profile_button)).perform(click());
 

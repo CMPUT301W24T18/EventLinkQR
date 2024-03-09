@@ -16,7 +16,6 @@ public class Attendee {
     private String phone_number; // Phone number of the attendee.
     private String homepage;     // Homepage URL of the attendee.
     private String fcmToken; // FCM Token for the user
-    private boolean location_enabled; // Whether the user has enabled location tracking
 
 /**
  * Constructs an Attendee object with the specified details.
@@ -26,15 +25,13 @@ public class Attendee {
  * @param phoneNumber The phone number of the attendee.
  * @param homepage The homepage URL of the attendee.
  * @param fcmToken The Firebase Cloud Messaging token associated with the attendee's device.
- * @param location_enabled Whether the user has enabled location tracking.
  */
-    public Attendee(String uuid, String name, String phoneNumber, String homepage, String fcmToken, Boolean location_enabled) {
+    public Attendee(String uuid, String name, String phoneNumber, String homepage, String fcmToken) {
         this.fcmToken = fcmToken;
         this.uuid = uuid;
         this.name = name;
         this.homepage = homepage;
         this.phone_number = phoneNumber;
-        this.location_enabled = location_enabled;
     }
 
     // Uncomment and import BufferedImage if you wish to add image handling.
@@ -117,27 +114,11 @@ public class Attendee {
 
     /**
      * Sets the FCM Token for the attendee.
-     * @param fcmToken token The UUID to set for the attendee.
+     * @param FCM token The UUID to set for the attendee.
      */
     public void setFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
 
-    /**
-     * Gets the location tracking status of the attendee.
-     * @return The location tracking status of the attendee.
-     */
-    public boolean getLocation_enabled() {
-        return location_enabled;
-    }
-
-    /**
-     * Sets the location tracking status for the attendee.
-     * @param location_enabled The location tracking status to set for the attendee.
-     */
-    public void setLocation_enabled(boolean location_enabled) {
-        this.location_enabled = location_enabled;
-    }
-
-
+    
     // Add methods for image handling here if needed.
     // Ensure you import and handle BufferedImage appropriately.
 }

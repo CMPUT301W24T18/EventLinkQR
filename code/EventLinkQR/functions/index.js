@@ -20,29 +20,28 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 return;
             }
 
-            if (eventDocData && eventDocData.attendees) {
-                const attendeesTokensPromises = eventDocData.attendees.map(async (userId) => {
-                    const userDoc = await admin.firestore().collection('Attendees').doc(userId).get();
+            const attendeesTokensPromises = attendeesSnapshot.docs.map(async (attendeeDoc) => {
+                const userId = attendeeDoc.id; // UUID of the attendee
+                const userDoc = await admin.firestore().collection('attendees_testing').doc(userId).get();
 
-                    if (userDoc.exists && userDoc.data().fcmToken) {
-                        const fcmToken = userDoc.data().fcmToken;
-                        console.log(`Token found for userId: ${userId}`);
-                        tokens.push(fcmToken);
+                if (userDoc.exists && userDoc.data().fcmToken) {
+                    const fcmToken = userDoc.data().fcmToken;
+                    console.log(`Token found for userId: ${userId}`);
+                    tokens.push(fcmToken);
 
-                        await admin.firestore().collection('userNotifications').doc(fcmToken)
-                            .set({
-                                notifications: admin.firestore.FieldValue.arrayUnion({
-                                    title: notificationData.heading,
-                                    body: notificationData.description,
-                                    eventId: eventId,
-                                    timestamp: new Date(),
-                                })
-                            }, { merge: true });
-                    } else {
-                        console.log(`No token found for userId: ${userId}`);
-                    }
-                });
-            }
+                    await admin.firestore().collection('userNotifications').doc(fcmToken)
+                        .set({
+                            notifications: admin.firestore.FieldValue.arrayUnion({
+                                title: notificationData.heading,
+                                body: notificationData.description,
+                                eventId: eventId,
+                                timestamp: new Date(),
+                            })
+                        }, { merge: true });
+                } else {
+                    console.log(`No token found for userId: ${userId}`);
+                }
+            });
 
             await Promise.all(attendeesTokensPromises);
             console.log(`Notifications stored for ${tokens.length} tokens.`);
