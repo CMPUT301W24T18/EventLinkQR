@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AttendeeMainActivity">
+    tools:context=".AttendeeMainActivity"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/my_event_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="My Upcoming Events"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <ListView
-        android:id="@+id/event_list_view"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/att_nav_controller"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_above="@+id/button_layout"
-        android:layout_below="@+id/my_event_id" />
-
+        android:layout_weight="1"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:navGraph="@navigation/att_navigation" />
 
     <LinearLayout
         android:id="@+id/button_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:gravity="center"
-
-        >
+        android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/attendee_home_button"
@@ -94,4 +86,4 @@
     </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

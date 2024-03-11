@@ -44,7 +44,7 @@ public class OrgAttendeesPage extends Fragment  {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+        event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
 
         // text view to display count of checked in attendees
         checkedInCountView = view.findViewById(R.id.checked_in_count);
@@ -65,7 +65,7 @@ public class OrgAttendeesPage extends Fragment  {
         // make the back button return to the event page
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgAttendeesToolbar);
         orgAttendeesToolbar.setNavigationOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_attendeesPage_to_orgEventFragment));
+                Navigation.findNavController(view).navigate(R.id.action_orgAttendeesPage_to_orgEventFragment2));
         orgAttendeesToolbar.setTitle(null);
 
         AttendeesViewAdapter pagerAdapter = new AttendeesViewAdapter(requireActivity());

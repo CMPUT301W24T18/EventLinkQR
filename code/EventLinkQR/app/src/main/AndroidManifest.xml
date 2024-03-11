@@ -26,9 +26,9 @@
             In local.properties, add the line:
             MAPS_API_KEY=AIz...
         -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="${MAPS_API_KEY}" />-->
 
         <activity android:name=".MainActivity" />
         <activity
@@ -81,8 +81,8 @@
             <!--            </intent-filter>-->
         </activity>
 
-        <activity android:name=".NotificationCreationActivity"></activity>
-        <activity android:name=".NotificationDisplayActivity"></activity>
+        <activity android:name=".NotificationCreationActivity" />
+        <activity android:name=".NotificationDisplayActivity"/>
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">

@@ -55,7 +55,7 @@ public class OrgCreateEventFragment extends Fragment {
 
         // make the back button return to the home page
         toolbar.setNavigationOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_createEventFragment_to_org_home_page));
+                Navigation.findNavController(view).navigate(R.id.action_orgCreateEventFragment_to_attendeeHomePage));
 
 
         //Add the categories options to the spinner objects and hiding the descriptor "Categories" from selection
@@ -87,12 +87,12 @@ public class OrgCreateEventFragment extends Fragment {
             } else {
                 // create new event form data and add it toi the database using the event manager
                 Event newEvent = new Event(name, description, category, Timestamp.now(), location, tracking);
-                String organizer = ((OrgMainActivity) requireActivity()).getOrgUUID();
+                String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
 
                 EventManager.createEvent(newEvent, organizer, customQRString);
 
                 // return to the home page
-                Navigation.findNavController(view).navigate(R.id.action_createEventFragment_to_org_home_page);
+                Navigation.findNavController(view).navigate(R.id.attendeeHomePage);
             }
 
         });
@@ -100,7 +100,7 @@ public class OrgCreateEventFragment extends Fragment {
         // send message since the function is not yet implemented
         chooseQrButton.setOnClickListener(v -> {
             publishButton.setEnabled(false);
-            ((OrgMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {
+            ((AttendeeMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {
                 this.customQRString = codeText;
                 publishButton.setEnabled(true);
             }, e -> {

@@ -12,7 +12,12 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.navigation.Navigation;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationRequest;
@@ -26,18 +31,19 @@ import com.google.firebase.firestore.GeoPoint;
 /**
  * Main activity class for attendees in the event management application.
  */
-public class AttendeeMainActivity extends Activity {
+public class AttendeeMainActivity extends AppCompatActivity {
 
     // UI components: buttons and a list view
     private MaterialButton homeButton, scanButton, profileButton, notificationButton;
-    private ListView eventListView;
+    private Event currentEvent;
 
+    private FragmentContainerView navController;
     private FusedLocationProviderClient fusedLocationClient;
     /**
      * QRCode scanner for scanning codes
      */
     private QRCodeScanner scanner;
-
+    private String attUUID;
     private String profileName;
 
     public interface LocationCallback {
@@ -63,25 +69,29 @@ public class AttendeeMainActivity extends Activity {
         scanButton = findViewById(R.id.attendee_scan_button);
         profileButton = findViewById(R.id.attendee_profile_button);
         notificationButton = findViewById(R.id.attendee_notification_button);
-        eventListView = findViewById(R.id.event_list_view);
+
+        navController = findViewById(R.id.att_nav_controller);
+
+        homeButton.setOnClickListener(v -> {
+            Navigation.findNavController(navController).navigate(R.id.attendeeHomePage);
+        });
+
+        // Set a click listener for the profile button
+        profileButton.setOnClickListener(v -> {
+            Navigation.findNavController(navController).navigate(R.id.attendeeProfileActivity);
+        });
 
         // Retrieve UUID from SharedPreferences and pass it to the next activity
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        String uuid = prefs.getString("UUID", null);
+        attUUID = prefs.getString("UUID", null);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        if (uuid != null) {
-            FirebaseFirestore.getInstance().collection("Users").document(uuid).get().addOnSuccessListener(d -> {
+        if (attUUID != null) {
+            FirebaseFirestore.getInstance().collection("Users").document(attUUID).get().addOnSuccessListener(d -> {
                 profileName = d.getString("name");
             });
         }
-
-        homeButton.setOnClickListener(view -> {
-            // Create an intent to start AttendeeMainActivity
-            Intent intent = new Intent(AttendeeMainActivity.this, AttendeeMainActivity.class);
-            startActivity(intent);
-        });
 
         setupProfileButton();
 
@@ -92,22 +102,6 @@ public class AttendeeMainActivity extends Activity {
      * Initialize onClick listener for the profile button
      */
     private void setupProfileButton() {
-        // Set a click listener for the profile button
-        profileButton.setOnClickListener(view -> {
-            // Create an intent to start AttendeeProfileActivity
-            Intent intent = new Intent(AttendeeMainActivity.this, AttendeeProfileActivity.class);
-
-            // Retrieve UUID from SharedPreferences and pass it to the next activity
-            SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-            String uuid = prefs.getString("UUID", null);
-            if (uuid != null) {
-                intent.putExtra("UUID", uuid);
-            }
-
-            // Start the AttendeeProfileActivity
-            startActivity(intent);
-        });
-
 
         // Handles the click event on the notification button. For devices running Android 13 (API level 33) or higher,
         // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayActivity.
@@ -245,4 +239,30 @@ public class AttendeeMainActivity extends Activity {
         }
     }
 
+    public String getAttUUID() {
+        return attUUID;
+    }
+    /**
+     * gets the current event on display
+     * @return the current event
+     */
+    public Event getCurrentEvent() {
+        return currentEvent;
+    }
+
+    /**
+     * sets the current event
+     * @param currentEvent the new current event
+     */
+    public void setCurrentEvent(Event currentEvent) {
+        this.currentEvent = currentEvent;
+    }
+
+    /**
+     * Get the qrCode scanner
+     * @return The QRCode scanner
+     */
+    public QRCodeScanner getScanner() {
+        return scanner;
+    }
 }

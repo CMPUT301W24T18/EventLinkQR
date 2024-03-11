@@ -78,6 +78,23 @@ public class EventManager extends Manager {
     }
 
     /**
+     * Add a callback to changes in the Events
+     *
+     * @param eventCallback The callback to be invoked when the events change
+     */
+    public static void addAllEventSnapshotCallback(Consumer<List<Event>> eventCallback) {
+        getCollection().addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+
+            if (querySnapshots != null) {
+                eventCallback.accept(querySnapshots.getDocuments().stream().map(d -> EventManager.fromDocument(d, null)).collect(Collectors.toList()));
+            }
+        });
+    }
+    /**
      * Add a callback to changes in the event attendees.
      *
      * @param eventName        Event to get attendees for
