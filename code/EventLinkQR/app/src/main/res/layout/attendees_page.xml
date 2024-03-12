@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:id="@+id/org_attendees_page"
-    tools:context=".OrgAttendeesPage">
+    tools:context=".AttendeesPage">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/org_attendees_tool_bar"

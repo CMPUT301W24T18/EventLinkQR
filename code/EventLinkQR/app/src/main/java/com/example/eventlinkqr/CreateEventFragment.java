@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,19 +20,25 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Timestamp;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * this class takes care of taking in the input for a new event and adding it to the data
  */
-public class OrgCreateEventFragment extends Fragment {
+public class CreateEventFragment extends Fragment implements DateTimePickerFragment.DateTimePickerListener {
 
     private String customQRString;
+    private Timestamp timestamp;
+    private MaterialButton dateButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.org_create_event_page, container, false);
+        return inflater.inflate(R.layout.create_event_page, container, false);
     }
 
     @Override
@@ -46,6 +54,7 @@ public class OrgCreateEventFragment extends Fragment {
         EditText locationInput = view.findViewById(R.id.event_location_input);
         SwitchCompat geoTracking = view.findViewById(R.id.new_event_geo_switch);
         Toolbar toolbar = view.findViewById(R.id.create_event_toolbar);
+        dateButton = view.findViewById(R.id.date_picker);
 
         Button publishButton = view.findViewById(R.id.publish_button);
         Button chooseQrButton = view.findViewById(R.id.choose_qr_button);
@@ -55,7 +64,7 @@ public class OrgCreateEventFragment extends Fragment {
 
         // make the back button return to the home page
         toolbar.setNavigationOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_createEventFragment_to_org_home_page));
+                Navigation.findNavController(view).navigate(R.id.action_orgCreateEventFragment_to_attendeeHomePage));
 
 
         //Add the categories options to the spinner objects and hiding the descriptor "Categories" from selection
@@ -80,19 +89,20 @@ public class OrgCreateEventFragment extends Fragment {
             String category = categoryInput.getSelectedItem().toString();
             String location = locationInput.getText().toString().trim();
             Boolean tracking = geoTracking.isChecked();
+            Timestamp timestamp = ((AttendeeMainActivity) requireActivity()).getTimestamp();
 
-            if(name.equals("") || description.equals("") || location.equals("") || category.equals("Category")){
+            if(name.equals("") || description.equals("") || location.equals("") || category.equals("Category") || timestamp == null){
                 // send wrong password message
                 Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
             } else {
                 // create new event form data and add it toi the database using the event manager
-                Event newEvent = new Event(name, description, category, Timestamp.now(), location, tracking);
-                String organizer = ((OrgMainActivity) requireActivity()).getOrgUUID();
+                Event newEvent = new Event(name, description, category, timestamp, location, tracking);
+                String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
 
                 EventManager.createEvent(newEvent, organizer, customQRString);
 
                 // return to the home page
-                Navigation.findNavController(view).navigate(R.id.action_createEventFragment_to_org_home_page);
+                Navigation.findNavController(view).navigate(R.id.attendeeHomePage);
             }
 
         });
@@ -100,7 +110,7 @@ public class OrgCreateEventFragment extends Fragment {
         // send message since the function is not yet implemented
         chooseQrButton.setOnClickListener(v -> {
             publishButton.setEnabled(false);
-            ((OrgMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {
+            ((AttendeeMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {
                 this.customQRString = codeText;
                 publishButton.setEnabled(true);
             }, e -> {
@@ -109,6 +119,14 @@ public class OrgCreateEventFragment extends Fragment {
             });
         });
 
+        // launches the date picker dialog fragment
+        dateButton.setOnClickListener(v -> {
+            new DateTimePickerFragment().show(getChildFragmentManager(), "Select Date and Time");
+        });
+
     }
+
+    @Override
+    public void addDateTime(Calendar dateAndtime) {}
 
 }

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AttendeeProfileActivity">
+
+    <TextView
+        android:id="@+id/tvProfileHeader"
+        android:layout_width="79dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:text="Profile"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/ivProfileImage"
+        android:layout_width="match_parent"
+        android:layout_height="229dp"
+        android:layout_below="@id/tvProfileHeader"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btnEditProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivProfileImage"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:text="Edit Profile Photo"
+        android:enabled="false"/>
+
+    <TextView
+        android:id="@+id/tvFullNameLabel"
+        android:layout_width="112dp"
+        android:layout_height="34dp"
+        android:layout_below="@id/btnEditProfile"
+        android:layout_alignParentStart="true"
+        android:layout_weight="1"
+        android:text="Full Name" />
+
+    <EditText
+        android:id="@+id/etFullName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnEditProfile"
+        android:layout_toEndOf="@id/tvFullNameLabel"
+        android:layout_weight="1"
+        android:hint="Allison TheRock Johnson"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/phoneNumber"
+        android:layout_width="136dp"
+        android:layout_height="31dp"
+        android:layout_below="@id/etFullName"
+        android:layout_alignParentStart="true"
+        android:layout_weight="1"
+        android:text="Phone Number" />
+
+    <EditText
+        android:id="@+id/phoneNumberEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etFullName"
+        android:layout_toEndOf="@id/phoneNumber"
+        android:layout_weight="1"
+        android:hint="1233456789"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/homepage"
+        android:layout_width="103dp"
+        android:layout_height="33dp"
+        android:layout_below="@id/phoneNumberEdit"
+        android:layout_alignParentStart="true"
+        android:layout_weight="1"
+        android:text="Homepage" />
+
+    <EditText
+        android:id="@+id/homepageEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/homepage"
+        android:layout_toEndOf="@id/homepage"
+        android:layout_weight="1"
+        android:hint="Enter Homepage Link"
+        android:inputType="textMultiLine" />
+
+    <TextView
+        android:id="@+id/LocationPermission"
+        android:layout_width="155dp"
+        android:layout_height="29dp"
+        android:layout_below="@id/homepageEdit"
+        android:layout_alignParentStart="true"
+        android:layout_weight="1"
+        android:text="Location Permission" />
+
+    <Switch
+        android:id="@+id/toggleLocation"
+        android:layout_width="64dp"
+        android:layout_height="37dp"
+        android:layout_below="@id/LocationPermission"
+        android:layout_alignParentEnd="true"
+        android:layout_weight="1" />
+
+    <!-- Layout for Save and Back buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/toggleLocation"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Back" />
+
+        <Button
+            android:id="@+id/btnResetApp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Reset Data" />
+    </LinearLayout>
+
+</LinearLayout>

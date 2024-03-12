@@ -22,7 +22,7 @@ import androidx.navigation.Navigation;
  */
 public class OrgEventFragment extends Fragment {
 
-  private ImageView qrCodeImage;
+    private ImageView qrCodeImage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,24 +50,24 @@ public class OrgEventFragment extends Fragment {
 
         // make the back button return to the home page
         orgEventToolBar.setNavigationOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.org_home_page));
+                Navigation.findNavController(view).navigate(R.id.attendeeHomePage));
 
         // make the attendees button go to the attendees page
         attendeesButton.setOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_attendeesPage));
+                Navigation.findNavController(view).navigate(R.id.action_orgEventFragment2_to_orgAttendeesPage));
 
         // Set the onClickListener for the send notification icon
         notificationSendIcon.setOnClickListener(v -> {
             // Create an intent to start the NotificationCreationActivity
             Intent intent = new Intent(getActivity(), NotificationCreationActivity.class);
-            Event currentEvent = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+            Event currentEvent = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
             if(currentEvent != null) {
                 intent.putExtra("eventId", currentEvent.getId()); // Assuming the Event object has a method getId() that returns the event's ID
             }
             startActivity(intent);
         });
 
-        Event event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+        Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
 
         // temporary message since it is not yet completely implemented
         detailsButton.setOnClickListener(v -> {
@@ -98,4 +98,3 @@ public class OrgEventFragment extends Fragment {
         return view;
     }
 }
-
