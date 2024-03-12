@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:navGraph="@navigation/att_navigation" />
+        app:navGraph="@navigation/nav" />
 
     <LinearLayout
         android:id="@+id/button_layout"

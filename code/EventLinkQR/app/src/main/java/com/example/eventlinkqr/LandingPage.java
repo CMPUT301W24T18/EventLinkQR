@@ -81,7 +81,7 @@ public class LandingPage extends AppCompatActivity {
                 startActivity(intent);
             });
         } else {
-            Intent intent = new Intent(LandingPage.this, MainActivity.class);
+            Intent intent = new Intent(LandingPage.this, AttendeeMainActivity.class);
             startActivity(intent);
             finish();
         }

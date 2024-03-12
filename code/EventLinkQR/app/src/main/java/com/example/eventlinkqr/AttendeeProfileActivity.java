@@ -36,7 +36,6 @@ public class AttendeeProfileActivity extends Fragment {
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
     private Switch toggleLocation; // Used for location permission
-    private Button switchAccount;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String uuid; // Unique identifier for the attendee
     private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
@@ -58,7 +57,6 @@ public class AttendeeProfileActivity extends Fragment {
         Button btnSave = view.findViewById(R.id.btnSave);
         Button btnBack = view.findViewById(R.id.btnBack);
         Button photoButton = view.findViewById(R.id.btnEditProfile);
-        switchAccount = view.findViewById(R.id.switch_account);
         toggleLocation = view.findViewById(R.id.toggleLocation);
         // Set a listener for the location switch
         toggleLocation.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -68,12 +66,6 @@ public class AttendeeProfileActivity extends Fragment {
         attendeeArrayAdapter = AttendeeArrayAdapter.getInstance(); // Get the singleton instance of the adapter
 
         checkUUIDAndLoadProfile(); // Check UUID and load profile data
-
-        // return to the select page to switch account type
-        switchAccount.setOnClickListener(v -> {
-            Intent intent = new Intent(requireActivity(), MainActivity.class);
-            startActivity(intent);
-        });
 
         btnSave.setOnClickListener(v -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
         btnBack.setOnClickListener(v ->
@@ -108,14 +100,12 @@ public class AttendeeProfileActivity extends Fragment {
 
         if (uuid == null) {
             SharedPreferences prefs = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-            switchAccount.setVisibility(View.GONE);
             // New profile: generate a new UUID
             uuid = UUID.randomUUID().toString();
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("UUID", uuid);
             editor.apply();
         } else {
-            switchAccount.setVisibility(View.VISIBLE);
             // Existing profile: load it
             loadProfile(uuid);
         }

@@ -17,7 +17,7 @@ public class NotificationCreationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_notification);
+        setContentView(R.layout.create_notification_page);
 
         notificationManager = new NotificationManager();
 

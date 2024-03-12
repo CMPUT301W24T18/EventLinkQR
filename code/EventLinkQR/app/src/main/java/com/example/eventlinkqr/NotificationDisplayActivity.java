@@ -1,8 +1,7 @@
 package com.example.eventlinkqr;
 
 import static android.content.ContentValues.TAG;
-import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import com.google.android.material.button.MaterialButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +50,7 @@ public class NotificationDisplayActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_display_notifications, container, false);
+        View view = inflater.inflate(R.layout.notifications_page, container, false);
 
 
         listView = view.findViewById(R.id.lvNotifications);

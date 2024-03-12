@@ -89,11 +89,12 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
 
 
         // Loop through the list of locations and add a marker for each one
-        for (LatLng location : locations) {
-            myMap.addMarker(new MarkerOptions().position(location));
-            builder.include(location);
+        if(locations != null) {
+            for (LatLng location : locations) {
+                myMap.addMarker(new MarkerOptions().position(location));
+                builder.include(location);
+            }
         }
-
         LatLngBounds bounds = builder.build();
 
         //This padding helps ensure points are visually inside of the map, not just on the boarder

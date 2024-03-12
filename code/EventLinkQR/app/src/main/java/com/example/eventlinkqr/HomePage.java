@@ -4,24 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.ArrayList;
-
-public class AttendeeHomePage extends Fragment {
+public class HomePage extends Fragment {
 
     /** the title for each tab*/
     private static final String[] TAB_TITLES = {"All", "My Events", "My Upcoming Events"};
@@ -35,7 +27,7 @@ public class AttendeeHomePage extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.attendee_home_page, container, false);
+        return inflater.inflate(R.layout.home_page, container, false);
     }
 
     @Override

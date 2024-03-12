@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/attendeeHomePage"
-        android:name="com.example.eventlinkqr.AttendeeHomePage"
+        android:name="com.example.eventlinkqr.HomePage"
         android:label="attendee_home_page"
-        tools:layout="@layout/attendee_home_page" >
+        tools:layout="@layout/home_page" >
         <action
             android:id="@+id/action_attendeeHomePage_to_attendeeProfileActivity"
             app:destination="@id/attendeeProfileActivity" />
@@ -36,16 +36,16 @@
         android:id="@+id/notificationDisplayActivity2"
         android:name="com.example.eventlinkqr.NotificationDisplayActivity"
         android:label="activity_display_notifications"
-        tools:layout="@layout/activity_display_notifications" >
+        tools:layout="@layout/notifications_page" >
         <action
             android:id="@+id/action_notificationDisplayActivity2_to_attendeeHomePage"
             app:destination="@id/attendeeHomePage" />
     </fragment>
     <fragment
         android:id="@+id/orgCreateEventFragment"
-        android:name="com.example.eventlinkqr.OrgCreateEventFragment"
+        android:name="com.example.eventlinkqr.CreateEventFragment"
         android:label="org_create_event_page"
-        tools:layout="@layout/org_create_event_page" >
+        tools:layout="@layout/create_event_page" >
         <action
             android:id="@+id/action_orgCreateEventFragment_to_attendeeHomePage"
             app:destination="@id/attendeeHomePage" />
@@ -64,9 +64,9 @@
     </fragment>
     <fragment
         android:id="@+id/orgAttendeesPage"
-        android:name="com.example.eventlinkqr.OrgAttendeesPage"
+        android:name="com.example.eventlinkqr.AttendeesPage"
         android:label="org_attendees_page"
-        tools:layout="@layout/org_attendees_page" >
+        tools:layout="@layout/attendees_page" >
         <action
             android:id="@+id/action_orgAttendeesPage_to_orgEventFragment2"
             app:destination="@id/orgEventFragment2" />

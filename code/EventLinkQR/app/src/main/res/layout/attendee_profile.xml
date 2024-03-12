@@ -109,13 +109,6 @@
         android:layout_weight="1" />
 
     <!-- Layout for Save and Back buttons -->
-    <Button
-        android:id="@+id/switch_account"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Switch account type" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -139,9 +132,10 @@
 
         <Button
             android:id="@+id/btnResetApp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Reset App Data" />
+            android:layout_weight="1"
+            android:text="Reset Data" />
     </LinearLayout>
 
 </LinearLayout>

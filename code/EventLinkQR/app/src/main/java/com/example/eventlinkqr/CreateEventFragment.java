@@ -23,14 +23,14 @@ import com.google.firebase.Timestamp;
 /**
  * this class takes care of taking in the input for a new event and adding it to the data
  */
-public class OrgCreateEventFragment extends Fragment {
+public class CreateEventFragment extends Fragment {
 
     private String customQRString;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.org_create_event_page, container, false);
+        return inflater.inflate(R.layout.create_event_page, container, false);
     }
 
     @Override

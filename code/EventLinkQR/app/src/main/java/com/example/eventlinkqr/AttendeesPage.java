@@ -16,14 +16,12 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.QuerySnapshot;
 
 /**
  * Class that creates the organizer view and keep-s track of events
  */
 //https://www.youtube.com/watch?v=LXl7D57fgOQ
-public class OrgAttendeesPage extends Fragment  {
+public class AttendeesPage extends Fragment  {
 
     /** the title for each tab*/
     private static final String[] TAB_TITLES = {"All", "Checked In", "Not Checked In"};
@@ -37,7 +35,7 @@ public class OrgAttendeesPage extends Fragment  {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.org_attendees_page, container, false);
+        return inflater.inflate(R.layout.attendees_page, container, false);
     }
 
     @Override

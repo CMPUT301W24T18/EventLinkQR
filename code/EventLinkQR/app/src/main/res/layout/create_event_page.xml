@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".OrgCreateEventFragment">
+    tools:context=".CreateEventFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/create_event_toolbar"

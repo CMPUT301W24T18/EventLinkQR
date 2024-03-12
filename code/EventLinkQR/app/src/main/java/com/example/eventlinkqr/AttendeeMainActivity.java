@@ -1,7 +1,6 @@
 package com.example.eventlinkqr;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,13 +18,10 @@ import androidx.navigation.Navigation;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 
 /**
  * Main activity class for attendees in the event management application.
@@ -62,7 +57,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
         scanner = new QRCodeScanner(this);
 
         // Set the content view to the attendee main layout
-        setContentView(R.layout.attendee_main_layout);
+        setContentView(R.layout.main_layout);
 
         // Initialize UI components
         homeButton = findViewById(R.id.attendee_home_button);
@@ -112,16 +107,14 @@ public class AttendeeMainActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
                         PackageManager.PERMISSION_GRANTED) {
                     // Permission granted, proceed with showing notifications
-                    Intent intent = new Intent(this, NotificationDisplayActivity.class);
-                    startActivity(intent);
+                    Navigation.findNavController(navController).navigate(R.id.notificationDisplayActivity2);
                 } else {
                     // Permission denied, guide user to settings
                     showCustomPermissionDialog();
                 }
             } else {
                 // For Android versions below Tiramisu, permission model is different and direct system settings guidance may be needed if notifications are turned off
-                Intent intent = new Intent(this, NotificationDisplayActivity.class);
-                startActivity(intent);
+                Navigation.findNavController(navController).navigate(R.id.notificationDisplayActivity2);
             }
         });
 
