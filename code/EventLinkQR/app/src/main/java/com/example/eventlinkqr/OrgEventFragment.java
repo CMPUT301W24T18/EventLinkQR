@@ -22,7 +22,7 @@ import androidx.navigation.Navigation;
  */
 public class OrgEventFragment extends Fragment {
 
-  private ImageView qrCodeImage;
+    private ImageView qrCodeImage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,4 +98,3 @@ public class OrgEventFragment extends Fragment {
         return view;
     }
 }
-

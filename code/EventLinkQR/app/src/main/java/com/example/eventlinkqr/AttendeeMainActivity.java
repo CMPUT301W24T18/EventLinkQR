@@ -21,12 +21,16 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Main activity class for attendees in the event management application.
  */
-public class AttendeeMainActivity extends AppCompatActivity {
+public class AttendeeMainActivity extends AppCompatActivity implements DateTimePickerFragment.DateTimePickerListener{
 
     // UI components: buttons and a list view
     private MaterialButton homeButton, scanButton, profileButton, notificationButton;
@@ -40,6 +44,25 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private QRCodeScanner scanner;
     private String attUUID;
     private String profileName;
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    private Timestamp timestamp;
+
+    /**
+     * listener for the date picker. Has to be implemented in an activity, that's why it's here
+     * @param dateAndtime the date and time of the new event
+     */
+    @Override
+    public void addDateTime(Calendar dateAndtime) {
+        MaterialButton dateButton = findViewById(R.id.date_picker);
+        Date date = dateAndtime.getTime();
+        String ca = date.toString();
+        dateButton.setHint(ca);
+        this.timestamp = new Timestamp(date);
+    }
 
     public interface LocationCallback {
         void onLocationReceived(LatLng location);

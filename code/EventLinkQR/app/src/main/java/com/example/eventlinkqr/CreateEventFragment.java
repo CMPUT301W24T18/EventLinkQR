@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,14 +20,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Timestamp;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * this class takes care of taking in the input for a new event and adding it to the data
  */
-public class CreateEventFragment extends Fragment {
+public class CreateEventFragment extends Fragment implements DateTimePickerFragment.DateTimePickerListener {
 
     private String customQRString;
+    private Timestamp timestamp;
+    private MaterialButton dateButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -46,6 +54,7 @@ public class CreateEventFragment extends Fragment {
         EditText locationInput = view.findViewById(R.id.event_location_input);
         SwitchCompat geoTracking = view.findViewById(R.id.new_event_geo_switch);
         Toolbar toolbar = view.findViewById(R.id.create_event_toolbar);
+        dateButton = view.findViewById(R.id.date_picker);
 
         Button publishButton = view.findViewById(R.id.publish_button);
         Button chooseQrButton = view.findViewById(R.id.choose_qr_button);
@@ -80,13 +89,14 @@ public class CreateEventFragment extends Fragment {
             String category = categoryInput.getSelectedItem().toString();
             String location = locationInput.getText().toString().trim();
             Boolean tracking = geoTracking.isChecked();
+            Timestamp timestamp = ((AttendeeMainActivity) requireActivity()).getTimestamp();
 
-            if(name.equals("") || description.equals("") || location.equals("") || category.equals("Category")){
+            if(name.equals("") || description.equals("") || location.equals("") || category.equals("Category") || timestamp == null){
                 // send wrong password message
                 Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
             } else {
                 // create new event form data and add it toi the database using the event manager
-                Event newEvent = new Event(name, description, category, Timestamp.now(), location, tracking);
+                Event newEvent = new Event(name, description, category, timestamp, location, tracking);
                 String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
 
                 EventManager.createEvent(newEvent, organizer, customQRString);
@@ -109,6 +119,14 @@ public class CreateEventFragment extends Fragment {
             });
         });
 
+        // launches the date picker dialog fragment
+        dateButton.setOnClickListener(v -> {
+            new DateTimePickerFragment().show(getChildFragmentManager(), "Select Date and Time");
+        });
+
     }
+
+    @Override
+    public void addDateTime(Calendar dateAndtime) {}
 
 }

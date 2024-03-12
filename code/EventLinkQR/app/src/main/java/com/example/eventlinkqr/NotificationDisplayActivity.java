@@ -94,4 +94,3 @@ public class NotificationDisplayActivity extends Fragment {
         });
     }
 }
-

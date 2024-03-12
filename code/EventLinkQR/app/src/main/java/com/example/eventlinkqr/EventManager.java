@@ -223,7 +223,7 @@ public class EventManager extends Manager {
         newEventData.put("location", newEvent.getLocation());
 
         // will edit this when i create a proper date selector
-        newEventData.put("dateAndTime", Timestamp.now());
+        newEventData.put("dateAndTime", newEvent.getDate());
 
         newEventData.put("geoTracking", newEvent.getGeoTracking());
         newEventData.put("organizer", organizer);

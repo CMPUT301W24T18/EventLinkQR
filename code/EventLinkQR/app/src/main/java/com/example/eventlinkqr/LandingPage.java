@@ -40,7 +40,7 @@ public class LandingPage extends AppCompatActivity {
      *                           being shut down then this Bundle contains the data it most
      *                           recently supplied in onSaveInstanceState(Bundle). Otherwise, it is null.
      */
-  
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,4 +134,3 @@ public class LandingPage extends AppCompatActivity {
         }
     }
 }
-

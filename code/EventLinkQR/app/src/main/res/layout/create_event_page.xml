@@ -82,12 +82,19 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editTextDate"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/date_picker"
+        style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:inputType="date" />
+        android:background="@android:color/transparent"
+        android:gravity="start|center_vertical"
+        android:hint="Select"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:icon="@drawable/ic_calendar"
+        app:iconGravity="end"
+        app:iconTint="@color/black" />
 
     <TextView
         android:id="@+id/textView5"
