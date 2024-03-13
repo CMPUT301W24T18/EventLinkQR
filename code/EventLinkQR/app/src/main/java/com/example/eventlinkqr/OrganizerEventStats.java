@@ -50,8 +50,9 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
             if (event != null) {
                 this.event = event;
                 locations = event.getCheckInLocations();
-                runOnUiThread(() -> setupMap());
-
+                if (locations != null && !locations.isEmpty()) {
+                    runOnUiThread(() -> setupMap());
+                }
                 String displayTotalAttendees = "Total Attendance\n" + event.getCheckedInAttendeesCount();
                 textViewTotalAttendees.setText(displayTotalAttendees);
 
