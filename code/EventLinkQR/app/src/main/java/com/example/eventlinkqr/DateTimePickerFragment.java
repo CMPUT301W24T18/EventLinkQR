@@ -14,6 +14,9 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
+/**
+ * this class takes care of the data and time input when creating a new event
+ */
 //https://developer.android.com/develop/ui/views/components/pickers
 public class DateTimePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -28,11 +31,8 @@ public class DateTimePickerFragment extends DialogFragment
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof DateTimePickerListener) {
-            listener = (DateTimePickerListener) context;
-        } else {
-            throw new RuntimeException(context + " must implement DateTimePickerListener");
-        }
+        // makes CreateEventFragment the listener
+        listener = (DateTimePickerListener) getParentFragment();
     }
 
     @NonNull
@@ -56,7 +56,6 @@ public class DateTimePickerFragment extends DialogFragment
         TimePickerDialog timepicker = new TimePickerDialog(requireContext(), this, hour, minute, true);
         timepicker.show();
     }
-
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

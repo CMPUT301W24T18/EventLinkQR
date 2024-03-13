@@ -31,7 +31,7 @@ import java.util.Date;
 /**
  * Main activity class for attendees in the event management application.
  */
-public class AttendeeMainActivity extends AppCompatActivity implements DateTimePickerFragment.DateTimePickerListener{
+public class AttendeeMainActivity extends AppCompatActivity {
 
     // UI components: buttons and a list view
     private MaterialButton homeButton, scanButton, profileButton, notificationButton;
@@ -45,22 +45,6 @@ public class AttendeeMainActivity extends AppCompatActivity implements DateTimeP
     private QRCodeScanner scanner;
     private String attUUID;
     private String profileName;
-
-    private Timestamp timestamp;
-
-    /**
-     * listener for the date picker. Has to be implemented in an activity, that's why it's here
-     * @param dateAndtime the date and time of the new event
-     */
-    @Override
-    public void addDateTime(Calendar dateAndtime) {
-        MaterialButton dateButton = findViewById(R.id.date_picker);
-        Date date = dateAndtime.getTime();
-        String timeChosen = date.toString();
-        // display the time chosen on the screen so the user can confirm
-        dateButton.setHint(timeChosen);
-        this.timestamp = new Timestamp(date);
-    }
 
     public interface LocationCallback {
         void onLocationReceived(LatLng location);
@@ -275,14 +259,6 @@ public class AttendeeMainActivity extends AppCompatActivity implements DateTimeP
      */
     public QRCodeScanner getScanner() {
         return scanner;
-    }
-
-    /**
-     * Gets the timestamp of the event that was created
-     * @return the timstamp of the event being created
-     */
-    public Timestamp getTimestamp() {
-        return timestamp;
     }
 
 }

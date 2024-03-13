@@ -29,10 +29,11 @@ import java.util.Date;
 /**
  * this class takes care of taking in the input for a new event and adding it to the data
  */
-public class CreateEventFragment extends Fragment{
+public class CreateEventFragment extends Fragment implements DateTimePickerFragment.DateTimePickerListener{
 
     private String customQRString;
     private MaterialButton dateButton;
+    Timestamp timestamp;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -88,7 +89,7 @@ public class CreateEventFragment extends Fragment{
             String category = categoryInput.getSelectedItem().toString();
             String location = locationInput.getText().toString().trim();
             Boolean tracking = geoTracking.isChecked();
-            Timestamp timestamp = ((AttendeeMainActivity) requireActivity()).getTimestamp();
+            //Timestamp timestamp = ((AttendeeMainActivity) requireActivity()).getTimestamp();
 
             if(name.equals("") || description.equals("") || location.equals("") || category.equals("Category") || timestamp == null){
                 // send wrong password message
@@ -123,6 +124,19 @@ public class CreateEventFragment extends Fragment{
             new DateTimePickerFragment().show(getChildFragmentManager(), "Select Date and Time");
         });
 
+    }
+
+    /**
+     * listener for the date picker, receives the date and time selected by the organizer
+     * @param dateAndtime the date and time of the new event
+     */
+    @Override
+    public void addDateTime(Calendar dateAndtime) {
+        Date date = dateAndtime.getTime();
+        String timeChosen = date.toString();
+        // display the time chosen on the screen so the user can confirm
+        dateButton.setHint(timeChosen);
+        this.timestamp = new Timestamp(date);
     }
 
 }
