@@ -96,7 +96,6 @@ public class AttendeeProfileActivity extends Fragment {
      * Checks UUID and loads profile data.
      */
     private void checkUUIDAndLoadProfile() {
-        String uuid = ((AttendeeMainActivity) requireActivity()).getAttUUID();
 
         if (uuid == null) {
             SharedPreferences prefs = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);

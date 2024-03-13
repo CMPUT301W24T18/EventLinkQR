@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,8 +74,6 @@ public class AttendeeMainActivity extends AppCompatActivity implements DateTimeP
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        scanner = new QRCodeScanner(this);
 
         // Set the content view to the attendee main layout
         setContentView(R.layout.main_layout);
