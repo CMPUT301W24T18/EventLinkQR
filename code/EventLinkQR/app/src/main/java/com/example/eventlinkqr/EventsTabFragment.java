@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * this class handles the home page tabs that display the events
+ */
 public class EventsTabFragment extends Fragment {
     private EventArrayAdapter eventAdapter;
     private ArrayList<Event> dataList;

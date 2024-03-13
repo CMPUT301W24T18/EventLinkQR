@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+/**
+ * custom view adapter for the different event pages
+ */
 public class EventsViewAdapter extends FragmentStateAdapter {
 
     public EventsViewAdapter(FragmentActivity fragmentActivity) {
