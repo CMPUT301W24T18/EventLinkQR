@@ -29,10 +29,9 @@ import java.util.Date;
 /**
  * this class takes care of taking in the input for a new event and adding it to the data
  */
-public class CreateEventFragment extends Fragment implements DateTimePickerFragment.DateTimePickerListener {
+public class CreateEventFragment extends Fragment{
 
     private String customQRString;
-    private Timestamp timestamp;
     private MaterialButton dateButton;
 
     @Override
@@ -125,8 +124,5 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         });
 
     }
-
-    @Override
-    public void addDateTime(Calendar dateAndtime) {}
 
 }

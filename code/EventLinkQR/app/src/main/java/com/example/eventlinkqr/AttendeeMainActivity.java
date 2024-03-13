@@ -45,10 +45,6 @@ public class AttendeeMainActivity extends AppCompatActivity implements DateTimeP
     private String attUUID;
     private String profileName;
 
-    public Timestamp getTimestamp() {
-        return timestamp;
-    }
-
     private Timestamp timestamp;
 
     /**
@@ -59,8 +55,9 @@ public class AttendeeMainActivity extends AppCompatActivity implements DateTimeP
     public void addDateTime(Calendar dateAndtime) {
         MaterialButton dateButton = findViewById(R.id.date_picker);
         Date date = dateAndtime.getTime();
-        String ca = date.toString();
-        dateButton.setHint(ca);
+        String timeChosen = date.toString();
+        // display the time chosen on the screen so the user can confirm
+        dateButton.setHint(timeChosen);
         this.timestamp = new Timestamp(date);
     }
 
@@ -281,4 +278,13 @@ public class AttendeeMainActivity extends AppCompatActivity implements DateTimeP
     public QRCodeScanner getScanner() {
         return scanner;
     }
+
+    /**
+     * Gets the timestamp of the event that was created
+     * @return the timstamp of the event being created
+     */
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
 }

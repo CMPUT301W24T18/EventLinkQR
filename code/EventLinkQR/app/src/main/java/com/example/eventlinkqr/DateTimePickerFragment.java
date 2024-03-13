@@ -20,6 +20,7 @@ public class DateTimePickerFragment extends DialogFragment
     private DateTimePickerListener listener;
     private Calendar selectedDateTime;
 
+    // the listener for when the time is set
     interface DateTimePickerListener {
         void addDateTime(Calendar dateAndtime);
     }
