@@ -1,7 +1,10 @@
 package com.example.eventlinkqr;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class CreateProfile extends Fragment {
     private static final String TAG = "AttendeeProfile";
@@ -113,12 +117,15 @@ public class CreateProfile extends Fragment {
         // Validate name is not null or empty
         if (name.equals("")) {
             Toast.makeText(requireActivity(), "Name cannot be empty", Toast.LENGTH_SHORT).show();
-        }else if (!phoneNumber.isEmpty()) {
+        }else if (phoneNumber.equals("") || phoneNumber.length()<10) {
             // Validate phone number if provided, and ensure it is exactly 10 digits
-            if (!phoneNumber.matches("\\d{10}")) {
-                Toast.makeText(requireActivity(), "Invalid Phone Number", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(requireActivity(), "Invalid Phone Number", Toast.LENGTH_SHORT).show();
         }else {
+            uuid = UUID.randomUUID().toString();
+            SharedPreferences prefs = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("UUID", uuid);
+            editor.apply();
             Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled);
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Users").document(uuid).set(attendee)

@@ -98,7 +98,6 @@ public class AttendeeMainActivity extends AppCompatActivity implements DateTimeP
         // Retrieve UUID from SharedPreferences and pass it to the next activity
         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         attUUID = prefs.getString("UUID", null);
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (attUUID != null) {

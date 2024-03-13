@@ -56,7 +56,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:hint="1233456789"
-        android:inputType="textEmailAddress" />
+        android:inputType="number"
+        android:maxLength="10" />
 
     <TextView
         android:layout_width="match_parent"

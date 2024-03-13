@@ -55,7 +55,6 @@ public class AttendeeProfileActivity extends Fragment {
         etPhoneNumber = view.findViewById(R.id.phoneNumberEdit);
         etHomepage = view.findViewById(R.id.homepageEdit);
         Button btnSave = view.findViewById(R.id.btnSave);
-        Button btnBack = view.findViewById(R.id.btnBack);
         Button photoButton = view.findViewById(R.id.btnEditProfile);
         toggleLocation = view.findViewById(R.id.toggleLocation);
         // Set a listener for the location switch
@@ -68,9 +67,7 @@ public class AttendeeProfileActivity extends Fragment {
         checkUUIDAndLoadProfile(); // Check UUID and load profile data
 
         btnSave.setOnClickListener(v -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
-        btnBack.setOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_attendeeProfileActivity_to_attendeeHomePage));
-//
+
 //        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
 //
 //
