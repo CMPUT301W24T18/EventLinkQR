@@ -93,7 +93,7 @@ public class AttendeeProfileActivity extends Fragment {
      * Checks UUID and loads profile data.
      */
     private void checkUUIDAndLoadProfile() {
-
+        uuid = ((AttendeeMainActivity) requireActivity()).getAttUUID();
         if (uuid == null) {
             SharedPreferences prefs = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
             // New profile: generate a new UUID
@@ -180,6 +180,8 @@ public class AttendeeProfileActivity extends Fragment {
         db.collection("Users").document(uuid).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     Attendee attendee = documentSnapshot.toObject(Attendee.class);
+
+                    Log.d("uuid added", "here");
                     if (attendee != null) {
                         etName.setText(attendee.getName());
                         etPhoneNumber.setText(attendee.getPhone_number());

@@ -28,6 +28,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Fragment for creating a profile the first time a user opens the app
+ */
 public class CreateProfile extends Fragment {
     private static final String TAG = "AttendeeProfile";
     // UI components: input fields, buttons, and switch
@@ -60,6 +63,7 @@ public class CreateProfile extends Fragment {
             onToggleLocationButtonClicked(isChecked);
         });
 
+        // close the app
         btnBack.setOnClickListener(v ->{
             requireActivity().finish();
         });
@@ -106,6 +110,10 @@ public class CreateProfile extends Fragment {
         startActivity(intent);
     }
 
+    /**
+     * saves the new profile into the database
+     * @param fcmToken the new fcm token
+     */
     private void saveProfile(String fcmToken){
         // Extract data from UI components
         String name = etName.getText().toString().trim();
