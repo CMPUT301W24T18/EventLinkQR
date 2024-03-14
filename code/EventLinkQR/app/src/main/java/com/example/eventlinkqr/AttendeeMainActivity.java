@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,11 +21,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Main activity class for attendees in the event management application.
@@ -76,7 +71,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
 
         // Set a click listener for the profile button
         profileButton.setOnClickListener(v -> {
-            Navigation.findNavController(navController).navigate(R.id.attendeeProfileActivity);
+            Navigation.findNavController(navController).navigate(R.id.attendeeProfilePage);
         });
 
         // Retrieve UUID from SharedPreferences and pass it to the next activity
@@ -96,7 +91,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
     }
 
     /**
-     * Initialize onClick listener for the profile button
+     * Initialize onClick listener for the notifications button
      */
     private void setupProfileButton() {
 
@@ -109,14 +104,14 @@ public class AttendeeMainActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
                         PackageManager.PERMISSION_GRANTED) {
                     // Permission granted, proceed with showing notifications
-                    Navigation.findNavController(navController).navigate(R.id.notificationDisplayActivity2);
+                    Navigation.findNavController(navController).navigate(R.id.notificationDisplayPage);
                 } else {
                     // Permission denied, guide user to settings
                     showCustomPermissionDialog();
                 }
             } else {
                 // For Android versions below Tiramisu, permission model is different and direct system settings guidance may be needed if notifications are turned off
-                Navigation.findNavController(navController).navigate(R.id.notificationDisplayActivity2);
+                Navigation.findNavController(navController).navigate(R.id.notificationDisplayPage);
             }
         });
 

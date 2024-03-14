@@ -63,7 +63,7 @@ public class AttendeesPage extends Fragment  {
         // make the back button return to the event page
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgAttendeesToolbar);
         orgAttendeesToolbar.setNavigationOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_orgAttendeesPage_to_orgEventFragment2));
+                Navigation.findNavController(view).navigate(R.id.action_orgAttendeesPage_to_orgEventFragment));
         orgAttendeesToolbar.setTitle(null);
 
         AttendeesViewAdapter pagerAdapter = new AttendeesViewAdapter(requireActivity());

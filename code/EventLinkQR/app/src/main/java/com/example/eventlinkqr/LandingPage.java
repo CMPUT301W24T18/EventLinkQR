@@ -33,7 +33,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class LandingPage extends AppCompatActivity {
-    NavController navController;
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
     /**

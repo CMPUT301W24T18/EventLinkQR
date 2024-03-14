@@ -5,19 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -103,7 +100,7 @@ public class EventsTabFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         ((AttendeeMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
-                        Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_orgEventFragment2);
+                        Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_orgEventFragment);
                     }
                 });
                 EventManager.addEventSnapshotCallback(((AttendeeMainActivity) requireActivity()).getAttUUID(), eventsCallback);

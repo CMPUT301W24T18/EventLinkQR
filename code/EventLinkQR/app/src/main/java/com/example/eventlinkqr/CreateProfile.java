@@ -78,10 +78,9 @@ public class CreateProfile extends Fragment {
         btnSave.setOnClickListener(v ->
                 fetchAndUpdateFCMToken());
         return view;
-
     }
 
-                /**
+    /**
      * Handles the location switch toggle and first time location permissions.
      * @param isChecked The state of the switch
      */

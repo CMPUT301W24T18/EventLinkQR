@@ -54,7 +54,7 @@ public class OrgEventFragment extends Fragment {
 
         // make the attendees button go to the attendees page
         attendeesButton.setOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_orgEventFragment2_to_orgAttendeesPage));
+                Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_orgAttendeesPage));
 
         // Set the onClickListener for the send notification icon
         notificationSendIcon.setOnClickListener(v -> {

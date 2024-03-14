@@ -6,7 +6,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
@@ -168,7 +166,7 @@ public class AttendeeProfileActivity extends Fragment {
      * Redirects to AttendeeMainActivity.
      */
     private void redirectToMainActivity() {
-        Navigation.findNavController(Objects.requireNonNull(requireActivity().getCurrentFocus())).navigate(R.id.action_attendeeProfileActivity_to_attendeeHomePage);
+        Navigation.findNavController(Objects.requireNonNull(requireActivity().getCurrentFocus())).navigate(R.id.action_attendeeProfilePage_to_attendeeHomePage);
     }
 
     /**

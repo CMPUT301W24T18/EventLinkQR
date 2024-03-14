@@ -89,7 +89,6 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
             String category = categoryInput.getSelectedItem().toString();
             String location = locationInput.getText().toString().trim();
             Boolean tracking = geoTracking.isChecked();
-            //Timestamp timestamp = ((AttendeeMainActivity) requireActivity()).getTimestamp();
 
             if(name.equals("") || description.equals("") || location.equals("") || category.equals("Category") || timestamp == null){
                 // send wrong password message
