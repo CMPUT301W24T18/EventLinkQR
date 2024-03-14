@@ -23,7 +23,7 @@ jobs:
     # OpenAI, 2024, ChatGPT, Create dummy local.properties in CI
     - name: Create dummy local.properties   
       run: |
-        echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
+        echo "sdk.dir=/usr/local/lib/android/sdk\nMAPS_API_KEY=dummyapikey" > local.properties
       working-directory: ./code/EventLinkQR
       
     - name: Grant execute permission for gradlew
