@@ -45,9 +45,7 @@
             </intent-filter></activity>
 
         <activity android:name=".OrgMainActivity"/>
-        <activity android:name=".AdminMainActivity"/>
-        <activity android:name=".AdminEvents"/>
-        <activity android:name=".AdminUsers"/>
+        <activity android:name=".AdmMainActivity"/>
         <activity android:name=".NotificationDetailActivity"/>
 
 

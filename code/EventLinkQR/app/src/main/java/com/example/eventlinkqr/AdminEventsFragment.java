@@ -2,9 +2,11 @@ package com.example.eventlinkqr;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import androidx.fragment.app.Fragment;
+
+import android.view.ViewGroup;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.Navigation;
@@ -14,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 
-public class AdminEvents extends AppCompatActivity {
+public class AdminEventsFragment extends Fragment {
 
     ListView eventsListView;
     ArrayList<Event> eventsList = new ArrayList<>();
@@ -26,11 +28,13 @@ public class AdminEvents extends AppCompatActivity {
     AdminEventAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_events);
 
-        eventsListView = findViewById(R.id.eventsListView);
+        View view = inflater.inflate(R.layout.fragment_admin_events, container, false);
+
+        eventsListView = view.findViewById(R.id.eventsListView);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 
         // Initialize Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -48,30 +52,17 @@ public class AdminEvents extends AppCompatActivity {
             }
         });
 
-        adapter = new AdminEventAdapter(this, eventsList);
+        adapter = new AdminEventAdapter(getContext(), eventsList);
         eventsListView.setAdapter(adapter);
 
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false); // This will stop the refresh animation
             }
         });
-
-//        eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Event selectedEvent = eventsList.get(position);
-//                // Extract the Firestore document ID from the selected event
-//                String eventId = selectedEvent.getId();
-//
-//                // Create an Intent to start OrgMainActivity and pass the eventId
-//                Intent intent = new Intent(AdminEvents.this, OrgMainActivity.class);
-//                intent.putExtra("eventId", eventId); // Pass the eventId
-//                startActivity(intent);
-//            }
-//        });
+        return view;
     }
 }
 

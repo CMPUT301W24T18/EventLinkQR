@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         adminButton.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, AdminMainActivity.class));
+            startActivity(new Intent(MainActivity.this, AdmMainActivity.class));
         });
 
 
