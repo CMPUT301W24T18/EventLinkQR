@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/att_navigation"
+    app:startDestination="@id/attendeeHomePage">
+
+    <fragment
+        android:id="@+id/attendeeHomePage"
+        android:name="com.example.eventlinkqr.HomePage"
+        android:label="attendee_home_page"
+        tools:layout="@layout/home_page" >
+        <action
+            android:id="@+id/action_attendeeHomePage_to_attendeeProfilePage"
+            app:destination="@id/attendeeProfilePage" />
+        <action
+            android:id="@+id/action_attendeeHomePage_to_notificationDisplayPage"
+            app:destination="@id/notificationDisplayPage" />
+        <action
+            android:id="@+id/action_attendeeHomePage_to_orgCreateEventFragment"
+            app:destination="@id/orgCreateEventFragment" />
+        <action
+            android:id="@+id/action_attendeeHomePage_to_orgEventFragment"
+            app:destination="@id/orgEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendeeProfilePage"
+        android:name="com.example.eventlinkqr.AttendeeProfileActivity"
+        android:label="attendee_profile"
+        tools:layout="@layout/attendee_profile" >
+        <action
+            android:id="@+id/action_attendeeProfilePage_to_attendeeHomePage"
+            app:destination="@id/attendeeHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationDisplayPage"
+        android:name="com.example.eventlinkqr.NotificationDisplayActivity"
+        android:label="activity_display_notifications"
+        tools:layout="@layout/notifications_page" >
+        <action
+            android:id="@+id/action_notificationDisplayPage_to_attendeeHomePage"
+            app:destination="@id/attendeeHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/orgCreateEventFragment"
+        android:name="com.example.eventlinkqr.CreateEventFragment"
+        android:label="org_create_event_page"
+        tools:layout="@layout/create_event_page" >
+        <action
+            android:id="@+id/action_orgCreateEventFragment_to_attendeeHomePage"
+            app:destination="@id/attendeeHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/orgEventFragment"
+        android:name="com.example.eventlinkqr.OrgEventFragment"
+        android:label="org_event_page"
+        tools:layout="@layout/org_event_page" >
+        <action
+            android:id="@+id/action_orgEventFragment_to_orgAttendeesPage"
+            app:destination="@id/orgAttendeesPage" />
+        <action
+            android:id="@+id/action_orgEventFragment_to_attendeeHomePage"
+            app:destination="@id/attendeeHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/orgAttendeesPage"
+        android:name="com.example.eventlinkqr.AttendeesPage"
+        android:label="org_attendees_page"
+        tools:layout="@layout/attendees_page" >
+        <action
+            android:id="@+id/action_orgAttendeesPage_to_orgEventFragment"
+            app:destination="@id/orgEventFragment" />
+    </fragment>
+</navigation>
