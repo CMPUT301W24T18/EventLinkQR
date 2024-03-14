@@ -23,11 +23,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         attendeeButton.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, AttendeeMainActivity.class));
+                startActivity(new Intent(MainActivity.this, AttendeeMainActivity.class));
         });
 
-        adminButton.setOnClickListener(v ->
-                Toast.makeText(this, "You're not an admin", Toast.LENGTH_SHORT).show());
+        adminButton.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, AdminMainActivity.class));
+        });
+
 
     }
 }

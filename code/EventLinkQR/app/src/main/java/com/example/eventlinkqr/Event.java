@@ -48,6 +48,10 @@ public class Event {
         this.description = description;
     }
 
+    // No-argument constructor required for Firebase deserialization
+    public Event() {
+    }
+
     /**
      * gets the event's name
      * @return the event's name

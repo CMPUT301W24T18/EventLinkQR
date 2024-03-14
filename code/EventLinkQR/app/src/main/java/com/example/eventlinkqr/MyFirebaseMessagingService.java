@@ -28,13 +28,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
+        System.out.println("HELLO0!!!!!!!!!!!!!!!!!!!!!!!!1 I HAVE ENTEREED SHOW NOTIFICATION!!!");
         // Handling data payload
         if (remoteMessage.getData().size() > 0) {
+            System.out.println("byeeeeeeeeeeeeeeee!!!!!!!!!!!!!!!!!!!!!!!!1 I HAVE ENTEREED SHOW NOTIFICATION!!!");
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             // Extract the title and body from the data payload.
             String title = remoteMessage.getData().get("title");
             String messageBody = remoteMessage.getData().get("body");
-            // If both title and body are present, display the notification.
+//             If both and body are present, display the notification.
             if (title != null && messageBody != null) {
                 showNotification(title, messageBody);
             }
@@ -49,7 +51,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     private void showNotification(String title, String messageBody) {
         // Create an intent that will open the NotificationDisplayActivity when the user taps the notification.
-        Intent intent = new Intent(this, NotificationDisplayActivity.class);
+        System.out.println("HELLO0!!!!!!!!!!!!!!!!!!!!!!!!1 I HAVE ENTEREED SHOW NOTIFICATION!!!");
+        Intent intent = new Intent(this, NotificationDetailActivity.class);
+
+        intent.putExtra("title", title);
+        intent.putExtra("message", messageBody);
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
         // Define the notification channel ID.

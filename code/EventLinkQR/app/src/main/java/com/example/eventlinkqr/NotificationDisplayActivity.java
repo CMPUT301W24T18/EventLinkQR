@@ -40,6 +40,7 @@ public class NotificationDisplayActivity extends AppCompatActivity {
      */
     private SwipeRefreshLayout swipeRefreshLayout;
 
+
     /**
      * Buttons for navigation to other activities.
      */
@@ -55,7 +56,6 @@ public class NotificationDisplayActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.lvNotifications);
         List<Notification> notifications = new ArrayList<>();
-        listView.setAdapter(adapter);
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
