@@ -35,36 +35,36 @@ public class AdminUserAdapter extends ArrayAdapter<Attendee> {
         tvName.setText(Attendee.getName());
 
 
-//        ImageView deleteButton = convertView.findViewById(R.id.deleteUserButton);
-//        deleteButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new AlertDialog.Builder(getContext())
-//                        .setTitle("Delete Event")
-//                        .setMessage("Are you sure you want to permanently delete this event?")
-//                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                // Continue with delete
-//                                Attendee eventToDelete = getItem(position);
-//                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                                db.collection("Users").document(eventToDelete.getId())
-//                                        .delete()
-//                                        .addOnSuccessListener(aVoid -> {
-//                                            // Remove from the adapter's dataset and refresh
-//                                            remove(eventToDelete);
-//                                            notifyDataSetChanged();
-//                                        })
-//                                        .addOnFailureListener(e -> {
-//                                            // Handle failure
-//                                            Toast.makeText(getContext(), "Failed to delete event.", Toast.LENGTH_SHORT).show();
-//                                        });
-//                            }
-//                        })
-//                        .setNegativeButton(android.R.string.no, null)
-//                        .setIcon(android.R.drawable.ic_dialog_alert)
-//                        .show();
-//            }
-//        });
+        ImageView deleteButton = convertView.findViewById(R.id.deleteUserButton);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Delete Event")
+                        .setMessage("Are you sure you want to permanently delete this User?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue with delete
+                                Attendee eventToDelete = getItem(position);
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                db.collection("Users").document(Attendee.getUuid())
+                                        .delete()
+                                        .addOnSuccessListener(aVoid -> {
+                                            // Remove from the adapter's dataset and refresh
+                                            remove(eventToDelete);
+                                            notifyDataSetChanged();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Handle failure
+                                            Toast.makeText(getContext(), "Failed to delete User.", Toast.LENGTH_SHORT).show();
+                                        });
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
 
 
         // Return the completed view to render on screen
