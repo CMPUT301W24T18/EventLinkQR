@@ -73,7 +73,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                 android.R.layout.simple_spinner_item, eventCategories){
             @Override
             public int getCount() {
-                //Truncate so "Genre" isn't one of the options
+                //Truncate so "Categories" isn't one of the options
                 return(eventCategories.length-1);
             }
         };

@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_attendeeHomePage_to_orgEventFragment"
             app:destination="@id/orgEventFragment" />
+        <action
+            android:id="@+id/action_attendeeHomePage_to_attendeeEventFragment"
+            app:destination="@id/attendeeEventFragment" />
     </fragment>
     <fragment
         android:id="@+id/attendeeProfilePage"
@@ -70,5 +73,14 @@
         <action
             android:id="@+id/action_orgAttendeesPage_to_orgEventFragment"
             app:destination="@id/orgEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendeeEventFragment"
+        android:name="com.example.eventlinkqr.AttendeeEventFragment"
+        android:label="att_event_page"
+        tools:layout="@layout/att_event_page" >
+        <action
+            android:id="@+id/action_attendeeEventFragment_to_attendeeHomePage"
+            app:destination="@id/attendeeHomePage" />
     </fragment>
 </navigation>
