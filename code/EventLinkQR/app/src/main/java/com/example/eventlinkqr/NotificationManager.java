@@ -2,7 +2,10 @@ package com.example.eventlinkqr;
 
 import android.util.Log;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
@@ -43,6 +46,42 @@ public class NotificationManager {
                 .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()))
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
+
+//    public void sendNotificationToDatabase(String eventId, String title, String description) {
+//        DocumentReference eventDocumentRef = db.collection("Notifications").document(eventId);
+//
+//        // Create a new notification Map to represent the notification details
+//        Map<String, Object> notificationData = new HashMap<>();
+//        notificationData.put("heading", title);
+//        notificationData.put("description", description);
+//
+//        // Use a transaction to ensure that the operation is atomic
+//        db.runTransaction((Transaction.Function<Void>) transaction -> {
+//                    DocumentSnapshot eventDocument = transaction.get(eventDocumentRef);
+//                    List<Map<String, Object>> notificationsList;
+//
+//                    // If the document already exists, retrieve its notifications list and add the new notification
+//                    if (eventDocument.exists()) {
+//                        notificationsList = (List<Map<String, Object>>) eventDocument.get("notifications");
+//                        if (notificationsList == null) { // Initialize the list if it's not present
+//                            notificationsList = new ArrayList<>();
+//                        }
+//                    } else {
+//                        // Initialize the list for new document
+//                        notificationsList = new ArrayList<>();
+//                    }
+//
+//                    // Add the new notification to the list
+//                    notificationsList.add(notificationData);
+//
+//                    // Update the document with the new list of notifications
+//                    transaction.set(eventDocumentRef, Collections.singletonMap("notifications", notificationsList));
+//                    return null; // Void function, so return null
+//                }).addOnSuccessListener(aVoid -> Log.d(TAG, "Transaction success"))
+//                .addOnFailureListener(e -> Log.w(TAG, "Transaction failure", e));
+//    }
+
+
 
     /**
      * Fetches notifications for the current user based on their Firebase Messaging token.

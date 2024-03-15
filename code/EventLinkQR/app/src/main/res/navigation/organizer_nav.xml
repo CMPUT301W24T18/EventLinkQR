@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_orgEventFragment_to_attendeesPage"
             app:destination="@id/attendeesPage" />
+        <action
+            android:id="@+id/action_orgEventFragment_to_viewNotification"
+            app:destination="@id/viewNotification" />
     </fragment>
     <fragment
         android:id="@+id/attendeesPage"
@@ -49,4 +52,20 @@
             android:id="@+id/action_createEventFragment_to_org_home_page"
             app:destination="@id/org_home_page" />
     </fragment>
+    <fragment
+        android:id="@+id/viewNotification"
+        android:name="com.example.eventlinkqr.OrgNotificationDisplay"
+        android:label="create_event_page"
+        tools:layout="@layout/organizer_notification_display" >
+        <action
+            android:id="@+id/action_viewNotification_to_sendNotification"
+            app:destination="@id/sendNotification" />
+    </fragment>
+    <fragment
+        android:id="@+id/sendNotification"
+        android:name="com.example.eventlinkqr.OrgSendNotification"
+        android:label="create_event_page"
+        tools:layout="@layout/activity_create_notification" >
+    </fragment>
+
 </navigation>
