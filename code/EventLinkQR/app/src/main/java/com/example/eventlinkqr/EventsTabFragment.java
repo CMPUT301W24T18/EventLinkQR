@@ -92,16 +92,19 @@ public class EventsTabFragment extends Fragment {
         switch (tabPosition) {
             case 0:
                 createEventButton.setVisibility(View.GONE);
+                eventsList.setOnItemClickListener((parent, view, position, id) -> {
+                    ((AttendeeMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
+                    // redirect to the attendee event page
+                    Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_attendeeEventFragment);
+                });
                 EventManager.addAllEventSnapshotCallback(eventsCallback);
                 break;
             case 1:
                 createEventButton.setVisibility(View.VISIBLE);
-                eventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        ((AttendeeMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
-                        Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_orgEventFragment);
-                    }
+                eventsList.setOnItemClickListener((parent, view, position, id) -> {
+                    ((AttendeeMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
+                    // redirect to the organizer event page
+                    Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_orgEventFragment);
                 });
                 EventManager.addEventSnapshotCallback(((AttendeeMainActivity) requireActivity()).getAttUUID(), eventsCallback);
                 break;

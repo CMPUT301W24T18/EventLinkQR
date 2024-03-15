@@ -229,6 +229,18 @@ public class AttendeeMainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * gets the profile name of the user
+     * @return the profile name of the user
+     */
+    public String getProfileName() {
+        return profileName;
+    }
+
+    /**
+     * gets the uuid of the user
+     * @return the uuid of the user
+     */
     public String getAttUUID() {
         return attUUID;
     }

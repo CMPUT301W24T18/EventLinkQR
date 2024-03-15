@@ -41,6 +41,7 @@ public class OrgEventFragment extends Fragment {
         TextView eventTitle = view.findViewById(R.id.org_event_name);
         TextView eventLocation = view.findViewById(R.id.org_event_location);
         TextView eventDescription = view.findViewById(R.id.org_event_description);
+        TextView eventDate = view.findViewById(R.id.org_event_datetime);
         qrCodeImage = view.findViewById(R.id.imageView);
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
@@ -85,6 +86,7 @@ public class OrgEventFragment extends Fragment {
         eventTitle.setText(event.getName());
         eventLocation.setText(event.getLocation());
         eventDescription.setText(event.getDescription());
+        eventDate.setText(event.getDate().toDate().toString());
 
         QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {
             try {
