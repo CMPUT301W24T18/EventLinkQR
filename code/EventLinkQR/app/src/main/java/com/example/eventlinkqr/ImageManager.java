@@ -6,11 +6,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.util.Base64;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -62,28 +65,33 @@ public class ImageManager {
      * @param context The context that the function is being called in.
      * @param fileUri The URI of the file to upload.
      * @param userId The user ID to associate the uploaded image with.
-     * @param imagePath The path within Firebase Storage where the image will be stored.
+     * @param image The path within Firebase Storage where the image will be stored.
      * @param callback The callback interface that handles the outcome of the upload operation.
      */
-    public void uploadImage(Context context, Uri fileUri, String userId, String imagePath, UploadCallback callback) {
-        // Create a storage reference
-        StorageReference storageRef = storage.getReference();
-        StorageReference imageRef = storageRef.child(imagePath);
-
-        // Upload file to Firebase Storage and simulate success or failure
-        imageRef.putFile(fileUri)
-            .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                String downloadUrl = uri.toString();
-                callback.onSuccess(downloadUrl);
-                // Store the image URL in Firestore under the user's document
-                db.collection("users").document(userId).update("imageUrl", downloadUrl)
-                    .addOnSuccessListener(aVoid -> Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show())
+    public void uploadImage(Context context, Uri fileUri, String userId, Bitmap image, UploadCallback callback) {
+        String base64Encoded = Base64.encodeToString(ImageManager.bitmapToByteArray(image), Base64.DEFAULT);
+        Map<String, String> imageMap = new HashMap<>();
+        imageMap.put("base64Image", base64Encoded);
+        db.collection("images_testing").add(imageMap).addOnSuccessListener(aVoid -> Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e -> Toast.makeText(context, "Failed to store image URL", Toast.LENGTH_SHORT).show());
-            }))
-            .addOnFailureListener(e -> {
-                            Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT).show();
-                            callback.onFailure(e);
-            });
+        //        // Create a storage reference
+//        StorageReference storageRef = storage.getReference();
+//        StorageReference imageRef = storageRef.child(image);
+//
+//        // Upload file to Firebase Storage and simulate success or failure
+//        imageRef.putFile(fileUri)
+//            .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+//                String downloadUrl = uri.toString();
+//                callback.onSuccess(downloadUrl);
+//                // Store the image URL in Firestore under the user's document
+//                db.collection("users").document(userId).update("imageUrl", downloadUrl)
+//                    .addOnSuccessListener(aVoid -> Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show())
+//                    .addOnFailureListener(e -> Toast.makeText(context, "Failed to store image URL", Toast.LENGTH_SHORT).show());
+//            }))
+//            .addOnFailureListener(e -> {
+//                            Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT).show();
+//                            callback.onFailure(e);
+//            });
     }
 
     /**
@@ -134,7 +142,7 @@ public class ImageManager {
      */
     public static byte[] bitmapToByteArray(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         return baos.toByteArray();
     }
 }
