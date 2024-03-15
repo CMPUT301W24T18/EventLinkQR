@@ -54,6 +54,9 @@ public class AttendeeMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Initialize scanner to work from this activity
+        scanner = new QRCodeScanner(this);
+
         // Set the content view to the attendee main layout
         setContentView(R.layout.main_layout);
 
@@ -150,6 +153,12 @@ public class AttendeeMainActivity extends AppCompatActivity {
                             Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
                         }).addOnFailureListener(x -> {
                             Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
+                        });
+                    } else if (code.getCodeType() == QRCode.PROMOTIONAL_TYPE) {
+                        // This is a promotional code, redirect to the attendee event details page
+                        EventManager.getEventById(code.getEventId(), event -> {
+                            setCurrentEvent(event);
+                            Navigation.findNavController(navController).navigate(R.id.action_attendeeHomePage_to_attendeeEventFragment);
                         });
                     }
                 });
