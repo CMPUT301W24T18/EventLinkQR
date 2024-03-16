@@ -121,6 +121,8 @@ public class EventManager extends Manager {
                             }
                         });
                 }
+                eventCallback.accept(events.stream().map(d -> EventManager.fromDocument(d, null)).collect(Collectors.toList()));
+
             }
         });
     }
