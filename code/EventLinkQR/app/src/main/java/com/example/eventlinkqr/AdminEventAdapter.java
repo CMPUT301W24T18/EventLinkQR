@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -33,6 +35,15 @@ public class AdminEventAdapter extends ArrayAdapter<Event> {
         TextView tvName = convertView.findViewById(R.id.textViewEventName);
         // Populate the data into the template view using the data object
         tvName.setText(event.getName());
+
+        convertView.setOnClickListener(v -> {
+            Event selectedEvent = getItem(position);
+            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+            activity.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frame_layout, EventDetailsFragment.newInstance(selectedEvent.getId()))
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         ImageView deleteButton = convertView.findViewById(R.id.deleteButton);
         deleteButton.setOnClickListener(new View.OnClickListener() {

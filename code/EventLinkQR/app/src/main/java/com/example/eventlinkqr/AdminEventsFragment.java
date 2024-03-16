@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.Navigation;
@@ -51,6 +52,7 @@ public class AdminEventsFragment extends Fragment {
                 // Handle the error
             }
         });
+
 
         adapter = new AdminEventAdapter(getContext(), eventsList);
         eventsListView.setAdapter(adapter);

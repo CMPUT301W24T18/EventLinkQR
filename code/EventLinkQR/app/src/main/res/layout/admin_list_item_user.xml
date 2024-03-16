@@ -19,6 +19,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:padding="8dp"
-        android:src="@drawable/baseline_delete_24" /> <!-- Ensure you have an ic_delete drawable -->
+        android:src="@drawable/baseline_delete_24" />
 
 </RelativeLayout>

@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -36,6 +38,18 @@ public class AdminUserAdapter extends ArrayAdapter<Attendee> {
 
 
         ImageView deleteButton = convertView.findViewById(R.id.deleteUserButton);
+
+        convertView.setOnClickListener(v -> {
+            Attendee selectedAttendee = getItem(position);
+            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+            activity.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frame_layout, AttendeeDetailsFragment.newInstance(selectedAttendee.getUuid()))
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
