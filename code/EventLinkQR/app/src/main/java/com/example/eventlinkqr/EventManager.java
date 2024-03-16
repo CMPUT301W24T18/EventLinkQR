@@ -99,30 +99,24 @@ public class EventManager extends Manager {
 
     /**
      * Add a callback to changes in the Events the user is signed up to
-     * @param userID then user's id
+     * @param userID the user's id
      * @param eventCallback The callback to be invoked when the events change
      */
     public static void addSignedUpEventsSnapshotcallback(String userID, Consumer<List<Event>> eventCallback) {
-        getCollection().addSnapshotListener((querySnapshots, error) -> {
-            if (error != null) {
-                Log.e("Firestore", error.toString());
-                return;
-            }
-
-            if (querySnapshots != null) {
-                List<DocumentSnapshot> events = new ArrayList<>();
+        List<Event> events = new ArrayList<>();
+        getCollection().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 // Check the list opf attendees for each event and see if the userId is one of them
-                for(DocumentSnapshot doc : querySnapshots.getDocuments()){
+                for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
                     getCollection().document(doc.getId()).collection("attendees").document(userID).get()
-                        .addOnSuccessListener(documentSnapshot -> {
-                            if(documentSnapshot.exists()){
-                                events.add(doc);
-                                eventCallback.accept(events.stream().map(d -> EventManager.fromDocument(d, null)).collect(Collectors.toList()));
-                            }
-                        });
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if(documentSnapshot.exists()){
+                                    events.add(EventManager.fromDocument(doc, null));
+                                    eventCallback.accept(events);
+                                }
+                            });
                 }
-                eventCallback.accept(events.stream().map(d -> EventManager.fromDocument(d, null)).collect(Collectors.toList()));
-
             }
         });
     }
