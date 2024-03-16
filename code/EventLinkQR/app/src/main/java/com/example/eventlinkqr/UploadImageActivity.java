@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -20,6 +21,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import java.io.IOException;
 
 /**
  * An activity that handles the uploading of images by users.
@@ -76,13 +79,16 @@ public class UploadImageActivity extends AppCompatActivity {
             if (imageUri != null) {
                 ImageManager imageManager = new ImageManager();
 
-                String userId = ""; //Attendee.getUuid();
-                String fileName = "uploaded_image_" + System.currentTimeMillis() + ".jpg"; // Example file name
-                String imagePath = "users/" + userId + "/" + fileName;
-
-                imageManager.uploadImage(UploadImageActivity.this, imageUri, userId, imagePath, new ImageManager.UploadCallback() {
+                //https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                Bitmap image;
+                try {
+                    image = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                imageManager.uploadImage(UploadImageActivity.this, image, new ImageManager.UploadCallback() {
                     @Override
-                    public void onSuccess(String imageUrl) {
+                    public void onSuccess() {
                         Toast.makeText(UploadImageActivity.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
                         // Update the image preview and close the activity
                         ImageView imagePreview = findViewById(R.id.image_preview);

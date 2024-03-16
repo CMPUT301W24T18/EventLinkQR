@@ -6,6 +6,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
@@ -66,11 +68,11 @@ public class AttendeeProfileActivity extends Fragment {
 
         btnSave.setOnClickListener(v -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
 
-//        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
-//
-//
-//        ImageView preview = view.findViewById(R.id.ivProfileImage);
-//        preview.setImageBitmap(deterministicBitmap);
+        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
+
+
+        ImageView preview = view.findViewById(R.id.ivProfileImage);
+        preview.setImageBitmap(deterministicBitmap);
 
         photoButton.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), UploadImageActivity.class);
