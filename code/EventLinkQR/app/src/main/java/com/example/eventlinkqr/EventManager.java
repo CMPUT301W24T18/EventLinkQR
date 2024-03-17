@@ -3,6 +3,7 @@ package com.example.eventlinkqr;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -11,8 +12,10 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** Class for managing database interaction for events */
@@ -91,6 +95,32 @@ public class EventManager extends Manager {
             }
         });
     }
+
+
+    /**
+     * Add a callback to changes in the Events the user is signed up to
+     * @param userID the user's id
+     * @param eventCallback The callback to be invoked when the events change
+     */
+    public static void addSignedUpEventsSnapshotcallback(String userID, Consumer<List<Event>> eventCallback) {
+        List<Event> events = new ArrayList<>();
+        getCollection().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                // Check the list opf attendees for each event and see if the userId is one of them
+                for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                    getCollection().document(doc.getId()).collection("attendees").document(userID).get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if(documentSnapshot.exists()){
+                                    events.add(EventManager.fromDocument(doc, null));
+                                    eventCallback.accept(events);
+                                }
+                            });
+                }
+            }
+        });
+    }
+
 
     /**
      * Add a callback to changes in the Events

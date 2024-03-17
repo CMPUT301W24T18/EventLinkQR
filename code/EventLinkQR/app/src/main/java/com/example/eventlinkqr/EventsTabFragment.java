@@ -110,6 +110,12 @@ public class EventsTabFragment extends Fragment {
                 break;
             case 2:
                 createEventButton.setVisibility(View.GONE);
+                eventsList.setOnItemClickListener((parent, view, position, id) -> {
+                    ((AttendeeMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
+                    // redirect to the attendee event page
+                    Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_attendeeEventFragment);
+                });
+                EventManager.addSignedUpEventsSnapshotcallback(((AttendeeMainActivity) requireActivity()).getAttUUID(), eventsCallback);
                 break;
         }
     }
