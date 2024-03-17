@@ -104,10 +104,20 @@ public class Notification {
         return timeSinceNotification;
     }
 
+    /**
+     * Returns the event name of the notification.
+     *
+     * @return The Event Name of the notification.
+     */
     public String getEventName() {
         return eventName;
     }
 
+    /**
+     * Sets the EventName associated with the notification.
+     *
+     * @param eventName The Event Name associated with the notification.
+     */
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }

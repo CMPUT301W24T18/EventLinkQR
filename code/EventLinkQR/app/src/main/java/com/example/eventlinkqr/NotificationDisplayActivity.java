@@ -60,10 +60,6 @@ public class NotificationDisplayActivity extends Fragment {
         String uuid = prefs.getString("UUID", null);
         System.out.println("UUID is : " + uuid);
 
-//        // Set the onClickListener for the send notification icon
-//        notificationSendIcon.setOnClickListener(v ->
-//                Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_viewNotification));
-
         listView = view.findViewById(R.id.lvNotifications);
         List<Notification> notifications = new ArrayList<>();
         listView.setAdapter(adapter);

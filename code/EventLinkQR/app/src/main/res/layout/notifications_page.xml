@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tvNotificationsHeader"
-        android:divider="@android:color/background_dark"
+        android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp"
         android:layout_above="@+id/button_layout"
         android:padding="0dp"

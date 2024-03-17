@@ -46,17 +46,12 @@ public class NotificationDetailActivity extends Fragment {
             }
         });
 
-
         // Set the title and message to their respective TextViews
         TextView tvTitle = view.findViewById(R.id.tvFullNotificationTitle);
         tvTitle.setText(title);
         TextView tvMessage = view.findViewById(R.id.tvFullNotificationMessage);
         tvMessage.setText(message);
-
         return view;
 
     }
-
-
-
 }

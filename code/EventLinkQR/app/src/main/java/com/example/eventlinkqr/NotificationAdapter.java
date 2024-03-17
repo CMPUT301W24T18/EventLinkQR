@@ -14,20 +14,24 @@ import androidx.annotation.IdRes;
 import androidx.navigation.Navigation;
 
 /**
- * Adapter for displaying notifications in a ListView. Each notification includes a title, description,
- * and the time since the notification was received.
+ * Custom ArrayAdapter for displaying notifications with varying content and layout
+ * depending on the context (organizer or user).
+ * This adapter supports conditional inflation of view layouts and setting up content
+ * dynamically based on the notification's details and the source of the notification list.
  */
 public class NotificationAdapter extends ArrayAdapter<Notification> {
 
     private List<Notification> notifications;
     private Context context;
-    private String source; // Add this line
+    private String source; // Identifier for the adapter's context (organizer or user)
 
     /**
-     * Constructs a new NotificationAdapter.
+     * Constructs a new instance of NotificationAdapter.
      *
-     * @param context          The current context.
-     * @param notifications    The list of notifications to display.
+     * @param context The current context, used to inflate the layout file.
+     * @param notifications A list of Notification objects to be displayed.
+     * @param source A string identifier indicating the context (organizer or user)
+     *               which affects layout inflation.
      */
     public NotificationAdapter(Context context, List<Notification> notifications, String source) {
         super(context, 0, notifications);
@@ -36,6 +40,9 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         this.source = source;
     }
 
+    /**
+    * Provides a view for an AdapterView
+     **/
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -64,7 +71,6 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         TextView timestampView = convertView.findViewById(R.id.tvNotificationTime);
 
         // Set the text for each TextView with the appropriate notification data
-
         heading.setText(notification.getTitle());
         description.setText(notification.getDescription());
         timestampView.setText(notification.getTimeSinceNotification());
@@ -87,8 +93,6 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
                 Navigation.findNavController(view).navigate(actionId, bundle);
             }
         });
-
-
         return convertView;
     }
 }

@@ -1,25 +1,21 @@
 package com.example.eventlinkqr;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-
 /**
- * takes care of the event page on the organizer activity
+ * A Fragment that provides UI for organizers to create and send notifications for an event.
+ * It presents input fields for the notification's title and message, along with a button to send the notification.
+ * The notification details are sent to the Firestore database under the corresponding event ID.
  */
 public class OrgSendNotification extends Fragment {
 
@@ -41,7 +37,6 @@ public class OrgSendNotification extends Fragment {
         orgEventToolBar.setNavigationOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.viewNotification));
 
-
         notificationManager = new NotificationManager();
 
         Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
@@ -50,7 +45,6 @@ public class OrgSendNotification extends Fragment {
         final EditText titleInput = view.findViewById(R.id.etNotificationTitle);
         final EditText messageInput = view.findViewById(R.id.etNotificationMessage);
         Button sendButton = view.findViewById(R.id.btnCreateNotification);
-
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override

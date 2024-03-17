@@ -74,38 +74,14 @@ public class NotificationManager {
     }
 
     /**
-     * Fetches notifications for the current user based on their Firebase Messaging token.
-     * Notifications are retrieved from the "userNotifications" document in Firestore.
-     * The method asynchronously returns a list of notifications to the provided listener.
+     * Fetches notifications for a user based on their UUID and enriches them with event names from the Events collection.
+     * Notifications are returned in reverse chronological order. This method handles asynchronous fetching of each
+     * notification's event name and aggregates the results. Upon completion, the listener is notified with a list of
+     * enriched notifications. If no notifications are found or an error occurs, the listener is notified of the error.
      *
-     * @param listener The listener that handles the fetched notifications or an error if one occurs.
+     * @param uuid The UUID of the user to fetch notifications for.
+     * @param listener The NotificationsFetchListener to notify with the fetched notifications or an error.
      */
-//    public void fetchNotifications(String uuid, NotificationsFetchListener listener) {
-//
-//        FirebaseFirestore.getInstance().collection("userNotifications").document(uuid)
-//                .get().addOnSuccessListener(documentSnapshot -> {
-//                    if (documentSnapshot.exists() && documentSnapshot.contains("notifications")) {
-//                        List<Map<String, Object>> notificationsMapList = (List<Map<String, Object>>) documentSnapshot.get("notifications");
-//                        List<Notification> notifications = new ArrayList<>();
-//                        Collections.reverse(notificationsMapList);
-//                        for (Map<String, Object> notifMap : notificationsMapList) {
-//                            String title = (String) notifMap.get("title");
-//                            String body = (String) notifMap.get("body");
-//                            Timestamp ts = (Timestamp) notifMap.get("timestamp");
-//                            Date notificationDate = ts.toDate();
-//                            String timeSinceNotification = getTimeSince(notificationDate);
-//                            notifications.add(new Notification(title, body, timeSinceNotification));
-//                        }
-//                        listener.onNotificationsFetched(notifications);
-//                    } else {
-//                        listener.onError(new Exception("No notifications found"));
-//                    }
-//                }).addOnFailureListener(e -> {
-//                    Log.e(TAG, "Error fetching notifications", e);
-//                    listener.onError(e);
-//                });
-//
-//    }
     public void fetchNotifications(String uuid, NotificationsFetchListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("userNotifications").document(uuid)
@@ -151,7 +127,16 @@ public class NotificationManager {
                 });
     }
 
-
+    /**
+     * Retrieves event-specific notifications from Firestore and processes them into Notification objects.
+     * Notifies a listener with either the fetched notifications or an error.
+     *
+     * Notifications are returned in reverse order, ensuring the most recent is first.
+     * If no notifications are found, or if an error occurs during the fetch, the listener is notified of the error.
+     *
+     * @param eventId The ID of the event to fetch notifications for.
+     * @param listener The listener to notify upon completion or error.
+     */
     public void fetchOrganizerNotifications(String eventId, NotificationsFetchListener listener) {
         FirebaseFirestore.getInstance().collection("Notifications").document(eventId)
                 .get().addOnCompleteListener(task -> {

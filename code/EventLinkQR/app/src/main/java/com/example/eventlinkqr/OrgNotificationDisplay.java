@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * takes care of the event page on the organizer activity
+ * Displays a list of notifications related to an event for organizers.
+ * Includes functionality to refresh notifications and navigate to the notification creation page.
  */
 public class OrgNotificationDisplay extends Fragment {
     /**
@@ -89,13 +90,14 @@ public class OrgNotificationDisplay extends Fragment {
 
 
     /**
-     * Fetches notifications from Firestore based on the current FCM token and updates the UI.
-     * It uses the NotificationManager class to retrieve notifications and handles success or error
-     * with appropriate actions.
+     * Fetches notifications for a specific event based on its ID and updates the display.
+     * Utilizes the NotificationManager to retrieve notifications and updates the ListView
+     * with the fetched data. If an error occurs during fetching, it is logged for further action.
+     *
+     * @param eventId The unique identifier of the event to fetch notifications for.
      */
     private void fetchNotifications(String eventId) {
         NotificationManager manager = new NotificationManager();
-
 
         manager.fetchOrganizerNotifications(eventId, new NotificationsFetchListener() {
             @Override
@@ -103,7 +105,6 @@ public class OrgNotificationDisplay extends Fragment {
                 NotificationAdapter adapter = new NotificationAdapter(getContext(), notifications,"organizer");
                 listView.setAdapter(adapter);
             }
-
             @Override
             public void onError(Exception e) {
                 Log.e(TAG, "Error fetching notifications", e);
