@@ -44,7 +44,9 @@ public class OrgSendNotification extends Fragment {
 
         notificationManager = new NotificationManager();
 
-        String eventId = "2132";
+        Event event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+
+        String eventId = event.getId(); // Define eventId from event object
         final EditText titleInput = view.findViewById(R.id.etNotificationTitle);
         final EditText messageInput = view.findViewById(R.id.etNotificationMessage);
         Button sendButton = view.findViewById(R.id.btnCreateNotification);

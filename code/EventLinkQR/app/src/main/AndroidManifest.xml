@@ -81,8 +81,7 @@
             <!--            </intent-filter>-->
         </activity>
 
-        <activity android:name=".NotificationCreationActivity"></activity>
-        <activity android:name=".NotificationDisplayActivity"></activity>
+        <activity android:name=".NotificationDisplayActivity"/>
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">

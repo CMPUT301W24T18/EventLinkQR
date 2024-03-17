@@ -13,6 +13,17 @@ public class Notification {
      *
      * @param title                The title of the notification.
      * @param description          The description of the notification.
+     */
+    public Notification(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
+    /**
+     * Constructs a new Notification with the specified title, description, and time elapsed since notification.
+     *
+     * @param title                The title of the notification.
+     * @param description          The description of the notification.
      * @param timeSinceNotification The time elapsed since the notification was created or received, formatted as a string (e.g., "2h" for two hours).
      */
     public Notification(String title, String description, String timeSinceNotification) {

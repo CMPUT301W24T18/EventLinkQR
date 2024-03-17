@@ -36,50 +36,50 @@ public class NotificationManager {
      * @param title       The title of the notification to be sent.
      * @param description The description of the notification to be sent.
      */
-    public void sendNotificationToDatabase(String eventId, String title, String description) {
-        Map<String, Object> notificationData = new HashMap<>();
-        notificationData.put("eventId", eventId);
-        notificationData.put("heading", title);
-        notificationData.put("description", description);
-
-        db.collection("notifications_testing").add(notificationData)
-                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-    }
-
 //    public void sendNotificationToDatabase(String eventId, String title, String description) {
-//        DocumentReference eventDocumentRef = db.collection("Notifications").document(eventId);
-//
-//        // Create a new notification Map to represent the notification details
 //        Map<String, Object> notificationData = new HashMap<>();
+//        notificationData.put("eventId", eventId);
 //        notificationData.put("heading", title);
 //        notificationData.put("description", description);
 //
-//        // Use a transaction to ensure that the operation is atomic
-//        db.runTransaction((Transaction.Function<Void>) transaction -> {
-//                    DocumentSnapshot eventDocument = transaction.get(eventDocumentRef);
-//                    List<Map<String, Object>> notificationsList;
-//
-//                    // If the document already exists, retrieve its notifications list and add the new notification
-//                    if (eventDocument.exists()) {
-//                        notificationsList = (List<Map<String, Object>>) eventDocument.get("notifications");
-//                        if (notificationsList == null) { // Initialize the list if it's not present
-//                            notificationsList = new ArrayList<>();
-//                        }
-//                    } else {
-//                        // Initialize the list for new document
-//                        notificationsList = new ArrayList<>();
-//                    }
-//
-//                    // Add the new notification to the list
-//                    notificationsList.add(notificationData);
-//
-//                    // Update the document with the new list of notifications
-//                    transaction.set(eventDocumentRef, Collections.singletonMap("notifications", notificationsList));
-//                    return null; // Void function, so return null
-//                }).addOnSuccessListener(aVoid -> Log.d(TAG, "Transaction success"))
-//                .addOnFailureListener(e -> Log.w(TAG, "Transaction failure", e));
+//        db.collection("notifications_testing").add(notificationData)
+//                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()))
+//                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
 //    }
+
+    public void sendNotificationToDatabase(String eventId, String title, String description) {
+        DocumentReference eventDocumentRef = db.collection("Notifications").document(eventId);
+
+        // Create a new notification Map to represent the notification details
+        Map<String, Object> notificationData = new HashMap<>();
+        notificationData.put("heading", title);
+        notificationData.put("description", description);
+
+        // Use a transaction to ensure that the operation is atomic
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+                    DocumentSnapshot eventDocument = transaction.get(eventDocumentRef);
+                    List<Map<String, Object>> notificationsList;
+
+                    // If the document already exists, retrieve its notifications list and add the new notification
+                    if (eventDocument.exists()) {
+                        notificationsList = (List<Map<String, Object>>) eventDocument.get("notifications");
+                        if (notificationsList == null) { // Initialize the list if it's not present
+                            notificationsList = new ArrayList<>();
+                        }
+                    } else {
+                        // Initialize the list for new document
+                        notificationsList = new ArrayList<>();
+                    }
+
+                    // Add the new notification to the list
+                    notificationsList.add(notificationData);
+
+                    // Update the document with the new list of notifications
+                    transaction.set(eventDocumentRef, Collections.singletonMap("notifications", notificationsList));
+                    return null; // Void function, so return null
+                }).addOnSuccessListener(aVoid -> Log.d(TAG, "Transaction success"))
+                .addOnFailureListener(e -> Log.w(TAG, "Transaction failure", e));
+    }
 
 
 
@@ -129,6 +129,31 @@ public class NotificationManager {
         );
     }
 
+    public void fetchOrganizerNotifications(String eventId, NotificationsFetchListener listener) {
+        FirebaseFirestore.getInstance().collection("Notifications").document(eventId)
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        List<Notification> notifications = new ArrayList<>();
+                        Map<String, Object> data = task.getResult().getData();
+
+                        if (data != null && data.containsKey("notifications")) {
+                            List<Map<String, Object>> notificationsList = (List<Map<String, Object>>) data.get("notifications");
+                            Collections.reverse(notificationsList); // Reverse the list to start with the most recent notification
+                            for (Map<String, Object> notifMap : notificationsList) {
+                                String heading = (String) notifMap.get("heading");
+                                String description = (String) notifMap.get("description");
+                                notifications.add(new Notification(heading, description));
+                            }
+                            listener.onNotificationsFetched(notifications);
+                        } else {
+                            listener.onError(new Exception("No notifications found in the document"));
+                        }
+                    } else {
+                        Log.e(TAG, "Error fetching document: ", task.getException());
+                        listener.onError(task.getException());
+                    }
+                });
+    }
 
     /**
      * Calculates the time elapsed since a given past date.

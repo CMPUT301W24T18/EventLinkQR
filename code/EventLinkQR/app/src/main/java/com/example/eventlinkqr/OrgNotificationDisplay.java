@@ -46,6 +46,8 @@ public class OrgNotificationDisplay extends Fragment {
         View view = inflater.inflate(R.layout.organizer_notification_display, container, false);
         Button notificationButton = view.findViewById(R.id.btnSendNotification);
 
+        Event event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+        String eventId = event.getId(); // Define eventId from event object
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgEventToolBar);
@@ -64,7 +66,7 @@ public class OrgNotificationDisplay extends Fragment {
             @Override
             public void onRefresh() {
                 // Call fetchNotifications here
-                fetchNotifications(); // This will fetch the token and refresh notifications
+                fetchNotifications(eventId); // This will fetch the token and refresh notifications
                 swipeRefreshLayout.setRefreshing(false); // This will stop the refresh animation
             }
         });
@@ -73,8 +75,7 @@ public class OrgNotificationDisplay extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_viewNotification_to_sendNotification));
 
 
-        // Get current FCM token and fetch notifications
-        fetchNotifications();
+        fetchNotifications(eventId);
 
         return view;
 
@@ -86,9 +87,11 @@ public class OrgNotificationDisplay extends Fragment {
      * It uses the NotificationManager class to retrieve notifications and handles success or error
      * with appropriate actions.
      */
-    private void fetchNotifications() {
+    private void fetchNotifications(String eventId) {
         NotificationManager manager = new NotificationManager();
-        manager.fetchNotifications(new NotificationsFetchListener() {
+
+
+        manager.fetchOrganizerNotifications(eventId, new NotificationsFetchListener() {
             @Override
             public void onNotificationsFetched(List<Notification> notifications) {
                 NotificationAdapter adapter = new NotificationAdapter(getContext(), notifications);
