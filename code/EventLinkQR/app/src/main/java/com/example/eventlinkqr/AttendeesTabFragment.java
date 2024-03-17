@@ -70,6 +70,7 @@ public class AttendeesTabFragment extends Fragment {
 
     }
 
+    @Override
     public void onResume() {
         super.onResume();
         generateDataForTab(getArguments().getInt(ARG_TAB_POSITION, 0));
