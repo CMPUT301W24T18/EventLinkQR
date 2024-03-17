@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -47,6 +49,7 @@ public class OrgNotificationDisplay extends Fragment {
         Button notificationButton = view.findViewById(R.id.btnSendNotification);
 
         Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+        String eventName = event.getName(); // Define eventName from event object
         String eventId = event.getId(); // Define eventId from event object
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
@@ -56,6 +59,9 @@ public class OrgNotificationDisplay extends Fragment {
         orgEventToolBar.setNavigationOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.orgEventFragment));
 
+
+        TextView header = view.findViewById(R.id.tvNotificationsHeader);
+        header.setText(eventName);
 
         listView = view.findViewById(R.id.lvNotifications);
         List<Notification> notifications = new ArrayList<>();

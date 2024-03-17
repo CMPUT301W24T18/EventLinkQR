@@ -42,19 +42,31 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         // Retrieve the notification item based on position in the list
         Notification notification = getItem(position);
 
-        // Check if an existing view is being reused, otherwise inflate a new view from XML
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.notification_item, parent, false);
+        // Inflate a different layout based on the source
+        if (convertView == null || !convertView.getTag().equals(source)) {
+            if (source.equals("organizer")) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.notification_item_organizer, parent, false);
+                convertView.setTag("organizer"); // Tag the view to identify its type
+            } else {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.notification_item, parent, false);
+                convertView.setTag("user"); // Tag the view to identify its type
+            }
+        }
+
+        if (convertView.getTag() == "user"){
+            TextView eventName = convertView.findViewById(R.id.tvEventName);
+            eventName.setText(notification.getEventName());
         }
 
         // Find the TextViews in the convertView
-        TextView titleView = convertView.findViewById(R.id.tvNotificationTitle);
-        TextView descriptionView = convertView.findViewById(R.id.tvNotificationDescription);
+        TextView heading = convertView.findViewById(R.id.tvNotificationHeading);
+        TextView description = convertView.findViewById(R.id.tvNotificationDescription);
         TextView timestampView = convertView.findViewById(R.id.tvNotificationTime);
 
         // Set the text for each TextView with the appropriate notification data
-        titleView.setText(notification.getTitle());
-        descriptionView.setText(notification.getDescription());
+
+        heading.setText(notification.getTitle());
+        description.setText(notification.getDescription());
         timestampView.setText(notification.getTimeSinceNotification());
 
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +76,7 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", notification.getTitle());
                 bundle.putString("message", notification.getDescription());
+                bundle.putString("eventName", notification.getEventName());
                 bundle.putString("source", NotificationAdapter.this.source);
 
                 // Determine the navigation action based on the source

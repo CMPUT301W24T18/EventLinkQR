@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /** Class for managing database interaction for Notifications */
 public class NotificationManager {
@@ -79,23 +80,68 @@ public class NotificationManager {
      *
      * @param listener The listener that handles the fetched notifications or an error if one occurs.
      */
+//    public void fetchNotifications(String uuid, NotificationsFetchListener listener) {
+//
+//        FirebaseFirestore.getInstance().collection("userNotifications").document(uuid)
+//                .get().addOnSuccessListener(documentSnapshot -> {
+//                    if (documentSnapshot.exists() && documentSnapshot.contains("notifications")) {
+//                        List<Map<String, Object>> notificationsMapList = (List<Map<String, Object>>) documentSnapshot.get("notifications");
+//                        List<Notification> notifications = new ArrayList<>();
+//                        Collections.reverse(notificationsMapList);
+//                        for (Map<String, Object> notifMap : notificationsMapList) {
+//                            String title = (String) notifMap.get("title");
+//                            String body = (String) notifMap.get("body");
+//                            Timestamp ts = (Timestamp) notifMap.get("timestamp");
+//                            Date notificationDate = ts.toDate();
+//                            String timeSinceNotification = getTimeSince(notificationDate);
+//                            notifications.add(new Notification(title, body, timeSinceNotification));
+//                        }
+//                        listener.onNotificationsFetched(notifications);
+//                    } else {
+//                        listener.onError(new Exception("No notifications found"));
+//                    }
+//                }).addOnFailureListener(e -> {
+//                    Log.e(TAG, "Error fetching notifications", e);
+//                    listener.onError(e);
+//                });
+//
+//    }
     public void fetchNotifications(String uuid, NotificationsFetchListener listener) {
-
-        FirebaseFirestore.getInstance().collection("userNotifications").document(uuid)
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("userNotifications").document(uuid)
                 .get().addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists() && documentSnapshot.contains("notifications")) {
                         List<Map<String, Object>> notificationsMapList = (List<Map<String, Object>>) documentSnapshot.get("notifications");
                         List<Notification> notifications = new ArrayList<>();
                         Collections.reverse(notificationsMapList);
+
+                        // Track pending event name fetches
+                        AtomicInteger pendingEventFetches = new AtomicInteger(notificationsMapList.size());
+
                         for (Map<String, Object> notifMap : notificationsMapList) {
                             String title = (String) notifMap.get("title");
                             String body = (String) notifMap.get("body");
+                            String eventId = (String) notifMap.get("eventId"); // Assuming eventId is stored here
                             Timestamp ts = (Timestamp) notifMap.get("timestamp");
                             Date notificationDate = ts.toDate();
                             String timeSinceNotification = getTimeSince(notificationDate);
-                            notifications.add(new Notification(title, body, timeSinceNotification));
+
+                            // Fetch event name using eventId
+                            db.collection("Events").document(eventId).get().addOnSuccessListener(eventDoc -> {
+                                String eventName = eventDoc.getString("name"); // Assuming event name is stored as 'name'
+                                Notification notification = new Notification(title, body, eventId, timeSinceNotification);
+                                notification.setEventName(eventName); // Set the event name
+                                notifications.add(notification);
+
+                                // Check if all fetches are done
+                                if (pendingEventFetches.decrementAndGet() == 0) {
+                                    listener.onNotificationsFetched(notifications);
+                                }
+                            }).addOnFailureListener(e -> {
+                                Log.e(TAG, "Error fetching event name", e);
+                                pendingEventFetches.decrementAndGet();
+                            });
                         }
-                        listener.onNotificationsFetched(notifications);
                     } else {
                         listener.onError(new Exception("No notifications found"));
                     }
@@ -103,8 +149,8 @@ public class NotificationManager {
                     Log.e(TAG, "Error fetching notifications", e);
                     listener.onError(e);
                 });
-
     }
+
 
     public void fetchOrganizerNotifications(String eventId, NotificationsFetchListener listener) {
         FirebaseFirestore.getInstance().collection("Notifications").document(eventId)
@@ -122,7 +168,9 @@ public class NotificationManager {
                                 Timestamp ts = (Timestamp) notifMap.get("timestamp");
                                 Date notificationDate = ts.toDate();
                                 String timeSinceNotification = getTimeSince(notificationDate);
-                                notifications.add(new Notification(heading, description, timeSinceNotification));
+                                notifications.add(new Notification(heading, description,  timeSinceNotification));
+
+
                             }
                             listener.onNotificationsFetched(notifications);
                         } else {

@@ -31,6 +31,7 @@ public class NotificationDetailActivity extends Fragment {
         Bundle arguments = getArguments();
         String title = arguments.getString("title", "Default Title");
         String message = arguments.getString("message", "Default Message");
+        String event = arguments.getString("", "Default Message");
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgEventToolBar);

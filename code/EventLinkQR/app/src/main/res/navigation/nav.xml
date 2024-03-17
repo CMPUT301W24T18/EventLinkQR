@@ -52,7 +52,7 @@
         android:id="@+id/notificationDetailedPage"
         android:name="com.example.eventlinkqr.NotificationDetailActivity"
         android:label="notificationDetailedPage"
-        tools:layout="@layout/notification_item" >
+        tools:layout="@layout/activity_notification_detail" >
         <action
             android:id="@+id/action_detailedNotification_to_organizerNotification"
             app:destination="@id/viewNotification" />
