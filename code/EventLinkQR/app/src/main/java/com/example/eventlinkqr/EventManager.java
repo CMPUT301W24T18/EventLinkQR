@@ -166,7 +166,35 @@ public class EventManager extends Manager {
                 int totalAttendees = querySnapshots.size();
                 attendeeCountCallback.accept(new int[]{checkedInCount, totalAttendees});
             } else {
+                Log.d("addEventCountSnapshotCallback", "No attendees found");
                 attendeeCountCallback.accept(new int[]{0, 0});
+            }
+        });
+    }
+
+    /**
+     * Add a callback to changes in the event attendees. Will return the new location list of attendees
+     * @param eventName The event id
+     * @param locationCallback The callback to be invoked when the event attendees change
+     */
+    public static void addEventLocationSnapshotCallback(String eventName, Consumer<ArrayList<LatLng>> locationCallback) {
+        getCollection().document(eventName).collection("attendees").addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+
+            if (querySnapshots != null) {
+                List<GeoPoint> geoPoints = querySnapshots.getDocuments().stream().map(d -> d.getGeoPoint("location")).filter(Objects::nonNull).collect(Collectors.toList());
+                ArrayList<LatLng> locations = new ArrayList<>();
+                for (GeoPoint gp : geoPoints) {
+                    locations.add(new LatLng(gp.getLatitude(), gp.getLongitude()));
+                }
+                Log.d("addEventLocationSnapshotCallback", "Locations: " + locations);
+                locationCallback.accept(locations);
+            } else {
+                Log.d("addEventLocationSnapshotCallback", "No attendees found");
+                locationCallback.accept(new ArrayList<>());
             }
         });
     }
