@@ -149,6 +149,29 @@ public class EventManager extends Manager {
     }
 
     /**
+     * Add a callback to changes in the event attendees. Will return the number of checked in attendees and the total number of attendees (those who have signed up)
+     *
+     * @param eventName
+     * @param attendeeCountCallback
+     */
+    public static void addEventCountSnapshotCallback(String eventName, Consumer<int[]> attendeeCountCallback) {
+        getCollection().document(eventName).collection("attendees").addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+
+            if (querySnapshots != null) {
+                int checkedInCount = (int) querySnapshots.getDocuments().stream().filter(d -> d.getBoolean("checkedIn")).count();
+                int totalAttendees = querySnapshots.size();
+                attendeeCountCallback.accept(new int[]{checkedInCount, totalAttendees});
+            } else {
+                attendeeCountCallback.accept(new int[]{0, 0});
+            }
+        });
+    }
+
+    /**
      * Create an event from the document
      *
      * @param document The document to generate the event from
