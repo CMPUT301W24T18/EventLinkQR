@@ -70,6 +70,11 @@ public class AttendeesTabFragment extends Fragment {
 
     }
 
+    public void onResume() {
+        super.onResume();
+        generateDataForTab(getArguments().getInt(ARG_TAB_POSITION, 0));
+    }
+
     /**
      * generates the data of the tab depending on which one it and adds it to the dataList
      * @param tabPosition the position of the tab
