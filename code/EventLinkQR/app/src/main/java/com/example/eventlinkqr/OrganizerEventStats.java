@@ -55,9 +55,7 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
                 } else {
                     Log.d("OrganizerEventStats", "Locations is null");
                 }
-                String displayTotalAttendees = "Total Attendance\n" + event.getCheckedInAttendeesCount();
-                textViewTotalAttendees.setText(displayTotalAttendees);
-
+                this.updateCheckInCount();
             } else {
                 Log.d("OrganizerEventStats", "Event is null");
             }
@@ -114,6 +112,16 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
             LatLng defaultEdmonton = new LatLng(53.5461, -113.4938);
             myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultEdmonton, 10));
         }
+
+    }
+
+    public void updateCheckInCount() {
+        EventManager.addEventCountSnapshotCallback(event.getId(), count -> {
+            int checkedInCount = count[0];
+            int totalCount = count[1];
+            String displayTotalAttendees = "Total Attendance\n" + checkedInCount + "/" + totalCount;
+            textViewTotalAttendees.setText(displayTotalAttendees);
+        });
 
     }
 
