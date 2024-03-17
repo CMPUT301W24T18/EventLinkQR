@@ -43,7 +43,24 @@
         <action
             android:id="@+id/action_notificationDisplayPage_to_attendeeHomePage"
             app:destination="@id/attendeeHomePage" />
+        <action
+            android:id="@+id/action_notificationDisplayPage_to_DetailPage"
+            app:destination="@id/notificationDetailedPage" />
     </fragment>
+
+    <fragment
+        android:id="@+id/notificationDetailedPage"
+        android:name="com.example.eventlinkqr.NotificationDetailActivity"
+        android:label="notificationDetailedPage"
+        tools:layout="@layout/notification_item" >
+        <action
+            android:id="@+id/action_detailedNotification_to_organizerNotification"
+            app:destination="@id/viewNotification" />
+        <action
+            android:id="@+id/action_detailedNotification_to_userNotification"
+            app:destination="@id/notificationDisplayPage" />
+    </fragment>
+
     <fragment
         android:id="@+id/orgCreateEventFragment"
         android:name="com.example.eventlinkqr.CreateEventFragment"
@@ -94,6 +111,9 @@
         <action
             android:id="@+id/action_viewNotification_to_sendNotification"
             app:destination="@id/sendNotification" />
+        <action
+            android:id="@+id/action_viewNotifications_to_oneDetailedNotification"
+            app:destination="@id/notificationDetailedPage" />
     </fragment>
     <fragment
         android:id="@+id/sendNotification"

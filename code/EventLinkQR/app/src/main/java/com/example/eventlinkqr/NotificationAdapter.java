@@ -8,24 +8,37 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import java.util.List;
+import android.os.Bundle;
+
+import androidx.annotation.IdRes;
+import androidx.navigation.Navigation;
 
 /**
  * Adapter for displaying notifications in a ListView. Each notification includes a title, description,
  * and the time since the notification was received.
  */
 public class NotificationAdapter extends ArrayAdapter<Notification> {
+
+    private List<Notification> notifications;
+    private Context context;
+    private String source; // Add this line
+
     /**
      * Constructs a new NotificationAdapter.
      *
-     * @param context       The current context.
-     * @param notifications The list of notifications to display.
+     * @param context          The current context.
+     * @param notifications    The list of notifications to display.
      */
-    public NotificationAdapter(Context context, List<Notification> notifications) {
+    public NotificationAdapter(Context context, List<Notification> notifications, String source) {
         super(context, 0, notifications);
+        this.context = context;
+        this.notifications = notifications;
+        this.source = source;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         // Retrieve the notification item based on position in the list
         Notification notification = getItem(position);
 
@@ -44,20 +57,26 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         descriptionView.setText(notification.getDescription());
         timestampView.setText(notification.getTimeSinceNotification());
 
-        // Set an OnClickListener on the convertView
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Create an intent to start the NotificationDetailActivity
-                Intent intent = new Intent(getContext(), NotificationDetailActivity.class);
-                // Pass the notification details to the activity
-                intent.putExtra("title", notification.getTitle());
-                intent.putExtra("message", notification.getDescription());
-                // Start the activity
-                getContext().startActivity(intent);
+                // Create a Bundle to pass data to NotificationDetailFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("title", notification.getTitle());
+                bundle.putString("message", notification.getDescription());
+                bundle.putString("source", NotificationAdapter.this.source);
+
+                // Determine the navigation action based on the source
+                int actionId = NotificationAdapter.this.source.equals("organizer") ?
+                        R.id.action_viewNotifications_to_oneDetailedNotification :
+                        R.id.action_notificationDisplayPage_to_DetailPage;
+
+                Navigation.findNavController(view).navigate(actionId, bundle);
             }
         });
+
 
         return convertView;
     }
 }
+

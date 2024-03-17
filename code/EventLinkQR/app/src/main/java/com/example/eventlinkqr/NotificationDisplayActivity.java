@@ -1,7 +1,9 @@
 package com.example.eventlinkqr;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -53,6 +56,14 @@ public class NotificationDisplayActivity extends Fragment {
         View view = inflater.inflate(R.layout.notifications_page, container, false);
 
 
+        SharedPreferences prefs = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String uuid = prefs.getString("UUID", null);
+        System.out.println("UUID is : " + uuid);
+
+//        // Set the onClickListener for the send notification icon
+//        notificationSendIcon.setOnClickListener(v ->
+//                Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_viewNotification));
+
         listView = view.findViewById(R.id.lvNotifications);
         List<Notification> notifications = new ArrayList<>();
         listView.setAdapter(adapter);
@@ -62,13 +73,13 @@ public class NotificationDisplayActivity extends Fragment {
             @Override
             public void onRefresh() {
                 // Call fetchNotifications here
-                fetchNotifications(); // This will fetch the token and refresh notifications
+                fetchNotifications(uuid); // This will fetch the token and refresh notifications
                 swipeRefreshLayout.setRefreshing(false); // This will stop the refresh animation
             }
         });
 
         // Get current FCM token and fetch notifications
-        fetchNotifications();
+        fetchNotifications(uuid);
         return view;
     }
 
@@ -77,12 +88,12 @@ public class NotificationDisplayActivity extends Fragment {
      * It uses the NotificationManager class to retrieve notifications and handles success or error
      * with appropriate actions.
      */
-    private void fetchNotifications() {
+    private void fetchNotifications(String uuid) {
         NotificationManager manager = new NotificationManager();
-        manager.fetchNotifications(new NotificationsFetchListener() {
+        manager.fetchNotifications(uuid, new NotificationsFetchListener() {
             @Override
             public void onNotificationsFetched(List<Notification> notifications) {
-                NotificationAdapter adapter = new NotificationAdapter(requireActivity(), notifications);
+                NotificationAdapter adapter = new NotificationAdapter(requireActivity(), notifications, "user");
                 listView.setAdapter(adapter);
             }
 

@@ -28,6 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.appcompat.widget.Toolbar>
+
     <!-- Notifications Header -->
     <TextView
         android:id="@+id/tvNotificationsHeader"
