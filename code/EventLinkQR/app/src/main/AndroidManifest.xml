@@ -77,8 +77,6 @@
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
             <!--            </intent-filter>-->
         </activity>
-
-        <activity android:name=".NotificationDisplayActivity"/>
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
