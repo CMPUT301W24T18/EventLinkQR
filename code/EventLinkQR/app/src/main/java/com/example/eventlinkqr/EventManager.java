@@ -58,6 +58,21 @@ public class EventManager extends Manager {
         attendee.put("location", new GeoPoint(location.latitude, location.longitude));
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
+
+    /**
+     * Check the given attendee into an event with a location
+     *
+     * @param uuid         The uuid of the attendee to check in
+     * @param attendeeName The name of the attendee to check in
+     * @param eventId      The id of the event to check into
+     */
+    public static Task<Void> signUp(String uuid, String attendeeName, String eventId) {
+        Map<String, Object> attendee = new HashMap<>();
+        attendee.put("name", attendeeName);
+        attendee.put("checkedIn", false);
+        return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
+    }
+
     /**
      * Add a callback to changes in the Events
      *
@@ -77,6 +92,23 @@ public class EventManager extends Manager {
         });
     }
 
+    /**
+     * Add a callback to changes in the Events
+     *
+     * @param eventCallback The callback to be invoked when the events change
+     */
+    public static void addAllEventSnapshotCallback(Consumer<List<Event>> eventCallback) {
+        getCollection().addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+
+            if (querySnapshots != null) {
+                eventCallback.accept(querySnapshots.getDocuments().stream().map(d -> EventManager.fromDocument(d, null)).collect(Collectors.toList()));
+            }
+        });
+    }
     /**
      * Add a callback to changes in the event attendees.
      *
@@ -204,9 +236,7 @@ public class EventManager extends Manager {
         newEventData.put("description", newEvent.getDescription());
         newEventData.put("category", newEvent.getCategory());
         newEventData.put("location", newEvent.getLocation());
-
-        // will edit this when i create a proper date selector
-        newEventData.put("dateAndTime", Timestamp.now());
+        newEventData.put("dateAndTime", newEvent.getDate());
 
         newEventData.put("geoTracking", newEvent.getGeoTracking());
         newEventData.put("organizer", organizer);

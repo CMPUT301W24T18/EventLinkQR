@@ -50,8 +50,11 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
             if (event != null) {
                 this.event = event;
                 locations = event.getCheckInLocations();
-                runOnUiThread(() -> setupMap());
-
+                if (locations != null) {
+                    runOnUiThread(() -> setupMap());
+                } else {
+                    Log.d("OrganizerEventStats", "Locations is null");
+                }
                 String displayTotalAttendees = "Total Attendance\n" + event.getCheckedInAttendeesCount();
                 textViewTotalAttendees.setText(displayTotalAttendees);
 
@@ -85,28 +88,33 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
         // Since this is just a preview and we'll likely be using emulators a lot let's add controls
         myMap.getUiSettings().setZoomControlsEnabled(true);
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        if (!locations.isEmpty()) {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
+            // Loop through the list of locations and add a marker for each one
+            for (LatLng location : locations) {
+                myMap.addMarker(new MarkerOptions().position(location));
+                builder.include(location);
+            }
 
-        // Loop through the list of locations and add a marker for each one
-        for (LatLng location : locations) {
-            myMap.addMarker(new MarkerOptions().position(location));
-            builder.include(location);
+            LatLngBounds bounds = builder.build();
+
+            //This padding helps ensure points are visually inside of the map, not just on the boarder
+            int padding = 200;
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPreviewContainer);
+            if (mapFragment != null && mapFragment.getView() != null) {
+                mapFragment.getView().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+                    // Now that the layout has occurred, move the camera
+                    if (myMap != null) {
+                        myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+                    }
+                });
+            }
+        } else {
+            LatLng defaultEdmonton = new LatLng(53.5461, -113.4938);
+            myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultEdmonton, 10));
         }
 
-        LatLngBounds bounds = builder.build();
-
-        //This padding helps ensure points are visually inside of the map, not just on the boarder
-        int padding = 200;
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPreviewContainer);
-        if (mapFragment != null && mapFragment.getView() != null) {
-            mapFragment.getView().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-                // Now that the layout has occurred, move the camera
-                if (myMap != null) {
-                    myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
-                }
-            });
-        }
     }
 
 }

@@ -32,7 +32,7 @@ public class OrgSendNotification extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_create_notification, container, false);
+        View view = inflater.inflate(R.layout.create_notification_page, container, false);
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgEventToolBar);
@@ -44,7 +44,7 @@ public class OrgSendNotification extends Fragment {
 
         notificationManager = new NotificationManager();
 
-        Event event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+        Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
 
         String eventId = event.getId(); // Define eventId from event object
         final EditText titleInput = view.findViewById(R.id.etNotificationTitle);

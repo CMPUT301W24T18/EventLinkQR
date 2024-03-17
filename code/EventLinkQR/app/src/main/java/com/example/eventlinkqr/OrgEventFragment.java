@@ -22,7 +22,7 @@ import androidx.navigation.Navigation;
  */
 public class OrgEventFragment extends Fragment {
 
-  private ImageView qrCodeImage;
+    private ImageView qrCodeImage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class OrgEventFragment extends Fragment {
         TextView eventTitle = view.findViewById(R.id.org_event_name);
         TextView eventLocation = view.findViewById(R.id.org_event_location);
         TextView eventDescription = view.findViewById(R.id.org_event_description);
+        TextView eventDate = view.findViewById(R.id.org_event_datetime);
         qrCodeImage = view.findViewById(R.id.imageView);
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
@@ -50,18 +51,18 @@ public class OrgEventFragment extends Fragment {
 
         // make the back button return to the home page
         orgEventToolBar.setNavigationOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.org_home_page));
+                Navigation.findNavController(view).navigate(R.id.attendeeHomePage));
 
         // make the attendees button go to the attendees page
         attendeesButton.setOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_attendeesPage));
+                Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_orgAttendeesPage));
 
         // Set the onClickListener for the send notification icon
         notificationSendIcon.setOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_viewNotification));
 
 
-        Event event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+        Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
 
         // temporary message since it is not yet completely implemented
         detailsButton.setOnClickListener(v -> {
@@ -79,6 +80,7 @@ public class OrgEventFragment extends Fragment {
         eventTitle.setText(event.getName());
         eventLocation.setText(event.getLocation());
         eventDescription.setText(event.getDescription());
+        eventDate.setText(event.getDate().toDate().toString());
 
         QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {
             try {
@@ -92,4 +94,3 @@ public class OrgEventFragment extends Fragment {
         return view;
     }
 }
-
