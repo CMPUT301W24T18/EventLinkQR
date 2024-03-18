@@ -8,6 +8,20 @@ public class Notification {
     private String description;
     private String timeSinceNotification;
 
+    private String eventId;
+    private String eventName; // Add this field
+
+    /**
+     * Constructs a new Notification with the specified title, description, and time elapsed since notification.
+     *
+     * @param title                The title of the notification.
+     * @param description          The description of the notification.
+     */
+    public Notification(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
     /**
      * Constructs a new Notification with the specified title, description, and time elapsed since notification.
      *
@@ -18,6 +32,21 @@ public class Notification {
     public Notification(String title, String description, String timeSinceNotification) {
         this.title = title;
         this.description = description;
+        this.timeSinceNotification = timeSinceNotification;
+    }
+
+    /**
+     * Constructs a new Notification with the specified title, description, and time elapsed since notification.
+     *
+     * @param title                The title of the notification.
+     * @param description          The description of the notification.
+     * @param eventId              The eventId of the event which the notification belongs to.
+     * @param timeSinceNotification The time elapsed since the notification was created or received, formatted as a string (e.g., "2h" for two hours).
+     */
+    public Notification(String title, String description, String eventId, String timeSinceNotification) {
+        this.title = title;
+        this.description = description;
+        this.eventId = eventId;
         this.timeSinceNotification = timeSinceNotification;
     }
 
@@ -73,5 +102,23 @@ public class Notification {
      */
     public String getTimeSinceNotification() {
         return timeSinceNotification;
+    }
+
+    /**
+     * Returns the event name of the notification.
+     *
+     * @return The Event Name of the notification.
+     */
+    public String getEventName() {
+        return eventName;
+    }
+
+    /**
+     * Sets the EventName associated with the notification.
+     *
+     * @param eventName The Event Name associated with the notification.
+     */
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 }
