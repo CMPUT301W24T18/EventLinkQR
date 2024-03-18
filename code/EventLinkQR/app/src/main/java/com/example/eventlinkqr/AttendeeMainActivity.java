@@ -54,6 +54,9 @@ public class AttendeeMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Initialize QRCodeScanner 
+        scanner = new QRCodeScanner(this);
+
         // Set the content view to the attendee main layout
         setContentView(R.layout.main_layout);
 

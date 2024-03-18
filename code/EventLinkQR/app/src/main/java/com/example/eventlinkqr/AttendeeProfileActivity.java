@@ -34,6 +34,8 @@ public class AttendeeProfileActivity extends Fragment {
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
     private Switch toggleLocation; // Used for location permission
+
+    private View rootView;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String uuid; // Unique identifier for the attendee
     private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
@@ -47,14 +49,14 @@ public class AttendeeProfileActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.attendee_profile, container, false);
+        rootView = inflater.inflate(R.layout.attendee_profile, container, false);
         // Initialize UI components
-        etName = view.findViewById(R.id.etFullName);
-        etPhoneNumber = view.findViewById(R.id.phoneNumberEdit);
-        etHomepage = view.findViewById(R.id.homepageEdit);
-        Button btnSave = view.findViewById(R.id.btnSave);
-        Button photoButton = view.findViewById(R.id.btnEditProfile);
-        toggleLocation = view.findViewById(R.id.toggleLocation);
+        etName = rootView.findViewById(R.id.etFullName);
+        etPhoneNumber = rootView.findViewById(R.id.phoneNumberEdit);
+        etHomepage = rootView.findViewById(R.id.homepageEdit);
+        Button btnSave = rootView.findViewById(R.id.btnSave);
+        Button photoButton = rootView.findViewById(R.id.btnEditProfile);
+        toggleLocation = rootView.findViewById(R.id.toggleLocation);
         // Set a listener for the location switch
         toggleLocation.setOnCheckedChangeListener((buttonView, isChecked) -> {
             onToggleLocationButtonClicked(isChecked);
@@ -80,11 +82,11 @@ public class AttendeeProfileActivity extends Fragment {
         });
 
         // Reset App Data button
-        Button btnResetApp = view.findViewById(R.id.btnResetApp);
+        Button btnResetApp = rootView.findViewById(R.id.btnResetApp);
 
         // Reset app data on button click
         btnResetApp.setOnClickListener(v -> resetAppData());
-        return view;
+        return rootView;
     }
 
     /**
@@ -166,7 +168,7 @@ public class AttendeeProfileActivity extends Fragment {
      * Redirects to AttendeeMainActivity.
      */
     private void redirectToMainActivity() {
-        Navigation.findNavController(Objects.requireNonNull(requireActivity().getCurrentFocus())).navigate(R.id.action_attendeeProfilePage_to_attendeeHomePage);
+        Navigation.findNavController(rootView).navigate(R.id.action_attendeeProfilePage_to_attendeeHomePage);
     }
 
     /**
