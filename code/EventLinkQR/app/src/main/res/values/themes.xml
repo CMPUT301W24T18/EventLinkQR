@@ -3,6 +3,7 @@
     <style name="Base.Theme.EventLinkQR" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="iconTintColor">@color/icon_tint</item>
         <item name="textColor">@color/text_color</item>
+        <item name="notificationHeading">@color/notification_heading</item>
     </style>
 
     <style name="Theme.EventLinkQR" parent="Base.Theme.EventLinkQR" />

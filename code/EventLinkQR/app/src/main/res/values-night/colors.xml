@@ -8,4 +8,5 @@
     <color name="grey"> #CFCFCFCF</color>
     <color name="icon_tint">#FFFFFF</color>
     <color name="text_color">#FFFFFF</color>
+    <color name="notification_heading">#E4E4E4</color>
 </resources>
