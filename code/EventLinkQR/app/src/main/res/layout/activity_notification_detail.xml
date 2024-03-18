@@ -93,7 +93,7 @@
             android:textSize="9sp"
             app:icon="@drawable/ic_profile"
             app:iconGravity="top"
-            app:iconTint="@color/black" />
+            app:iconTint="?attr/iconTintColor" />
 
     </LinearLayout>
 
