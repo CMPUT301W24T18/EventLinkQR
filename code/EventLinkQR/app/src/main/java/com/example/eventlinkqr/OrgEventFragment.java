@@ -58,15 +58,9 @@ public class OrgEventFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_orgAttendeesPage));
 
         // Set the onClickListener for the send notification icon
-        notificationSendIcon.setOnClickListener(v -> {
-            // Create an intent to start the NotificationCreationActivity
-            Intent intent = new Intent(getActivity(), NotificationCreationActivity.class);
-            Event currentEvent = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
-            if(currentEvent != null) {
-                intent.putExtra("eventId", currentEvent.getId()); // Assuming the Event object has a method getId() that returns the event's ID
-            }
-            startActivity(intent);
-        });
+        notificationSendIcon.setOnClickListener(v ->
+                Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_viewNotification));
+
 
         Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
 

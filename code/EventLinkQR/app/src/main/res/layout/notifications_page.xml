@@ -11,12 +11,21 @@
         android:id="@+id/tvNotificationsHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notifications"
+        android:text="Attendee Notifications"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textSize="24sp"
         android:paddingHorizontal="16dp"
-        android:paddingTop="16dp" />
+        android:paddingTop="16dp"
+        android:layout_marginBottom="8dp"
+        />
+
+    <!-- Horizontal Line below the Header -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/tvNotificationsHeader" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
@@ -30,10 +39,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tvNotificationsHeader"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
         android:layout_above="@+id/button_layout"
-        android:padding="8dp"
+        android:padding="0dp"
         tools:ignore="MissingClass" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
