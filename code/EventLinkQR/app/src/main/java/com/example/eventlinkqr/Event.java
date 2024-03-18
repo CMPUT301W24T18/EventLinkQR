@@ -17,9 +17,13 @@ public class Event {
     private Timestamp date;
     private String id;
     private Boolean geoTracking;
-    private int checkedInAttendeesCount;
+
     private ArrayList<Attendee> checkedInAttendees;
     private ArrayList<LatLng> checkInLocations;
+
+    private int signedUpCount;
+
+    private int checkedInAttendeesCount;
     /**
      * Event creator with all attributes
      * @param name the event's name
@@ -36,6 +40,17 @@ public class Event {
         this.date = date;
         this.location = location;
         this.geoTracking = geoTracking;
+    }
+
+    public Event(String name, String description, String category, Timestamp date, String location, Boolean geoTracking, int checkedInAttendeesCount, int signedUpCount) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.date = date;
+        this.location = location;
+        this.geoTracking = geoTracking;
+        this.checkedInAttendeesCount = checkedInAttendeesCount;
+        this.signedUpCount = signedUpCount;
     }
 
     /**
@@ -174,11 +189,20 @@ public class Event {
         this.checkInLocations = checkInLocations;
     }
 
-    public int getTotalAttendees() {
-        if (checkedInAttendees == null || checkedInAttendees.isEmpty()) {
-            return 0;
-        } else {
-            return checkedInAttendees.size();
-        }
+//    public int getTotalAttendees() {
+//        if (checkedInAttendees == null || checkedInAttendees.isEmpty()) {
+//            return 0;
+//        } else {
+//            return checkedInAttendees.size();
+//        }
+//    }
+
+    public int getSignedUpCount() {
+        return signedUpCount;
     }
+
+    public void setSignedUpCount(int signedUpCount) {
+        this.signedUpCount = signedUpCount;
+    }
+
 }

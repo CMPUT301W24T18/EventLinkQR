@@ -11,6 +11,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
@@ -41,6 +42,7 @@ public class EventManager extends Manager {
         Map<String, Object> attendee = new HashMap<>();
         attendee.put("name", attendeeName);
         attendee.put("checkedIn", true);
+        getCollection().document(eventId).update("checkedInCount", FieldValue.increment(1));
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
@@ -56,6 +58,7 @@ public class EventManager extends Manager {
         attendee.put("name", attendeeName);
         attendee.put("checkedIn", true);
         attendee.put("location", new GeoPoint(location.latitude, location.longitude));
+        getCollection().document(eventId).update("checkedInCount", FieldValue.increment(1));
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
@@ -70,6 +73,7 @@ public class EventManager extends Manager {
         Map<String, Object> attendee = new HashMap<>();
         attendee.put("name", attendeeName);
         attendee.put("checkedIn", false);
+        getCollection().document(eventId).update("signedUpCount", FieldValue.increment(1));
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
@@ -162,6 +166,8 @@ public class EventManager extends Manager {
                 document.get("dateAndTime", Timestamp.class),
                 document.get("location", String.class),
                 document.get("geoTracking", Boolean.class));
+//                document.get("checkedInCount", Integer.class),
+//                document.get("signedUpCount", Integer.class));
         if (attendees != null) {
             e.setCheckedInAttendeesCount(attendees.size());
         }
@@ -240,6 +246,9 @@ public class EventManager extends Manager {
 
         newEventData.put("geoTracking", newEvent.getGeoTracking());
         newEventData.put("organizer", organizer);
+
+        newEventData.put("signedUpCount", newEvent.getSignedUpCount());
+        newEventData.put("checkedInAttendeesCount", newEvent.getCheckedInAttendeesCount());
 
         getCollection().add(newEventData)
                 .addOnSuccessListener(documentReference -> {
