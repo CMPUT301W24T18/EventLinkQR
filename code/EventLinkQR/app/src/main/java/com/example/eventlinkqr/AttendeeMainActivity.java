@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Collection;
 
 /**
  * Main activity class for attendees in the event management application.
@@ -40,6 +43,8 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private QRCodeScanner scanner;
     private String attUUID;
     private String profileName;
+
+    // MilestoneManager collection, one for each event this user may host
 
     public interface LocationCallback {
         void onLocationReceived(LatLng location);
@@ -83,6 +88,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
             FirebaseFirestore.getInstance().collection("Users").document(attUUID).get().addOnSuccessListener(d -> {
                 profileName = d.getString("name");
             });
+            MilestoneManager.addMilestoneSnapshotCallback(attUUID, this::handleMilestone);
         }
 
         setupProfileButton();
@@ -266,6 +272,14 @@ public class AttendeeMainActivity extends AppCompatActivity {
      */
     public QRCodeScanner getScanner() {
         return scanner;
+    }
+
+    /**
+     * Milestone handler to handle the milestone
+     * @param milestone
+     */
+    private void handleMilestone(Milestone milestone) {
+        Log.d("Milestone", "Milestone reached: " + milestone.getInfo() + " " + milestone.getValue());
     }
 
 }
