@@ -166,7 +166,7 @@ public class AttendeeProfileFragment extends Fragment {
      * Redirects to AttendeeMainActivity.
      */
     private void redirectToMainActivity() {
-        Navigation.findNavController(Objects.requireNonNull(requireActivity().getCurrentFocus())).navigate(R.id.action_attendeeProfilePage_to_attendeeHomePage);
+        Navigation.findNavController(((AttendeeMainActivity)requireActivity()).getNavController()).navigate(R.id.action_attendeeProfilePage_to_attendeeHomePage);
     }
 
     /**

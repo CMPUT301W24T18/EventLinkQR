@@ -277,4 +277,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
         return scanner;
     }
 
+    public FragmentContainerView getNavController() {
+        return navController;
+    }
 }
