@@ -1,12 +1,15 @@
 package com.example.eventlinkqr;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
 import androidx.core.app.NotificationCompat;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import android.util.Log;
 
 /**
  * Handles incoming messages from Firebase Cloud Messaging (FCM).

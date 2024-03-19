@@ -8,17 +8,11 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import java.io.ByteArrayOutputStream;
-import java.util.Random;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Manages uploading, fetching, and generating images for Firebase Storage and Firestore.
