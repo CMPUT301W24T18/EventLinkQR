@@ -12,29 +12,18 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <!-- Event Name -->
-        <TextView
-            android:id="@+id/tvEventName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#757575"
-            android:fontFamily="sans-serif-medium"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
         <!-- Notification Heading -->
         <TextView
             android:id="@+id/tvNotificationHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="normal"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:textColor="#757575"
             android:maxLines="2"
             android:ellipsize="end"
-            android:paddingTop="4dp"/>
+            android:paddingTop="4dp"
+            />
 
         <!-- Notification Description -->
         <TextView

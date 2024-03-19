@@ -44,20 +44,17 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
 
         // Get the eventID from the intent
         String eventId = getIntent().getStringExtra("eventId");
-        Log.d("OrganizerEventStats", eventId);
 
         EventManager.getEventById(eventId, event -> {
             if (event != null) {
                 this.event = event;
                 locations = event.getCheckInLocations();
                 if (locations != null) {
-                    runOnUiThread(() -> setupMap());
+                    setupMap();
                 } else {
                     Log.d("OrganizerEventStats", "Locations is null");
                 }
-                String displayTotalAttendees = "Total Attendance\n" + event.getCheckedInAttendeesCount();
-                textViewTotalAttendees.setText(displayTotalAttendees);
-
+                this.updateCheckInCount();
             } else {
                 Log.d("OrganizerEventStats", "Event is null");
             }
@@ -88,11 +85,38 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
         // Since this is just a preview and we'll likely be using emulators a lot let's add controls
         myMap.getUiSettings().setZoomControlsEnabled(true);
 
-        if (!locations.isEmpty()) {
+        // Add a snapshot listener to the event's check-in locations
+       EventManager.addEventLocationSnapshotCallback(event.getId(), newLocations -> {
+           this.populateMap(myMap, newLocations);
+        });
+        this.populateMap(myMap, locations);
+    }
+
+    /**
+     * Updates the count of the attendees that have checked in to the event
+     */
+    public void updateCheckInCount() {
+        EventManager.addEventCountSnapshotCallback(event.getId(), count -> {
+            int checkedInCount = count[0];
+            int totalCount = count[1];
+            String displayTotalAttendees = "Total Attendance\n" + checkedInCount + "/" + totalCount;
+            textViewTotalAttendees.setText(displayTotalAttendees);
+        });
+
+    }
+
+    /**
+     * Populates the map with markers for each location in the list.
+     * @param myMap The Google Map object to be populated.
+     * @param newLocations The list of locations to be added to the map.
+     */
+    public void populateMap(GoogleMap myMap, ArrayList<LatLng> newLocations) {
+        myMap.clear();
+        if (!newLocations.isEmpty()) {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
             // Loop through the list of locations and add a marker for each one
-            for (LatLng location : locations) {
+            for (LatLng location : newLocations) {
                 myMap.addMarker(new MarkerOptions().position(location));
                 builder.include(location);
             }
@@ -101,20 +125,10 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
 
             //This padding helps ensure points are visually inside of the map, not just on the boarder
             int padding = 200;
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapPreviewContainer);
-            if (mapFragment != null && mapFragment.getView() != null) {
-                mapFragment.getView().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-                    // Now that the layout has occurred, move the camera
-                    if (myMap != null) {
-                        myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
-                    }
-                });
-            }
+            myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
         } else {
             LatLng defaultEdmonton = new LatLng(53.5461, -113.4938);
             myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultEdmonton, 10));
         }
-
     }
-
 }
