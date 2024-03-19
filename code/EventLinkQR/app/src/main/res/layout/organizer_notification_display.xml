@@ -37,6 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:textColor="?attr/textColor"
+        android:textStyle="bold"
         android:textSize="24sp"
         android:paddingHorizontal="16dp"
         android:paddingTop="16dp"
@@ -45,8 +47,8 @@
     <!-- Horizontal Line below the Header -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
+        android:layout_height="1.5dp"
+        android:background="?attr/textColor"
         android:layout_below="@id/tvNotificationsHeader" />
 
 

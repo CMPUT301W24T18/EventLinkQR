@@ -18,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#757575"
+            android:textStyle="normal"
+            android:textColor="?attr/notificationHeading"
             android:maxLines="2"
             android:ellipsize="end"
             android:paddingTop="4dp"
@@ -31,8 +31,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="#757575"
+            android:textColor="?attr/notificationHeading"
             android:maxLines="3"
+            android:textStyle="italic"
             android:ellipsize="end"
             android:paddingTop="4dp"/>
 
@@ -44,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:textColor="@color/cardview_dark_background"
+        android:textColor="?attr/notificationHeading"
         android:paddingTop="4dp" />
 
 </LinearLayout>
