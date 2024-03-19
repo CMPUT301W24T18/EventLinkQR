@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/org_event_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:navigationIcon="?attr/actionModeCloseDrawable">
+
+        <TextView
+            android:id="@+id/attendees_toolBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Notification Title EditText -->
+    <EditText
+        android:id="@+id/etNotificationTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/org_event_toolbar"
+        android:layout_marginTop="16dp"
+        android:height="48dp"
+        android:hint="@string/message_title"
+        android:inputType="textPersonName"/>
+
+    <!-- Notification Message EditText -->
+    <EditText
+        android:id="@+id/etNotificationMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etNotificationTitle"
+        android:layout_marginTop="16dp"
+        android:height="48dp"
+        android:hint="@string/notification_message"
+        android:inputType="textMultiLine"/>
+
+    <!-- Button to create notification -->
+    <Button
+        android:id="@+id/btnCreateNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etNotificationMessage"
+        android:layout_marginTop="24dp"
+        android:text="@string/send_notification"/>
+
+</RelativeLayout>

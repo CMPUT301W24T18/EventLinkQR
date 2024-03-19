@@ -30,7 +30,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
-        <activity android:name=".MainActivity" />
         <activity
             android:name=".UploadImageActivity"
             android:exported="true">
@@ -44,8 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter></activity>
 
-        <activity android:name=".OrgMainActivity"/>
-        <activity android:name=".AdmMainActivity"/>
         <activity android:name=".NotificationDetailActivity"/>
 
 
@@ -80,9 +77,6 @@
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
             <!--            </intent-filter>-->
         </activity>
-
-        <activity android:name=".NotificationCreationActivity"/>
-        <activity android:name=".NotificationDisplayActivity"/>
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false"

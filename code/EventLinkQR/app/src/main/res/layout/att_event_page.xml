@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".OrgEventFragment">
+    tools:context=".AttendeeEventFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/org_event_toolbar"
+        android:id="@+id/att_event_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,34 +16,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/actionModeCloseDrawable">
 
-
-        <TextView
-            android:id="@+id/attendees_toolBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/notification_send_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/baseline_edit_notifications_24"
-            android:contentDescription="@string/send_notification"
-            app:tint="?attr/iconTintColor" />
-
-
     </androidx.appcompat.widget.Toolbar>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/att_event_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="2"
@@ -51,7 +27,7 @@
         />
 
     <TextView
-        android:id="@+id/org_event_name"
+        android:id="@+id/att_event_name"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -78,7 +54,7 @@
             android:src="@drawable/ic_location" />
 
         <TextView
-            android:id="@+id/org_event_location"
+            android:id="@+id/att_event_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="15dp"
@@ -98,7 +74,7 @@
             android:src="@drawable/ic_time" />
 
         <TextView
-            android:id="@+id/org_event_datetime"
+            android:id="@+id/att_event_datetime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="15dp"
@@ -120,7 +96,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/org_event_description"
+        android:id="@+id/att_event_description"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -128,28 +104,12 @@
         android:paddingEnd="5dp"
         android:textSize="20sp" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
+
+    <Button
+        android:id="@+id/sign_up_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/details_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/details_string" />
-
-        <Button
-            android:id="@+id/attendees_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/Attendees_string" />
-    </LinearLayout>
+        android:layout_gravity="center"
+        android:text="Sign Up" />
 
 </LinearLayout>

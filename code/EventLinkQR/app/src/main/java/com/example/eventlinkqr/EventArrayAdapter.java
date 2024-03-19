@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * custom adapter to display the desired info about the event on screen
@@ -39,7 +38,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
 
         //Map all the TextViews
         TextView eventName = view.findViewById(R.id.event_title);
-        TextView eventDate = view.findViewById(R.id.event_date);
+        TextView eventDate = view.findViewById(R.id.event_description);
 
         assert event != null;
 

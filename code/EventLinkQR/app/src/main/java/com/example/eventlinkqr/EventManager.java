@@ -3,6 +3,7 @@ package com.example.eventlinkqr;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -11,8 +12,10 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** Class for managing database interaction for events */
@@ -58,6 +62,21 @@ public class EventManager extends Manager {
         attendee.put("location", new GeoPoint(location.latitude, location.longitude));
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
+
+    /**
+     * Check the given attendee into an event with a location
+     *
+     * @param uuid         The uuid of the attendee to check in
+     * @param attendeeName The name of the attendee to check in
+     * @param eventId      The id of the event to check into
+     */
+    public static Task<Void> signUp(String uuid, String attendeeName, String eventId) {
+        Map<String, Object> attendee = new HashMap<>();
+        attendee.put("name", attendeeName);
+        attendee.put("checkedIn", false);
+        return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
+    }
+
     /**
      * Add a callback to changes in the Events
      *
@@ -77,6 +96,49 @@ public class EventManager extends Manager {
         });
     }
 
+
+    /**
+     * Add a callback to changes in the Events the user is signed up to
+     * @param userID the user's id
+     * @param eventCallback The callback to be invoked when the events change
+     */
+    public static void addSignedUpEventsSnapshotcallback(String userID, Consumer<List<Event>> eventCallback) {
+        List<Event> events = new ArrayList<>();
+        getCollection().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                // Check the list opf attendees for each event and see if the userId is one of them
+                for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                    getCollection().document(doc.getId()).collection("attendees").document(userID).get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if(documentSnapshot.exists()){
+                                    events.add(EventManager.fromDocument(doc, null));
+                                    eventCallback.accept(events);
+                                }
+                            });
+                }
+            }
+        });
+    }
+
+
+    /**
+     * Add a callback to changes in the Events
+     *
+     * @param eventCallback The callback to be invoked when the events change
+     */
+    public static void addAllEventSnapshotCallback(Consumer<List<Event>> eventCallback) {
+        getCollection().addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+
+            if (querySnapshots != null) {
+                eventCallback.accept(querySnapshots.getDocuments().stream().map(d -> EventManager.fromDocument(d, null)).collect(Collectors.toList()));
+            }
+        });
+    }
     /**
      * Add a callback to changes in the event attendees.
      *
@@ -112,6 +174,57 @@ public class EventManager extends Manager {
             }
             if (querySnapshots != null) {
                 attendeeCallback.accept(querySnapshots.getDocuments().stream().map(d -> d.getString("name")).collect(Collectors.toList()));
+            }
+        });
+    }
+
+    /**
+     * Add a callback to changes in the event attendees. Will return the number of checked in attendees and the total number of attendees (those who have signed up)
+     *
+     * @param eventName
+     * @param attendeeCountCallback
+     */
+    public static void addEventCountSnapshotCallback(String eventName, Consumer<int[]> attendeeCountCallback) {
+        getCollection().document(eventName).collection("attendees").addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+
+            if (querySnapshots != null) {
+                int checkedInCount = (int) querySnapshots.getDocuments().stream().filter(d -> d.getBoolean("checkedIn")).count();
+                int totalAttendees = querySnapshots.size();
+                attendeeCountCallback.accept(new int[]{checkedInCount, totalAttendees});
+            } else {
+                Log.d("addEventCountSnapshotCallback", "No attendees found");
+                attendeeCountCallback.accept(new int[]{0, 0});
+            }
+        });
+    }
+
+    /**
+     * Add a callback to changes in the event attendees. Will return the new location list of attendees
+     * @param eventName The event id
+     * @param locationCallback The callback to be invoked when the event attendees change
+     */
+    public static void addEventLocationSnapshotCallback(String eventName, Consumer<ArrayList<LatLng>> locationCallback) {
+        getCollection().document(eventName).collection("attendees").addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+
+            if (querySnapshots != null) {
+                List<GeoPoint> geoPoints = querySnapshots.getDocuments().stream().map(d -> d.getGeoPoint("location")).filter(Objects::nonNull).collect(Collectors.toList());
+                ArrayList<LatLng> locations = new ArrayList<>();
+                for (GeoPoint gp : geoPoints) {
+                    locations.add(new LatLng(gp.getLatitude(), gp.getLongitude()));
+                }
+                Log.d("addEventLocationSnapshotCallback", "Locations: " + locations);
+                locationCallback.accept(locations);
+            } else {
+                Log.d("addEventLocationSnapshotCallback", "No attendees found");
+                locationCallback.accept(new ArrayList<>());
             }
         });
     }
@@ -204,9 +317,7 @@ public class EventManager extends Manager {
         newEventData.put("description", newEvent.getDescription());
         newEventData.put("category", newEvent.getCategory());
         newEventData.put("location", newEvent.getLocation());
-
-        // will edit this when i create a proper date selector
-        newEventData.put("dateAndTime", Timestamp.now());
+        newEventData.put("dateAndTime", newEvent.getDate());
 
         newEventData.put("geoTracking", newEvent.getGeoTracking());
         newEventData.put("organizer", organizer);

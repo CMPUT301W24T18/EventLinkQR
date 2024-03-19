@@ -48,7 +48,7 @@ public class AttendeesTabFragment extends Fragment {
         // Get the tab position from arguments
         assert getArguments() != null;
         int tabPosition = getArguments().getInt(ARG_TAB_POSITION, 0);
-        event = ((OrgMainActivity) requireActivity()).getCurrentEvent();
+        event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
 
         dataList = new ArrayList<>();
 
@@ -68,6 +68,12 @@ public class AttendeesTabFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        generateDataForTab(getArguments().getInt(ARG_TAB_POSITION, 0));
     }
 
     /**

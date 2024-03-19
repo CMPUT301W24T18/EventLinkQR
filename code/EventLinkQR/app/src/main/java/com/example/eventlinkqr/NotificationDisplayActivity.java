@@ -1,15 +1,22 @@
 package com.example.eventlinkqr;
 
 import static android.content.ContentValues.TAG;
-import android.content.Intent;
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import com.google.android.material.button.MaterialButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +26,7 @@ import java.util.List;
  * The class also supports pull-to-refresh functionality using a SwipeRefreshLayout and allows navigation
  * to other activities through MaterialButtons.
  */
-public class NotificationDisplayActivity extends AppCompatActivity {
+public class NotificationDisplayActivity extends Fragment {
     /**
      * ListView for displaying notifications.
      */
@@ -42,68 +49,34 @@ public class NotificationDisplayActivity extends AppCompatActivity {
 
 
     /**
-     * Buttons for navigation to other activities.
-     */
-    MaterialButton homeButton, scanButton, profileButton, notificationButton;
-
-    /**
      * Initializes the activity, its views, and fetches the initial set of notifications.
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_notifications);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.notifications_page, container, false);
 
-        listView = findViewById(R.id.lvNotifications);
+
+        SharedPreferences prefs = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String uuid = prefs.getString("UUID", null);
+        System.out.println("UUID is : " + uuid);
+
+        listView = view.findViewById(R.id.lvNotifications);
         List<Notification> notifications = new ArrayList<>();
 
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Call fetchNotifications here
-                fetchNotifications(); // This will fetch the token and refresh notifications
+                fetchNotifications(uuid); // This will fetch the token and refresh notifications
                 swipeRefreshLayout.setRefreshing(false); // This will stop the refresh animation
             }
         });
 
         // Get current FCM token and fetch notifications
-        fetchNotifications();
-
-        // Initialize buttons
-        homeButton = findViewById(R.id.attendee_home_button);
-        scanButton = findViewById(R.id.attendee_scan_button);
-        profileButton = findViewById(R.id.attendee_profile_button);
-        notificationButton = findViewById(R.id.attendee_notification_button);
-
-        // Home Button Click Listener
-        homeButton.setOnClickListener(view -> {
-            // Create an intent to start NotificationActivity
-            Intent intent = new Intent(NotificationDisplayActivity.this, AttendeeMainActivity.class);
-            startActivity(intent);
-        });
-
-        // Profile Button Click Listener
-        profileButton.setOnClickListener(view -> {
-            // Intent to start AttendeeProfileActivity
-            Intent intent = new Intent(NotificationDisplayActivity.this, AttendeeProfileActivity.class);
-
-            // Retrieve UUID from SharedPreferences and pass it to the next activity
-            SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-            String uuid = prefs.getString("UUID", null);
-            if (uuid != null) {
-                intent.putExtra("UUID", uuid);
-            }
-            // Start the AttendeeProfileActivity
-            startActivity(intent);
-        });
-
-        // Notification Button Click Listener
-        notificationButton.setOnClickListener(view -> {
-            // Create an intent to start NotificationActivity
-            Intent intent = new Intent(NotificationDisplayActivity.this, NotificationDisplayActivity.class);
-            startActivity(intent);
-        });
+        fetchNotifications(uuid);
+        return view;
     }
 
     /**
@@ -111,12 +84,12 @@ public class NotificationDisplayActivity extends AppCompatActivity {
      * It uses the NotificationManager class to retrieve notifications and handles success or error
      * with appropriate actions.
      */
-    private void fetchNotifications() {
+    private void fetchNotifications(String uuid) {
         NotificationManager manager = new NotificationManager();
-        manager.fetchNotifications(new NotificationsFetchListener() {
+        manager.fetchNotifications(uuid, new NotificationsFetchListener() {
             @Override
             public void onNotificationsFetched(List<Notification> notifications) {
-                NotificationAdapter adapter = new NotificationAdapter(NotificationDisplayActivity.this, notifications);
+                NotificationAdapter adapter = new NotificationAdapter(requireActivity(), notifications, "user");
                 listView.setAdapter(adapter);
             }
 
@@ -128,4 +101,3 @@ public class NotificationDisplayActivity extends AppCompatActivity {
         });
     }
 }
-
