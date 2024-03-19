@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.Timestamp;
@@ -56,14 +59,15 @@ public class EventDetailsFragment extends Fragment {
                 TextView nameTextView = view.findViewById(R.id.eventNameTextView);
                 TextView categoryTextView = view.findViewById(R.id.eventCategoryTextView);
                 TextView DescriptionTextView = view.findViewById(R.id.eventDescriptionTextView);
-//                TextView DateTextView = view.findViewById(R.id.eventDateTimeTextView);
+                TextView DateTextView = view.findViewById(R.id.eventDateTimeTextView);
                 TextView LocationTextView = view.findViewById(R.id.eventLocationTextView);
+
+                handleDateTime(event,DateTextView);
 
                 // Add more views as needed
                 nameTextView.setText(event.getName());
                 categoryTextView.setText(event.getCategory());
                 DescriptionTextView.setText(event.getDescription());
-//                DateTextView.setText((CharSequence) sdf);
                 LocationTextView.setText(event.getLocation());
             }
         }).addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to load event.", Toast.LENGTH_SHORT).show());
@@ -88,5 +92,25 @@ public class EventDetailsFragment extends Fragment {
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    private void handleDateTime(Event event,TextView DateTextView ){
+
+        com.google.firebase.Timestamp firebaseTimestamp = event.getDate();
+
+        if (firebaseTimestamp != null) {
+            // Convert Firebase Timestamp to java.util.Date
+            Date date = firebaseTimestamp.toDate();
+
+            // Format Date to String
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            String formattedDate = sdf.format(date);
+
+            // Now set the formatted date string to the TextView
+            DateTextView.setText(formattedDate);
+        }else {
+            // Handle the case where the timestamp is null
+            DateTextView.setText("No date available");
+        }
     }
 }

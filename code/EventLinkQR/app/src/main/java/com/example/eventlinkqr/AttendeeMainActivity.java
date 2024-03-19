@@ -8,7 +8,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +42,10 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private QRCodeScanner scanner;
     private String attUUID;
     private String profileName;
+
+    private int clickCount = 10;
+    private Handler clickHandler = new Handler();
+    private Runnable clickRunnable;
 
     public interface LocationCallback {
         void onLocationReceived(LatLng location);
@@ -94,6 +100,42 @@ public class AttendeeMainActivity extends AppCompatActivity {
      * Initialize onClick listener for the notifications button
      */
     private void setupProfileButton() {
+
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickCount--;
+
+                if (clickCount > 0) {
+                    // Cancel any existing callbacks
+                    clickHandler.removeCallbacks(clickRunnable);
+
+                    // Show the remaining clicks in a Toast message
+                    Toast.makeText(AttendeeMainActivity.this, clickCount + " clicks remaining", Toast.LENGTH_SHORT).show();
+
+                    // Set up a delayed action to reset click count
+                    clickRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            // Navigate to the profile page if only one click was detected
+                            if (clickCount == 9) {
+                                Navigation.findNavController(navController).navigate(R.id.attendeeProfilePage);
+                            }
+                            // Reset click count
+                            clickCount = 10;
+                        }
+                    };
+
+                    // If the button isn't pressed again within 4 seconds, the runnable will execute
+                    clickHandler.postDelayed(clickRunnable, 4000);
+                } else {
+                    // Navigate to AdmMainActivity on 10th click
+                    Intent intent = new Intent(AttendeeMainActivity.this, AdmMainActivity.class);
+                    startActivity(intent);
+                    clickCount = 10; // Reset clickCount for next time
+                }
+            }
+        });
 
         // Handles the click event on the notification button. For devices running Android 13 (API level 33) or higher,
         // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayActivity.
