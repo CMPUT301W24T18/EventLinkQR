@@ -1,7 +1,10 @@
 package com.example.eventlinkqr;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Date;
 import java.util.List;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -16,12 +19,12 @@ public class Milestone {
     private String info;
     private Integer value;
 
-    Date timestamp;
+    Timestamp timestamp;
 
     public Milestone() {
         // Default constructor required for calls to DataSnapshot.getValue(Milestone.class)
     }
-    public Milestone(String eventId, String organizerId, String info, Integer value, Date timestamp) {
+    public Milestone(String eventId, String organizerId, String info, Integer value, Timestamp timestamp) {
         this.eventId = eventId;
         this.organizerId = organizerId;
         this.info = info;
@@ -38,7 +41,7 @@ public class Milestone {
         return value;
     }
 
-    public Date getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
@@ -50,7 +53,7 @@ public class Milestone {
         this.info = info;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -69,6 +72,5 @@ public class Milestone {
     public String getOrganizerId() {
         return organizerId;
     }
-
 
 }

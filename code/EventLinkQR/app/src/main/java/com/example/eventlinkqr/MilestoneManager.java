@@ -29,8 +29,13 @@ public class MilestoneManager extends Manager {
                         System.err.println("Listen failed: " + e);
                         return;
                     }
+
                     if (snapshots != null && !snapshots.isEmpty()) {
                         Log.d("MilestoneManager", "Milestone snapshot received" + snapshots.getDocuments().get(0).getId());
+                    }
+
+                    if (snapshots != null && !snapshots.isEmpty()) {
+
                         Milestone latestMilestone = snapshots.getDocuments().get(0).toObject(Milestone.class);
                         callback.accept(latestMilestone);
                     } else {
@@ -38,7 +43,5 @@ public class MilestoneManager extends Manager {
                     }
                 });
     }
-
-
 
 }
