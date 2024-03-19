@@ -63,6 +63,9 @@ public class Event {
         this.description = description;
     }
 
+    public Event() {
+        // Default constructor required for calls to DataSnapshot.getValue(Event.class)
+    }
     /**
      * gets the event's name
      * @return the event's name

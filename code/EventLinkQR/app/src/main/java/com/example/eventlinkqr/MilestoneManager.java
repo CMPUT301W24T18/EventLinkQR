@@ -1,14 +1,21 @@
 package com.example.eventlinkqr;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class MilestoneManager extends Manager {
 
     private static final String COLLECTION_PATH = "Milestones";
+
+    private static final ArrayList<Integer> milestones = new ArrayList<>(Arrays.asList(1, 5, 10, 20, 50, 100, 200, 500, 1000));
 
     /**
      * Listen for changes in the milestones collection and call the callback function. A change means
@@ -44,4 +51,54 @@ public class MilestoneManager extends Manager {
                 });
     }
 
+    public static void checkForCheckInMilestone(String eventId, String organizerId) {
+        Log.d("MilestoneManager", "Checking for checkIn milestone for eventId: " + eventId + " and organizerId: " + organizerId);
+        getFirebase().collection("Events")
+                .document(eventId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Event event = task.getResult().toObject(Event.class);
+                        if (event != null) {
+                            int checkedInAttendeesCount = event.getCheckedInAttendeesCount();
+                            if (milestones.contains(checkedInAttendeesCount)) {
+                                Milestone milestone = new Milestone(eventId, organizerId, "checkIn", checkedInAttendeesCount, Timestamp.now());
+                                addMilestone(milestone);
+                            }
+                        }
+                    }
+                });
+
+
+    }
+
+    public static void checkForSignUpMilestone(String eventId, String organizerId) {
+        getFirebase().collection("Events")
+                .document(eventId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Event event = task.getResult().toObject(Event.class);
+                        if (event != null) {
+                            int signedUpAttendeesCount = event.getSignedUpCount();
+                            if (milestones.contains(signedUpAttendeesCount)) {
+                                Milestone milestone = new Milestone(eventId, organizerId, "signUp", signedUpAttendeesCount, Timestamp.now());
+                                Log.d("MilestoneManager", "OrganizerId: " + organizerId + " reached a milestone ");
+                                addMilestone(milestone);
+                            }
+                        }
+                    }
+                });
+    }
+
+    public static void addMilestone(Milestone milestone) {
+        getFirebase().collection(COLLECTION_PATH)
+                .add(milestone)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("MilestoneManager", "Milestone added with ID: " + documentReference.getId());
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("MilestoneManager", "Error adding milestone", e);
+                });
+    }
 }

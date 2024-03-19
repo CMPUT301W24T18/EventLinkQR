@@ -17,6 +17,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +46,9 @@ public class EventManager extends Manager {
         attendee.put("name", attendeeName);
         attendee.put("checkedIn", true);
         getCollection().document(eventId).update("checkedInCount", FieldValue.increment(1));
+        EventManager.getOrganizerId(eventId, organizerId -> {
+            MilestoneManager.checkForCheckInMilestone(eventId, organizerId);
+        });
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
@@ -59,6 +65,9 @@ public class EventManager extends Manager {
         attendee.put("checkedIn", true);
         attendee.put("location", new GeoPoint(location.latitude, location.longitude));
         getCollection().document(eventId).update("checkedInCount", FieldValue.increment(1));
+        EventManager.getOrganizerId(eventId, organizerId -> {
+            MilestoneManager.checkForCheckInMilestone(eventId, organizerId);
+        });
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
@@ -74,6 +83,10 @@ public class EventManager extends Manager {
         attendee.put("name", attendeeName);
         attendee.put("checkedIn", false);
         getCollection().document(eventId).update("signedUpCount", FieldValue.increment(1));
+        Log.d("EventManager", "Checking for sign up milestone");
+        EventManager.getOrganizerId(eventId, organizerId -> {
+            MilestoneManager.checkForSignUpMilestone(eventId, organizerId);
+        });
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
@@ -220,6 +233,22 @@ public class EventManager extends Manager {
                     getCollection().document(eventId).collection("attendees").get().addOnSuccessListener(q -> {
                         eventCallback.accept(fromDocument(document, q));
                     });
+                } else {
+                    Log.d("Firestore", "No such document");
+                }
+            } else {
+                Log.d("Firestore", "get failed with ", task.getException());
+            }
+        });
+    }
+
+    public static void getOrganizerId(String eventId, Consumer<String> eventCallback) {
+        getCollection().document(eventId).get().addOnCompleteListener((Task<DocumentSnapshot> task) -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Log.d("Firestore", "DocumentSnapshot data: " + document.getData());
+                    eventCallback.accept(document.getString("organizer"));
                 } else {
                     Log.d("Firestore", "No such document");
                 }
