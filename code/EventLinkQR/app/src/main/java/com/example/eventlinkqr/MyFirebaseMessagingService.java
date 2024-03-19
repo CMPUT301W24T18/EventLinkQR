@@ -51,8 +51,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody The body text of the message to be displayed in the notification.
      */
     private void showNotification(String title, String messageBody) {
-        // Create an intent that will open the NotificationDisplayActivity when the user taps the notification.
-        Intent intent = new Intent(this, NotificationDisplayActivity.class);
+        // Create an intent that will open the NotificationDisplayFragment when the user taps the notification.
+        Intent intent = new Intent(this, NotificationDisplayFragment.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
         // Define the notification channel ID.

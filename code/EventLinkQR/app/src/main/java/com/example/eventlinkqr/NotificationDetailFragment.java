@@ -15,7 +15,7 @@ import androidx.navigation.Navigation;
 /**
  * Activity to display the details of a notification.
  */
-public class NotificationDetailActivity extends Fragment {
+public class NotificationDetailFragment extends Fragment {
 
     /**
      * Called when the activity is starting.

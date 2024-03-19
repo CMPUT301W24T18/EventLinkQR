@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/notificationDisplayPage"
-        android:name="com.example.eventlinkqr.NotificationDisplayActivity"
+        android:name="com.example.eventlinkqr.NotificationDisplayFragment"
         android:label="activity_display_notifications"
         tools:layout="@layout/notifications_page" >
         <action
@@ -50,7 +50,7 @@
 
     <fragment
         android:id="@+id/notificationDetailedPage"
-        android:name="com.example.eventlinkqr.NotificationDetailActivity"
+        android:name="com.example.eventlinkqr.NotificationDetailFragment"
         android:label="notificationDetailedPage"
         tools:layout="@layout/activity_notification_detail" >
         <action

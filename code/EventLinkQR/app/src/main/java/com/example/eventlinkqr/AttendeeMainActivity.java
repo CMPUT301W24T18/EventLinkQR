@@ -98,9 +98,9 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private void setupProfileButton() {
 
         // Handles the click event on the notification button. For devices running Android 13 (API level 33) or higher,
-        // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayActivity.
+        // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayFragment.
         // If not, shows a custom dialog to guide users to enable notifications. For devices below Android 13, directly
-        // navigates to the NotificationDisplayActivity as permission checks are not required.
+        // navigates to the NotificationDisplayFragment as permission checks are not required.
         notificationButton.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
@@ -172,13 +172,13 @@ public class AttendeeMainActivity extends AppCompatActivity {
      * This method first checks if the user has already been prompted for notification permission.
      * If not, it presents an AlertDialog asking the user if they wish to enable notifications for the app.
      * A positive response directs the user to the app's system settings to enable notifications,
-     * while a negative response simply proceeds to the NotificationDisplayActivity.
+     * while a negative response simply proceeds to the NotificationDisplayFragment.
      * Regardless of the user's choice, their decision is recorded to avoid repeated prompts.
      */
     private void showCustomPermissionDialog() {
         if (!shouldPromptForNotificationPermission()) {
-            // User has already been prompted, proceed directly to NotificationDisplayActivity
-            Intent intent = new Intent(this, NotificationDisplayActivity.class);
+            // User has already been prompted, proceed directly to NotificationDisplayFragment
+            Intent intent = new Intent(this, NotificationDisplayFragment.class);
             startActivity(intent);
             return;
         }
@@ -204,8 +204,8 @@ public class AttendeeMainActivity extends AppCompatActivity {
                     editor.putBoolean("hasBeenPromptedForNotificationPermission", true);
                     editor.apply();
 
-                    // User chose not to enable notifications, proceed to NotificationDisplayActivity
-                    Intent intent = new Intent(this, NotificationDisplayActivity.class);
+                    // User chose not to enable notifications, proceed to NotificationDisplayFragment
+                    Intent intent = new Intent(this, NotificationDisplayFragment.class);
                     startActivity(intent);
                 })
                 .create().show();
