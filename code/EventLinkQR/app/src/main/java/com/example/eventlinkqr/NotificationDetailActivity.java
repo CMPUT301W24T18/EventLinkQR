@@ -48,8 +48,8 @@ public class NotificationDetailActivity extends AppCompatActivity {
 
         // Profile button click listener
         profileButton.setOnClickListener(view -> {
-            // Create an intent to start AttendeeProfileActivity
-            Intent intent = new Intent(NotificationDetailActivity.this, AttendeeProfileActivity.class);
+            // Create an intent to start AttendeeProfileFragment
+            Intent intent = new Intent(NotificationDetailActivity.this, AttendeeProfileFragment.class);
 
             // Retrieve UUID from SharedPreferences and pass it to the next activity
             SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
@@ -57,7 +57,7 @@ public class NotificationDetailActivity extends AppCompatActivity {
             if (uuid != null) {
                 intent.putExtra("UUID", uuid);
             }
-            // Start the AttendeeProfileActivity
+            // Start the AttendeeProfileFragment
             startActivity(intent);
         });
 

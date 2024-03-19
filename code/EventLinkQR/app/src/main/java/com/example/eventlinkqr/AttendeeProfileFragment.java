@@ -29,7 +29,7 @@ import java.util.UUID;
 /**
  * Activity for managing an attendee's profile.
  */
-public class AttendeeProfileActivity extends Fragment {
+public class AttendeeProfileFragment extends Fragment {
     private static final String TAG = "AttendeeProfile";
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;

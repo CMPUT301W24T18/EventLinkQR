@@ -31,7 +31,7 @@ public class AttendeeMainActivityTest {
     public ActivityScenarioRule<AttendeeMainActivity> activityScenarioRule = new ActivityScenarioRule<>(AttendeeMainActivity.class);
 
     /**
-     * Tests whether the AttendeeProfileActivity is started upon clicking the profile button.
+     * Tests whether the AttendeeProfileFragment is navigated to upon clicking the profile button.
      * This test simulates a user action of clicking the profile button and verifies
      * that the AttendeeProfileActivity is correctly launched.
      */

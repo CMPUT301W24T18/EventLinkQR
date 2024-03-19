@@ -124,7 +124,7 @@ public class CreateProfile extends Fragment {
         // Validate name is not null or empty
         if (name.equals("")) {
             Toast.makeText(requireActivity(), "Name cannot be empty", Toast.LENGTH_SHORT).show();
-        }else if (phoneNumber.equals("") || phoneNumber.length()<10) {
+        }else if (!phoneNumber.equals("") && phoneNumber.length()<10) {
             // Validate phone number if provided, and ensure it is exactly 10 digits
             Toast.makeText(requireActivity(), "Invalid Phone Number", Toast.LENGTH_SHORT).show();
         }else {
