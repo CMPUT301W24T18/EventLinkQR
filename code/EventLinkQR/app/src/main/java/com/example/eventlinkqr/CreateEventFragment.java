@@ -106,7 +106,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
         });
 
-        // send message since the function is not yet implemented
+        // Scan in a custom code.
         chooseQrButton.setOnClickListener(v -> {
             publishButton.setEnabled(false);
             ((AttendeeMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {

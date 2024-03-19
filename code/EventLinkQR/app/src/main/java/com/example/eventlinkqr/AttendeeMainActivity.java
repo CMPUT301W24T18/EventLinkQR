@@ -277,6 +277,10 @@ public class AttendeeMainActivity extends AppCompatActivity {
         return scanner;
     }
 
+    /**
+     * Get the nav controller for this activity
+     * @return The nav controller
+     */
     public FragmentContainerView getNavController() {
         return navController;
     }

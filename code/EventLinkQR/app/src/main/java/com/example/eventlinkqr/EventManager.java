@@ -326,11 +326,14 @@ public class EventManager extends Manager {
                 .addOnSuccessListener(documentReference -> {
                     String eventId = documentReference.getId();
                     String codeText = customQR;
+                    String promotionalText = "eventlinkqr:promotion:" + eventId;
+
                     if (codeText == null) {
                         codeText = "eventlinkqr:" + eventId;
                     }
                     // Automatically generate a QR Code for now. In the future support uploading custom.
                     QRCodeManager.addQRCode(codeText, QRCode.CHECK_IN_TYPE, eventId);
+                    QRCodeManager.addQRCode(promotionalText, QRCode.PROMOTIONAL_TYPE, eventId);
                     Log.e("Firestore", "Event " + newEvent.getName() + " by " + organizer + " successfully added");
                 })
                 .addOnFailureListener(e -> {
