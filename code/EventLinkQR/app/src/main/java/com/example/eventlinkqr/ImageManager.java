@@ -58,19 +58,19 @@ public class ImageManager {
     }
 
     /**
-     * Uploads an image to Firebase Storage and updates the Firestore database with the image path.
+     * Uploads an image to Firebase Storage that is linked to the uuid that uploaded it and updates the Firestore database with the image path as Base64.
      *
      * @param context The context that the function is being called in.
-     * @param fileUri The URI of the file to upload.
-     * @param userId The user ID to associate the uploaded image with.
+     * @param uuid The user ID to associate the uploaded image with.
      * @param image The path within Firebase Storage where the image will be stored.
      * @param callback The callback interface that handles the outcome of the upload operation.
      */
-    public void uploadImage(Context context, Bitmap image, UploadCallback callback) {
+    public void uploadImage(Context context, String uuid, Bitmap image, UploadCallback callback) {
         String base64Encoded = Base64.encodeToString(ImageManager.bitmapToByteArray(image), Base64.DEFAULT);
         Map<String, String> imageMap = new HashMap<>();
         imageMap.put("base64Image", base64Encoded);
-        db.collection("images_testing").add(imageMap)
+
+        db.collection("images_testing").document(uuid).set(imageMap) // changed add to set
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
                     callback.onSuccess();

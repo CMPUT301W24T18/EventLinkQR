@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -40,7 +43,8 @@ public class AttendeeProfileActivity extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String uuid; // Unique identifier for the attendee
     private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
-    public static Uri uploadedImageUri = null;
+    private ImageView preview;
+    private Bitmap deterministicBitmap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,10 +74,10 @@ public class AttendeeProfileActivity extends Fragment {
 
         btnSave.setOnClickListener(v -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
 
-        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
+        deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
 
 
-        ImageView preview = view.findViewById(R.id.ivProfileImage);
+        preview = view.findViewById(R.id.ivProfileImage);
         preview.setImageBitmap(deterministicBitmap);
 
         photoButton.setOnClickListener(v -> {
@@ -81,16 +85,6 @@ public class AttendeeProfileActivity extends Fragment {
             intent.putExtra("origin", "Attendee");
             intent.putExtra("uuid", uuid);
             startActivity(intent);
-
-            if (uploadedImageUri != null) {
-                // If there is an uploaded image, display it
-                preview.setImageURI(uploadedImageUri);
-                // Reset the static variable to null to avoid displaying it unnecessarily later
-                uploadedImageUri = null;
-            } else {
-                // If no uploaded image is present, display the deterministic image
-                preview.setImageBitmap(deterministicBitmap);
-            }
         });
 
         // Reset App Data button
@@ -243,5 +237,43 @@ public class AttendeeProfileActivity extends Fragment {
             // The switch is off
             Toast.makeText(requireActivity(), "Location tracking disabled", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Handles updating the ImageView preview when an image has been uploaded or removed
+     */
+    public void refreshProfileImage(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("images_testing").document(uuid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String base64Image = documentSnapshot.getString("base64Image");
+                        if (base64Image != null && !base64Image.isEmpty()) {
+                            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            preview.setImageBitmap(decodedByte);
+                        } else {
+                            // If no uploaded image is present, display the deterministic image
+                            preview.setImageBitmap(deterministicBitmap);
+                        }
+                    }
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Error displaying profile Image", Toast.LENGTH_SHORT).show();// Handle any errors
+                });
+//        if (imageUri != null) {
+//            Glide.with(this).load(imageUri).into(preview);
+//        } else {
+//            // If no uploaded image is present, display the deterministic image
+//            preview.setImageBitmap(deterministicBitmap);
+//        }
+    }
+
+    /**
+     * Is called to refresh the profile image everytime the AttendeeProfilActivity is on the foreground
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshProfileImage();
     }
 }

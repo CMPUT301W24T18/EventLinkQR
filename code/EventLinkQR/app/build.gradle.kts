@@ -68,6 +68,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation ("androidx.activity:activity:1.8.2")
     implementation ("androidx.fragment:fragment:1.6.2")
+//    implementation ("com.github.bumptech.glide:glide:4.16.0")
+//    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
     testImplementation("org.mockito:mockito-core:5.10.0")
     testImplementation("org.mockito:mockito-junit-jupiter:5.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")

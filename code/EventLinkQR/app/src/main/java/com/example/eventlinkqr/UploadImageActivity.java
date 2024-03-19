@@ -38,6 +38,7 @@ public class UploadImageActivity extends AppCompatActivity {
     private Button upload_button, cancel_button, chooseImage_button;
     private TextView prompt;
     private Uri imageUri;
+    String userUuid;
 
 
     // ActivityResultLauncher for handling gallery selection result
@@ -87,14 +88,20 @@ public class UploadImageActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                imageManager.uploadImage(UploadImageActivity.this, image, new ImageManager.UploadCallback() {
+
+                userUuid = intent.getStringExtra("uuid"); // to get the uuid of the user
+                imageManager.uploadImage(UploadImageActivity.this,  userUuid, image, new ImageManager.UploadCallback() {
                     @Override
                     public void onSuccess() {
                         Toast.makeText(UploadImageActivity.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
                         // Update the image preview and close the activity
-                        AttendeeProfileActivity.uploadedImageUri = imageUri;
+//                        AttendeeProfileActivity.uploadedImageUri = imageUri;
                         ImageView imagePreview = findViewById(R.id.image_preview);
                         imagePreview.setImageURI(imageUri);
+
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("imageUri", imageUri.toString());
+                        setResult(Activity.RESULT_OK, returnIntent);
                         finish();
                     }
 
