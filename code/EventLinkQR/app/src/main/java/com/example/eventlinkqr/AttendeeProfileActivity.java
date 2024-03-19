@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ public class AttendeeProfileActivity extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String uuid; // Unique identifier for the attendee
     private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
+    public static Uri uploadedImageUri = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,16 @@ public class AttendeeProfileActivity extends Fragment {
             intent.putExtra("origin", "Attendee");
             intent.putExtra("uuid", uuid);
             startActivity(intent);
+
+            if (uploadedImageUri != null) {
+                // If there is an uploaded image, display it
+                preview.setImageURI(uploadedImageUri);
+                // Reset the static variable to null to avoid displaying it unnecessarily later
+                uploadedImageUri = null;
+            } else {
+                // If no uploaded image is present, display the deterministic image
+                preview.setImageBitmap(deterministicBitmap);
+            }
         });
 
         // Reset App Data button

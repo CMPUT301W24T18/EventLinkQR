@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -79,7 +80,7 @@ public class UploadImageActivity extends AppCompatActivity {
             if (imageUri != null) {
                 ImageManager imageManager = new ImageManager();
 
-                //https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                 Bitmap image;
                 try {
                     image = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
@@ -91,6 +92,7 @@ public class UploadImageActivity extends AppCompatActivity {
                     public void onSuccess() {
                         Toast.makeText(UploadImageActivity.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
                         // Update the image preview and close the activity
+                        AttendeeProfileActivity.uploadedImageUri = imageUri;
                         ImageView imagePreview = findViewById(R.id.image_preview);
                         imagePreview.setImageURI(imageUri);
                         finish();
