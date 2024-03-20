@@ -129,7 +129,6 @@ public class ImageManager {
      */
     public static byte[] bitmapToByteArray(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, baos);
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         return baos.toByteArray();
     }

@@ -25,7 +25,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -260,12 +259,6 @@ public class AttendeeProfileActivity extends Fragment {
                 }).addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Error displaying profile Image", Toast.LENGTH_SHORT).show();// Handle any errors
                 });
-//        if (imageUri != null) {
-//            Glide.with(this).load(imageUri).into(preview);
-//        } else {
-//            // If no uploaded image is present, display the deterministic image
-//            preview.setImageBitmap(deterministicBitmap);
-//        }
     }
 
     /**
