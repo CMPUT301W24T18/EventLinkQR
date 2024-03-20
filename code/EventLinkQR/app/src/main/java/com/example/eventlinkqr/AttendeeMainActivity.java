@@ -130,7 +130,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                     clickHandler.postDelayed(clickRunnable, 4000);
                 } else {
                     // Navigate to AdmMainActivity on 10th click
-                    Intent intent = new Intent(AttendeeMainActivity.this, AdmMainActivity.class);
+                    Intent intent = new Intent(AttendeeMainActivity.this, EnterPinActivity.class);
                     startActivity(intent);
                     clickCount = 10; // Reset clickCount for next time
                 }
