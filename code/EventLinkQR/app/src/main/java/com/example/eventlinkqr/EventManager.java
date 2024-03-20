@@ -118,8 +118,8 @@ public class EventManager extends Manager {
      *
      * @param eventCallback The callback to be invoked when the events change
      */
-    public static void addAllEventSnapshotCallback(Consumer<List<Event>> eventCallback) {
-        getCollection().addSnapshotListener((querySnapshots, error) -> {
+    public static void addAllEventSnapshotCallback(String userID, Consumer<List<Event>> eventCallback) {
+        getCollection().whereNotEqualTo("organizer", userID).addSnapshotListener((querySnapshots, error) -> {
             if (error != null) {
                 Log.e("Firestore", error.toString());
                 return;

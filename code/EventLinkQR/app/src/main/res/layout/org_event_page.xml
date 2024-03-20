@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".OrgEventFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -15,7 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/actionModeCloseDrawable">
-
 
         <TextView
             android:id="@+id/attendees_toolBar"
@@ -30,108 +29,120 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
+            android:id="@+id/promotional_qr_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Promote"
-            android:id="@+id/promotional_qr_button" />
+            android:text="Promote" />
+
         <ImageView
             android:id="@+id/notification_send_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/baseline_edit_notifications_24"
             android:contentDescription="@string/send_notification"
+            android:src="@drawable/baseline_edit_notifications_24"
             app:tint="?attr/iconTintColor" />
-
-
     </androidx.appcompat.widget.Toolbar>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:src="@drawable/ic_profile"
-        />
-
-    <TextView
-        android:id="@+id/org_event_name"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fontFamily="serif"
-        android:gravity="center"
-        android:text="@string/My_events_string"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/org_event_toolbar">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_location" />
-
-        <TextView
-            android:id="@+id/org_event_location"
+        <LinearLayout
+            android:id="@+id/org_event_contents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:textSize="24sp" />
-    </LinearLayout>
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_profile" />
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_time" />
+            <TextView
+                android:id="@+id/org_event_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/My_events_string"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/org_event_datetime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:textSize="24sp" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
-        android:fontFamily="serif"
-        android:gravity="bottom"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:text="@string/what_to_expect"
-        android:textSize="34sp"
-        android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_location" />
 
-    <TextView
-        android:id="@+id/org_event_description"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/org_event_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_time" />
+
+                <TextView
+                    android:id="@+id/org_event_datetime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:fontFamily="serif"
+                android:gravity="bottom"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/what_to_expect"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/org_event_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -157,4 +168,4 @@
             android:text="@string/Attendees_string" />
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
