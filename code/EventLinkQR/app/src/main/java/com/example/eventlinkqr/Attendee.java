@@ -17,6 +17,7 @@ public class Attendee {
     private String homepage;     // Homepage URL of the attendee.
     private String fcmToken; // FCM Token for the user
     private boolean location_enabled; // Whether the user has enabled location tracking
+    private boolean isAdmin; // Indicates if the attendee can go to the Admin mode
 
 /**
  * Constructs an Attendee object with the specified details.
@@ -135,6 +136,22 @@ public class Attendee {
      */
     public void setLocation_enabled(boolean location_enabled) {
         this.location_enabled = location_enabled;
+    }
+
+    /**
+     * Gets the admin mode status of the attendee.
+     * @return The admin mode status of the attendee.
+     */
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    /**
+     * Sets the admin mode status of the attendee.
+     * @param admin The admin mode status of the attendee.
+     */
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
 

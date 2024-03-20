@@ -45,7 +45,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
 
     private int clickCount = 10;
     private Handler clickHandler = new Handler();
-    private Runnable clickRunnable;
+    private Runnable clickResetRunnable;
 
     public interface LocationCallback {
         void onLocationReceived(LatLng location);
@@ -108,15 +108,37 @@ public class AttendeeMainActivity extends AppCompatActivity {
                     Navigation.findNavController(navController).navigate(R.id.attendeeProfilePage);
                 } else {
 
+                    // Cancel any existing callbacks
+                    clickHandler.removeCallbacks(clickResetRunnable);
+
                     clickCount--;
+
+                    // Set up a delayed action to reset click count
+                    clickResetRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            clickCount = 10;
+                        }
+                    };
+
+                    // Reset the click count if the button isn't pressed again within 1.5 seconds
+                    clickHandler.postDelayed(clickResetRunnable, 1500);
 
                     if (clickCount <= 6 && clickCount > 0) {
                         // Show the remaining clicks in a Toast message, starting from the 4th tap
                         Toast.makeText(AttendeeMainActivity.this, clickCount + " clicks remaining", Toast.LENGTH_SHORT).show();
                     } else if (clickCount == 0) {
-                        // Navigate to AdmMainActivity on the 10th click
-                        Intent intent = new Intent(AttendeeMainActivity.this, EnterPinActivity.class);
-                        startActivity(intent);
+                        FirebaseFirestore.getInstance().collection("Users").document(attUUID)
+                                .get().addOnSuccessListener(documentSnapshot -> {
+                                    Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                                    if (attendee != null && attendee.isAdmin()) {
+                                        // If isAdmin is true, go to AdmMainActivity
+                                        startActivity(new Intent(AttendeeMainActivity.this, AdmMainActivity.class));
+                                    } else {
+                                        // If isAdmin is false, go to EnterPinActivity
+                                        startActivity(new Intent(AttendeeMainActivity.this, EnterPinActivity.class));
+                                    }
+                                });
                         clickCount = 10; // Reset the click count
                     }
 
