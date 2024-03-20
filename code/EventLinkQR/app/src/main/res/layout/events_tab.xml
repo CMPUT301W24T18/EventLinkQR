@@ -15,5 +15,5 @@
         android:layout_gravity="center"
         android:background="@android:color/transparent"
         android:text="@string/Create_event_string"
-        android:textColor="@color/black" />
+        android:textColor="?attr/textColor"/>
 </LinearLayout>
