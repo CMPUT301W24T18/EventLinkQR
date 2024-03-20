@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -23,13 +24,12 @@ import androidx.navigation.Navigation;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.Objects;
 import java.util.UUID;
 
 /**
  * Activity for managing an attendee's profile.
  */
-public class AttendeeProfileActivity extends Fragment {
+public class AttendeeProfileFragment extends Fragment {
     private static final String TAG = "AttendeeProfile";
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
@@ -166,7 +166,7 @@ public class AttendeeProfileActivity extends Fragment {
      * Redirects to AttendeeMainActivity.
      */
     private void redirectToMainActivity() {
-        Navigation.findNavController(Objects.requireNonNull(requireActivity().getCurrentFocus())).navigate(R.id.action_attendeeProfilePage_to_attendeeHomePage);
+        Navigation.findNavController(((AttendeeMainActivity)requireActivity()).getNavController()).navigate(R.id.action_attendeeProfilePage_to_attendeeHomePage);
     }
 
     /**

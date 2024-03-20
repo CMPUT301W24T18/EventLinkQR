@@ -19,7 +19,6 @@ import androidx.navigation.Navigation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -53,6 +52,9 @@ public class AttendeeMainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize scanner to work from this activity
+        scanner = new QRCodeScanner(this);
 
         // Set the content view to the attendee main layout
         setContentView(R.layout.main_layout);
@@ -96,9 +98,9 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private void setupProfileButton() {
 
         // Handles the click event on the notification button. For devices running Android 13 (API level 33) or higher,
-        // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayActivity.
+        // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayFragment.
         // If not, shows a custom dialog to guide users to enable notifications. For devices below Android 13, directly
-        // navigates to the NotificationDisplayActivity as permission checks are not required.
+        // navigates to the NotificationDisplayFragment as permission checks are not required.
         notificationButton.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
@@ -151,6 +153,12 @@ public class AttendeeMainActivity extends AppCompatActivity {
                         }).addOnFailureListener(x -> {
                             Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
                         });
+                    } else if (code.getCodeType() == QRCode.PROMOTIONAL_TYPE) {
+                        // This is a promotional code, redirect to the attendee event details page
+                        EventManager.getEventById(code.getEventId(), event -> {
+                            setCurrentEvent(event);
+                            Navigation.findNavController(navController).navigate(R.id.action_attendeeHomePage_to_attendeeEventFragment);
+                        });
                     }
                 });
             }, e -> {
@@ -164,13 +172,13 @@ public class AttendeeMainActivity extends AppCompatActivity {
      * This method first checks if the user has already been prompted for notification permission.
      * If not, it presents an AlertDialog asking the user if they wish to enable notifications for the app.
      * A positive response directs the user to the app's system settings to enable notifications,
-     * while a negative response simply proceeds to the NotificationDisplayActivity.
+     * while a negative response simply proceeds to the NotificationDisplayFragment.
      * Regardless of the user's choice, their decision is recorded to avoid repeated prompts.
      */
     private void showCustomPermissionDialog() {
         if (!shouldPromptForNotificationPermission()) {
-            // User has already been prompted, proceed directly to NotificationDisplayActivity
-            Intent intent = new Intent(this, NotificationDisplayActivity.class);
+            // User has already been prompted, proceed directly to NotificationDisplayFragment
+            Intent intent = new Intent(this, NotificationDisplayFragment.class);
             startActivity(intent);
             return;
         }
@@ -196,8 +204,8 @@ public class AttendeeMainActivity extends AppCompatActivity {
                     editor.putBoolean("hasBeenPromptedForNotificationPermission", true);
                     editor.apply();
 
-                    // User chose not to enable notifications, proceed to NotificationDisplayActivity
-                    Intent intent = new Intent(this, NotificationDisplayActivity.class);
+                    // User chose not to enable notifications, proceed to NotificationDisplayFragment
+                    Intent intent = new Intent(this, NotificationDisplayFragment.class);
                     startActivity(intent);
                 })
                 .create().show();
@@ -268,4 +276,11 @@ public class AttendeeMainActivity extends AppCompatActivity {
         return scanner;
     }
 
+    /**
+     * Get the nav controller for this activity
+     * @return The nav controller
+     */
+    public FragmentContainerView getNavController() {
+        return navController;
+    }
 }

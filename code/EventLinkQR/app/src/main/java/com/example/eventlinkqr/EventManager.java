@@ -2,30 +2,21 @@ package com.example.eventlinkqr;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.Filter;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** Class for managing database interaction for events */
@@ -326,11 +317,14 @@ public class EventManager extends Manager {
                 .addOnSuccessListener(documentReference -> {
                     String eventId = documentReference.getId();
                     String codeText = customQR;
+                    String promotionalText = "eventlinkqr:promotion:" + eventId;
+
                     if (codeText == null) {
                         codeText = "eventlinkqr:" + eventId;
                     }
                     // Automatically generate a QR Code for now. In the future support uploading custom.
                     QRCodeManager.addQRCode(codeText, QRCode.CHECK_IN_TYPE, eventId);
+                    QRCodeManager.addQRCode(promotionalText, QRCode.PROMOTIONAL_TYPE, eventId);
                     Log.e("Firestore", "Event " + newEvent.getName() + " by " + organizer + " successfully added");
                 })
                 .addOnFailureListener(e -> {

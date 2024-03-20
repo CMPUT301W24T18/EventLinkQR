@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ import java.util.List;
  * The class also supports pull-to-refresh functionality using a SwipeRefreshLayout and allows navigation
  * to other activities through MaterialButtons.
  */
-public class NotificationDisplayActivity extends Fragment {
+public class NotificationDisplayFragment extends Fragment {
     /**
      * ListView for displaying notifications.
      */

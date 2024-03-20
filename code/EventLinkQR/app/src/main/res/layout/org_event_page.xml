@@ -29,6 +29,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Promote"
+            android:id="@+id/promotional_qr_button" />
         <ImageView
             android:id="@+id/notification_send_icon"
             android:layout_width="wrap_content"

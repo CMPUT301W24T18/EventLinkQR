@@ -1,7 +1,5 @@
 package com.example.eventlinkqr;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +12,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.google.android.material.button.MaterialButton;
-
 /**
  * Activity to display the details of a notification.
  */
-public class NotificationDetailActivity extends Fragment {
+public class NotificationDetailFragment extends Fragment {
 
     /**
      * Called when the activity is starting.
