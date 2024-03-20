@@ -163,12 +163,12 @@ public class Event {
     }
 
     public void setCheckedInAttendeesCount(Integer count) {
-        if(count == null){
+
+        if (count == null) {
             this.checkedInAttendeesCount = 0;
         } else {
             this.checkedInAttendeesCount = count;
         }
-
     }
 
     /**
