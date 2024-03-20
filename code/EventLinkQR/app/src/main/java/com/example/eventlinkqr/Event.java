@@ -162,8 +162,12 @@ public class Event {
         return checkedInAttendeesCount;
     }
 
-    public void setCheckedInAttendeesCount(int count) {
-        checkedInAttendeesCount = count;
+    public void setCheckedInAttendeesCount(Integer count) {
+        if (count == null) {
+            this.checkedInAttendeesCount = 0;
+        } else {
+            this.checkedInAttendeesCount = count;
+        }
     }
 
     /**

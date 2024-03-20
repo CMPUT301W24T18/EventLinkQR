@@ -104,35 +104,20 @@ public class AttendeeMainActivity extends AppCompatActivity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickCount--;
-
-                if (clickCount > 0) {
-                    // Cancel any existing callbacks
-                    clickHandler.removeCallbacks(clickRunnable);
-
-                    // Show the remaining clicks in a Toast message
-                    Toast.makeText(AttendeeMainActivity.this, clickCount + " clicks remaining", Toast.LENGTH_SHORT).show();
-
-                    // Set up a delayed action to reset click count
-                    clickRunnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            // Navigate to the profile page if only one click was detected
-                            if (clickCount == 9) {
-                                Navigation.findNavController(navController).navigate(R.id.attendeeProfilePage);
-                            }
-                            // Reset click count
-                            clickCount = 10;
-                        }
-                    };
-
-                    // If the button isn't pressed again within 4 seconds, the runnable will execute
-                    clickHandler.postDelayed(clickRunnable, 4000);
+                if (!isOnProfilePage()) {
+                    Navigation.findNavController(navController).navigate(R.id.attendeeProfilePage);
                 } else {
-                    // Navigate to AdmMainActivity on 10th click
-                    Intent intent = new Intent(AttendeeMainActivity.this, AdmMainActivity.class);
-                    startActivity(intent);
-                    clickCount = 10; // Reset clickCount for next time
+                    clickCount--;
+
+                    if (clickCount <= 6 && clickCount > 0) {
+                        // Show the remaining clicks in a Toast message, starting from the 4th tap
+                        Toast.makeText(AttendeeMainActivity.this, clickCount + " clicks remaining", Toast.LENGTH_SHORT).show();
+                    } else if (clickCount == 0) {
+                        // Navigate to AdmMainActivity on the 10th click
+                        Intent intent = new Intent(AttendeeMainActivity.this, AdmMainActivity.class);
+                        startActivity(intent);
+                        clickCount = 10; // Reset the click count
+                    }
                 }
             }
         });
@@ -158,6 +143,15 @@ public class AttendeeMainActivity extends AppCompatActivity {
         });
 
     }
+
+    private boolean isOnProfilePage() {
+        // Obtain the current destination ID from the NavController
+        int currentDestinationId = Navigation.findNavController(navController).getCurrentDestination().getId();
+
+        // Check if the current destination ID matches the profile page ID
+        return currentDestinationId == R.id.attendeeProfilePage;
+    }
+
 
     /**
      * Initialize the onClick listener for the scan button
