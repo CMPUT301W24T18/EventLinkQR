@@ -1,10 +1,6 @@
 package com.example.eventlinkqr;
 
-import android.content.Context;
-import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Singleton class that manages a list of Attendee objects.

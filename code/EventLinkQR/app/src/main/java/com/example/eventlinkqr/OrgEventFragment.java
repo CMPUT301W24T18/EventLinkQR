@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ public class OrgEventFragment extends Fragment {
         /** All buttons and the toolbar that will be used on this page*/
         Button detailsButton = view.findViewById(R.id.details_button);
         Button attendeesButton = view.findViewById(R.id.attendees_button);
+        Button promotionalButton = view.findViewById(R.id.promotional_qr_button);
         ImageView notificationSendIcon = view.findViewById(R.id.notification_send_icon);
         TextView eventTitle = view.findViewById(R.id.org_event_name);
         TextView eventLocation = view.findViewById(R.id.org_event_location);
@@ -58,15 +60,9 @@ public class OrgEventFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_orgAttendeesPage));
 
         // Set the onClickListener for the send notification icon
-        notificationSendIcon.setOnClickListener(v -> {
-            // Create an intent to start the NotificationCreationActivity
-            Intent intent = new Intent(getActivity(), NotificationCreationActivity.class);
-            Event currentEvent = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
-            if(currentEvent != null) {
-                intent.putExtra("eventId", currentEvent.getId()); // Assuming the Event object has a method getId() that returns the event's ID
-            }
-            startActivity(intent);
-        });
+        notificationSendIcon.setOnClickListener(v ->
+                Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_viewNotification));
+
 
         Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
 
@@ -88,12 +84,28 @@ public class OrgEventFragment extends Fragment {
         eventDescription.setText(event.getDescription());
         eventDate.setText(event.getDate().toDate().toString());
 
+
         QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {
             try {
                 qrCodeImage.setImageBitmap(q.toBitmap(512, 512));
             } catch (QRCodeGeneratorException e) {
                 throw new RuntimeException(e);
             }
+        });
+
+        // When clicked, bring up the promotional QR code
+        promotionalButton.setOnClickListener(v -> {
+            QRCodeManager.fetchQRCode(event, QRCode.PROMOTIONAL_TYPE).addOnSuccessListener(q -> {
+                Dialog qrCodeDialog = new Dialog(requireActivity());
+                qrCodeDialog.setContentView(R.layout.view_qr_layout);
+                ImageView modalQrCodeImage = qrCodeDialog.findViewById(R.id.view_qr_image);
+                try {
+                    modalQrCodeImage.setImageBitmap(q.toBitmap(512, 512));
+                } catch (QRCodeGeneratorException e) {
+                    throw new RuntimeException(e);
+                }
+                qrCodeDialog.show();
+            });
         });
 
         // Inflate the layout for this fragment

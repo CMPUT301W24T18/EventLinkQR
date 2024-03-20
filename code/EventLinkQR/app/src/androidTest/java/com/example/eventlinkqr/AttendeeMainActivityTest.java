@@ -3,11 +3,11 @@ package com.example.eventlinkqr;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
@@ -31,7 +31,7 @@ public class AttendeeMainActivityTest {
     public ActivityScenarioRule<AttendeeMainActivity> activityScenarioRule = new ActivityScenarioRule<>(AttendeeMainActivity.class);
 
     /**
-     * Tests whether the AttendeeProfileActivity is started upon clicking the profile button.
+     * Tests whether the AttendeeProfileFragment is navigated to upon clicking the profile button.
      * This test simulates a user action of clicking the profile button and verifies
      * that the AttendeeProfileActivity is correctly launched.
      */

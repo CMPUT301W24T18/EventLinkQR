@@ -20,14 +20,12 @@ import com.google.firebase.storage.UploadTask;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.robolectric.RobolectricTestRunner;
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(RobolectricTestRunner.class)
+//@RunWith(RobolectricTestRunner.class)
 public class ImageManagerTest {
     @Mock
     private FirebaseStorage mockStorage = mock(FirebaseStorage.class);

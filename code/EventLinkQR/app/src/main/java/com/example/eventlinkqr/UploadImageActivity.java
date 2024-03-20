@@ -19,9 +19,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
 
@@ -95,7 +93,6 @@ public class UploadImageActivity extends AppCompatActivity {
                     public void onSuccess() {
                         Toast.makeText(UploadImageActivity.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
                         // Update the image preview and close the activity
-//                        AttendeeProfileActivity.uploadedImageUri = imageUri;
                         ImageView imagePreview = findViewById(R.id.image_preview);
                         imagePreview.setImageURI(imageUri);
 

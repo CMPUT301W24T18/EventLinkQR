@@ -35,11 +35,12 @@
             android:background="@android:color/transparent"
             android:minWidth="88dip"
             android:text="Home"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:textSize="9sp"
             app:icon="@drawable/ic_home"
             app:iconGravity="top"
-            app:iconTint="@color/black" />
+            app:iconTint="?attr/iconTintColor"
+            />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/attendee_scan_button"
@@ -49,11 +50,12 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:text="Scan QR"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:textSize="9sp"
             app:icon="@drawable/ic_camera"
             app:iconGravity="top"
-            app:iconTint="@color/black" />
+            app:iconTint="?attr/iconTintColor"
+            />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/attendee_notification_button"
@@ -63,11 +65,11 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:text="Notification"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:textSize="9sp"
             app:icon="@drawable/ic_notifications"
             app:iconGravity="top"
-            app:iconTint="@color/black" />
+            app:iconTint="?attr/iconTintColor" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/attendee_profile_button"
@@ -77,11 +79,12 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:text="Profile"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:textSize="9sp"
             app:icon="@drawable/ic_profile"
             app:iconGravity="top"
-            app:iconTint="@color/black" />
+            app:iconTint="?attr/iconTintColor"
+            />
 
     </LinearLayout>
 

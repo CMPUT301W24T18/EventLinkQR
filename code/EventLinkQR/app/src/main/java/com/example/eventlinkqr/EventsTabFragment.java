@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -110,6 +109,12 @@ public class EventsTabFragment extends Fragment {
                 break;
             case 2:
                 createEventButton.setVisibility(View.GONE);
+                eventsList.setOnItemClickListener((parent, view, position, id) -> {
+                    ((AttendeeMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
+                    // redirect to the attendee event page
+                    Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_attendeeEventFragment);
+                });
+                EventManager.addSignedUpEventsSnapshotcallback(((AttendeeMainActivity) requireActivity()).getAttUUID(), eventsCallback);
                 break;
         }
     }

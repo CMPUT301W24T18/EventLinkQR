@@ -1,4 +1,10 @@
 package com.example.eventlinkqr;
+
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+
+import android.content.Intent;
+
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
@@ -8,13 +14,6 @@ import androidx.test.filters.LargeTest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-
-import android.content.Intent;
-
-import com.example.eventlinkqr.OrganizerEventStats;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
