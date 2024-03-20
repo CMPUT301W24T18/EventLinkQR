@@ -1,5 +1,8 @@
 package com.example.eventlinkqr;
+import com.example.eventlinkqr.AttendeeProfileActivity;
 
+
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +30,8 @@ public class AdmMainActivity extends AppCompatActivity {
             } else if (id == R.id.events) {
                 replaceFragment(new AdminEventsFragment());
             } else if (id == R.id.profile) {
-                replaceFragment(new AdminProfileFragment());
+                Intent intent = new Intent(this, AttendeeMainActivity.class);
+                startActivity(intent);
             } else if (id == R.id.images) {
                 replaceFragment(new AdminImagesFragment());
             }
