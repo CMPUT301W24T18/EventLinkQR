@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- Notification Title and Description Container -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Notification Heading -->
+        <TextView
+            android:id="@+id/tvNotificationHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:textColor="?attr/notificationHeading"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:paddingTop="4dp"
+            />
+
+        <!-- Notification Description -->
+        <TextView
+            android:id="@+id/tvNotificationDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="?attr/notificationHeading"
+            android:maxLines="3"
+            android:textStyle="italic"
+            android:ellipsize="end"
+            android:paddingTop="4dp"/>
+
+    </LinearLayout>
+
+    <!-- Timestamp TextView -->
+    <TextView
+        android:id="@+id/tvNotificationTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="?attr/notificationHeading"
+        android:paddingTop="4dp" />
+
+</LinearLayout>

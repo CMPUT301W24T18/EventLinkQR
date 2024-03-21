@@ -29,6 +29,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Promote"
+            android:id="@+id/promotional_qr_button" />
         <ImageView
             android:id="@+id/notification_send_icon"
             android:layout_width="wrap_content"
@@ -36,7 +41,8 @@
             android:layout_gravity="end"
             android:layout_marginEnd="8dp"
             android:src="@drawable/baseline_edit_notifications_24"
-            android:contentDescription="@string/send_notification" />
+            android:contentDescription="@string/send_notification"
+            app:tint="?attr/iconTintColor" />
 
 
     </androidx.appcompat.widget.Toolbar>
@@ -46,7 +52,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:src="@drawable/ic_profile" />
+        android:src="@drawable/ic_profile"
+        />
 
     <TextView
         android:id="@+id/org_event_name"

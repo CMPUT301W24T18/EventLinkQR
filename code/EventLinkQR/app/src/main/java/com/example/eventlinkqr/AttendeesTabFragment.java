@@ -1,7 +1,6 @@
 package com.example.eventlinkqr;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +67,12 @@ public class AttendeesTabFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        generateDataForTab(getArguments().getInt(ARG_TAB_POSITION, 0));
     }
 
     /**

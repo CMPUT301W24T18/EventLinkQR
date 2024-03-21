@@ -12,24 +12,42 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <!-- Notification Title -->
+        <!-- Event Name -->
         <TextView
-            android:id="@+id/tvNotificationTitle"
+            android:id="@+id/tvEventName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?attr/notificationHeading"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
             android:ellipsize="end" />
 
-        <!-- Notification Short Description -->
+        <!-- Notification Heading -->
+        <TextView
+            android:id="@+id/tvNotificationHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:textColor="?attr/notificationHeading"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingTop="4dp"/>
+
+        <!-- Notification Description -->
         <TextView
             android:id="@+id/tvNotificationDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:maxLines="1"
-            android:ellipsize="end" />
+            android:textColor="?attr/notificationHeading"
+            android:textStyle="italic"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:paddingTop="4dp"/>
+
     </LinearLayout>
 
     <!-- Timestamp TextView -->
@@ -37,8 +55,8 @@
         android:id="@+id/tvNotificationTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:textSize="14sp"
-        android:textColor="#757575" /> <!-- Use your desired color for the timestamp -->
+        android:textSize="16sp"
+        android:textColor="?attr/notificationHeading"
+        android:paddingTop="4dp" />
 
 </LinearLayout>
