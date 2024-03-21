@@ -128,18 +128,22 @@ public class AttendeeMainActivity extends AppCompatActivity {
                         // Show the remaining clicks in a Toast message, starting from the 4th tap
                         Toast.makeText(AttendeeMainActivity.this, clickCount + " clicks remaining", Toast.LENGTH_SHORT).show();
                     } else if (clickCount == 0) {
-                        FirebaseFirestore.getInstance().collection("Users").document(attUUID)
-                                .get().addOnSuccessListener(documentSnapshot -> {
-                                    Attendee attendee = documentSnapshot.toObject(Attendee.class);
-                                    if (attendee != null && attendee.isAdmin()) {
-                                        // If isAdmin is true, go to AdmMainActivity
-                                        startActivity(new Intent(AttendeeMainActivity.this, AdmMainActivity.class));
-                                    } else {
-                                        // If isAdmin is false, go to EnterPinActivity
-                                        startActivity(new Intent(AttendeeMainActivity.this, EnterPinActivity.class));
-                                    }
-                                });
+
+                        AttendeeManager.getAttendee(attUUID, attendee -> {
+
+                            System.out.println(attendee.isAdmin());
+                            System.out.println(attendee.getUuid());
+                            System.out.println(attendee.getFcmToken());
+
+                            if(attendee != null && attendee.isAdmin()) {
+                                startActivity(new Intent(AttendeeMainActivity.this, AdmMainActivity.class));
+                            } else {
+                                startActivity(new Intent(AttendeeMainActivity.this, EnterPinActivity.class));
+                            }
+                        });
+
                         clickCount = 10; // Reset the click count
+
                     }
 
                 }

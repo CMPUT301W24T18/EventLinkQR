@@ -135,7 +135,7 @@ public class AttendeeProfileActivity extends Fragment {
         Boolean locationEnabled = toggleLocation.isChecked();
 
 
-        Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled);
+        Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
 
         // Validate name is not null or empty
         if (name == null || name.trim().isEmpty()) {

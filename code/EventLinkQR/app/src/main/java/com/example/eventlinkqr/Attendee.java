@@ -29,13 +29,14 @@ public class Attendee {
  * @param fcmToken The Firebase Cloud Messaging token associated with the attendee's device.
  * @param location_enabled Whether the user has enabled location tracking.
  */
-    public Attendee(String uuid, String name, String phoneNumber, String homepage, String fcmToken, Boolean location_enabled) {
+    public Attendee(String uuid, String name, String phoneNumber, String homepage, String fcmToken, Boolean location_enabled, Boolean isAdmin) {
         this.fcmToken = fcmToken;
         this.uuid = uuid;
         this.name = name;
         this.homepage = homepage;
         this.phone_number = phoneNumber;
         this.location_enabled = location_enabled;
+        this.isAdmin = isAdmin != null && isAdmin;
     }
 
     // Uncomment and import BufferedImage if you wish to add image handling.
