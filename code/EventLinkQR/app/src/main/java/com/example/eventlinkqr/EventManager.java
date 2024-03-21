@@ -95,11 +95,10 @@ public class EventManager extends Manager {
      */
     public static void addSignedUpEventsSnapshotcallback(String userID, Consumer<List<Event>> eventCallback) {
         List<Event> events = new ArrayList<>();
-        getCollection().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+        getCollection().addSnapshotListener((querySnapshots, error) -> {
+            if(querySnapshots != null){
                 // Check the list opf attendees for each event and see if the userId is one of them
-                for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                for(DocumentSnapshot doc : querySnapshots.getDocuments()){
                     getCollection().document(doc.getId()).collection("attendees").document(userID).get()
                             .addOnSuccessListener(documentSnapshot -> {
                                 if(documentSnapshot.exists()){
