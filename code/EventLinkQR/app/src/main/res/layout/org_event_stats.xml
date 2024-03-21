@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrganizerEventStats">
+
+    <!-- Stats Title -->
+    <TextView
+        android:id="@+id/textViewStatsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check-in stats"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="16dp" />
+
+    <!-- Stats Description -->
+    <TextView
+        android:id="@+id/textViewStatsDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Stats are updated in real-time. All attendees will be checked in on the day of the event."
+        app:layout_constraintTop_toBottomOf="@id/textViewStatsTitle"
+        app:layout_constraintStart_toStartOf="@id/textViewStatsTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp" />
+
+    <!-- Total Attendance -->
+    <TextView
+        android:id="@+id/textViewTotalAttendance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Total Attendance"
+        android:gravity="center"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewStatsDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp" />
+
+    <!-- Map Fragment Container -->
+    <FrameLayout
+        android:id="@+id/mapPreviewContainer"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:background="#FEF7FF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewTotalAttendance">
+
+        <!-- SupportMapFragment goes here programmatically or via <fragment> tag -->
+
+    </FrameLayout>
+
+    <!-- Start Event Button -->
+    <Button
+        android:id="@+id/buttonStartEvent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Start Event"
+        android:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

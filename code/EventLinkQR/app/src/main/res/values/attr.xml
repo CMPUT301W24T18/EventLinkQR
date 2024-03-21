@@ -1,0 +1,5 @@
+<resources>
+    <attr name="iconTintColor" format="color"/>
+    <attr name="textColor" format="color"/>
+    <attr name="notificationHeading" format="color"/>
+</resources>

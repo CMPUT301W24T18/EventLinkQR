@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/att_navigation"
+    app:startDestination="@id/attendeeHomePage">
+
+    <fragment
+        android:id="@+id/attendeeHomePage"
+        android:name="com.example.eventlinkqr.HomePage"
+        android:label="attendee_home_page"
+        tools:layout="@layout/home_page" >
+        <action
+            android:id="@+id/action_attendeeHomePage_to_attendeeProfilePage"
+            app:destination="@id/attendeeProfilePage" />
+        <action
+            android:id="@+id/action_attendeeHomePage_to_notificationDisplayPage"
+            app:destination="@id/notificationDisplayPage" />
+        <action
+            android:id="@+id/action_attendeeHomePage_to_orgCreateEventFragment"
+            app:destination="@id/orgCreateEventFragment" />
+        <action
+            android:id="@+id/action_attendeeHomePage_to_orgEventFragment"
+            app:destination="@id/orgEventFragment" />
+        <action
+            android:id="@+id/action_attendeeHomePage_to_attendeeEventFragment"
+            app:destination="@id/attendeeEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendeeProfilePage"
+        android:name="com.example.eventlinkqr.AttendeeProfileFragment"
+        android:label="attendee_profile"
+        tools:layout="@layout/attendee_profile" >
+        <action
+            android:id="@+id/action_attendeeProfilePage_to_attendeeHomePage"
+            app:destination="@id/attendeeHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationDisplayPage"
+        android:name="com.example.eventlinkqr.NotificationDisplayFragment"
+        android:label="activity_display_notifications"
+        tools:layout="@layout/notifications_page" >
+        <action
+            android:id="@+id/action_notificationDisplayPage_to_attendeeHomePage"
+            app:destination="@id/attendeeHomePage" />
+        <action
+            android:id="@+id/action_notificationDisplayPage_to_DetailPage"
+            app:destination="@id/notificationDetailedPage" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/notificationDetailedPage"
+        android:name="com.example.eventlinkqr.NotificationDetailFragment"
+        android:label="notificationDetailedPage"
+        tools:layout="@layout/activity_notification_detail" >
+        <action
+            android:id="@+id/action_detailedNotification_to_organizerNotification"
+            app:destination="@id/viewNotification" />
+        <action
+            android:id="@+id/action_detailedNotification_to_userNotification"
+            app:destination="@id/notificationDisplayPage" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/orgCreateEventFragment"
+        android:name="com.example.eventlinkqr.CreateEventFragment"
+        android:label="org_create_event_page"
+        tools:layout="@layout/create_event_page" >
+        <action
+            android:id="@+id/action_orgCreateEventFragment_to_attendeeHomePage"
+            app:destination="@id/attendeeHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/orgEventFragment"
+        android:name="com.example.eventlinkqr.OrgEventFragment"
+        android:label="org_event_page"
+        tools:layout="@layout/org_event_page" >
+        <action
+            android:id="@+id/action_orgEventFragment_to_orgAttendeesPage"
+            app:destination="@id/orgAttendeesPage" />
+        <action
+            android:id="@+id/action_orgEventFragment_to_attendeeHomePage"
+            app:destination="@id/attendeeHomePage" />
+        <action
+            android:id="@+id/action_orgEventFragment_to_viewNotification"
+            app:destination="@id/viewNotification" />
+    </fragment>
+    <fragment
+        android:id="@+id/orgAttendeesPage"
+        android:name="com.example.eventlinkqr.AttendeesPage"
+        android:label="org_attendees_page"
+        tools:layout="@layout/attendees_page" >
+        <action
+            android:id="@+id/action_orgAttendeesPage_to_orgEventFragment"
+            app:destination="@id/orgEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendeeEventFragment"
+        android:name="com.example.eventlinkqr.AttendeeEventFragment"
+        android:label="att_event_page"
+        tools:layout="@layout/att_event_page" >
+        <action
+            android:id="@+id/action_attendeeEventFragment_to_attendeeHomePage"
+            app:destination="@id/attendeeHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewNotification"
+        android:name="com.example.eventlinkqr.OrgNotificationDisplay"
+        android:label="create_event_page"
+        tools:layout="@layout/organizer_notification_display" >
+        <action
+            android:id="@+id/action_viewNotification_to_sendNotification"
+            app:destination="@id/sendNotification" />
+        <action
+            android:id="@+id/action_viewNotifications_to_oneDetailedNotification"
+            app:destination="@id/notificationDetailedPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/sendNotification"
+        android:name="com.example.eventlinkqr.OrgSendNotification"
+        android:label="create_event_page"
+        tools:layout="@layout/create_notification_page" >
+    </fragment>
+</navigation>

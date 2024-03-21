@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AttendeeMainActivity"
+    android:orientation="vertical">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/att_nav_controller"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:navGraph="@navigation/nav" />
+
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/attendee_home_button"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:minWidth="88dip"
+            android:text="Home"
+            android:textColor="?attr/textColor"
+            android:textSize="9sp"
+            app:icon="@drawable/ic_home"
+            app:iconGravity="top"
+            app:iconTint="?attr/iconTintColor"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/attendee_scan_button"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:text="Scan QR"
+            android:textColor="?attr/textColor"
+            android:textSize="9sp"
+            app:icon="@drawable/ic_camera"
+            app:iconGravity="top"
+            app:iconTint="?attr/iconTintColor"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/attendee_notification_button"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:text="Notification"
+            android:textColor="?attr/textColor"
+            android:textSize="9sp"
+            app:icon="@drawable/ic_notifications"
+            app:iconGravity="top"
+            app:iconTint="?attr/iconTintColor" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/attendee_profile_button"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:text="Profile"
+            android:textColor="?attr/textColor"
+            android:textSize="9sp"
+            app:icon="@drawable/ic_profile"
+            app:iconGravity="top"
+            app:iconTint="?attr/iconTintColor"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

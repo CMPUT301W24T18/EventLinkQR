@@ -1,53 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/landing_container"
+    tools:context=".LandingPage">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@color/background_color"
-tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/textView_appName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/imageView_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/app_name"
-        android:textSize="35sp"
-        android:textColor="@color/text_primary"
-        android:textStyle="bold" />
-
-    <ImageView
-        android:id="@+id/imageView_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:contentDescription="img"
-        android:src="@drawable/qr_code_image" />
-
-    <Button
-        android:id="@+id/createProfile"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imageView_logo"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="-94dp"
-        android:layout_marginEnd="50dp"
-        android:text="Create Profile"
-        android:textColor="@color/white"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:background="@color/background_color"
+        android:id="@+id/landing_rel_layout">
 
-    <TextView
-        android:id="@+id/textView_slogan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView_appName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="130dp"
-        android:text="SCAN QR CODE"
-        android:textColor="@color/text_secondary"
-        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/textView_appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/imageView_logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="@string/app_name"
+            android:textSize="35sp"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold" />
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/imageView_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:contentDescription="img"
+            android:src="@drawable/qr_code_image" />
+
+        <Button
+            android:id="@+id/createProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageView_logo"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="-94dp"
+            android:layout_marginEnd="50dp"
+            android:text="Create Profile"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView_slogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView_appName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="130dp"
+            android:text="SCAN QR CODE"
+            android:textColor="@color/text_secondary"
+            android:textSize="18sp" />
+
+
+
+    </RelativeLayout>
+</FrameLayout>

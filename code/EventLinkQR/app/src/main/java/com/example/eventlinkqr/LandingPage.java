@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +42,7 @@ public class LandingPage extends AppCompatActivity {
      *                           being shut down then this Bundle contains the data it most
      *                           recently supplied in onSaveInstanceState(Bundle). Otherwise, it is null.
      */
-  
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,13 +77,15 @@ public class LandingPage extends AppCompatActivity {
 
         Button createProfileButton = findViewById(R.id.createProfile);
 
+        Intent intent = new Intent(LandingPage.this, AttendeeMainActivity.class);
         if (uuid == null) {
             createProfileButton.setOnClickListener(v -> {
-                Intent intent = new Intent(LandingPage.this, AttendeeProfileActivity.class);
-                startActivity(intent);
+                ((RelativeLayout) findViewById(R.id.landing_rel_layout)).setVisibility(View.GONE);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.landing_container, new CreateProfile())
+                        .commit();
             });
         } else {
-            Intent intent = new Intent(LandingPage.this, AttendeeMainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -134,4 +138,3 @@ public class LandingPage extends AppCompatActivity {
         }
     }
 }
-
