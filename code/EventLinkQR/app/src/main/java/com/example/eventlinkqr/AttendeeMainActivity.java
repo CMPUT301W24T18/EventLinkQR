@@ -236,6 +236,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                     callback.onLocationReceived(location);
                 } else {
                     Toast.makeText(this, "Failed to get location", Toast.LENGTH_SHORT).show();
+                    Log.d("Location", "Failed to get location with error: " + task.getException());
                 }
             });
         } else {
@@ -289,6 +290,8 @@ public class AttendeeMainActivity extends AppCompatActivity {
      */
     private void handleMilestone(Milestone milestone) {
         Log.d("Milestone", "Milestone reached: " + milestone.getInfo() + " " + milestone.getValue());
+        //Make a toast to inform the user of their milestone
+        Toast.makeText(this, "Milestone reached: " + milestone.getInfo() + " " + milestone.getValue(), Toast.LENGTH_SHORT).show();
     }
 
 

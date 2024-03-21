@@ -117,10 +117,12 @@ public class OrganizerEventStats extends AppCompatActivity implements OnMapReady
 
             //This padding helps ensure points are visually inside of the map, not just on the boarder
             int padding = 200;
-            myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+//            myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+            myMap.setOnMapLoadedCallback(() -> myMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding)));
         } else {
             LatLng defaultEdmonton = new LatLng(53.5461, -113.4938);
-            myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultEdmonton, 10));
+
+//            myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultEdmonton, 10));
         }
     }
 }
