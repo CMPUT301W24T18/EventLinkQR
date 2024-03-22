@@ -100,12 +100,12 @@ public class EventManager extends Manager {
                 // Check the list opf attendees for each event and see if the userId is one of them
                 for(DocumentSnapshot doc : querySnapshots.getDocuments()){
                     getCollection().document(doc.getId()).collection("attendees").document(userID).get()
-                            .addOnSuccessListener(documentSnapshot -> {
-                                if(documentSnapshot.exists()){
-                                    events.add(EventManager.fromDocument(doc, null));
-                                    eventCallback.accept(events);
-                                }
-                            });
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if(documentSnapshot.exists()){
+                                events.add(EventManager.fromDocument(doc, null));
+                                eventCallback.accept(events);
+                            }
+                        });
                 }
             }
         });
@@ -114,21 +114,28 @@ public class EventManager extends Manager {
 
     /**
      * Add a callback to changes in the Events
-     *
+     * @param userID the user's uuid
      * @param eventCallback The callback to be invoked when the events change
      */
     public static void addAllEventSnapshotCallback(String userID, Consumer<List<Event>> eventCallback) {
+        List<Event> events = new ArrayList<>();
+        // gets all the events the user is not the organiser of
         getCollection().whereNotEqualTo("organizer", userID).addSnapshotListener((querySnapshots, error) -> {
-            if (error != null) {
-                Log.e("Firestore", error.toString());
-                return;
-            }
-
-            if (querySnapshots != null) {
-                eventCallback.accept(querySnapshots.getDocuments().stream().map(d -> EventManager.fromDocument(d, null)).collect(Collectors.toList()));
+            if(querySnapshots != null){
+                // Check the list opf attendees for each event and see if the userId is one of them
+                for(DocumentSnapshot doc : querySnapshots.getDocuments()){
+                    getCollection().document(doc.getId()).collection("attendees").document(userID).get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if(!documentSnapshot.exists()){
+                                events.add(EventManager.fromDocument(doc, null));
+                                eventCallback.accept(events);
+                            }
+                        });
+                }
             }
         });
     }
+
     /**
      * Add a callback to changes in the event attendees.
      *
