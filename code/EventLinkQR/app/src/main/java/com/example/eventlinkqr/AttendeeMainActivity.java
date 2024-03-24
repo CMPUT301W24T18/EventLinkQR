@@ -124,9 +124,11 @@ public class AttendeeMainActivity extends AppCompatActivity {
                     // Reset the click count if the button isn't pressed again within 1.5 seconds
                     clickHandler.postDelayed(clickResetRunnable, 1500);
 
-                    if (clickCount <= 6 && clickCount > 0) {
+                    if (clickCount <= 1 && clickCount > 0) {
                         // Show the remaining clicks in a Toast message, starting from the 4th tap
-                        Toast.makeText(AttendeeMainActivity.this, clickCount + " clicks remaining", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(AttendeeMainActivity.this, clickCount + " clicks remaining", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(AttendeeMainActivity.this, "About to Enter Admin Mode", Toast.LENGTH_SHORT).show();
                     } else if (clickCount == 0) {
 
                         AttendeeManager.getAttendee(attUUID, attendee -> {
