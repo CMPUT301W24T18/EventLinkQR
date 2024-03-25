@@ -6,13 +6,18 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -37,6 +42,8 @@ public class AttendeeProfileFragment extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String uuid; // Unique identifier for the attendee
     private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
+    private ImageView preview;
+    private Bitmap deterministicBitmap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,11 +73,11 @@ public class AttendeeProfileFragment extends Fragment {
 
         btnSave.setOnClickListener(v -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
 
-//        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
-//
-//
-//        ImageView preview = view.findViewById(R.id.ivProfileImage);
-//        preview.setImageBitmap(deterministicBitmap);
+        deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
+
+
+        preview = view.findViewById(R.id.ivProfileImage);
+        preview.setImageBitmap(deterministicBitmap);
 
         photoButton.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), UploadImageActivity.class);
@@ -229,5 +236,37 @@ public class AttendeeProfileFragment extends Fragment {
             // The switch is off
             Toast.makeText(requireActivity(), "Location tracking disabled", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Handles updating the ImageView preview when an image has been uploaded or removed
+     */
+    public void refreshProfileImage(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("images_testing").document(uuid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String base64Image = documentSnapshot.getString("base64Image");
+                        if (base64Image != null && !base64Image.isEmpty()) {
+                            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            preview.setImageBitmap(decodedByte);
+                        } else {
+                            // If no uploaded image is present, display the deterministic image
+                            preview.setImageBitmap(deterministicBitmap);
+                        }
+                    }
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Error displaying profile Image", Toast.LENGTH_SHORT).show();// Handle any errors
+                });
+    }
+
+    /**
+     * Is called to refresh the profile image everytime the AttendeeProfilActivity is on the foreground
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshProfileImage();
     }
 }
