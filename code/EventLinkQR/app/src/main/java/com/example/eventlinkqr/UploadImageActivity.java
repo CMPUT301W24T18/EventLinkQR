@@ -1,6 +1,7 @@
 package com.example.eventlinkqr;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class UploadImageActivity extends AppCompatActivity {
 
     private ImageView imagePreview;
-    private Button upload_button, cancel_button, chooseImage_button;
+    private Button upload_button, cancel_button, chooseImage_button, delete_button;
     private TextView prompt;
     private Uri imageUri;
 
@@ -45,6 +46,7 @@ public class UploadImageActivity extends AppCompatActivity {
         chooseImage_button = findViewById(R.id.button_choose_image);
         upload_button = findViewById(R.id.button_confirm_upload);
         cancel_button = findViewById(R.id.button_cancel_upload);
+        delete_button = findViewById(R.id.button_delete_image);
         prompt = findViewById(R.id.prompt);
 
         Intent intent = getIntent();
@@ -68,9 +70,9 @@ public class UploadImageActivity extends AppCompatActivity {
             if (imageUri != null) {
                 ImageManager imageManager = new ImageManager();
 
-                String userId = ""; //Attendee.getUuid();
-                String fileName = "uploaded_image_" + System.currentTimeMillis() + ".jpg"; // Example file name
-                String imagePath = "users/" + userId + "/" + fileName;
+                SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                String userId = prefs.getString("UUID", null);
+                String imagePath = "images/" + userId + ".jpg";
 
                 imageManager.uploadImage(UploadImageActivity.this, imageUri, userId, imagePath, new ImageManager.UploadCallback() {
                     @Override
@@ -93,5 +95,11 @@ public class UploadImageActivity extends AppCompatActivity {
         });
 
         cancel_button.setOnClickListener(view -> this.finish());
+
+        delete_button.setOnClickListener(view -> {
+            Bitmap deterministicImage = ImageManager.generateDeterministicImage(uuid);
+            ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage);
+            confirmDeleteDialogFragment.show(getSupportFragmentManager(), "confirmDelete");
+        });
     }
 }
