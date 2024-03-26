@@ -2,6 +2,7 @@ package com.example.eventlinkqr;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +41,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private QRCodeScanner scanner;
     private String attUUID;
     private String profileName;
+    private Context context;
 
     public interface LocationCallback {
         void onLocationReceived(LatLng location);
@@ -55,6 +58,9 @@ public class AttendeeMainActivity extends AppCompatActivity {
 
         // Initialize scanner to work from this activity
         scanner = new QRCodeScanner(this);
+
+        // initialize the context to use asd a parameter
+        context = this;
 
         // Set the content view to the attendee main layout
         setContentView(R.layout.main_layout);
@@ -133,7 +139,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                         AttendeeManager.getAttendee(uuid, attendee -> {
                             if(attendee.getLocation_enabled()) {
                                 getLastLocation(location -> {
-                                    EventManager.checkIn(uuid, profileName, code.getEventId(), location).addOnSuccessListener(x -> {
+                                    EventManager.checkIn(context, uuid, profileName, code.getEventId(), location).addOnSuccessListener(x -> {
                                         Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
                                     }).addOnFailureListener(x -> {
                                         Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();

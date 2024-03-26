@@ -1,10 +1,18 @@
 package com.example.eventlinkqr;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -46,26 +54,65 @@ public class EventManager extends Manager {
      * @param eventId      The id of the event to check into
      * @param location     The location of the check-in
      */
-    public static Task<Void> checkIn(String uuid, String attendeeName, String eventId, LatLng location) {
-        Map<String, Object> attendee = new HashMap<>();
-        attendee.put("name", attendeeName);
-        attendee.put("checkedIn", true);
-        attendee.put("location", new GeoPoint(location.latitude, location.longitude));
-        return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
+    public static Task<Void> checkIn(Context context, String uuid, String attendeeName, String eventId, LatLng location) {
+        getCollection().document(eventId).collection("attendees").document(uuid).get()
+            .addOnSuccessListener(documentSnapshot -> {
+                // check if the user is already signed up to the event
+                if (documentSnapshot.exists()) {
+                    Map<String, Object> attendee = new HashMap<>();
+                    int checkInCount = Objects.requireNonNull(documentSnapshot.getLong("checkInCount")).intValue() + 1;
+                    attendee.put("name", attendeeName);
+                    attendee.put("checkedIn", true);
+                    attendee.put("checkInCount", checkInCount);
+                    attendee.put("location", new GeoPoint(location.latitude, location.longitude));
+                    getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
+                } else {
+                    EventManager.signUp(context, uuid, attendeeName, eventId, true, location);
+                }
+
+        });
+        return getCollection().document(eventId).collection("attendees").document(uuid).set(null);
     }
 
     /**
      * Check the given attendee into an event with a location
      *
-     * @param uuid         The uuid of the attendee to check in
+     * @param uuid         The uuid of the attendee to sign up
      * @param attendeeName The name of the attendee to check in
      * @param eventId      The id of the event to check into
+     * @param checkingIn   whether we need to check in immediately after signing up or not
+     * @param location     the location in case the method is getting called from checkin with location on
      */
-    public static Task<Void> signUp(String uuid, String attendeeName, String eventId) {
-        Map<String, Object> attendee = new HashMap<>();
-        attendee.put("name", attendeeName);
-        attendee.put("checkedIn", false);
-        return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
+    public static void signUp(Context context, String uuid, String attendeeName, String eventId, boolean checkingIn, LatLng location) {
+        EventManager.getMaxAttendees(eventId, maxAttendees -> {
+            EventManager.addEventCountSnapshotCallback(eventId, count -> {
+                // check if the max number of attendees was reached
+                if(count[1] >= maxAttendees){
+                    Toast.makeText(context, "This event is Full", Toast.LENGTH_SHORT).show();
+                }else{
+                    // add the user to the list
+                    Map<String, Object> attendee = new HashMap<>();
+                    attendee.put("name", attendeeName);
+                    attendee.put("checkedIn", false);
+                    attendee.put("checkInCount", 0);
+                    getCollection().document(eventId).collection("attendees").document(uuid).set(attendee)
+                        .addOnSuccessListener(unused ->{
+                            Toast.makeText(context, "Signed Up", Toast.LENGTH_SHORT).show();
+
+                            // checkin if the method was called form the checkIn method
+                            if(checkingIn && location != null){
+                                checkIn(context, uuid, attendeeName, eventId, location);
+                            }else if(checkingIn){
+                                checkIn(uuid, attendeeName, eventId);
+                            }
+                        })
+                        .addOnFailureListener(e
+                                -> Toast.makeText(context, "Failed to sign up", Toast.LENGTH_SHORT).show());
+                }
+            });
+        });
+
+
     }
 
     /**
@@ -308,14 +355,14 @@ public class EventManager extends Manager {
      * @param organizer the organizer of the event
      * @param customQR  (optional) encoded text for the qr code
      */
-    public static void createEvent(Event newEvent, String organizer, String customQR) {
+    public static void createEvent(Event newEvent, String organizer, String customQR, int maxAttendees) {
         HashMap<String, Object> newEventData = new HashMap<>();
         newEventData.put("name", newEvent.getName());
         newEventData.put("description", newEvent.getDescription());
         newEventData.put("category", newEvent.getCategory());
         newEventData.put("location", newEvent.getLocation());
         newEventData.put("dateAndTime", newEvent.getDate());
-
+        newEventData.put("maxAttendees", maxAttendees);
         newEventData.put("geoTracking", newEvent.getGeoTracking());
         newEventData.put("organizer", organizer);
 
@@ -336,5 +383,44 @@ public class EventManager extends Manager {
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Event failed to be added");
                 });
+    }
+
+    /**
+     * Checks if the user is signed up to the event
+     *
+     * @param eventId the event id
+     * @param uuid the user's uuid
+     * @param signedUp consumer to receive the boolean result
+     */
+    public static void isSignedUp(String uuid, String eventId, Consumer<Boolean> signedUp){
+        getCollection().document(eventId).collection("attendees").document(uuid).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                if(document.exists()){
+                    signedUp.accept(true);
+                }else{
+                    signedUp.accept(false);
+                }
+            }else{
+                Log.d("Firestore", "get failed with ", task.getException());
+            }
+        });
+    }
+
+    /**
+     * gets the attendee limit for the event, set by the organizer
+     *
+     * @param eventId the event's id
+     * @param signedUp the consumer that will receive the value
+     */
+    public static void getMaxAttendees(String eventId, Consumer<Integer> signedUp){
+        getCollection().document(eventId).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                signedUp.accept(Objects.requireNonNull(document.getLong("maxAttendees")).intValue());
+            }else{
+                Log.d("Firestore", "get failed with ", task.getException());
+            }
+        });
     }
 }
