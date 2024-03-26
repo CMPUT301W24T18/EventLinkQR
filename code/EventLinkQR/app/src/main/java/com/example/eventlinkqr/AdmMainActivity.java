@@ -1,7 +1,4 @@
 package com.example.eventlinkqr;
-import com.example.eventlinkqr.AttendeeProfileActivity;
-
-
 import android.content.Intent;
 import android.os.Bundle;
 
