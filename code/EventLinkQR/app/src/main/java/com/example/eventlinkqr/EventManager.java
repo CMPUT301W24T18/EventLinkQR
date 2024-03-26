@@ -42,8 +42,12 @@ public class EventManager extends Manager {
      */
     public static Task<Void> checkIn(String uuid, String attendeeName, String eventId) {
         Map<String, Object> attendee = new HashMap<>();
-        attendee.put("name", attendeeName);
-        attendee.put("checkedIn", true);
+        EventManager.getCheckinCount(eventId, uuid, checkInCount -> {
+            checkInCount ++;
+            attendee.put("name", attendeeName);
+            attendee.put("checkedIn", true);
+            attendee.put("checkInCount", checkInCount);
+        });
         return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
@@ -54,24 +58,16 @@ public class EventManager extends Manager {
      * @param eventId      The id of the event to check into
      * @param location     The location of the check-in
      */
-    public static Task<Void> checkIn(Context context, String uuid, String attendeeName, String eventId, LatLng location) {
-        getCollection().document(eventId).collection("attendees").document(uuid).get()
-            .addOnSuccessListener(documentSnapshot -> {
-                // check if the user is already signed up to the event
-                if (documentSnapshot.exists()) {
-                    Map<String, Object> attendee = new HashMap<>();
-                    int checkInCount = Objects.requireNonNull(documentSnapshot.getLong("checkInCount")).intValue() + 1;
-                    attendee.put("name", attendeeName);
-                    attendee.put("checkedIn", true);
-                    attendee.put("checkInCount", checkInCount);
-                    attendee.put("location", new GeoPoint(location.latitude, location.longitude));
-                    getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
-                } else {
-                    EventManager.signUp(context, uuid, attendeeName, eventId, true, location);
-                }
-
+    public static Task<Void> checkIn(String uuid, String attendeeName, String eventId, LatLng location) {
+        Map<String, Object> attendee = new HashMap<>();
+        EventManager.getCheckinCount(eventId, uuid, checkInCount -> {
+            checkInCount ++;
+            attendee.put("name", attendeeName);
+            attendee.put("checkedIn", true);
+            attendee.put("checkInCount", checkInCount);
+            attendee.put("location", new GeoPoint(location.latitude, location.longitude));
         });
-        return getCollection().document(eventId).collection("attendees").document(uuid).set(null);
+        return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
     /**
@@ -101,7 +97,7 @@ public class EventManager extends Manager {
 
                             // checkin if the method was called form the checkIn method
                             if(checkingIn && location != null){
-                                checkIn(context, uuid, attendeeName, eventId, location);
+                                checkIn(uuid, attendeeName, eventId, location);
                             }else if(checkingIn){
                                 checkIn(uuid, attendeeName, eventId);
                             }
@@ -310,7 +306,6 @@ public class EventManager extends Manager {
                 }
                 e.setCheckInLocations(locations);
             }
-
         }
 
         return e;
@@ -422,5 +417,21 @@ public class EventManager extends Manager {
                 Log.d("Firestore", "get failed with ", task.getException());
             }
         });
+    }
+
+    /**
+     * finds the amount of times the user has checked into the event
+     * @param eventId the event's id
+     * @param uuid the user's uuid
+     * @param count the consumer to get the count
+     */
+    public static void getCheckinCount(String eventId, String uuid, Consumer<Integer> count){
+        getCollection().document(eventId).collection("attendees").document(uuid).get()
+            .addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                   DocumentSnapshot document = task.getResult();
+                   count.accept(Objects.requireNonNull(document.getLong("checkInCount")).intValue());
+                }
+            });
     }
 }

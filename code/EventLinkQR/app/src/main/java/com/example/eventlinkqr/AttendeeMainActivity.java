@@ -135,10 +135,16 @@ public class AttendeeMainActivity extends AppCompatActivity {
                         AttendeeManager.getAttendee(uuid, attendee -> {
                             if(attendee.getLocation_enabled()) {
                                 getLastLocation(location -> {
-                                    EventManager.checkIn(this, uuid, profileName, code.getEventId(), location).addOnSuccessListener(x -> {
-                                        Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
-                                    }).addOnFailureListener(x -> {
-                                        Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
+                                    EventManager.isSignedUp(uuid, code.getEventId(), isSignedUp -> {
+                                        if(isSignedUp){
+                                            EventManager.checkIn(uuid, profileName, code.getEventId(), location).addOnSuccessListener(x -> {
+                                                Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
+                                            }).addOnFailureListener(x -> {
+                                                Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
+                                            });
+                                        }else{
+                                            EventManager.signUp(this, uuid, profileName, code.getEventId(), true, location);
+                                        }
                                     });
                                 });
                             } else {
