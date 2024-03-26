@@ -12,20 +12,9 @@
         android:paddingLeft="110dp"
         android:textStyle="bold" />
 
-    <ImageView
-        android:id="@+id/attendeeImageView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/ic_profile"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="50dp"
-        android:layout_alignParentTop="true"/>
-
     <LinearLayout
         android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/attendeeImageView"
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         android:orientation="vertical">
