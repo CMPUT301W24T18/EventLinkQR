@@ -96,7 +96,7 @@ public class EventsTabFragment extends Fragment {
                     // redirect to the attendee event page
                     Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_attendeeEventFragment);
                 });
-                EventManager.addAllEventSnapshotCallback(eventsCallback);
+                EventManager.addAllEventSnapshotCallback(((AttendeeMainActivity) requireActivity()).getAttUUID(), eventsCallback);
                 break;
             case 1:
                 createEventButton.setVisibility(View.VISIBLE);
