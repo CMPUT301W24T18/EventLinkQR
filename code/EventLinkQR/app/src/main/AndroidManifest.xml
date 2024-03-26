@@ -43,9 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter></activity>
 
-        <activity android:name=".NotificationDetailActivity"/>
-        <activity android:name=".AdmMainActivity"/>
-
         <activity
             android:name=".OrganizerEventStats"
             android:exported="true"
@@ -68,15 +65,6 @@
             <!--            </intent-filter>-->
         </activity>
 
-        <activity
-            android:name=".AttendeeProfileActivity"
-            android:exported="true">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
-
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
-        </activity>
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false"

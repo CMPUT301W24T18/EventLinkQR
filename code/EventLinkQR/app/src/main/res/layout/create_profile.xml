@@ -28,7 +28,7 @@
         android:layout_centerHorizontal="true"
         android:layout_weight="1"
         android:text="Edit Profile Photo"
-        android:enabled="false"/>
+        android:enabled="true"/>
 
     <TextView
         android:layout_width="match_parent"

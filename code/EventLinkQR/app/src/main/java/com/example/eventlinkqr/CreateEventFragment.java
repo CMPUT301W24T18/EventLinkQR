@@ -1,6 +1,5 @@
 package com.example.eventlinkqr;
 
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -106,7 +104,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
         });
 
-        // send message since the function is not yet implemented
+        // Scan in a custom code.
         chooseQrButton.setOnClickListener(v -> {
             publishButton.setEnabled(false);
             ((AttendeeMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {

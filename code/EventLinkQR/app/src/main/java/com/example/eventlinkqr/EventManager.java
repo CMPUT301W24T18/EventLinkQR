@@ -2,30 +2,21 @@ package com.example.eventlinkqr;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.Filter;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** Class for managing database interaction for events */
@@ -104,18 +95,17 @@ public class EventManager extends Manager {
      */
     public static void addSignedUpEventsSnapshotcallback(String userID, Consumer<List<Event>> eventCallback) {
         List<Event> events = new ArrayList<>();
-        getCollection().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+        getCollection().addSnapshotListener((querySnapshots, error) -> {
+            if(querySnapshots != null){
                 // Check the list opf attendees for each event and see if the userId is one of them
-                for(DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()){
+                for(DocumentSnapshot doc : querySnapshots.getDocuments()){
                     getCollection().document(doc.getId()).collection("attendees").document(userID).get()
-                            .addOnSuccessListener(documentSnapshot -> {
-                                if(documentSnapshot.exists()){
-                                    events.add(EventManager.fromDocument(doc, null));
-                                    eventCallback.accept(events);
-                                }
-                            });
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if(documentSnapshot.exists()){
+                                events.add(EventManager.fromDocument(doc, null));
+                                eventCallback.accept(events);
+                            }
+                        });
                 }
             }
         });
@@ -124,21 +114,28 @@ public class EventManager extends Manager {
 
     /**
      * Add a callback to changes in the Events
-     *
+     * @param userID the user's uuid
      * @param eventCallback The callback to be invoked when the events change
      */
-    public static void addAllEventSnapshotCallback(Consumer<List<Event>> eventCallback) {
-        getCollection().addSnapshotListener((querySnapshots, error) -> {
-            if (error != null) {
-                Log.e("Firestore", error.toString());
-                return;
-            }
-
-            if (querySnapshots != null) {
-                eventCallback.accept(querySnapshots.getDocuments().stream().map(d -> EventManager.fromDocument(d, null)).collect(Collectors.toList()));
+    public static void addAllEventSnapshotCallback(String userID, Consumer<List<Event>> eventCallback) {
+        List<Event> events = new ArrayList<>();
+        // gets all the events the user is not the organiser of
+        getCollection().whereNotEqualTo("organizer", userID).addSnapshotListener((querySnapshots, error) -> {
+            if(querySnapshots != null){
+                // Check the list opf attendees for each event and see if the userId is one of them
+                for(DocumentSnapshot doc : querySnapshots.getDocuments()){
+                    getCollection().document(doc.getId()).collection("attendees").document(userID).get()
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if(!documentSnapshot.exists()){
+                                events.add(EventManager.fromDocument(doc, null));
+                                eventCallback.accept(events);
+                            }
+                        });
+                }
             }
         });
     }
+
     /**
      * Add a callback to changes in the event attendees.
      *
@@ -326,11 +323,14 @@ public class EventManager extends Manager {
                 .addOnSuccessListener(documentReference -> {
                     String eventId = documentReference.getId();
                     String codeText = customQR;
+                    String promotionalText = "eventlinkqr:promotion:" + eventId;
+
                     if (codeText == null) {
                         codeText = "eventlinkqr:" + eventId;
                     }
                     // Automatically generate a QR Code for now. In the future support uploading custom.
                     QRCodeManager.addQRCode(codeText, QRCode.CHECK_IN_TYPE, eventId);
+                    QRCodeManager.addQRCode(promotionalText, QRCode.PROMOTIONAL_TYPE, eventId);
                     Log.e("Firestore", "Event " + newEvent.getName() + " by " + organizer + " successfully added");
                 })
                 .addOnFailureListener(e -> {
