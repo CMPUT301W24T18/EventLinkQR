@@ -41,7 +41,6 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private QRCodeScanner scanner;
     private String attUUID;
     private String profileName;
-    private Context context;
 
     public interface LocationCallback {
         void onLocationReceived(LatLng location);
@@ -58,9 +57,6 @@ public class AttendeeMainActivity extends AppCompatActivity {
 
         // Initialize scanner to work from this activity
         scanner = new QRCodeScanner(this);
-
-        // initialize the context to use asd a parameter
-        context = this;
 
         // Set the content view to the attendee main layout
         setContentView(R.layout.main_layout);
@@ -139,7 +135,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                         AttendeeManager.getAttendee(uuid, attendee -> {
                             if(attendee.getLocation_enabled()) {
                                 getLastLocation(location -> {
-                                    EventManager.checkIn(context, uuid, profileName, code.getEventId(), location).addOnSuccessListener(x -> {
+                                    EventManager.checkIn(this, uuid, profileName, code.getEventId(), location).addOnSuccessListener(x -> {
                                         Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
                                     }).addOnFailureListener(x -> {
                                         Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
