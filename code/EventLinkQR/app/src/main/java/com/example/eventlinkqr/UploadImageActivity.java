@@ -62,11 +62,14 @@ public class UploadImageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String origin = intent.getStringExtra("origin");
-        String uuid = intent.getStringExtra("uuid");
-        if(origin != null && uuid != null && origin.equals("Attendee")) {
+        userUuid = intent.getStringExtra("uuid"); // to get the uuid of the user
+
+        if(origin != null && userUuid != null && origin.equals("Attendee")) {
             // Call the method to generate a deterministic image
-            Bitmap deterministicImage = ImageManager.generateDeterministicImage(uuid);
+            Bitmap deterministicImage = ImageManager.generateDeterministicImage(userUuid);
             imagePreview.setImageBitmap(deterministicImage);
+        }else{
+            // find a way to display the image that's in the database
         }
 
 
@@ -88,11 +91,7 @@ public class UploadImageActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                String userId = prefs.getString("UUID", null);
-                String imagePath = "images/" + userId + ".jpg";
 
-                userUuid = intent.getStringExtra("uuid"); // to get the uuid of the user
                 imageManager.uploadImage(UploadImageActivity.this,  userUuid, image, new ImageManager.UploadCallback() {
                     @Override
                     public void onSuccess() {
@@ -120,9 +119,10 @@ public class UploadImageActivity extends AppCompatActivity {
         cancel_button.setOnClickListener(view -> this.finish());
 
         delete_button.setOnClickListener(view -> {
-            Bitmap deterministicImage = ImageManager.generateDeterministicImage(uuid);
-            ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage);
+            Bitmap deterministicImage = ImageManager.generateDeterministicImage(userUuid);
+            ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage, userUuid);
             confirmDeleteDialogFragment.show(getSupportFragmentManager(), "confirmDelete");
         });
     }
+
 }
