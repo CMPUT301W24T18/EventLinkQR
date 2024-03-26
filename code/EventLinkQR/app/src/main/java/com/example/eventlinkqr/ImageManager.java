@@ -2,27 +2,22 @@ package com.example.eventlinkqr;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.util.Base64;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import androidx.annotation.NonNull;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.io.ByteArrayOutputStream;
 
 /**
  * Manages uploading, fetching, and generating images for Firebase Storage and Firestore.
@@ -83,6 +78,27 @@ public class ImageManager {
     }
 
     /**
+     * Deletes the image from the firebase storage using the uuid that it is linked to
+     *
+     * @param context The context that the function is being called in.
+     * @param uuid The user ID to associate the uploaded image with.
+     */
+    static void deleteImageFromFirebase(ConfirmDeleteDialogFragment context, String uuid) {
+        // reference to image file in Firebase Storage
+        DocumentReference imageRef = Manager.getFirebase().collection("images_testing")
+                .document(uuid);
+
+        imageRef.delete().addOnSuccessListener(aVoid -> {
+            // Image deleted successfully
+            Toast.makeText(context.getContext(), "Image deleted successfully.", Toast.LENGTH_SHORT).show();
+//            imageView.setImageBitmap(null); // Clear the image from the ImageView
+        }).addOnFailureListener(exception -> {
+            // Image deleted unsuccessfully
+            Toast.makeText(context.getContext(), "Deletion failed.", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    /**
      * Generates a deterministic Bitmap image (a smiley face) based on the provided input string.
      * The generated image is a simple colored square, where the color is determined by the hash code of the input.
      *
@@ -132,5 +148,17 @@ public class ImageManager {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         return baos.toByteArray();
+    }
+
+    /**
+     * Decodes the base64Image back t a bitmap and displays it to the specified imageView
+     *
+     * @param base64Image is retrieved from the database as the image that the user uploaded as either profile or poster
+     * @param imageView to display the decoded base64image
+     */
+    public static void displayBase64Image(String base64Image, ImageView imageView) {
+        byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        imageView.setImageBitmap(decodedByte);
     }
 }

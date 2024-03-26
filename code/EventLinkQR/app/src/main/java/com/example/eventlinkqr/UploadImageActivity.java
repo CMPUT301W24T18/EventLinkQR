@@ -22,6 +22,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.IOException;
 
 /**
@@ -35,7 +37,7 @@ public class UploadImageActivity extends AppCompatActivity {
 
     private ImageView imagePreview;
     private Button upload_button, cancel_button, chooseImage_button, delete_button;
-    private TextView prompt;
+//    private TextView prompt;
     private Uri imageUri;
     String userUuid;
 
@@ -58,7 +60,7 @@ public class UploadImageActivity extends AppCompatActivity {
         upload_button = findViewById(R.id.button_confirm_upload);
         cancel_button = findViewById(R.id.button_cancel_upload);
         delete_button = findViewById(R.id.button_delete_image);
-        prompt = findViewById(R.id.prompt);
+//        prompt = findViewById(R.id.prompt);
 
         Intent intent = getIntent();
         String origin = intent.getStringExtra("origin");
@@ -70,13 +72,25 @@ public class UploadImageActivity extends AppCompatActivity {
             imagePreview.setImageBitmap(deterministicImage);
         }else{
             // find a way to display the image that's in the database
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("images_testing").document(userUuid)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if(documentSnapshot.exists() && documentSnapshot.contains("base64Image")) {
+                            String base64Image = documentSnapshot.getString("base64Image");
+                            ImageManager.displayBase64Image(base64Image, imagePreview); // Static method called directly with class name
+                        } else {
+                            Toast.makeText(UploadImageActivity.this, "No image found for this user.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(UploadImageActivity.this, "Failed to fetch image: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
         }
 
 
 //        For Testing Purposes
 //        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage("Basia"); //(Attendee.getUuid);
 //        imagePreview.setImageBitmap(deterministicBitmap);
-
         chooseImage_button.setOnClickListener(view -> getImage.launch("image/*"));
 
         upload_button.setOnClickListener(view -> {

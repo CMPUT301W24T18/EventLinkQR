@@ -36,30 +36,10 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
         builder.setMessage("Are you sure you want to delete this image?")
                 .setPositiveButton("Delete", (dialog, id) -> {
                     imageView.setImageBitmap(bitmapToRestore); // Reset to the original Bitmap
-                    deleteImageFromFirebase(uuid);
+                    ImageManager.deleteImageFromFirebase(ConfirmDeleteDialogFragment.this, uuid);
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> {
                 });
         return builder.create();
-    }
-
-    private void deleteImageFromFirebase(String uuid) {
-        // Construct the reference to image file in Firebase Storage
-        String imagePath = "images/" + uuid + ".jpg";
-        DocumentReference imageRef = Manager.getFirebase().collection("images_testing")
-                .document(uuid);
-
-        imageRef.delete().addOnSuccessListener(aVoid -> {
-            // Image deleted successfully
-
-            // remove the toast from this class
-            //            Toast.makeText(getContext(), "Image deleted successfully.", Toast.LENGTH_SHORT).show();
-//            imageView.setImageBitmap(null); // Clear the image from the ImageView
-
-        }).addOnFailureListener(exception -> {
-            // Handle unsuccessful deletions
-            // remove the toast from this class
-//            Toast.makeText(getContext(), "Deletion failed.", Toast.LENGTH_SHORT).show();
-        });
     }
 }
