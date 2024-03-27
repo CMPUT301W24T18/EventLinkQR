@@ -64,6 +64,8 @@ public class UploadImageActivity extends AppCompatActivity {
         delete_button = findViewById(R.id.button_delete_image);
         imagePreview = findViewById(R.id.image_preview);
 
+        ImageManager.refreshProfileImage(getApplicationContext(), imagePreview);
+
         Intent intent = getIntent();
         String origin = intent.getStringExtra("origin");
         userUuid = intent.getStringExtra("uuid"); // to get the uuid of the user
@@ -132,17 +134,9 @@ public class UploadImageActivity extends AppCompatActivity {
             Bitmap deterministicImage = ImageManager.generateDeterministicImage(userUuid);
             ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage, userUuid);
             confirmDeleteDialogFragment.show(getSupportFragmentManager(), "confirmDelete");
-            confirmDeleteDialogFragment.getDialog().setOnDismissListener(dialog -> {
-                // Perform actions after dialog is dismissed, like showing a Toast
-                Toast.makeText(UploadImageActivity.this, "Operation Completed", Toast.LENGTH_SHORT).show();
-            });
 
             // Update the image preview and close the activity
-            imagePreview.setImageURI(null);
-
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra("imageUri", imageUri.toString());
-            setResult(Activity.RESULT_OK, returnIntent);
+            ImageManager.refreshProfileImage(getApplicationContext(), imagePreview);
             finish();
         });
     }

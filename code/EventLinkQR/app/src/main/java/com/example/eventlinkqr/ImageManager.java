@@ -28,6 +28,8 @@ public class ImageManager {
 
     private final FirebaseStorage storage;
     private final FirebaseFirestore db;
+    private ImageView preview;
+    static String uuid;
 
     /**
      * ImageManager constructor that instantiates the Firebase Storage and Firestore instances
@@ -96,6 +98,29 @@ public class ImageManager {
             // Image deleted unsuccessfully
             Toast.makeText(context.getContext(), "Deletion failed.", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    /**
+     * Handles updating the ImageView preview when an image has been uploaded or removed
+     */
+    public static void refreshProfileImage(Context context, ImageView preview){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("images_testing").document(uuid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String base64Image = documentSnapshot.getString("base64Image");
+                        if (base64Image != null && !base64Image.isEmpty()) {
+                            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            preview.setImageBitmap(decodedByte);
+                        } else {
+                            // If no uploaded image is present, display the deterministic image
+                            preview.setImageBitmap(ImageManager.generateDeterministicImage(uuid));
+                        }
+                    }
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(context, "Error displaying profile Image", Toast.LENGTH_SHORT).show();// Handle any errors
+                });
     }
 
     /**
