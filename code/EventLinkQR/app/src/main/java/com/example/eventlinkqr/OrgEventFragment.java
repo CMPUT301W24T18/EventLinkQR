@@ -1,7 +1,10 @@
 package com.example.eventlinkqr;
 
-import android.app.Dialog;
+import static androidx.core.content.FileProvider.getUriForFile;
+
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 /**
@@ -39,6 +46,7 @@ public class OrgEventFragment extends Fragment {
         Button detailsButton = view.findViewById(R.id.details_button);
         Button attendeesButton = view.findViewById(R.id.attendees_button);
         Button promotionalButton = view.findViewById(R.id.promotional_qr_button);
+        Button sharebutton = view.findViewById(R.id.share_qr_button);
         ImageView notificationSendIcon = view.findViewById(R.id.notification_send_icon);
         TextView eventTitle = view.findViewById(R.id.org_event_name);
         TextView eventLocation = view.findViewById(R.id.org_event_location);
@@ -88,6 +96,9 @@ public class OrgEventFragment extends Fragment {
         QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {
             try {
                 qrCodeImage.setImageBitmap(q.toBitmap(512, 512));
+                sharebutton.setOnClickListener(v -> {
+                    shareImage(q);
+                });
             } catch (QRCodeGeneratorException e) {
                 throw new RuntimeException(e);
             }
@@ -95,20 +106,29 @@ public class OrgEventFragment extends Fragment {
 
         // When clicked, bring up the promotional QR code
         promotionalButton.setOnClickListener(v -> {
-            QRCodeManager.fetchQRCode(event, QRCode.PROMOTIONAL_TYPE).addOnSuccessListener(q -> {
-                Dialog qrCodeDialog = new Dialog(requireActivity());
-                qrCodeDialog.setContentView(R.layout.view_qr_layout);
-                ImageView modalQrCodeImage = qrCodeDialog.findViewById(R.id.view_qr_image);
-                try {
-                    modalQrCodeImage.setImageBitmap(q.toBitmap(512, 512));
-                } catch (QRCodeGeneratorException e) {
-                    throw new RuntimeException(e);
-                }
-                qrCodeDialog.show();
-            });
+            QRCodeManager.fetchQRCode(event, QRCode.PROMOTIONAL_TYPE).addOnSuccessListener(this::shareImage);
         });
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void shareImage(QRCode q) {
+        try {
+            File temp = new File(requireContext().getCacheDir(), "qr.png");
+            FileOutputStream outputStream = new FileOutputStream(temp);
+            q.toBitmap(512, 512).compress(Bitmap.CompressFormat.PNG,100, outputStream);
+
+            Uri contentUri = getUriForFile(requireContext(), "com.example.eventlinkqr.fileprovider", temp);
+
+            // See https://developer.android.com/training/sharing/send#java
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            sendIntent.setType("image/png");
+            startActivity(sendIntent);
+        } catch (IOException | QRCodeGeneratorException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
