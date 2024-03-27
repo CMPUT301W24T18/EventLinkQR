@@ -43,6 +43,7 @@ public class EventManager extends Manager {
     public static void checkIn(Context context, String uuid, String attendeeName, String eventId) {
         Map<String, Object> attendee = new HashMap<>();
         EventManager.getCheckinCount(eventId, uuid, checkInCount -> {
+            //increment the checkin count for the attendee
             int newCheckInCount = checkInCount + 1;
             attendee.put("name", attendeeName);
             attendee.put("checkedIn", true);
@@ -68,6 +69,7 @@ public class EventManager extends Manager {
     public static void checkIn(Context context, String uuid, String attendeeName, String eventId, LatLng location) {
         Map<String, Object> attendee = new HashMap<>();
         EventManager.getCheckinCount(eventId, uuid, checkInCount -> {
+            //increment the checkin count for the attendee
             int newCheckInCount = checkInCount + 1;
             attendee.put("name", attendeeName);
             attendee.put("checkedIn", true);
@@ -95,9 +97,9 @@ public class EventManager extends Manager {
      */
     public static void signUp(Context context, String uuid, String attendeeName, String eventId, boolean checkingIn, LatLng location) {
         EventManager.getMaxAttendees(eventId, maxAttendees -> {
-            EventManager.addEventCountSnapshotCallback(eventId, count -> {
+            EventManager.getNumAttendees(eventId, attendeeCount -> {
                 // check if the max number of attendees was reached
-                if(count[1] >= maxAttendees){
+                if(attendeeCount >= maxAttendees){
                     Toast.makeText(context, "This event is Full", Toast.LENGTH_SHORT).show();
                 }else{
                     // add the user to the list
@@ -448,6 +450,20 @@ public class EventManager extends Manager {
                 if(task.isSuccessful()){
                    DocumentSnapshot document = task.getResult();
                    count.accept(Objects.requireNonNull(document.getLong("checkInCount")).intValue());
+                }
+            });
+    }
+
+    /**
+     * finds the number of attendees currently signed up to the event
+     * @param eventId the event's id
+     * @param count the consumer for the count of attendees
+     */
+    public static void getNumAttendees(String eventId, Consumer<Integer> count){
+        getCollection().document(eventId).collection("attendees").get()
+            .addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    count.accept(task.getResult().size());
                 }
             });
     }

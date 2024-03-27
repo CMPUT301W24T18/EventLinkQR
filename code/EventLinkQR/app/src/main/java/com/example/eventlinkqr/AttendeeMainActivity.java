@@ -136,6 +136,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                             if(attendee.getLocation_enabled()) {
                                 getLastLocation(location -> {
                                     EventManager.isSignedUp(uuid, code.getEventId(), isSignedUp -> {
+                                        // Check if the user isn't signed up, check if there is space for the user to sign up first
                                         if(isSignedUp){
                                             EventManager.checkIn(this, uuid, profileName, code.getEventId(), location);
                                         }else{
@@ -145,6 +146,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                                 });
                             } else {
                                 EventManager.isSignedUp(uuid, code.getEventId(), isSignedUp -> {
+                                    // Check if the user isn't signed up, check if there is space for the user to sign up first
                                     if(isSignedUp){
                                         EventManager.checkIn(this, uuid, profileName, code.getEventId());
                                     }else{
