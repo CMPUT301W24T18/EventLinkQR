@@ -135,6 +135,7 @@ public class UploadImageActivity extends AppCompatActivity {
             ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage, userUuid);
             confirmDeleteDialogFragment.show(getSupportFragmentManager(), "confirmDelete");
 
+            Toast.makeText(getApplicationContext(), "Image deleted successfully.", Toast.LENGTH_SHORT).show();
             // Update the image preview and close the activity
             ImageManager.refreshProfileImage(getApplicationContext(), imagePreview);
             finish();
