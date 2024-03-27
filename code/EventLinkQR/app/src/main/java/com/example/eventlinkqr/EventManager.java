@@ -40,15 +40,22 @@ public class EventManager extends Manager {
      * @param attendeeName The name of the attendee to check in
      * @param eventId      The id of the event to check into
      */
-    public static Task<Void> checkIn(String uuid, String attendeeName, String eventId) {
+    public static void checkIn(Context context, String uuid, String attendeeName, String eventId) {
         Map<String, Object> attendee = new HashMap<>();
         EventManager.getCheckinCount(eventId, uuid, checkInCount -> {
-            checkInCount ++;
+            int newCheckInCount = checkInCount + 1;
             attendee.put("name", attendeeName);
             attendee.put("checkedIn", true);
-            attendee.put("checkInCount", checkInCount);
+            attendee.put("checkInCount", newCheckInCount);
+            getCollection().document(eventId).collection("attendees").document(uuid).set(attendee)
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Toast.makeText(context, "Checked In", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(context, "Failed to check in", Toast.LENGTH_SHORT).show();
+                    }
+                });
         });
-        return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
     /**
@@ -58,16 +65,23 @@ public class EventManager extends Manager {
      * @param eventId      The id of the event to check into
      * @param location     The location of the check-in
      */
-    public static Task<Void> checkIn(String uuid, String attendeeName, String eventId, LatLng location) {
+    public static void checkIn(Context context, String uuid, String attendeeName, String eventId, LatLng location) {
         Map<String, Object> attendee = new HashMap<>();
         EventManager.getCheckinCount(eventId, uuid, checkInCount -> {
-            checkInCount ++;
+            int newCheckInCount = checkInCount + 1;
             attendee.put("name", attendeeName);
             attendee.put("checkedIn", true);
-            attendee.put("checkInCount", checkInCount);
+            attendee.put("checkInCount", newCheckInCount);
             attendee.put("location", new GeoPoint(location.latitude, location.longitude));
+            getCollection().document(eventId).collection("attendees").document(uuid).set(attendee)
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Toast.makeText(context, "Checked In", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(context, "Failed to check in", Toast.LENGTH_SHORT).show();
+                    }
+                });
         });
-        return getCollection().document(eventId).collection("attendees").document(uuid).set(attendee);
     }
 
     /**
@@ -92,18 +106,21 @@ public class EventManager extends Manager {
                     attendee.put("checkedIn", false);
                     attendee.put("checkInCount", 0);
                     getCollection().document(eventId).collection("attendees").document(uuid).set(attendee)
-                        .addOnSuccessListener(unused ->{
-                            Toast.makeText(context, "Signed Up", Toast.LENGTH_SHORT).show();
+                        .addOnCompleteListener(task -> {
+                            if(task.isSuccessful()){
 
-                            // checkin if the method was called form the checkIn method
-                            if(checkingIn && location != null){
-                                checkIn(uuid, attendeeName, eventId, location);
-                            }else if(checkingIn){
-                                checkIn(uuid, attendeeName, eventId);
+                                Toast.makeText(context, "Signed Up", Toast.LENGTH_SHORT).show();
+
+                                // checkin if the method was called form the checkIn method
+                                if(checkingIn && location != null){
+                                    EventManager.checkIn(context, uuid, attendeeName, eventId, location);
+                                }else if(checkingIn){
+                                    EventManager.checkIn(context, uuid, attendeeName, eventId);
+                                }
+                            }else{
+                                Toast.makeText(context, "Failed to sign up", Toast.LENGTH_SHORT).show();
                             }
-                        })
-                        .addOnFailureListener(e
-                                -> Toast.makeText(context, "Failed to sign up", Toast.LENGTH_SHORT).show());
+                        });
                 }
             });
         });

@@ -137,29 +137,21 @@ public class AttendeeMainActivity extends AppCompatActivity {
                                 getLastLocation(location -> {
                                     EventManager.isSignedUp(uuid, code.getEventId(), isSignedUp -> {
                                         if(isSignedUp){
-                                            EventManager.checkIn(uuid, profileName, code.getEventId(), location).addOnSuccessListener(x -> {
-                                                Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
-                                            }).addOnFailureListener(x -> {
-                                                Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
-                                            });
+                                            EventManager.checkIn(this, uuid, profileName, code.getEventId(), location);
                                         }else{
                                             EventManager.signUp(this, uuid, profileName, code.getEventId(), true, location);
                                         }
                                     });
                                 });
                             } else {
-                                EventManager.checkIn(uuid, profileName, code.getEventId()).addOnSuccessListener(x -> {
-                                    Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
-                                }).addOnFailureListener(x -> {
-                                    Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
+                                EventManager.isSignedUp(uuid, code.getEventId(), isSignedUp -> {
+                                    if(isSignedUp){
+                                        EventManager.checkIn(this, uuid, profileName, code.getEventId());
+                                    }else{
+                                        EventManager.signUp(this, uuid, profileName, code.getEventId(), true, null);
+                                    }
                                 });
                             }
-                        });
-
-                        EventManager.checkIn(uuid, profileName, code.getEventId()).addOnSuccessListener(x -> {
-                            Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
-                        }).addOnFailureListener(x -> {
-                            Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
                         });
                     } else if (code.getCodeType() == QRCode.PROMOTIONAL_TYPE) {
                         // This is a promotional code, redirect to the attendee event details page
