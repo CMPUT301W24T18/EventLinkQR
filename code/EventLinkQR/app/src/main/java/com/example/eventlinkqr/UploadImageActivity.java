@@ -40,6 +40,8 @@ public class UploadImageActivity extends AppCompatActivity {
 //    private TextView prompt;
     private Uri imageUri;
     String userUuid;
+    Bitmap deterministicImage;
+    ImageManager imageManager;
 
 
     // ActivityResultLauncher for handling gallery selection result
@@ -60,7 +62,7 @@ public class UploadImageActivity extends AppCompatActivity {
         upload_button = findViewById(R.id.button_confirm_upload);
         cancel_button = findViewById(R.id.button_cancel_upload);
         delete_button = findViewById(R.id.button_delete_image);
-//        prompt = findViewById(R.id.prompt);
+        imagePreview = findViewById(R.id.image_preview);
 
         Intent intent = getIntent();
         String origin = intent.getStringExtra("origin");
@@ -68,7 +70,7 @@ public class UploadImageActivity extends AppCompatActivity {
 
         if(origin != null && userUuid != null && origin.equals("Attendee")) {
             // Call the method to generate a deterministic image
-            Bitmap deterministicImage = ImageManager.generateDeterministicImage(userUuid);
+            deterministicImage = ImageManager.generateDeterministicImage(userUuid);
             imagePreview.setImageBitmap(deterministicImage);
         }else{
             // find a way to display the image that's in the database
@@ -79,24 +81,19 @@ public class UploadImageActivity extends AppCompatActivity {
                         if(documentSnapshot.exists() && documentSnapshot.contains("base64Image")) {
                             String base64Image = documentSnapshot.getString("base64Image");
                             ImageManager.displayBase64Image(base64Image, imagePreview); // Static method called directly with class name
-                        } else {
-                            Toast.makeText(UploadImageActivity.this, "No image found for this user.", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Toast.makeText(UploadImageActivity.this, "No image found for this user.", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(e -> Toast.makeText(UploadImageActivity.this, "Failed to fetch image: " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
         }
 
-
-//        For Testing Purposes
-//        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage("Basia"); //(Attendee.getUuid);
-//        imagePreview.setImageBitmap(deterministicBitmap);
         chooseImage_button.setOnClickListener(view -> getImage.launch("image/*"));
 
         upload_button.setOnClickListener(view -> {
-
             if (imageUri != null) {
-                ImageManager imageManager = new ImageManager();
+                imageManager = new ImageManager();
 
                 // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                 Bitmap image;
@@ -111,7 +108,6 @@ public class UploadImageActivity extends AppCompatActivity {
                     public void onSuccess() {
                         Toast.makeText(UploadImageActivity.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
                         // Update the image preview and close the activity
-                        ImageView imagePreview = findViewById(R.id.image_preview);
                         imagePreview.setImageURI(imageUri);
 
                         Intent returnIntent = new Intent();
@@ -136,6 +132,14 @@ public class UploadImageActivity extends AppCompatActivity {
             Bitmap deterministicImage = ImageManager.generateDeterministicImage(userUuid);
             ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage, userUuid);
             confirmDeleteDialogFragment.show(getSupportFragmentManager(), "confirmDelete");
+
+            // Update the image preview and close the activity
+            imagePreview.setImageURI(null);
+
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("imageUri", imageUri.toString());
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();
         });
     }
 
