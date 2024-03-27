@@ -93,7 +93,6 @@ public class ImageManager {
         imageRef.delete().addOnSuccessListener(aVoid -> {
             // Image deleted successfully
             Toast.makeText(context.getContext(), "Image deleted successfully.", Toast.LENGTH_SHORT).show();
-//            imageView.setImageBitmap(null); // Clear the image from the ImageView
         }).addOnFailureListener(exception -> {
             // Image deleted unsuccessfully
             Toast.makeText(context.getContext(), "Deletion failed.", Toast.LENGTH_SHORT).show();
