@@ -244,6 +244,6 @@ public class AttendeeProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ImageManager.refreshProfileImage(getContext(), preview);
+        ImageManager.refreshProfileImage(getContext(), uuid, preview);
     }
 }

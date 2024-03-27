@@ -64,7 +64,7 @@ public class UploadImageActivity extends AppCompatActivity {
         delete_button = findViewById(R.id.button_delete_image);
         imagePreview = findViewById(R.id.image_preview);
 
-        ImageManager.refreshProfileImage(getApplicationContext(), imagePreview);
+        ImageManager.refreshProfileImage(getApplicationContext(), userUuid, imagePreview);
 
         Intent intent = getIntent();
         String origin = intent.getStringExtra("origin");
@@ -137,7 +137,7 @@ public class UploadImageActivity extends AppCompatActivity {
 
             Toast.makeText(getApplicationContext(), "Image deleted successfully.", Toast.LENGTH_SHORT).show();
             // Update the image preview and close the activity
-            ImageManager.refreshProfileImage(getApplicationContext(), imagePreview);
+            ImageManager.refreshProfileImage(getApplicationContext(), userUuid, imagePreview);
             finish();
         });
     }

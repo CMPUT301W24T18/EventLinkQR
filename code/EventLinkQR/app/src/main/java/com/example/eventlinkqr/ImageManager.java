@@ -101,8 +101,12 @@ public class ImageManager {
 
     /**
      * Handles updating the ImageView preview when an image has been uploaded or removed
+     *
+     * @param context the context that calls this method
+     * @param uuid the uuid of the user that refreshes/updates the profile
+     * @param preview the image view that the image is being updated in
      */
-    public static void refreshProfileImage(Context context, ImageView preview){
+    public static void refreshProfileImage(Context context, String uuid, ImageView preview){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("images_testing").document(uuid).get()
                 .addOnSuccessListener(documentSnapshot -> {
