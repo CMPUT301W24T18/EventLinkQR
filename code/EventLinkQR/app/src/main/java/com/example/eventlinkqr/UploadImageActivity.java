@@ -132,6 +132,10 @@ public class UploadImageActivity extends AppCompatActivity {
             Bitmap deterministicImage = ImageManager.generateDeterministicImage(userUuid);
             ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage, userUuid);
             confirmDeleteDialogFragment.show(getSupportFragmentManager(), "confirmDelete");
+            confirmDeleteDialogFragment.getDialog().setOnDismissListener(dialog -> {
+                // Perform actions after dialog is dismissed, like showing a Toast
+                Toast.makeText(UploadImageActivity.this, "Operation Completed", Toast.LENGTH_SHORT).show();
+            });
 
             // Update the image preview and close the activity
             imagePreview.setImageURI(null);
