@@ -16,6 +16,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -85,10 +88,22 @@ public class AdminUsersFragment extends Fragment {
 
         db.collection("Users").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                usersList.clear(); // Clear the list to avoid duplicating items if this method is called again
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Attendee attendee = document.toObject(Attendee.class);
                     usersList.add(attendee);
                 }
+
+                // Sort the usersList here
+                Collections.sort(usersList, new Comparator<Attendee>() {
+                    @Override
+                    public int compare(Attendee user1, Attendee user2) {
+                        // Replace 'getName()' with your actual method in Attendee class that returns the user's name
+                        return user1.getName().compareToIgnoreCase(user2.getName());
+                    }
+                });
+
+                // Notify the adapter
                 adapter.notifyDataSetChanged();
             } else {
                 // Handle the error

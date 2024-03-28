@@ -16,6 +16,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A Fragment that represents the admin events view in the application.
@@ -67,6 +69,17 @@ import java.util.ArrayList;
                     event.setId(document.getId());
                     eventsList.add(event);
                 }
+
+                // Sort eventsList here
+                Collections.sort(eventsList, new Comparator<Event>() {
+                    @Override
+                    public int compare(Event event1, Event event2) {
+                        // Replace 'getEventName()' with your actual method name that returns the event name
+                        return event1.getName().compareToIgnoreCase(event2.getName());
+                    }
+                });
+
+                // Notify the adapter
                 adapter.notifyDataSetChanged();
             } else {
                 // Handle the error

@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -68,7 +70,10 @@ public class AttendeeDetailsFragment extends Fragment {
         toolbar.setNavigationOnClickListener(v -> {
             // Handle the back button action
             if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout,new AdminUsersFragment());
+                fragmentTransaction.commit();
             }
         });
 
@@ -134,7 +139,10 @@ public class AttendeeDetailsFragment extends Fragment {
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(view.getContext(), "Attendee deleted successfully", Toast.LENGTH_SHORT).show();
                                     if (getActivity() != null) {
-                                        getActivity().getSupportFragmentManager().popBackStack();
+                                        FragmentManager fragmentManager = getParentFragmentManager();
+                                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                        fragmentTransaction.replace(R.id.frame_layout,new AdminUsersFragment());
+                                        fragmentTransaction.commit();
                                     }
                                 })
                                 .addOnFailureListener(e -> {

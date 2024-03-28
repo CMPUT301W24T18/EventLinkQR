@@ -15,6 +15,8 @@ import java.util.Locale;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -64,7 +66,10 @@ public class EventDetailsFragment extends Fragment {
         toolbar.setNavigationOnClickListener(v -> {
             // Handle the back button action
             if (getActivity() != null) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout,new AdminEventsFragment());
+                fragmentTransaction.commit();
             }
         });
 
@@ -126,7 +131,10 @@ public class EventDetailsFragment extends Fragment {
                             .addOnSuccessListener(aVoid -> {
                                 Toast.makeText(view.getContext(), "Event deleted successfully", Toast.LENGTH_SHORT).show();
                                 if (getActivity() != null) {
-                                    getActivity().getSupportFragmentManager().popBackStack();
+                                    FragmentManager fragmentManager = getParentFragmentManager();
+                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                    fragmentTransaction.replace(R.id.frame_layout,new AdminEventsFragment());
+                                    fragmentTransaction.commit();
                                 }
                             })
                             .addOnFailureListener(e -> Toast.makeText(view.getContext(), "Error deleting event", Toast.LENGTH_SHORT).show());
