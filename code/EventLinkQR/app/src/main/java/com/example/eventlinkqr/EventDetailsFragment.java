@@ -13,19 +13,33 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * A Fragment that displays the details of an event, including options to view and delete the event.
+ * This class interacts with Firebase Firestore to retrieve and delete event data.
+ */
 public class EventDetailsFragment extends Fragment {
 
     private String eventId;
 
+    /**
+     * Default constructor required for instantiating the fragment.
+     */
     public EventDetailsFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Creates a new instance of EventDetailsFragment with a specific event ID.
+     *
+     * @param eventId The ID of the event to display.
+     * @return EventDetailsFragment An instance of EventDetailsFragment with event ID bundled.
+     */
     public static EventDetailsFragment newInstance(String eventId) {
         EventDetailsFragment fragment = new EventDetailsFragment();
         Bundle args = new Bundle();
@@ -34,9 +48,25 @@ public class EventDetailsFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Inflates the layout for the fragment's view and initiates the process of loading event details.
+     *
+     * @param inflater LayoutInflater object to inflate any views in the fragment
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * @return View Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_details, container, false);
+
+        Toolbar toolbar = view.findViewById(R.id.create_event_toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            // Handle the back button action
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
         if (getArguments() != null) {
             eventId = getArguments().getString("eventId");
@@ -49,6 +79,12 @@ public class EventDetailsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Fetches event details from Firestore and populates the UI with these details.
+     *
+     * @param id The unique ID of the event.
+     * @param view The view to populate with event data.
+     */
     private void fetchEventDetails(String id, View view) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Events").document(id).get().addOnSuccessListener(documentSnapshot -> {
@@ -73,6 +109,12 @@ public class EventDetailsFragment extends Fragment {
         }).addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to load event.", Toast.LENGTH_SHORT).show());
     }
 
+    /**
+     * Initiates the deletion process for the current event.
+     *
+     * @param eventId The unique ID of the event to be deleted.
+     * @param view The view from which the delete action was initiated.
+     */
     private void deleteEvent(String eventId, View view) {
         new AlertDialog.Builder(getContext())
                 .setTitle("Delete Event")
@@ -94,6 +136,12 @@ public class EventDetailsFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Handles the conversion and formatting of the event date and time from Firebase Timestamp to a human-readable format.
+     *
+     * @param event The event object containing the Firebase Timestamp.
+     * @param DateTextView The TextView where the formatted date and time should be displayed.
+     */
     private void handleDateTime(Event event,TextView DateTextView ){
 
         com.google.firebase.Timestamp firebaseTimestamp = event.getDate();

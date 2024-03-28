@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import androidx.appcompat.widget.Toolbar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class AttendeeDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     /**
      * Factory method to create a new instance of this fragment using the provided UUID.
      *
@@ -61,6 +63,14 @@ public class AttendeeDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attendee_details, container, false);
+
+        Toolbar toolbar = view.findViewById(R.id.create_event_toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            // Handle the back button action
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
         if (getArguments() != null) {
             attendeeUuid = getArguments().getString("attendeeUuid");
