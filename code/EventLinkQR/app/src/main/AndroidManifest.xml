@@ -30,6 +30,15 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
+        <!--https://developer.android.com/reference/androidx/core/content/FileProvider -->
+        <provider
+            android:name="com.example.eventlinkqr.QRFileProvider"
+            android:authorities="com.example.eventlinkqr.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+        </provider>
+
         <activity
             android:name=".UploadImageActivity"
             android:exported="true">
