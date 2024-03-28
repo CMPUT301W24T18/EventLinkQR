@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,6 +17,8 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -161,13 +164,13 @@ public class EventManager extends Manager {
             if(querySnapshots != null){
                 // Check the list opf attendees for each event and see if the userId is one of them
                 for(DocumentSnapshot doc : querySnapshots.getDocuments()){
-                    getCollection().document(doc.getId()).collection("attendees").document(userID).get()
-                        .addOnSuccessListener(documentSnapshot -> {
-                            if(documentSnapshot.exists()){
-                                events.add(EventManager.fromDocument(doc, null));
-                                eventCallback.accept(events);
-                            }
-                        });
+                    getCollection().document(doc.getId()).collection("attendees").document(userID)
+                            .addSnapshotListener((value, error1) -> {
+                        if(value != null){
+                            events.add(EventManager.fromDocument(doc, null));
+                            eventCallback.accept(events);
+                        }
+                    });
                 }
             }
         });
@@ -186,13 +189,13 @@ public class EventManager extends Manager {
             if(querySnapshots != null){
                 // Check the list opf attendees for each event and see if the userId is one of them
                 for(DocumentSnapshot doc : querySnapshots.getDocuments()){
-                    getCollection().document(doc.getId()).collection("attendees").document(userID).get()
-                        .addOnSuccessListener(documentSnapshot -> {
-                            if(!documentSnapshot.exists()){
-                                events.add(EventManager.fromDocument(doc, null));
-                                eventCallback.accept(events);
-                            }
-                        });
+                    getCollection().document(doc.getId()).collection("attendees").document(userID)
+                            .addSnapshotListener((value, error1) -> {
+                                if(value != null){
+                                    events.add(EventManager.fromDocument(doc, null));
+                                    eventCallback.accept(events);
+                                }
+                            });
                 }
             }
         });
@@ -204,15 +207,22 @@ public class EventManager extends Manager {
      * @param eventName        Event to get attendees for
      * @param attendeeCallback The callback to be invoked when the event attendees change
      */
-    public static void addEventAttendeeSnapshotCallback(String eventName, Consumer<List<String>> attendeeCallback) {
+    public static void addEventAttendeeSnapshotCallback(String eventName, Consumer<List<Attendees>> attendeeCallback) {
         getCollection().document(eventName).collection("attendees").addSnapshotListener((querySnapshots, error) -> {
             if (error != null) {
                 Log.e("Firestore", error.toString());
                 return;
             }
-
             if (querySnapshots != null) {
-                attendeeCallback.accept(querySnapshots.getDocuments().stream().map(d -> d.getString("name")).collect(Collectors.toList()));
+                List<Attendees> attendees = new ArrayList<>();
+                for(DocumentSnapshot doc : querySnapshots.getDocuments()){
+                    Attendees attendee = doc.toObject(Attendees.class);
+                    if(attendee != null) {
+                        attendees.add(attendee);
+                    }
+                }
+                attendeeCallback.accept(attendees);
+
             }
         });
     }
@@ -224,7 +234,7 @@ public class EventManager extends Manager {
      * @param checkedIn        Filter on checked-in / not-checked-in attendees
      * @param attendeeCallback The callback to be invoked when the event attendees change
      */
-    public static void addEventAttendeeSnapshotCallback(String eventName, boolean checkedIn, Consumer<List<String>> attendeeCallback) {
+    public static void addEventAttendeeSnapshotCallback(String eventName, boolean checkedIn, Consumer<List<Attendees>> attendeeCallback) {
         getCollection().document(eventName).collection("attendees").whereEqualTo("checkedIn", checkedIn).addSnapshotListener((querySnapshots, error) -> {
             // add all attendees that have checked in
             if (error != null) {
@@ -232,7 +242,15 @@ public class EventManager extends Manager {
                 return;
             }
             if (querySnapshots != null) {
-                attendeeCallback.accept(querySnapshots.getDocuments().stream().map(d -> d.getString("name")).collect(Collectors.toList()));
+                List<Attendees> attendees = new ArrayList<>();
+                for(DocumentSnapshot doc : querySnapshots.getDocuments()){
+                    Attendees attendee = doc.toObject(Attendees.class);
+                    if(attendee != null) {
+                        attendees.add(attendee);
+                    }
+                }
+                attendeeCallback.accept(attendees);
+
             }
         });
     }

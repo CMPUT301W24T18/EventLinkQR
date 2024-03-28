@@ -36,7 +36,6 @@ public class AttendeeProfileFragment extends Fragment {
     private Switch toggleLocation; // Used for location permission
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String uuid; // Unique identifier for the attendee
-    private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,8 +58,6 @@ public class AttendeeProfileFragment extends Fragment {
         toggleLocation.setOnCheckedChangeListener((buttonView, isChecked) -> {
             onToggleLocationButtonClicked(isChecked);
         });
-
-        attendeeArrayAdapter = AttendeeArrayAdapter.getInstance(); // Get the singleton instance of the adapter
 
         checkUUIDAndLoadProfile(); // Check UUID and load profile data
 
