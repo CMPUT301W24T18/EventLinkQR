@@ -16,14 +16,32 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
+
+/**
+ * A Fragment subclass that displays the details of an attendee.
+ * It includes functionality for fetching attendee details from Firestore
+ * and deleting the attendee's data.
+ *
+ * Usage: This fragment should be used within an activity where details of a specific
+ * attendee need to be displayed and managed.
+ */
 public class AttendeeDetailsFragment extends Fragment {
 
     private String attendeeUuid;
 
+    /**
+     * Default constructor. Required for the instantiation of the fragment.
+     */
     public AttendeeDetailsFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Factory method to create a new instance of this fragment using the provided UUID.
+     *
+     * @param attendeeUuid UUID of the attendee whose details are to be displayed.
+     * @return A new instance of fragment AttendeeDetailsFragment.
+     */
     public static AttendeeDetailsFragment newInstance(String attendeeUuid) {
         AttendeeDetailsFragment fragment = new AttendeeDetailsFragment();
         Bundle args = new Bundle();
@@ -32,6 +50,14 @@ public class AttendeeDetailsFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attendee_details, container, false);
@@ -52,6 +78,12 @@ public class AttendeeDetailsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Fetches the details of an attendee from Firestore and populates the views in the fragment.
+     *
+     * @param uuid The UUID of the attendee.
+     * @param view The view of the fragment.
+     */
     private void fetchAttendeeDetails(String uuid, View view) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Users").document(uuid).get().addOnSuccessListener(documentSnapshot -> {
@@ -72,6 +104,13 @@ public class AttendeeDetailsFragment extends Fragment {
         });
     }
 
+    /**
+     * Deletes the attendee from Firestore and displays a toast message on success or failure.
+     * This method also handles the display of a confirmation dialog before deletion.
+     *
+     * @param attendeeUuid The UUID of the attendee to be deleted.
+     * @param view         The view of the fragment.
+     */
     private void deleteAttendee(String attendeeUuid, View view) {
         new AlertDialog.Builder(getContext())
                 .setTitle("Delete User")

@@ -14,12 +14,33 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Fragment used for managing images in an admin context within an Android application.
+ * This fragment allows admins to view a list of images, and provides functionality for deleting images.
+ *
+ * The class interacts with Firestore to fetch and delete images, and uses a custom adapter
+ * to bind image data to a ListView.
+ *
+ * Usage: This fragment should be used within an activity where admin users can manage images.
+ * It requires an XML layout resource named 'fragment_admin_image' that contains a ListView
+ * for displaying the images.
+ */
 public class AdminImagesFragment extends Fragment {
     private ListView listView;
     private ImageAdapter adapter;
     private List<ImageModel> imageList;
     private List<String> documentIds; // List to hold document IDs
 
+
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * This is optional, and non-graphical fragments can return null.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,6 +55,11 @@ public class AdminImagesFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Fetches images from the Firestore database and populates them into the image list.
+     * The method queries the 'images_testing' collection in Firestore, extracts image data,
+     * and updates the ListView adapter.
+     */
     private void fetchImages() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("images_testing").get()
@@ -50,7 +76,10 @@ public class AdminImagesFragment extends Fragment {
                 .addOnFailureListener(e -> {/* Handle error */});
     }
 
-
+    /**
+     * Sets up a listener for the ListView. This listener handles item click events,
+     * triggering a confirmation dialog for deleting the selected image.
+     */
     private void setupListViewListener() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             // Get the document ID for the selected image
@@ -59,6 +88,13 @@ public class AdminImagesFragment extends Fragment {
         });
     }
 
+    /**
+     * Displays a confirmation dialog for deleting an image. If the user confirms,
+     * the method {@link #deleteImage(String, int)} is called to perform the deletion.
+     *
+     * @param documentId The Firestore document ID of the image to be deleted.
+     * @param position   The position of the image in the ListView.
+     */
     private void showDeleteConfirmationDialog(String documentId, int position) {
         new AlertDialog.Builder(getActivity())
                 .setTitle("Delete Image")
@@ -69,6 +105,14 @@ public class AdminImagesFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Deletes an image from Firestore and updates the ListView.
+     * This method removes the image from both the Firestore database and the local image list,
+     * then notifies the adapter to refresh the ListView.
+     *
+     * @param documentId The Firestore document ID of the image to be deleted.
+     * @param position   The position of the image in the ListView.
+     */
     private void deleteImage(String documentId, int position) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("images_testing").document(documentId)

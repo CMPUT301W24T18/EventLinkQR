@@ -17,12 +17,33 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for managing and displaying a list of events in an admin context.
+ * This adapter is used to bind event data to views and provide interactive functionality
+ * like viewing event details and deleting events.
+ *
+ **/
 public class AdminEventAdapter extends ArrayAdapter<Event> {
 
+    /**
+     * Constructor for the AdminEventAdapter.
+     *
+     * @param context The current context. This value cannot be null.
+     * @param events  The list of events to display. This value cannot be null.
+     */
     public AdminEventAdapter(Context context, ArrayList<Event> events) {
         super(context, 0, events);
     }
 
+    /**
+     * Provides a view for an AdapterView (ListView, GridView, etc.)
+     *
+     * @param position    The position in the data set of the data item.
+     * @param convertView The old view to reuse, if possible. This value may be null.
+     * @param parent      The parent view that this view will eventually be attached to.
+     *                    This value cannot be null.
+     * @return A View corresponding to the data at the specified position.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position

@@ -23,10 +23,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the  factory method to
- * create an instance of this fragment.
+ * Fragment used for managing users (attendees) in an admin context within an Android application.
+ * This fragment allows admins to view a list of users and provides functionality for refreshing
+ * the user list.
+ *
+ * The class interacts with Firestore to fetch users and uses a custom adapter
+ * to bind user data to a ListView.
  */
+
 public class AdminUsersFragment extends Fragment {
 
     private ListView userListView;
@@ -34,10 +38,22 @@ public class AdminUsersFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private AdminUserAdapter adapter;
 
+    /**
+     * Default constructor. Required for instantiation of the fragment.
+     */
     public AdminUsersFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * This is optional, and non-graphical fragments can return null.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate views in the fragment.
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +73,12 @@ public class AdminUsersFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Sets up Firestore database interaction and initializes the ListView adapter.
+     * This method fetches user data from Firestore and populates the ListView via the adapter.
+     *
+     * @param view The current view of the fragment.
+     */
     private void setupFirebaseAndAdapter(View view) {
         // Initialize Firestore and Adapter here
         FirebaseFirestore db = FirebaseFirestore.getInstance();

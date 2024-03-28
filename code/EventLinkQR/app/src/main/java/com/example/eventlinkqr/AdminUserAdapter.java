@@ -17,12 +17,33 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * An ArrayAdapter subclass for managing and displaying a list of attendees (users) in an admin context.
+ * This adapter binds attendee data to views and provides interactive functionality such as
+ * viewing attendee details and deleting attendees.
+ */
+
 public class AdminUserAdapter extends ArrayAdapter<Attendee> {
 
+    /**
+     * Constructor for the AdminUserAdapter.
+     *
+     * @param context  The current context. This value cannot be null.
+     * @param Attendee The list of attendees to display. This value cannot be null.
+     */
     public AdminUserAdapter(Context context, ArrayList<Attendee> Attendee) {
         super(context, 0, Attendee);
     }
 
+    /**
+     * Provides a view for an AdapterView (ListView, GridView, etc.)
+     *
+     * @param position    The position in the data set of the data item.
+     * @param convertView The old view to reuse, if possible. This value may be null.
+     * @param parent      The parent view that this view will eventually be attached to.
+     *                    This value cannot be null.
+     * @return A View corresponding to the data at the specified position.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position

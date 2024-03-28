@@ -9,10 +9,26 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.eventlinkqr.databinding.AdmMainActivityBinding;
 
+/**
+ * Main activity for the Admin section of the EventLink QR application.
+ * This activity is responsible for handling the navigation between different fragments
+ * (such as AdminEventsFragment, AdminUsersFragment, AdminImagesFragment) and switching to
+ * the AttendeeMainActivity.
+ *
+ * The activity uses a bottom navigation view to facilitate the navigation between different
+ * sections of the admin interface.
+ */
 public class AdmMainActivity extends AppCompatActivity {
 
     AdmMainActivityBinding binding;
 
+    /**
+     * Initializes the activity. This method sets up the UI and fragment navigation.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down, this Bundle contains the most recent data,
+     *                           or null if there is no data.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -37,6 +53,12 @@ public class AdmMainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Replaces the current fragment in the 'frame_layout' with the specified fragment.
+     * This method is used to switch between the different admin sections.
+     *
+     * @param fragment The new fragment to display.
+     */
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
