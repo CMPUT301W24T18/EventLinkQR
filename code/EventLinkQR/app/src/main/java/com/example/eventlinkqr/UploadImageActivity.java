@@ -143,9 +143,9 @@ public class UploadImageActivity extends AppCompatActivity {
 //            // Update the image preview and close the activity
 //            imagePreview.setImageURI(null);
 
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra("imageUri", imageUri.toString());
-            setResult(Activity.RESULT_OK, returnIntent);
+//            Intent returnIntent = new Intent();
+//            returnIntent.putExtra("imageUri", imageUri.toString());
+//            setResult(Activity.RESULT_OK, returnIntent);
             finish();
         });
     }
