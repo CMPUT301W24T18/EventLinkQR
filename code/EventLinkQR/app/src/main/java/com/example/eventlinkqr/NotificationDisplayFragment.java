@@ -46,6 +46,7 @@ public class NotificationDisplayFragment extends Fragment {
      */
     private SwipeRefreshLayout swipeRefreshLayout;
 
+
     /**
      * Initializes the activity, its views, and fetches the initial set of notifications.
      */
@@ -61,7 +62,6 @@ public class NotificationDisplayFragment extends Fragment {
 
         listView = view.findViewById(R.id.lvNotifications);
         List<Notification> notifications = new ArrayList<>();
-        listView.setAdapter(adapter);
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

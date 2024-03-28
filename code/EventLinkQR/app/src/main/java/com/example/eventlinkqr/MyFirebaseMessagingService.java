@@ -31,13 +31,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
+        System.out.println("HELLO0!!!!!!!!!!!!!!!!!!!!!!!!1 I HAVE ENTEREED SHOW NOTIFICATION!!!");
         // Handling data payload
         if (remoteMessage.getData().size() > 0) {
+            System.out.println("byeeeeeeeeeeeeeeee!!!!!!!!!!!!!!!!!!!!!!!!1 I HAVE ENTEREED SHOW NOTIFICATION!!!");
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             // Extract the title and body from the data payload.
             String title = remoteMessage.getData().get("title");
             String messageBody = remoteMessage.getData().get("body");
-            // If both title and body are present, display the notification.
+//             If both and body are present, display the notification.
             if (title != null && messageBody != null) {
                 showNotification(title, messageBody);
             }

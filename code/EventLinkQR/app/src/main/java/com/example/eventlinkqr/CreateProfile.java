@@ -130,7 +130,7 @@ public class CreateProfile extends Fragment {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("UUID", uuid);
             editor.apply();
-            Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled);
+            Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Users").document(uuid).set(attendee)
                     .addOnSuccessListener(aVoid -> {

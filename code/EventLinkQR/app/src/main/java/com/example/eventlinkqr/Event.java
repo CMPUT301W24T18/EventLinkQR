@@ -47,6 +47,10 @@ public class Event {
         this.description = description;
     }
 
+    // No-argument constructor required for Firebase deserialization
+    public Event() {
+    }
+
     /**
      * gets the event's name
      * @return the event's name
@@ -157,8 +161,13 @@ public class Event {
         return checkedInAttendeesCount;
     }
 
-    public void setCheckedInAttendeesCount(int count) {
-        checkedInAttendeesCount = count;
+    public void setCheckedInAttendeesCount(Integer count) {
+
+        if (count == null) {
+            this.checkedInAttendeesCount = 0;
+        } else {
+            this.checkedInAttendeesCount = count;
+        }
     }
 
     /**
