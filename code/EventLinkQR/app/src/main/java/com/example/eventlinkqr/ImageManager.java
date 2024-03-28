@@ -30,15 +30,12 @@ import java.io.ByteArrayOutputStream;
  * generate deterministic images based on a given input, and convert Bitmap images to byte arrays for uploading.
  */
 public class ImageManager {
-
-    private final FirebaseStorage storage;
     private final FirebaseFirestore db;
 
     /**
      * ImageManager constructor that instantiates the Firebase Storage and Firestore instances
      */
     public ImageManager(){
-        storage = FirebaseStorage.getInstance();
         db = FirebaseFirestore.getInstance();
     }
 
