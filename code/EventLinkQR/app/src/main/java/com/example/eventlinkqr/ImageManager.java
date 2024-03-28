@@ -28,8 +28,6 @@ public class ImageManager {
 
     private final FirebaseStorage storage;
     private final FirebaseFirestore db;
-    private ImageView preview;
-    static String uuid;
 
     /**
      * ImageManager constructor that instantiates the Firebase Storage and Firestore instances
@@ -85,7 +83,7 @@ public class ImageManager {
      * @param context The context that the function is being called in.
      * @param uuid The user ID to associate the uploaded image with.
      */
-    static void deleteImageFromFirebase(ConfirmDeleteDialogFragment context, String uuid) {
+    static void deleteImageFromFirebase(ConfirmDeleteDialogFragment context, String uuid, UploadCallback callback) {
         // reference to image file in Firebase Storage
         DocumentReference imageRef = Manager.getFirebase().collection("images_testing")
                 .document(uuid);
@@ -93,37 +91,12 @@ public class ImageManager {
         imageRef.delete().addOnSuccessListener(aVoid -> {
             // Image deleted successfully
             Toast.makeText(context.getContext(), "Image deleted successfully.", Toast.LENGTH_SHORT).show();
+            callback.onSuccess();
         }).addOnFailureListener(exception -> {
             // Image deleted unsuccessfully
             Toast.makeText(context.getContext(), "Deletion failed.", Toast.LENGTH_SHORT).show();
+            callback.onFailure(exception);
         });
-    }
-
-    /**
-     * Handles updating the ImageView preview when an image has been uploaded or removed
-     *
-     * @param context the context that calls this method
-     * @param uuid the uuid of the user that refreshes/updates the profile
-     * @param preview the image view that the image is being updated in
-     */
-    public static void refreshProfileImage(Context context, String uuid, ImageView preview){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("images_testing").document(uuid).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        String base64Image = documentSnapshot.getString("base64Image");
-                        if (base64Image != null && !base64Image.isEmpty()) {
-                            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
-                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            preview.setImageBitmap(decodedByte);
-                        } else {
-                            // If no uploaded image is present, display the deterministic image
-                            preview.setImageBitmap(ImageManager.generateDeterministicImage(uuid));
-                        }
-                    }
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(context, "Error displaying profile Image", Toast.LENGTH_SHORT).show();// Handle any errors
-                });
     }
 
     /**

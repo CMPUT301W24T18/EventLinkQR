@@ -6,9 +6,11 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -37,7 +39,7 @@ public class UploadImageActivity extends AppCompatActivity {
 
     private ImageView imagePreview;
     private Button upload_button, cancel_button, chooseImage_button, delete_button;
-//    private TextView prompt;
+    //    private TextView prompt;
     private Uri imageUri;
     String userUuid;
     Bitmap deterministicImage;
@@ -63,8 +65,6 @@ public class UploadImageActivity extends AppCompatActivity {
         cancel_button = findViewById(R.id.button_cancel_upload);
         delete_button = findViewById(R.id.button_delete_image);
         imagePreview = findViewById(R.id.image_preview);
-
-        ImageManager.refreshProfileImage(getApplicationContext(), userUuid, imagePreview);
 
         Intent intent = getIntent();
         String origin = intent.getStringExtra("origin");
@@ -109,8 +109,9 @@ public class UploadImageActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess() {
                         Toast.makeText(UploadImageActivity.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
+                        refreshImageView();
                         // Update the image preview and close the activity
-                        imagePreview.setImageURI(imageUri);
+//                        imagePreview.setImageURI(imageUri);
 
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("imageUri", imageUri.toString());
@@ -134,12 +135,49 @@ public class UploadImageActivity extends AppCompatActivity {
             Bitmap deterministicImage = ImageManager.generateDeterministicImage(userUuid);
             ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage, userUuid);
             confirmDeleteDialogFragment.show(getSupportFragmentManager(), "confirmDelete");
+//            confirmDeleteDialogFragment.getDialog().setOnDismissListener(dialog -> {
+//                // Perform actions after dialog is dismissed, like showing a Toast
+//                Toast.makeText(UploadImageActivity.this, "Operation Completed", Toast.LENGTH_SHORT).show();
+//            });
+//
+//            // Update the image preview and close the activity
+//            imagePreview.setImageURI(null);
 
-            Toast.makeText(getApplicationContext(), "Image deleted successfully.", Toast.LENGTH_SHORT).show();
-            // Update the image preview and close the activity
-            ImageManager.refreshProfileImage(getApplicationContext(), userUuid, imagePreview);
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("imageUri", imageUri.toString());
+            setResult(Activity.RESULT_OK, returnIntent);
             finish();
         });
+    }
+
+    /**
+     * To refresh the image preview in the uploadImageActivity so that the user can see what image is being uploaded or deleted
+     */
+    public void refreshImageView() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("images_testing").document(userUuid)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists() && documentSnapshot.contains("base64Image")) {
+                        String base64Image = documentSnapshot.getString("base64Image");
+                        if (base64Image != null && !base64Image.isEmpty()) {
+                            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            imagePreview.setImageBitmap(decodedByte);
+                        } else {
+                            // Handle the case where there is no image
+                            imagePreview.setImageBitmap(deterministicImage);
+                        }
+                    } else {
+                        // Document doesn't exist or doesn't have the image; handle accordingly
+                        imagePreview.setImageBitmap(deterministicImage);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle any failure in fetching the document
+                    Toast.makeText(UploadImageActivity.this, "Failed to refresh image view: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    imagePreview.setImageBitmap(null); // or set a default image upon failure
+                });
     }
 
 }
