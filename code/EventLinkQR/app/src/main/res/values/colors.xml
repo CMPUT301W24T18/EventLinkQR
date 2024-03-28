@@ -9,4 +9,6 @@
     <color name="icon_tint">#000000</color>
     <color name="text_color">#000000</color>
     <color name="notification_heading">#0E0E0E</color>
+    <color name="unreadNotificationBackground">#F44336</color>
+    <color name="readNotificationBackground">#8BC34A</color>
 </resources>

@@ -97,12 +97,12 @@ public class OrgNotificationDisplay extends Fragment {
      * @param eventId The unique identifier of the event to fetch notifications for.
      */
     private void fetchNotifications(String eventId) {
-        NotificationManager manager = new NotificationManager();
+        NotificationManager manager = new NotificationManager(requireContext());
 
         manager.fetchOrganizerNotifications(eventId, new NotificationsFetchListener() {
             @Override
             public void onNotificationsFetched(List<Notification> notifications) {
-                NotificationAdapter adapter = new NotificationAdapter(getContext(), notifications,"organizer");
+                NotificationAdapter adapter = new NotificationAdapter(getContext(), notifications,"organizer", manager);
                 listView.setAdapter(adapter);
             }
             @Override

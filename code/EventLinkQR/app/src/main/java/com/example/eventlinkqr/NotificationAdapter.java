@@ -2,6 +2,7 @@ package com.example.eventlinkqr;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import java.util.List;
 import android.os.Bundle;
 
 import androidx.annotation.IdRes;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.Navigation;
 
 /**
@@ -24,6 +26,9 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
     private List<Notification> notifications;
     private Context context;
     private String source; // Identifier for the adapter's context (organizer or user)
+    private NotificationManager notificationManager;
+
+
 
     /**
      * Constructs a new instance of NotificationAdapter.
@@ -33,11 +38,12 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
      * @param source A string identifier indicating the context (organizer or user)
      *               which affects layout inflation.
      */
-    public NotificationAdapter(Context context, List<Notification> notifications, String source) {
+    public NotificationAdapter(Context context, List<Notification> notifications, String source, NotificationManager notificationManager) {
         super(context, 0, notifications);
         this.context = context;
         this.notifications = notifications;
         this.source = source;
+        this.notificationManager = notificationManager;
     }
 
     /**
@@ -57,6 +63,13 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
             } else {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.notification_item, parent, false);
                 convertView.setTag("user"); // Tag the view to identify its type
+
+                if (!notification.isRead()) {
+                    convertView.setBackgroundColor(ContextCompat.getColor(context, R.color.unreadNotificationBackground));
+                    }
+                else {
+                    convertView.setBackgroundColor(ContextCompat.getColor(context, R.color.readNotificationBackground));
+                    }
             }
         }
 
@@ -75,6 +88,8 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         description.setText(notification.getDescription());
         timestampView.setText(notification.getTimeSinceNotification());
 
+
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,11 +101,22 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
                 bundle.putString("source", NotificationAdapter.this.source);
 
                 // Determine the navigation action based on the source
-                int actionId = NotificationAdapter.this.source.equals("organizer") ?
-                        R.id.action_viewNotifications_to_oneDetailedNotification :
-                        R.id.action_notificationDisplayPage_to_DetailPage;
+//                int actionId = NotificationAdapter.this.source.equals("organizer") ?
+//                        R.id.action_viewNotifications_to_oneDetailedNotification :
+//                        R.id.action_notificationDisplayPage_to_DetailPage;
 
-                Navigation.findNavController(view).navigate(actionId, bundle);
+                if ("user".equals(NotificationAdapter.this.source)) {
+
+                    notificationManager.markNotificationAsRead(notification.getTitle(), notification.getDescription(), notification.getTimeSinceNotification());
+
+                    // Logic to navigate to the detail page for users
+                    Navigation.findNavController(view).navigate(R.id.action_notificationDisplayPage_to_DetailPage, bundle);
+                } else {
+                    // Logic to navigate to the detailed notification for organizers
+                    Navigation.findNavController(view).navigate(R.id.action_viewNotifications_to_oneDetailedNotification, bundle);
+                }
+
+//                Navigation.findNavController(view).navigate(actionId, bundle);
             }
         });
         return convertView;

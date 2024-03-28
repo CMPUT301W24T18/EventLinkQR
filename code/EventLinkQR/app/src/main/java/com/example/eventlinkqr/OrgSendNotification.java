@@ -37,7 +37,7 @@ public class OrgSendNotification extends Fragment {
         orgEventToolBar.setNavigationOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.viewNotification));
 
-        notificationManager = new NotificationManager();
+        notificationManager = new NotificationManager(requireContext());
 
         Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
 

@@ -44,6 +44,7 @@ exports.sendNotificationToEventAttendees = functions.firestore
                                 body: lastNotification.description,
                                 eventId: eventId,
                                 timestamp: new Date(),
+                                isRead: false,
                             })
                         }, { merge: true });
                 } else {
