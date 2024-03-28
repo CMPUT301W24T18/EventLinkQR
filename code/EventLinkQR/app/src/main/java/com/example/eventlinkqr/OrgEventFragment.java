@@ -113,6 +113,10 @@ public class OrgEventFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Open an intent to share the qr code image.
+     * @param q The qr code to share.
+     */
     private void shareImage(QRCode q) {
         try {
             File temp = new File(requireContext().getCacheDir(), "qr.png");
