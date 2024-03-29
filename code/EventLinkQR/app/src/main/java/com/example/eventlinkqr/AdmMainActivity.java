@@ -1,4 +1,5 @@
 package com.example.eventlinkqr;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -43,8 +44,18 @@ public class AdmMainActivity extends AppCompatActivity {
             } else if (id == R.id.events) {
                 replaceFragment(new AdminEventsFragment());
             } else if (id == R.id.profile) {
-                Intent intent = new Intent(this, AttendeeMainActivity.class);
-                startActivity(intent);
+                new AlertDialog.Builder(this)
+                        .setTitle("Exit Admin Mode")
+                        .setMessage("Are you sure you would like to exit the Admin mode?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            // Positive button logic
+                            Intent intent = new Intent(this, AttendeeMainActivity.class);
+                            startActivity(intent);
+                        })
+                        .setNegativeButton("No", (dialog, which) -> {
+                            // Negative button logic (do nothing)
+                        })
+                        .show();
             } else if (id == R.id.images) {
                 replaceFragment(new AdminImagesFragment());
             }
