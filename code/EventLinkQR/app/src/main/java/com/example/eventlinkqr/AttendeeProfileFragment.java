@@ -241,7 +241,7 @@ public class AttendeeProfileFragment extends Fragment {
      */
     public void refreshProfileImage(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("images_testing").document(uuid).get()
+        db.collection("Images").document(uuid).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String base64Image = documentSnapshot.getString("base64Image");

@@ -77,7 +77,7 @@ public class UploadImageActivity extends AppCompatActivity {
         }else{
             // find a way to display the image that's in the database
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("images_testing").document(userUuid)
+            db.collection("Images").document(userUuid)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if(documentSnapshot.exists() && documentSnapshot.contains("base64Image")) {
@@ -141,7 +141,7 @@ public class UploadImageActivity extends AppCompatActivity {
      */
     public void refreshImageView() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("images_testing").document(userUuid)
+        db.collection("Images").document(userUuid)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists() && documentSnapshot.contains("base64Image")) {

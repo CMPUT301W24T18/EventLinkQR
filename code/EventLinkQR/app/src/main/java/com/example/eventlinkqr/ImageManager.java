@@ -66,7 +66,7 @@ public class ImageManager {
         Map<String, String> imageMap = new HashMap<>();
         imageMap.put("base64Image", base64Encoded);
 
-        db.collection("images_testing").document(uuid).set(imageMap) // changed add to set
+        db.collection("Images").document(uuid).set(imageMap) // changed add to set
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
                     callback.onSuccess();
@@ -85,7 +85,7 @@ public class ImageManager {
      */
     static void deleteImageFromFirebase(ConfirmDeleteDialogFragment context, String uuid, UploadCallback callback) {
         // reference to image file in Firebase Storage
-        DocumentReference imageRef = Manager.getFirebase().collection("images_testing")
+        DocumentReference imageRef = Manager.getFirebase().collection("Images")
                 .document(uuid);
 
         imageRef.delete().addOnSuccessListener(aVoid -> {
