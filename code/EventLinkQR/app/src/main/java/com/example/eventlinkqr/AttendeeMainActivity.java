@@ -90,7 +90,6 @@ public class AttendeeMainActivity extends AppCompatActivity {
             FirebaseFirestore.getInstance().collection("Users").document(attUUID).get().addOnSuccessListener(d -> {
                 profileName = d.getString("name");
             });
-            MilestoneManager.addMilestoneSnapshotCallback(attUUID, this::handleMilestone);
         }
 
         setupProfileButton();
@@ -283,16 +282,6 @@ public class AttendeeMainActivity extends AppCompatActivity {
         return scanner;
     }
 
-    /**
-<<<<<<< HEAD
-     * Milestone handler to handle the milestone
-     * @param milestone
-     */
-    private void handleMilestone(Milestone milestone) {
-        Log.d("Milestone", "Milestone reached: " + milestone.getInfo() + " " + milestone.getValue());
-        //Make a toast to inform the user of their milestone
-        Toast.makeText(this, "Milestone reached: " + milestone.getInfo() + " " + milestone.getValue(), Toast.LENGTH_SHORT).show();
-    }
 
 
      /** Get the nav controller for this activity

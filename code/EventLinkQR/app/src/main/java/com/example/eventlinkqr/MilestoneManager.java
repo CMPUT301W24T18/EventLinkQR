@@ -1,12 +1,9 @@
 package com.example.eventlinkqr;
 
-import android.provider.ContactsContract;
+
 import android.util.Log;
-
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -14,7 +11,6 @@ import java.util.function.Consumer;
 public class MilestoneManager extends Manager {
 
     private static final String COLLECTION_PATH = "Milestones";
-
     private static final ArrayList<Integer> milestones = new ArrayList<>(Arrays.asList(1, 5, 10, 20, 50, 100, 200, 500, 1000));
 
     /**
@@ -42,7 +38,6 @@ public class MilestoneManager extends Manager {
                     }
 
                     if (snapshots != null && !snapshots.isEmpty()) {
-
                         Milestone latestMilestone = snapshots.getDocuments().get(0).toObject(Milestone.class);
                         callback.accept(latestMilestone);
                     } else {

@@ -1,13 +1,8 @@
 package com.example.eventlinkqr;
 
+
 import com.google.firebase.Timestamp;
-
 import java.util.Date;
-import java.util.List;
-
-import java.util.Map;
-import java.util.Objects;
-
 /**
  * Milestone class to keep track of the milestones that the user has reached
  * and to provide a way to add a milestone to the database.
@@ -18,8 +13,7 @@ public class Milestone {
     private String organizerId;
     private String info;
     private Integer value;
-
-    Timestamp timestamp;
+    private Timestamp timestamp;
 
     public Milestone() {
         // Default constructor required for calls to DataSnapshot.getValue(Milestone.class)
@@ -33,7 +27,6 @@ public class Milestone {
     }
 
     public String getInfo() {
-
         return info;
     }
 
