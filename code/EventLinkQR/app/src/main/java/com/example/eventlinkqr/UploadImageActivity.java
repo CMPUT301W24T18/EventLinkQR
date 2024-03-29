@@ -109,9 +109,9 @@ public class UploadImageActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess() {
                         Toast.makeText(UploadImageActivity.this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show();
-                        refreshImageView();
                         // Update the image preview and close the activity
-//                        imagePreview.setImageURI(imageUri);
+                        ImageView imagePreview = findViewById(R.id.image_preview);
+                        imagePreview.setImageURI(imageUri);
 
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("imageUri", imageUri.toString());
@@ -146,7 +146,7 @@ public class UploadImageActivity extends AppCompatActivity {
 //            Intent returnIntent = new Intent();
 //            returnIntent.putExtra("imageUri", imageUri.toString());
 //            setResult(Activity.RESULT_OK, returnIntent);
-            finish();
+//            finish();
         });
     }
 

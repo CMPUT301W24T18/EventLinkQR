@@ -261,12 +261,12 @@ public class AttendeeProfileFragment extends Fragment {
                 });
     }
 
-    /**
-     * Is called to refresh the profile image everytime the AttendeeProfilActivity is on the foreground
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        refreshProfileImage();
-    }
+//    /**
+//     * Is called to refresh the profile image everytime the AttendeeProfilActivity is on the foreground
+//     */
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        refreshProfileImage();
+//    }
 }
