@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -44,8 +45,12 @@ public class CreateProfile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        uuid = UUID.randomUUID().toString();
         View view = inflater.inflate(R.layout.create_profile, container, false);
+        ImageView image = view.findViewById(R.id.new_prof_image);
+
+        image.setImageBitmap(ImageManager.generateDeterministicImage(uuid));
+
         // Initialize UI components
         etName = view.findViewById(R.id.new_full_name);
         etPhoneNumber = view.findViewById(R.id.new_phone);
@@ -125,7 +130,6 @@ public class CreateProfile extends Fragment {
             // Validate phone number if provided, and ensure it is exactly 10 digits
             Toast.makeText(requireActivity(), "Invalid Phone Number", Toast.LENGTH_SHORT).show();
         }else {
-            uuid = UUID.randomUUID().toString();
             SharedPreferences prefs = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("UUID", uuid);

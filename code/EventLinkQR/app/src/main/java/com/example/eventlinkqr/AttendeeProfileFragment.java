@@ -77,7 +77,7 @@ public class AttendeeProfileFragment extends Fragment {
 
 
         preview = view.findViewById(R.id.ivProfileImage);
-        preview.setImageBitmap(deterministicBitmap);
+//        preview.setImageBitmap(deterministicBitmap);
 
         photoButton.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), UploadImageActivity.class);
@@ -255,18 +255,21 @@ public class AttendeeProfileFragment extends Fragment {
                             // If no uploaded image is present, display the deterministic image
                             preview.setImageBitmap(deterministicBitmap);
                         }
+                    } else {
+                        preview.setImageBitmap(deterministicBitmap);
                     }
                 }).addOnFailureListener(e -> {
+                    preview.setImageBitmap(deterministicBitmap);
                     Toast.makeText(getContext(), "Error displaying profile Image", Toast.LENGTH_SHORT).show();// Handle any errors
                 });
     }
 
-//    /**
-//     * Is called to refresh the profile image everytime the AttendeeProfilActivity is on the foreground
-//     */
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        refreshProfileImage();
-//    }
+    /**
+     * Is called to refresh the profile image everytime the AttendeeProfilActivity is on the foreground
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshProfileImage();
+    }
 }

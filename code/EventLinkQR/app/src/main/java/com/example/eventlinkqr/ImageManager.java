@@ -90,11 +90,9 @@ public class ImageManager {
 
         imageRef.delete().addOnSuccessListener(aVoid -> {
             // Image deleted successfully
-            Toast.makeText(context.getContext(), "Image deleted successfully.", Toast.LENGTH_SHORT).show();
             callback.onSuccess();
         }).addOnFailureListener(exception -> {
             // Image deleted unsuccessfully
-            Toast.makeText(context.getContext(), "Deletion failed.", Toast.LENGTH_SHORT).show();
             callback.onFailure(exception);
         });
     }
@@ -108,7 +106,7 @@ public class ImageManager {
      */
     public static Bitmap generateDeterministicImage(String input) {
 
-        Bitmap bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 

@@ -39,7 +39,6 @@ public class UploadImageActivity extends AppCompatActivity {
 
     private ImageView imagePreview;
     private Button upload_button, cancel_button, chooseImage_button, delete_button;
-    //    private TextView prompt;
     private Uri imageUri;
     String userUuid;
     Bitmap deterministicImage;
@@ -71,6 +70,7 @@ public class UploadImageActivity extends AppCompatActivity {
         userUuid = intent.getStringExtra("uuid"); // to get the uuid of the user
 
         if(origin != null && userUuid != null && origin.equals("Attendee")) {
+            refreshImageView();
             // Call the method to generate a deterministic image
             deterministicImage = ImageManager.generateDeterministicImage(userUuid);
             imagePreview.setImageBitmap(deterministicImage);
@@ -83,8 +83,6 @@ public class UploadImageActivity extends AppCompatActivity {
                         if(documentSnapshot.exists() && documentSnapshot.contains("base64Image")) {
                             String base64Image = documentSnapshot.getString("base64Image");
                             ImageManager.displayBase64Image(base64Image, imagePreview); // Static method called directly with class name
-//                        } else {
-//                            Toast.makeText(UploadImageActivity.this, "No image found for this user.", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(e -> Toast.makeText(UploadImageActivity.this, "Failed to fetch image: " + e.getMessage(), Toast.LENGTH_SHORT).show());
@@ -135,18 +133,6 @@ public class UploadImageActivity extends AppCompatActivity {
             Bitmap deterministicImage = ImageManager.generateDeterministicImage(userUuid);
             ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage, userUuid);
             confirmDeleteDialogFragment.show(getSupportFragmentManager(), "confirmDelete");
-//            confirmDeleteDialogFragment.getDialog().setOnDismissListener(dialog -> {
-//                // Perform actions after dialog is dismissed, like showing a Toast
-//                Toast.makeText(UploadImageActivity.this, "Operation Completed", Toast.LENGTH_SHORT).show();
-//            });
-//
-//            // Update the image preview and close the activity
-//            imagePreview.setImageURI(null);
-
-//            Intent returnIntent = new Intent();
-//            returnIntent.putExtra("imageUri", imageUri.toString());
-//            setResult(Activity.RESULT_OK, returnIntent);
-//            finish();
         });
     }
 

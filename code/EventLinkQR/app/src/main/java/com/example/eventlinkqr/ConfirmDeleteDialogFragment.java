@@ -41,7 +41,6 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Are you sure you want to delete this image?")
                 .setPositiveButton("Delete", (dialog, id) -> {
-//                    imageView.setImageBitmap(bitmapToRestore); // Reset to the original Bitmap
                     ImageManager.deleteImageFromFirebase(ConfirmDeleteDialogFragment.this, uuid, new ImageManager.UploadCallback() {
                         @Override
                         public void onSuccess() {
