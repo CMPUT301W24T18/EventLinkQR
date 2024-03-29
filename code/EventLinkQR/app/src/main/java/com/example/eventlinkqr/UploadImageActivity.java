@@ -165,5 +165,4 @@ public class UploadImageActivity extends AppCompatActivity {
                     imagePreview.setImageBitmap(null); // or set a default image upon failure
                 });
     }
-
 }

@@ -19,11 +19,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class ConfirmDeleteDialogFragment extends DialogFragment {
-    public interface OnDeleteConfirmListener {
-        void onDeleteConfirmed();
-    }
 
-    private OnDeleteConfirmListener onDeleteConfirmListener;
     private final ImageView imageView;
     private final Bitmap bitmapToRestore;
     private final String uuid;

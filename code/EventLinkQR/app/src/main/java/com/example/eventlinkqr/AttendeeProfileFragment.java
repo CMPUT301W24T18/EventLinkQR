@@ -75,9 +75,7 @@ public class AttendeeProfileFragment extends Fragment {
 
         deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
 
-
         preview = view.findViewById(R.id.ivProfileImage);
-//        preview.setImageBitmap(deterministicBitmap);
 
         photoButton.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), UploadImageActivity.class);
