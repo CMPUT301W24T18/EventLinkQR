@@ -12,6 +12,12 @@ android {
         useJUnitPlatform()
     }
 
+    android {
+        lint {
+            baseline = file("lint-baseline.xml")
+        }
+    }
+
     defaultConfig {
         applicationId = "com.example.eventlinkqr"
         minSdk = 24
