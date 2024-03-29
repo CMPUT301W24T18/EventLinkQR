@@ -397,6 +397,8 @@ public class EventManager extends Manager {
         newEventData.put("maxAttendees", maxAttendees);
         newEventData.put("geoTracking", newEvent.getGeoTracking());
         newEventData.put("organizer", organizer);
+        newEventData.put("signedUpCount", 0);
+        newEventData.put("checkedInAttendeesCount", 0);
 
         getCollection().add(newEventData)
                 .addOnSuccessListener(documentReference -> {
