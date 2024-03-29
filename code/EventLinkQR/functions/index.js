@@ -69,3 +69,39 @@ exports.sendNotificationToEventAttendees = functions.firestore
             console.error('Error sending updated notifications:', error);
         }
     });
+
+exports.handleNewMilestone = functions.firestore
+.document('Milestones/{milestoneId}')
+.onCreate(async (snapshot, context) => {
+    const milestoneData = snapshot.data();
+    const { eventId, info, value } = milestoneData;
+
+    // Construct the milestone notification message
+    const notificationBody = `Milestone achieved: ${info} with value: ${value}`;
+
+    // Check if a notification document for this event ID already exists
+    const notificationsRef = admin.firestore().collection('Notifications');
+    const existingNotificationDoc = await notificationsRef.doc(eventId).get();
+
+    if (existingNotificationDoc.exists) {
+        // Document exists, so update it with the new milestone notification
+        await notificationsRef.doc(eventId).update({
+            notifications: admin.firestore.FieldValue.arrayUnion({
+                info: info,
+                value: value,
+                timestamp: admin.firestore.FieldValue.serverTimestamp()
+            })
+        });
+        console.log(`Updated Notifications for event ID: ${eventId} with new milestone.`);
+    } else {
+        // Document does not exist, create a new one with the milestone notification
+        await notificationsRef.doc(eventId).set({
+            notifications: [{
+                info: info,
+                value: value,
+                timestamp: admin.firestore.FieldValue.serverTimestamp()
+            }]
+        });
+        console.log(`Created Notifications for event ID: ${eventId} with the first milestone.`);
+    }
+});

@@ -43,7 +43,6 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private String attUUID;
     private String profileName;
 
-    // MilestoneManager collection, one for each event this user may host
 
     public interface LocationCallback {
         void onLocationReceived(LatLng location);
@@ -168,6 +167,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                 });
             }, e -> {
                 Toast.makeText(this, "Invalid QR Code", Toast.LENGTH_SHORT).show();
+                Log.d("QRCode", "Failed to scan code: " + e.getMessage());
             });
         });
     }
