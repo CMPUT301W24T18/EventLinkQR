@@ -157,7 +157,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                         // This is a promotional code, redirect to the attendee event details page
                         EventManager.getEventById(code.getEventId(), event -> {
                             setCurrentEvent(event);
-                            Navigation.findNavController(navController).navigate(R.id.action_attendeeHomePage_to_attendeeEventFragment);
+                            Navigation.findNavController(navController).navigate(R.id.attendeeEventFragment);
                         });
                     }
                 });
