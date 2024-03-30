@@ -51,9 +51,6 @@ public class NotificationManager {
      * @param description The description of the notification to be sent.
      */
     public void sendNotificationToDatabase(String eventId, String title, String description) {
-
-        Boolean isRead = false;
-
         DocumentReference eventDocumentRef = db.collection("Notifications").document(eventId);
 
         // Create a new notification Map to represent the notification details
@@ -61,7 +58,6 @@ public class NotificationManager {
         notificationData.put("heading", title);
         notificationData.put("description", description);
         notificationData.put("timestamp", new Date());
-        notificationData.put("isRead", isRead);
 
         // Use a transaction to ensure that the operation is atomic
         db.runTransaction((Transaction.Function<Void>) transaction -> {
@@ -197,8 +193,7 @@ public class NotificationManager {
                 if (notifications != null) {
                     for (Map<String, Object> notification : notifications) {
                         if (title.equals(notification.get("title")) &&
-                                description.equals(notification.get("body")) &&
-                                timeSinceNotification.equals(notification.get("timeSinceNotification"))) {
+                                description.equals(notification.get("body"))) {
                             notification.put("isRead", true);
                             // Assuming only one notification matches, break after finding it
                             break;
