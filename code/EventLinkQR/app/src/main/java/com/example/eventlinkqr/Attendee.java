@@ -1,7 +1,4 @@
 package com.example.eventlinkqr;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * This class represents an attendee in the event management system.

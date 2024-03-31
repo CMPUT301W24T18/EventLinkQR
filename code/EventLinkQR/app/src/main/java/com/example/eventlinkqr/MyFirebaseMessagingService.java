@@ -1,12 +1,15 @@
 package com.example.eventlinkqr;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
 import androidx.core.app.NotificationCompat;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import android.util.Log;
 
 /**
  * Handles incoming messages from Firebase Cloud Messaging (FCM).
@@ -48,8 +51,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody The body text of the message to be displayed in the notification.
      */
     private void showNotification(String title, String messageBody) {
-        // Create an intent that will open the NotificationDisplayActivity when the user taps the notification.
-        Intent intent = new Intent(this, NotificationDisplayActivity.class);
+        // Create an intent that will open the NotificationDisplayFragment when the user taps the notification.
+        Intent intent = new Intent(this, NotificationDisplayFragment.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
         // Define the notification channel ID.

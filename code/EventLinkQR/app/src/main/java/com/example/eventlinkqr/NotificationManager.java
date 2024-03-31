@@ -3,7 +3,6 @@ package com.example.eventlinkqr;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.util.Log;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import com.google.firebase.Timestamp;
@@ -11,10 +10,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Transaction;
-import com.google.firebase.messaging.FirebaseMessaging;
-
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;

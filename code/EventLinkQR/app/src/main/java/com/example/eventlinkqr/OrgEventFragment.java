@@ -1,6 +1,10 @@
 package com.example.eventlinkqr;
 
+import static androidx.core.content.FileProvider.getUriForFile;
+
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 /**
@@ -37,6 +45,8 @@ public class OrgEventFragment extends Fragment {
         /** All buttons and the toolbar that will be used on this page*/
         Button detailsButton = view.findViewById(R.id.details_button);
         Button attendeesButton = view.findViewById(R.id.attendees_button);
+        Button promotionalButton = view.findViewById(R.id.promotional_qr_button);
+        Button sharebutton = view.findViewById(R.id.share_qr_button);
         ImageView notificationSendIcon = view.findViewById(R.id.notification_send_icon);
         TextView eventTitle = view.findViewById(R.id.org_event_name);
         TextView eventLocation = view.findViewById(R.id.org_event_location);
@@ -82,15 +92,47 @@ public class OrgEventFragment extends Fragment {
         eventDescription.setText(event.getDescription());
         eventDate.setText(event.getDate().toDate().toString());
 
+
         QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {
             try {
                 qrCodeImage.setImageBitmap(q.toBitmap(512, 512));
+                sharebutton.setOnClickListener(v -> {
+                    shareImage(q);
+                });
             } catch (QRCodeGeneratorException e) {
                 throw new RuntimeException(e);
             }
         });
 
+        // When clicked, bring up the promotional QR code
+        promotionalButton.setOnClickListener(v -> {
+            QRCodeManager.fetchQRCode(event, QRCode.PROMOTIONAL_TYPE).addOnSuccessListener(this::shareImage);
+        });
+
         // Inflate the layout for this fragment
         return view;
+    }
+
+    /**
+     * Open an intent to share the qr code image.
+     * @param q The qr code to share.
+     */
+    private void shareImage(QRCode q) {
+        try {
+            File temp = new File(requireContext().getCacheDir(), "qr.png");
+            FileOutputStream outputStream = new FileOutputStream(temp);
+            q.toBitmap(512, 512).compress(Bitmap.CompressFormat.PNG,100, outputStream);
+
+            Uri contentUri = getUriForFile(requireContext(), "com.example.eventlinkqr.fileprovider", temp);
+
+            // See https://developer.android.com/training/sharing/send#java
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            sendIntent.setType("image/png");
+            startActivity(sendIntent);
+        } catch (IOException | QRCodeGeneratorException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

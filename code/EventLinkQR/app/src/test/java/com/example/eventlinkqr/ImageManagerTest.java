@@ -9,38 +9,28 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.content.Context;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.util.Base64;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.robolectric.RobolectricTestRunner;
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(RobolectricTestRunner.class)
 public class ImageManagerTest {
-    @Mock
-    private FirebaseStorage mockStorage = mock(FirebaseStorage.class);
     @Mock
     private FirebaseFirestore mockDb = mock(FirebaseFirestore.class);
     @Mock
-    private Task<Uri> mockDownloadUrlTask;
+    private Task<Void> mockUploadTask;
     @Mock
-    private StorageReference mockStorageRef;
-    @Mock
-    private StorageReference mockImageRef;
-    @Mock
-    private UploadTask mockUploadTask;
+    private CollectionReference mockCollectionRef;
     @Mock
     private DocumentReference mockDocumentRef;
     @Mock
@@ -49,24 +39,26 @@ public class ImageManagerTest {
     @Test
     public void testCreateImageManager() {
         try(MockedStatic<FirebaseFirestore> mockedFirestore = mockStatic(FirebaseFirestore.class);
-            MockedStatic<FirebaseStorage> mockedStorage = mockStatic(FirebaseStorage.class)) {
-            mockedStorage.when(FirebaseStorage::getInstance).thenReturn(mockStorage);
+            MockedStatic<Base64> mockedBase64 = mockStatic(Base64.class)) {
             mockedFirestore.when(FirebaseFirestore::getInstance).thenReturn(mockDb);
-            when(mockStorage.getReference()).thenReturn(mockStorageRef);
-            when(mockStorageRef.child(anyString())).thenReturn(mockImageRef);
-            when(mockImageRef.putFile(any(Uri.class))).thenReturn(mockUploadTask);
+            when(mockDb.collection(anyString())).thenReturn(mockCollectionRef);
+            when(mockCollectionRef.document("uuid")).thenReturn(mockDocumentRef);
+            when(mockDocumentRef.set(any())).thenReturn(mockUploadTask);
+
+            Bitmap mockBitmap = mock(Bitmap.class);
+
+            mockedBase64.when(() -> Base64.encodeToString(ImageManager.bitmapToByteArray(mockBitmap), Base64.DEFAULT)).thenReturn("abcd");
+
             when(mockUploadTask.addOnSuccessListener(any())).thenReturn(mockUploadTask);
 
             ImageManager imageManager = new ImageManager();
-
-            imageManager.uploadImage(mockContext, mock(Uri.class), "userId", "/Image/path", new ImageManager.UploadCallback() {
+            imageManager.uploadImage(mockContext, "uuid", mockBitmap, new ImageManager.UploadCallback() {
                 @Override
-                public void onSuccess(String imageUrl) { }
+                public void onSuccess() { }
                 @Override
                 public void onFailure(Exception exception) { }
             });
 
-            verify(mockImageRef, times(1)).putFile(any(Uri.class));
             verify(mockUploadTask, times(1)).addOnSuccessListener(any());
             verify(mockUploadTask, times(1)).addOnFailureListener(any());
         }

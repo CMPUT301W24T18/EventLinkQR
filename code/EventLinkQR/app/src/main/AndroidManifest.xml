@@ -30,6 +30,15 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
+        <!--https://developer.android.com/reference/androidx/core/content/FileProvider -->
+        <provider
+            android:name="com.example.eventlinkqr.QRFileProvider"
+            android:authorities="com.example.eventlinkqr.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+        </provider>
+
         <activity
             android:name=".UploadImageActivity"
             android:exported="true">
@@ -42,9 +51,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter></activity>
-
-        <activity android:name=".NotificationDetailActivity"/>
-
 
         <activity
             android:name=".OrganizerEventStats"
@@ -68,15 +74,6 @@
             <!--            </intent-filter>-->
         </activity>
 
-        <activity
-            android:name=".AttendeeProfileActivity"
-            android:exported="true">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
-
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
-        </activity>
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
