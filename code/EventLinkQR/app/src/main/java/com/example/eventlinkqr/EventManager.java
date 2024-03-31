@@ -420,6 +420,30 @@ public class EventManager extends Manager {
     }
 
     /**
+     * Adds a new event to the database
+     *
+     * @param editedEvent the event containing the new values
+     */
+    public static void editEvent(Event editedEvent) {
+        HashMap<String, Object> editedEventData = new HashMap<>();
+        editedEventData.put("name", editedEvent.getName());
+        editedEventData.put("description", editedEvent.getDescription());
+        editedEventData.put("category", editedEvent.getCategory());
+        editedEventData.put("location", editedEvent.getLocation());
+        editedEventData.put("dateAndTime", editedEvent.getDate());
+        editedEventData.put("geoTracking", editedEvent.getGeoTracking());
+
+        getCollection().document(editedEvent.getId()).update(editedEventData)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("Firestore", "event succesfully edited");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Event failed to be edited");
+                });
+    }
+
+
+    /**
      * Checks if the user is signed up to the event
      *
      * @param eventId the event id

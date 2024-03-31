@@ -26,9 +26,6 @@ public class AttendeesPage extends Fragment  {
     /** the title for each tab*/
     private static final String[] TAB_TITLES = {"All", "Checked In", "Not Checked In"};
 
-    /** TextView of the count of checked in attendees for the current event*/
-    private TextView checkedInCountView;
-
     private Event event;
 
 
@@ -43,12 +40,6 @@ public class AttendeesPage extends Fragment  {
         super.onViewCreated(view, savedInstanceState);
 
         event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
-
-        // text view to display count of checked in attendees
-        checkedInCountView = view.findViewById(R.id.checked_in_count);
-
-        // update the count of checked in attendees
-        updateCheckInCount();
 
         // the tool bar on top of the page
         /** the toolbar for the page*/
@@ -73,15 +64,5 @@ public class AttendeesPage extends Fragment  {
         new TabLayoutMediator(attendeesTabLayout, attendeesViewPager,
                 (tab, position) -> tab.setText(TAB_TITLES[position])
         ).attach();
-    }
-
-    /**
-     * Updates the count of the attendees that have checked in to the event
-     */
-    public void updateCheckInCount() {
-        EventManager.addEventAttendeeSnapshotCallback(event.getId(), true, attendeeNames -> {
-            int count = attendeeNames.size();
-            checkedInCountView.setText("Total checked in attendees: " + count);
-        });
     }
 }
