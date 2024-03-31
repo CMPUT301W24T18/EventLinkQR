@@ -69,38 +69,31 @@ public class AdminUserAdapter extends ArrayAdapter<Attendee> {
                     .commit();
         });
 
-
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Delete Event")
-                        .setMessage("Are you sure you want to permanently delete this User?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Continue with delete
-                                Attendee eventToDelete = getItem(position);
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                db.collection("Users").document(Attendee.getUuid())
-                                        .delete()
-                                        .addOnSuccessListener(aVoid -> {
-                                            // Remove from the adapter's dataset and refresh
-                                            remove(eventToDelete);
-                                            notifyDataSetChanged();
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            // Handle failure
-                                            Toast.makeText(getContext(), "Failed to delete User.", Toast.LENGTH_SHORT).show();
-                                        });
+        deleteButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Delete User")
+                    .setMessage("Are you sure you want to permanently delete this User?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        Attendee attendeeToDelete = getItem(position);
+                        AdminManager adminManager = new AdminManager(getContext());
+                        adminManager.deleteUser(attendeeToDelete.getUuid(), new AdminManager.AdminEventOperationCallback() {
+                            @Override
+                            public void onSuccess() {
+                                remove(attendeeToDelete); // Remove from the adapter's dataset
+                                notifyDataSetChanged(); // Refresh the list
+                                Toast.makeText(getContext(), "User deleted successfully", Toast.LENGTH_SHORT).show();
                             }
-                        })
-                        .setNegativeButton(android.R.string.no, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }
-        });
 
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                Toast.makeText(getContext(), "Failed to delete User: " + errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        });
 
         // Return the completed view to render on screen
         return convertView;

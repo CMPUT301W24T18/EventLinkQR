@@ -30,6 +30,7 @@ public class AdminImagesFragment extends Fragment {
     private ImageAdapter adapter;
     private List<ImageModel> imageList;
     private List<String> documentIds; // List to hold document IDs
+    private AdminManager adminManager;
 
 
     /**
@@ -50,6 +51,7 @@ public class AdminImagesFragment extends Fragment {
         documentIds = new ArrayList<>(); // Initialize the document IDs list
         adapter = new ImageAdapter(getActivity(), R.layout.item_image, imageList);
         listView.setAdapter(adapter);
+        adminManager = new AdminManager(getActivity());
         fetchImages();
         setupListViewListener();
         return view;
@@ -61,19 +63,21 @@ public class AdminImagesFragment extends Fragment {
      * and updates the ListView adapter.
      */
     private void fetchImages() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("images_testing").get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            ImageModel image = documentSnapshot.toObject(ImageModel.class);
-                            imageList.add(image);
-                            documentIds.add(documentSnapshot.getId()); // Store document ID
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                })
-                .addOnFailureListener(e -> {/* Handle error */});
+        adminManager.fetchImages(new AdminManager.FetchImagesCallback() {
+            @Override
+            public void onSuccess(List<ImageModel> images, List<String> documentIds) {
+                imageList.clear();
+                imageList.addAll(images);
+                AdminImagesFragment.this.documentIds.clear();
+                AdminImagesFragment.this.documentIds.addAll(documentIds);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -113,17 +117,22 @@ public class AdminImagesFragment extends Fragment {
      * @param documentId The Firestore document ID of the image to be deleted.
      * @param position   The position of the image in the ListView.
      */
+
     private void deleteImage(String documentId, int position) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("images_testing").document(documentId)
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    imageList.remove(position); // Remove from the image list
-                    documentIds.remove(position); // Also remove the document ID from its list
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(getActivity(), "Image deleted successfully", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> Toast.makeText(getActivity(), "Error deleting image", Toast.LENGTH_SHORT).show());
+        adminManager.deleteImage(documentId, new AdminManager.AdminEventOperationCallback() {
+            @Override
+            public void onSuccess() {
+                imageList.remove(position);
+                documentIds.remove(position);
+                adapter.notifyDataSetChanged();
+                Toast.makeText(getActivity(), "Image deleted successfully", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(getActivity(), "Error deleting image: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
 

@@ -77,18 +77,20 @@ public class AdminEventAdapter extends ArrayAdapter<Event> {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Continue with delete
                                 Event eventToDelete = getItem(position);
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                db.collection("Events").document(eventToDelete.getId())
-                                        .delete()
-                                        .addOnSuccessListener(aVoid -> {
-                                            // Remove from the adapter's dataset and refresh
-                                            remove(eventToDelete);
-                                            notifyDataSetChanged();
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            // Handle failure
-                                            Toast.makeText(getContext(), "Failed to delete event.", Toast.LENGTH_SHORT).show();
-                                        });
+                                AdminManager adminManager = new AdminManager(getContext());
+                                adminManager.deleteEvent(eventToDelete.getId(), new AdminManager.AdminEventOperationCallback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        // Remove from the adapter's dataset and refresh
+                                        remove(eventToDelete);
+                                        notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onFailure(String errorMessage) {
+                                        Toast.makeText(getContext(), "Failed to delete event: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                         })
                         .setNegativeButton(android.R.string.no, null)

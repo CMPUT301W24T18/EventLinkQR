@@ -18,12 +18,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 /**
  * Fragment used for managing users (attendees) in an admin context within an Android application.
@@ -40,7 +42,7 @@ public class AdminUsersFragment extends Fragment {
     private ArrayList<Attendee> usersList = new ArrayList<>();
     private SwipeRefreshLayout swipeRefreshLayout;
     private AdminUserAdapter adapter;
-
+    private AdminManager adminManager;
     /**
      * Default constructor. Required for instantiation of the fragment.
      */
@@ -65,7 +67,11 @@ public class AdminUsersFragment extends Fragment {
 
         userListView = view.findViewById(R.id.userListView); // Ensure the ID matches in your layout
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        adapter = new AdminUserAdapter(getContext(), usersList);
+        userListView.setAdapter(adapter);
 
+        // Initialize AdminManager with the current context
+        adminManager = new AdminManager(getContext());
         setupFirebaseAndAdapter(view);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -83,34 +89,22 @@ public class AdminUsersFragment extends Fragment {
      * @param view The current view of the fragment.
      */
     private void setupFirebaseAndAdapter(View view) {
-        // Initialize Firestore and Adapter here
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("Users").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                usersList.clear(); // Clear the list to avoid duplicating items if this method is called again
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Attendee attendee = document.toObject(Attendee.class);
-                    usersList.add(attendee);
-                }
-
-                // Sort the usersList here
-                Collections.sort(usersList, new Comparator<Attendee>() {
-                    @Override
-                    public int compare(Attendee user1, Attendee user2) {
-                        // Replace 'getName()' with your actual method in Attendee class that returns the user's name
-                        return user1.getName().compareToIgnoreCase(user2.getName());
-                    }
-                });
-
-                // Notify the adapter
+        fetchUsers();
+    }
+    private void fetchUsers() {
+        adminManager.fetchUsers(new AdminManager.FetchUsersCallback() {
+            @Override
+            public void onSuccess(List<Attendee> fetchedUsers) {
+                usersList.clear();
+                usersList.addAll(fetchedUsers);
                 adapter.notifyDataSetChanged();
-            } else {
-                // Handle the error
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Handle the error, e.g., show a Toast
+                Toast.makeText(getContext(), "Error fetching users: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
-
-        adapter = new AdminUserAdapter(getContext(), usersList);
-        userListView.setAdapter(adapter);
     }
 }
