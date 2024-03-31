@@ -57,8 +57,12 @@ public class MilestoneManager extends Manager {
                         if (event != null) {
                             int checkedInAttendeesCount = event.getCheckedInAttendeesCount();
                             if (milestones.contains(checkedInAttendeesCount)) {
+                                // Create a milestone object and add it to the database for record keeping purposes
                                 Milestone milestone = new Milestone(eventId, organizerId, "checkIn", checkedInAttendeesCount, Timestamp.now());
                                 addMilestone(milestone);
+
+                                NotificationManager notificationManager = new NotificationManager();
+                                notificationManager.sendNotificationToDatabase(eventId, "Check-in Milestone", event.getName() + " has reached a check-in milestone of " + checkedInAttendeesCount + " attendees!");
                             }
                         }
                     }
@@ -80,6 +84,9 @@ public class MilestoneManager extends Manager {
                                 Milestone milestone = new Milestone(eventId, organizerId, "signUp", signedUpAttendeesCount, Timestamp.now());
                                 Log.d("MilestoneManager", "OrganizerId: " + organizerId + " reached a milestone ");
                                 addMilestone(milestone);
+
+                                NotificationManager notificationManager = new NotificationManager();
+                                notificationManager.sendNotificationToDatabase(eventId, "Check-in Milestone", event.getName() + " has reached a sign-up milestone of " + signedUpAttendeesCount + " attendees!");
                             }
                         }
                     }
