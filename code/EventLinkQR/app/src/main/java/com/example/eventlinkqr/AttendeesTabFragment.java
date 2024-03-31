@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -19,8 +21,8 @@ import java.util.function.Consumer;
  * initializes the value that will be displayed on the selected tab in the attendees page
  */
 public class AttendeesTabFragment extends Fragment {
-    private ArrayAdapter<String> attendeesAdapter;
-    private ArrayList<String> dataList;
+    private AttendeeArrayAdapter attendeesAdapter;
+    private ArrayList<Attendees> dataList;
     private ListView attendeesList;
     private Event event;
     private static final String ARG_TAB_POSITION = "TAB_POSITION";
@@ -54,7 +56,7 @@ public class AttendeesTabFragment extends Fragment {
         // generate data from the database
         generateDataForTab(tabPosition);
 
-        attendeesAdapter = new ArrayAdapter<>(requireContext(), R.layout.attendees_content, dataList);
+        attendeesAdapter = new AttendeeArrayAdapter(requireContext(), dataList);
 
         // Set the adapter to the ListView
         attendeesList.setAdapter(attendeesAdapter);
@@ -80,9 +82,9 @@ public class AttendeesTabFragment extends Fragment {
      * @param tabPosition the position of the tab
      */
     private void generateDataForTab(int tabPosition) {
-        Consumer<List<String>> attendeeNamesCallback = attendeeNames -> {
+        Consumer<List<Attendees>> attendeeNamesCallback = attendees -> {
             dataList.clear();
-            dataList.addAll(attendeeNames);
+            dataList.addAll(attendees);
             attendeesAdapter.notifyDataSetChanged();
         };
 

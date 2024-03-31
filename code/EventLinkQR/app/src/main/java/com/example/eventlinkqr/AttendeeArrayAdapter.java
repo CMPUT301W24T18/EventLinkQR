@@ -1,85 +1,48 @@
 package com.example.eventlinkqr;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 
 /**
- * Singleton class that manages a list of Attendee objects.
+ * custom array adapter for an array of attendees to an event
  */
-public class AttendeeArrayAdapter {
-    // Static instance of the adapter for singleton pattern
-    private static AttendeeArrayAdapter instance = null;
+public class AttendeeArrayAdapter extends ArrayAdapter<Attendees> {
 
-    // List to hold Attendee objects
-    private ArrayList<Attendee> attendees;
 
-    /**
-     * Private constructor for singleton pattern.
-     */
-    private AttendeeArrayAdapter() {
-        attendees = new ArrayList<>();
+    public AttendeeArrayAdapter(@NonNull Context context, ArrayList<Attendees> attendee) {
+        super(context, 0, attendee);
     }
 
-    /**
-     * Returns the number of attendees in the adapter.
-     * @return int representing the number of attendees
-     */
-    public int getCount() {
-        return attendees.size();
-    }
-
-    /**
-     * Returns the Attendee at the specified position in the list.
-     * @param position The position of the attendee in the list.
-     * @return Attendee object at the specified position.
-     */
-    public Attendee getItem(int position) {
-        return attendees.get(position);
-    }
-
-    /**
-     * Ensures a single instance of AttendeeArrayAdapter is created (Singleton pattern).
-     * @return The single instance of AttendeeArrayAdapter.
-     */
-    public static synchronized AttendeeArrayAdapter getInstance() {
-        if (instance == null) {
-            instance = new AttendeeArrayAdapter();
+    @NonNull
+    @Override
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View view;
+        if(convertView == null){
+            view = LayoutInflater.from (getContext()).inflate(R.layout.attendees_content, parent, false);
+        }else{
+            view = convertView;
         }
-        return instance;
-    }
 
-    /**
-     * Adds an Attendee object to the adapter list.
-     * @param attendee The Attendee object to be added.
-     */
-    public void addAttendee(Attendee attendee) {
-        attendees.add(attendee);
-    }
+        Attendees attendee = getItem(position);
 
-    /**
-     * Checks if an attendee with the specified UUID exists in the list.
-     * @param uuid The UUID to be checked.
-     * @return true if an attendee with the UUID exists, false otherwise.
-     */
-    public boolean containsUUID(String uuid) {
-        for (Attendee attendee : attendees) {
-            if (attendee.getUuid().equals(uuid)) {
-                return true;
-            }
-        }
-        return false;
-    }
+        TextView attendeeName = view.findViewById(R.id.attendee_name);
+        TextView checkinCount = view.findViewById(R.id.attendee_checkin_count);
 
-    /**
-     * Retrieves an Attendee by their UUID.
-     * @param uuid The UUID of the attendee to retrieve.
-     * @return Attendee object with the specified UUID, or null if not found.
-     */
-    public Attendee getAttendeeByUUID(String uuid) {
-        for (Attendee attendee : attendees) {
-            if (attendee.getUuid().equals(uuid)) {
-                return attendee;
-            }
-        }
-        return null;
+        assert attendee != null;
+
+        //sets the value of the textvies
+        attendeeName.setText(attendee.getName());
+        checkinCount.setText("Check-in count: " + attendee.getCheckInCount());
+
+        return view;
     }
 }

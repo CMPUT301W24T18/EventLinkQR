@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content_view"
-    android:layout_width="wrap_content"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp"
-    android:textSize="40sp">
-</TextView>
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/attendee_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:textSize="40sp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/attendee_checkin_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Check-in count: ">
+    </TextView>
+</LinearLayout>

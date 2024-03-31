@@ -48,6 +48,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         //Map all the input fields
         EditText nameInput = view.findViewById(R.id.event_name_input);
         EditText descriptionInput = view.findViewById(R.id.event_description_input);
+        EditText maxAttendeesInput = view.findViewById(R.id.max_attendees);
         Spinner categoryInput = view.findViewById(R.id.category_selector);
         EditText locationInput = view.findViewById(R.id.event_location_input);
         SwitchCompat geoTracking = view.findViewById(R.id.new_event_geo_switch);
@@ -86,6 +87,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
             String description = descriptionInput.getText().toString().trim();
             String category = categoryInput.getSelectedItem().toString();
             String location = locationInput.getText().toString().trim();
+            String maxAttendee = maxAttendeesInput.getText().toString().trim();
             Boolean tracking = geoTracking.isChecked();
 
             if(name.equals("") || description.equals("") || location.equals("") || category.equals("Category") || timestamp == null){
@@ -96,7 +98,12 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                 Event newEvent = new Event(name, description, category, timestamp, location, tracking, 0, 0);
                 String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
 
-                EventManager.createEvent(newEvent, organizer, customQRString);
+                // if the user, hasn't set a limit, set it to a default value
+                if(maxAttendee.equals("")) {
+                    EventManager.createEvent(newEvent, organizer, customQRString, Integer.MAX_VALUE);
+                }else{
+                    EventManager.createEvent(newEvent, organizer, customQRString, Integer.parseInt(maxAttendee));
+                }
 
                 // return to the home page
                 Navigation.findNavController(view).navigate(R.id.attendeeHomePage);
@@ -117,9 +124,8 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         });
 
         // launches the date picker dialog fragment
-        dateButton.setOnClickListener(v -> {
-            new DateTimePickerFragment().show(getChildFragmentManager(), "Select Date and Time");
-        });
+        dateButton.setOnClickListener(v ->
+                new DateTimePickerFragment().show(getChildFragmentManager(), "Select Date and Time"));
 
     }
 
