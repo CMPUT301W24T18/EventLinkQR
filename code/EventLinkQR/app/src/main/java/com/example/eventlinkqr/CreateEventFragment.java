@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         Bundle arguments = getArguments();
 
         //Map all the input fields
+        TextView pageTitle = view.findViewById(R.id.create_event_title);
         EditText nameInput = view.findViewById(R.id.event_name_input);
         EditText descriptionInput = view.findViewById(R.id.event_description_input);
         EditText maxAttendeesInput = view.findViewById(R.id.max_attendees);
@@ -63,6 +65,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle(null);
+        pageTitle.setText("Create event");
 
         // make the back button return to the home page
         toolbar.setNavigationOnClickListener(v ->
@@ -85,6 +88,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
         // set the values if we are editing an event instead of creating one
         if(arguments != null){
+            pageTitle.setText("Edit event");
             nameInput.setText(arguments.getString("name"));
             descriptionInput.setText(arguments.getString("description"));
             maxAttendeesInput.setHint("You cannot change the attendee limit");
