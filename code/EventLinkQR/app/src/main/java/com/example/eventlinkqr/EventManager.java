@@ -122,13 +122,16 @@ public class EventManager extends Manager {
                     attendee.put("name", attendeeName);
                     attendee.put("checkedIn", false);
                     attendee.put("checkInCount", 0);
-                    getCollection().document(eventId).update("signedUpCount", FieldValue.increment(1));
-                    MilestoneManager.checkForSignUpMilestone(eventId, uuid);
                     getCollection().document(eventId).collection("attendees").document(uuid).set(attendee)
                         .addOnCompleteListener(task -> {
                             if(task.isSuccessful()){
 
                                 Toast.makeText(context, "Signed Up", Toast.LENGTH_SHORT).show();
+
+                                EventManager.getOrganizerId(eventId, organizerId -> {
+                                    getCollection().document(eventId).update("signedUpCount", FieldValue.increment(1));
+                                    MilestoneManager.checkForSignUpMilestone(eventId, organizerId);
+                                });
 
                                 // checkin if the method was called form the checkIn method
                                 if(checkingIn && location != null){
