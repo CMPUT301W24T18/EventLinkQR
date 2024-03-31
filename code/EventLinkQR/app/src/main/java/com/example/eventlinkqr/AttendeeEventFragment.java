@@ -15,6 +15,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.function.Consumer;
+
 /**
  * A {@link Fragment} subclass responsible for displaying an event's details from the perspective
  * of an attendee. This fragment allows attendees to view event information and sign up for the event.
@@ -81,10 +86,13 @@ public class AttendeeEventFragment extends Fragment {
             String uuid = ((AttendeeMainActivity) requireActivity()).getAttUUID();
             String profileName = ((AttendeeMainActivity) requireActivity()).getProfileName();
 
-            EventManager.signUp(uuid, profileName, event.getId()).addOnSuccessListener(x -> {
-                Toast.makeText(requireActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
-            }).addOnFailureListener(x -> {
-                Toast.makeText(requireActivity(), "Failed to sign up", Toast.LENGTH_SHORT).show();
+            EventManager.isSignedUp(uuid, event.getId(), isSignedUp -> {
+                if(isSignedUp){
+                    // send message when user is already signed up
+                    Toast.makeText(getContext(), "You are already signed up to this event", Toast.LENGTH_SHORT).show();
+                }else{
+                    EventManager.signUp(getContext(), uuid, profileName, event.getId(), false, null);
+                }
             });
         });
 

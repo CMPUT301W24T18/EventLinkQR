@@ -2,6 +2,7 @@ package com.example.eventlinkqr;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,8 +12,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.view.View;
+import android.util.Log;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentContainerView;
@@ -127,9 +128,6 @@ public class AttendeeMainActivity extends AppCompatActivity {
                     clickHandler.postDelayed(clickResetRunnable, 1500);
 
                     if (clickCount <= 1 && clickCount > 0) {
-                        // Show the remaining clicks in a Toast message, starting from the 4th tap
-//                        Toast.makeText(AttendeeMainActivity.this, clickCount + " clicks remaining", Toast.LENGTH_SHORT).show();
-
                         Toast.makeText(AttendeeMainActivity.this, "About to Enter Admin Mode", Toast.LENGTH_SHORT).show();
                     } else if (clickCount == 0) {
 
@@ -199,25 +197,25 @@ public class AttendeeMainActivity extends AppCompatActivity {
                         AttendeeManager.getAttendee(uuid, attendee -> {
                             if(attendee.getLocation_enabled()) {
                                 getLastLocation(location -> {
-                                    EventManager.checkIn(uuid, profileName, code.getEventId(), location).addOnSuccessListener(x -> {
-                                        Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
-                                    }).addOnFailureListener(x -> {
-                                        Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
+                                    EventManager.isSignedUp(uuid, code.getEventId(), isSignedUp -> {
+                                        // Check if the user isn't signed up, check if there is space for the user to sign up first
+                                        if(isSignedUp){
+                                            EventManager.checkIn(this, uuid, profileName, code.getEventId(), location);
+                                        }else{
+                                            EventManager.signUp(this, uuid, profileName, code.getEventId(), true, location);
+                                        }
                                     });
                                 });
                             } else {
-                                EventManager.checkIn(uuid, profileName, code.getEventId()).addOnSuccessListener(x -> {
-                                    Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
-                                }).addOnFailureListener(x -> {
-                                    Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
+                                EventManager.isSignedUp(uuid, code.getEventId(), isSignedUp -> {
+                                    // Check if the user isn't signed up, check if there is space for the user to sign up first
+                                    if(isSignedUp){
+                                        EventManager.checkIn(this, uuid, profileName, code.getEventId());
+                                    }else{
+                                        EventManager.signUp(this, uuid, profileName, code.getEventId(), true, null);
+                                    }
                                 });
                             }
-                        });
-
-                        EventManager.checkIn(uuid, profileName, code.getEventId()).addOnSuccessListener(x -> {
-                            Toast.makeText(this, "Checked In", Toast.LENGTH_SHORT).show();
-                        }).addOnFailureListener(x -> {
-                            Toast.makeText(this, "Failed to check in", Toast.LENGTH_SHORT).show();
                         });
                     } else if (code.getCodeType() == QRCode.PROMOTIONAL_TYPE) {
                         // This is a promotional code, redirect to the attendee event details page

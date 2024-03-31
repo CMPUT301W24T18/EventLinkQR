@@ -67,8 +67,6 @@ public class AttendeeProfileFragment extends Fragment {
             onToggleLocationButtonClicked(isChecked);
         });
 
-        attendeeArrayAdapter = AttendeeArrayAdapter.getInstance(); // Get the singleton instance of the adapter
-
         checkUUIDAndLoadProfile(); // Check UUID and load profile data
 
         btnSave.setOnClickListener(v -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
