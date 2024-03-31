@@ -87,7 +87,7 @@ public class MilestoneManager extends Manager {
                                 addMilestone(milestone);
 
                                 NotificationManager notificationManager = new NotificationManager();
-                                notificationManager.sendNotificationToDatabase(eventId, "Check-in Milestone", event.getName() + " has reached a sign-up milestone of " + signedUpAttendeesCount + " attendee" + (signedUpAttendeesCount > 1 ? "s!" : "!"), true);
+                                notificationManager.sendNotificationToDatabase(eventId, "Sign-up Milestone", event.getName() + " has reached a sign-up milestone of " + signedUpAttendeesCount + " attendee" + (signedUpAttendeesCount > 1 ? "s!" : "!"), true);
                             }
                         }
                     }
