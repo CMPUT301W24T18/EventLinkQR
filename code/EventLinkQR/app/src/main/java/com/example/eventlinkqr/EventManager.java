@@ -39,7 +39,7 @@ public class EventManager extends Manager {
     /**
      * The Firestore collection path for events
      */
-    private static final String COLLECTION_PATH = "Events";
+    private static final String COLLECTION_PATH = "EventsTestMilestones";
 
     /**
      * Check the given attendee into an event with no location
@@ -59,6 +59,10 @@ public class EventManager extends Manager {
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         Toast.makeText(context, "Checked In", Toast.LENGTH_SHORT).show();
+                        getCollection().document(eventId).update("checkedInAttendeesCount", FieldValue.increment(1));
+                        EventManager.getOrganizerId(eventId, organizerId -> {
+                            MilestoneManager.checkForCheckInMilestone(eventId, organizerId);
+                        });
                     }else{
                         Toast.makeText(context, "Failed to check in", Toast.LENGTH_SHORT).show();
                     }
@@ -86,6 +90,10 @@ public class EventManager extends Manager {
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         Toast.makeText(context, "Checked In", Toast.LENGTH_SHORT).show();
+                        getCollection().document(eventId).update("checkedInAttendeesCount", FieldValue.increment(1));
+                        EventManager.getOrganizerId(eventId, organizerId -> {
+                            MilestoneManager.checkForCheckInMilestone(eventId, organizerId);
+                        });
                     }else{
                         Toast.makeText(context, "Failed to check in", Toast.LENGTH_SHORT).show();
                     }
@@ -114,6 +122,8 @@ public class EventManager extends Manager {
                     attendee.put("name", attendeeName);
                     attendee.put("checkedIn", false);
                     attendee.put("checkInCount", 0);
+                    getCollection().document(eventId).update("signedUpCount", FieldValue.increment(1));
+                    MilestoneManager.checkForSignUpMilestone(eventId, uuid);
                     getCollection().document(eventId).collection("attendees").document(uuid).set(attendee)
                         .addOnCompleteListener(task -> {
                             if(task.isSuccessful()){
