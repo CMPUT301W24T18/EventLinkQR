@@ -39,7 +39,7 @@ public class EventManager extends Manager {
     /**
      * The Firestore collection path for events
      */
-    private static final String COLLECTION_PATH = "EventsTestMilestones";
+    private static final String COLLECTION_PATH = "Events";
 
     /**
      * Check the given attendee into an event with no location

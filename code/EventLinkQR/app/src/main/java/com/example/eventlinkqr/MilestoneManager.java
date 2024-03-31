@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 public class MilestoneManager extends Manager {
 
     private static final String COLLECTION_PATH = "Milestones";
+    private static final String EVENT_COLLECTION_PATH = "Events";
     private static final ArrayList<Integer> milestones = new ArrayList<>(Arrays.asList(1, 5, 10, 20, 50, 100, 200, 500, 1000));
 
     /**
@@ -48,7 +49,7 @@ public class MilestoneManager extends Manager {
 
     public static void checkForCheckInMilestone(String eventId, String organizerId) {
         Log.d("MilestoneManager", "Checking for checkIn milestone for eventId: " + eventId + " and organizerId: " + organizerId);
-        getFirebase().collection("Events")
+        getFirebase().collection(EVENT_COLLECTION_PATH)
                 .document(eventId)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -62,7 +63,7 @@ public class MilestoneManager extends Manager {
                                 addMilestone(milestone);
 
                                 NotificationManager notificationManager = new NotificationManager();
-                                notificationManager.sendNotificationToDatabase(eventId, "Check-in Milestone", event.getName() + " has reached a check-in milestone of " + checkedInAttendeesCount + " attendees!");
+                                notificationManager.sendNotificationToDatabase(eventId, "Check-in Milestone", event.getName() + " has reached a check-in milestone of " + checkedInAttendeesCount + " attendee" + (checkedInAttendeesCount > 1 ? "s!" : "!"), true);
                             }
                         }
                     }
@@ -72,7 +73,7 @@ public class MilestoneManager extends Manager {
     }
 
     public static void checkForSignUpMilestone(String eventId, String organizerId) {
-        getFirebase().collection("Events")
+        getFirebase().collection(EVENT_COLLECTION_PATH)
                 .document(eventId)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -86,7 +87,7 @@ public class MilestoneManager extends Manager {
                                 addMilestone(milestone);
 
                                 NotificationManager notificationManager = new NotificationManager();
-                                notificationManager.sendNotificationToDatabase(eventId, "Check-in Milestone", event.getName() + " has reached a sign-up milestone of " + signedUpAttendeesCount + " attendees!");
+                                notificationManager.sendNotificationToDatabase(eventId, "Check-in Milestone", event.getName() + " has reached a sign-up milestone of " + signedUpAttendeesCount + " attendee" + (signedUpAttendeesCount > 1 ? "s!" : "!"), true);
                             }
                         }
                     }
