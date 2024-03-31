@@ -181,6 +181,15 @@ public class NotificationManager {
                 });
     }
 
+    /**
+     * Marks a notification as read based on its title and description. It updates the 'isRead' flag
+     * for the matched notification in the Firestore database. Assumes only one notification matches
+     * the criteria and updates the first one found.
+     *
+     * @param title The title of the notification.
+     * @param description The description of the notification.
+     * @param timeSinceNotification Not used in the current implementation, reserved for future use.
+     */
     public void markNotificationAsRead(String title, String description, String timeSinceNotification) {
         SharedPreferences prefs = context.getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String uuid = prefs.getString("UUID", null);

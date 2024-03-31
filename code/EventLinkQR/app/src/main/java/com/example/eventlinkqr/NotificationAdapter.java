@@ -34,6 +34,8 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
      * @param notifications A list of Notification objects to be displayed.
      * @param source A string identifier indicating the context (organizer or user)
      *               which affects layout inflation.
+     * @param notificationManager An instance of NotificationManager used to manage operations
+     *                             on notifications, such as marking them as read.
      */
     public NotificationAdapter(Context context, List<Notification> notifications, String source, NotificationManager notificationManager) {
         super(context, 0, notifications);
