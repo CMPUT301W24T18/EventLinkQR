@@ -8,7 +8,6 @@ public class Notification {
     private String description;
     private String timeSinceNotification;
     private boolean isRead;
-
     private String eventId;
     private String eventName; // Add this field
 
@@ -43,6 +42,7 @@ public class Notification {
      * @param description          The description of the notification.
      * @param eventId              The eventId of the event which the notification belongs to.
      * @param timeSinceNotification The time elapsed since the notification was created or received, formatted as a string (e.g., "2h" for two hours).
+     * @param isRead                A boolean values which tells whether the notification is yet read or unread.
      */
     public Notification(String title, String description, String eventId, String timeSinceNotification, Boolean isRead) {
         this.title = title;
