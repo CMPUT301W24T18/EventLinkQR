@@ -1,6 +1,7 @@
 package com.example.eventlinkqr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -387,7 +388,7 @@ public class EventManager extends Manager {
      * @param organizer the organizer of the event
      * @param customQR  (optional) encoded text for the qr code
      */
-    public static void createEvent(Event newEvent, String organizer, String customQR, int maxAttendees) {
+    public static void createEvent(Context context, Event newEvent, String organizer, String customQR, int maxAttendees, Bitmap poster) {
         HashMap<String, Object> newEventData = new HashMap<>();
         newEventData.put("name", newEvent.getName());
         newEventData.put("description", newEvent.getDescription());
@@ -406,6 +407,10 @@ public class EventManager extends Manager {
                     String codeText = customQR;
                     String promotionalText = "eventlinkqr:promotion:" + eventId;
 
+                    // upload the poster if there is one
+                    if(poster != null){
+                        ImageManager.uploadPoster(context, eventId, poster);
+                    }
                     if (codeText == null) {
                         codeText = "eventlinkqr:" + eventId;
                     }

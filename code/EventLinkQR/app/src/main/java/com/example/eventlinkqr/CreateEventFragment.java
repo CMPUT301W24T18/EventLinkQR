@@ -163,34 +163,33 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                 // create new event form data and add it toi the database using the event manager
                 Event event = new Event(name, description, category, timestamp, location, tracking);
                 String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
+                Bitmap image = null;
+
+                // set the value of the image
+                if (imageUri != null) {
+                    // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                    try {
+                        image = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    ImageManager.deletePoster(event.getId());
+                }
 
                 if(arguments != null) {
                     //edit the information of the event of the event
                     event.setId(arguments.getString("id"));
                     EventManager.editEvent(event);
-
-                    // set the value of the image
-                    if (imageUri != null) {
-                        // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
-                        Bitmap image;
-                        try {
-                            image = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
-                            ImageManager.uploadPoster(getContext(), event.getId(), image);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }else{
-                        ImageManager.deletePoster(event.getId());
-                    }
+                    ImageManager.uploadPoster(getContext(), event.getId(), image);
                 }else{
                     // if the user, hasn't set a limit, set it to a default value
                     if(maxAttendee.equals("")) {
-                        EventManager.createEvent(event, organizer, customQRString, Integer.MAX_VALUE);
+                        EventManager.createEvent(getContext(), event, organizer, customQRString, Integer.MAX_VALUE, image);
                     }else{
-                        EventManager.createEvent(event, organizer, customQRString, Integer.parseInt(maxAttendee));
+                        EventManager.createEvent(getContext(), event, organizer, customQRString, Integer.parseInt(maxAttendee), image);
                     }
                 }
-
                 // return to the home page
                 Navigation.findNavController(view).navigate(R.id.attendeeHomePage);
             }
