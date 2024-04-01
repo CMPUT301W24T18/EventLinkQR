@@ -1,16 +1,22 @@
 package com.example.eventlinkqr;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +28,7 @@ import androidx.navigation.Navigation;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Timestamp;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,6 +42,16 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
     private String customQRString;
     private MaterialButton dateButton;
     Timestamp timestamp;
+    private ImageView posterImage;
+    private Uri imageUri;
+
+    // ActivityResultLauncher for handling gallery selection result
+    private final ActivityResultLauncher<String> getImage = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            uri -> {
+                imageUri = uri;
+                posterImage.setImageURI(uri);
+            });
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -54,12 +71,14 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         EditText nameInput = view.findViewById(R.id.event_name_input);
         EditText descriptionInput = view.findViewById(R.id.event_description_input);
         EditText maxAttendeesInput = view.findViewById(R.id.max_attendees);
-        Spinner categoryInput = view.findViewById(R.id.category_selector);
         EditText locationInput = view.findViewById(R.id.event_location_input);
+
+        Spinner categoryInput = view.findViewById(R.id.category_selector);
         SwitchCompat geoTracking = view.findViewById(R.id.new_event_geo_switch);
         Toolbar toolbar = view.findViewById(R.id.create_event_toolbar);
-        dateButton = view.findViewById(R.id.date_picker);
 
+        dateButton = view.findViewById(R.id.date_picker);
+        Button posterButton = view.findViewById(R.id.poster_button);
         Button publishButton = view.findViewById(R.id.publish_button);
         Button chooseQrButton = view.findViewById(R.id.choose_qr_button);
 
@@ -71,6 +90,8 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         toolbar.setNavigationOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_orgCreateEventFragment_to_attendeeHomePage));
 
+        // set the onclick listener for selecting a poster for the event
+        posterButton.setOnClickListener(v -> getImage.launch("image/*"));
 
         //Add the categories options to the spinner objects and hiding the descriptor "Categories" from selection
         //https://stackoverflow.com/questions/9863378/how-to-hide-one-item-in-an-android-spinner Romich, uploaded Feb 2, 2014
@@ -107,6 +128,8 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
             geoTracking.setChecked(arguments.getBoolean("geo"));
         }
+
+
         publishButton.setOnClickListener(v -> {
 
             // store all the inputted values
@@ -137,6 +160,18 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                         EventManager.createEvent(event, organizer, customQRString, Integer.parseInt(maxAttendee));
                     }
                 }
+
+//                // set the value of the image
+//                if (imageUri != null) {
+//                    // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+//                    Bitmap image;
+//                    try {
+////                        ImageManager.uploadPoster(getContext(), );
+//                        image = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
 
                 // return to the home page
                 Navigation.findNavController(view).navigate(R.id.attendeeHomePage);

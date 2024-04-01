@@ -30,7 +30,7 @@ import java.io.IOException;
  */
 public class OrgEventFragment extends Fragment {
 
-    private ImageView qrCodeImage;
+    private ImageView eventPoster;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class OrgEventFragment extends Fragment {
         TextView eventDescription = view.findViewById(R.id.org_event_description);
         TextView eventDate = view.findViewById(R.id.org_event_datetime);
         TextView eventCategaory = view.findViewById(R.id.org_event_category);
-        qrCodeImage = view.findViewById(R.id.imageView);
+        eventPoster = view.findViewById(R.id.imageView);
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
 
@@ -73,9 +73,23 @@ public class OrgEventFragment extends Fragment {
         notificationSendIcon.setOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_viewNotification));
 
-
-
         Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+
+        // Set the values to be displayed
+        eventTitle.setText(event.getName());
+        eventLocation.setText(event.getLocation());
+        eventDescription.setText(event.getDescription());
+        eventDate.setText(event.getDate().toDate().toString());
+        eventCategaory.setText(event.getCategory());
+        ImageManager.isPoster(event.getId(), hasPoster -> {
+            if(hasPoster){
+                ImageManager.getPoster(event.getId(), posterBitmap -> {
+                    eventPoster.setImageBitmap(posterBitmap);
+                });
+            }else{
+                eventPoster.setImageBitmap(ImageManager.generateDeterministicImage(event.getId()));
+            }
+        });
 
         // temporary message since it is not yet completely implemented
         detailsButton.setOnClickListener(v -> {
@@ -103,23 +117,12 @@ public class OrgEventFragment extends Fragment {
             Navigation.findNavController(view).navigate(R.id.orgCreateEventFragment, bundle);
         });
 
-        // Set the values to be displayed
-        eventTitle.setText(event.getName());
-        eventLocation.setText(event.getLocation());
-        eventDescription.setText(event.getDescription());
-        eventDate.setText(event.getDate().toDate().toString());
-        eventCategaory.setText(event.getCategory());
 
 
         QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {
-            try {
-                qrCodeImage.setImageBitmap(q.toBitmap(512, 512));
-                sharebutton.setOnClickListener(v -> {
-                    shareImage(q);
-                });
-            } catch (QRCodeGeneratorException e) {
-                throw new RuntimeException(e);
-            }
+            sharebutton.setOnClickListener(v -> {
+                shareImage(q);
+            });
         });
 
         // When clicked, bring up the promotional QR code
