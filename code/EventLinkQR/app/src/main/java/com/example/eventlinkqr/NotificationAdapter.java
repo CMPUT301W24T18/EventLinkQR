@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
@@ -23,6 +24,9 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
     private List<Notification> notifications;
     private Context context;
     private String source; // Identifier for the adapter's context (organizer or user)
+    private NotificationManager notificationManager;
+
+
 
     /**
      * Constructs a new instance of NotificationAdapter.
@@ -31,12 +35,15 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
      * @param notifications A list of Notification objects to be displayed.
      * @param source A string identifier indicating the context (organizer or user)
      *               which affects layout inflation.
+     * @param notificationManager An instance of NotificationManager used to manage operations
+     *                             on notifications, such as marking them as read.
      */
-    public NotificationAdapter(Context context, List<Notification> notifications, String source) {
+    public NotificationAdapter(Context context, List<Notification> notifications, String source, NotificationManager notificationManager) {
         super(context, 0, notifications);
         this.context = context;
         this.notifications = notifications;
         this.source = source;
+        this.notificationManager = notificationManager;
     }
 
     /**
@@ -56,6 +63,15 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
             } else {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.notification_item, parent, false);
                 convertView.setTag("user"); // Tag the view to identify its type
+
+                ImageView statusIcon = convertView.findViewById(R.id.notificationStatusIcon);
+                if (!notification.isRead()) {
+                    // Show red circle for unread notifications
+                    statusIcon.setImageResource(R.drawable.ic_unread_tick);
+                } else {
+                    // Show green circle for read notifications
+                    statusIcon.setImageResource(R.drawable.ic_blue_tick);
+                }
             }
         }
 
@@ -74,6 +90,8 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         description.setText(notification.getDescription());
         timestampView.setText(notification.getTimeSinceNotification());
 
+
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,12 +102,16 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
                 bundle.putString("eventName", notification.getEventName());
                 bundle.putString("source", NotificationAdapter.this.source);
 
-                // Determine the navigation action based on the source
-                int actionId = NotificationAdapter.this.source.equals("organizer") ?
-                        R.id.action_viewNotifications_to_oneDetailedNotification :
-                        R.id.action_notificationDisplayPage_to_DetailPage;
+                if ("user".equals(NotificationAdapter.this.source)) {
 
-                Navigation.findNavController(view).navigate(actionId, bundle);
+                    notificationManager.markNotificationAsRead(notification.getTitle(), notification.getDescription(), notification.getTimeSinceNotification());
+
+                    // Logic to navigate to the detail page for users
+                    Navigation.findNavController(view).navigate(R.id.action_notificationDisplayPage_to_DetailPage, bundle);
+                } else {
+                    // Logic to navigate to the detailed notification for organizers
+                    Navigation.findNavController(view).navigate(R.id.action_viewNotifications_to_oneDetailedNotification, bundle);
+                }
             }
         });
         return convertView;

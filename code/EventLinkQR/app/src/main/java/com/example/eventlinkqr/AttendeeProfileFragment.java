@@ -67,8 +67,6 @@ public class AttendeeProfileFragment extends Fragment {
             onToggleLocationButtonClicked(isChecked);
         });
 
-        attendeeArrayAdapter = AttendeeArrayAdapter.getInstance(); // Get the singleton instance of the adapter
-
         checkUUIDAndLoadProfile(); // Check UUID and load profile data
 
         btnSave.setOnClickListener(v -> fetchAndUpdateFCMToken()); // Fetch FCM token and save profile
@@ -140,7 +138,7 @@ public class AttendeeProfileFragment extends Fragment {
         Boolean locationEnabled = toggleLocation.isChecked();
 
 
-        Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled);
+        Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
 
         // Validate name is not null or empty
         if (name == null || name.trim().isEmpty()) {

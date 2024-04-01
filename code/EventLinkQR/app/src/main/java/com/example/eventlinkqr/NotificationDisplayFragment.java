@@ -46,6 +46,7 @@ public class NotificationDisplayFragment extends Fragment {
      */
     private SwipeRefreshLayout swipeRefreshLayout;
 
+
     /**
      * Initializes the activity, its views, and fetches the initial set of notifications.
      */
@@ -61,7 +62,6 @@ public class NotificationDisplayFragment extends Fragment {
 
         listView = view.findViewById(R.id.lvNotifications);
         List<Notification> notifications = new ArrayList<>();
-        listView.setAdapter(adapter);
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -84,11 +84,11 @@ public class NotificationDisplayFragment extends Fragment {
      * with appropriate actions.
      */
     private void fetchNotifications(String uuid) {
-        NotificationManager manager = new NotificationManager();
+        NotificationManager manager = new NotificationManager(requireContext());
         manager.fetchNotifications(uuid, new NotificationsFetchListener() {
             @Override
             public void onNotificationsFetched(List<Notification> notifications) {
-                NotificationAdapter adapter = new NotificationAdapter(requireActivity(), notifications, "user");
+                NotificationAdapter adapter = new NotificationAdapter(requireActivity(), notifications, "user", manager);
                 listView.setAdapter(adapter);
             }
 

@@ -15,15 +15,42 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.function.Consumer;
+
 /**
- * this class takes care of viewing an event's details from the attendee point of view and allows them to sign up to the event
+ * A {@link Fragment} subclass responsible for displaying an event's details from the perspective
+ * of an attendee. This fragment allows attendees to view event information and sign up for the event.
+ *
+ * This fragment is part of the attendee's user interface and is accessed within the attendee area
+ * of the application. It displays the event name, date, description, location, and an image related
+ * to the event. Attendees can use the sign-up button to register their interest in the event.
  */
 public class AttendeeEventFragment extends Fragment {
+
+    /**
+     * Called to do initial creation of the fragment.
+     *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * This method inflates the layout for the fragment's view and initializes
+     * the UI components to display the event's details. It also sets up the event
+     * sign-up functionality.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,10 +86,13 @@ public class AttendeeEventFragment extends Fragment {
             String uuid = ((AttendeeMainActivity) requireActivity()).getAttUUID();
             String profileName = ((AttendeeMainActivity) requireActivity()).getProfileName();
 
-            EventManager.signUp(uuid, profileName, event.getId()).addOnSuccessListener(x -> {
-                Toast.makeText(requireActivity(), "Signed Up", Toast.LENGTH_SHORT).show();
-            }).addOnFailureListener(x -> {
-                Toast.makeText(requireActivity(), "Failed to sign up", Toast.LENGTH_SHORT).show();
+            EventManager.isSignedUp(uuid, event.getId(), isSignedUp -> {
+                if(isSignedUp){
+                    // send message when user is already signed up
+                    Toast.makeText(getContext(), "You are already signed up to this event", Toast.LENGTH_SHORT).show();
+                }else{
+                    EventManager.signUp(getContext(), uuid, profileName, event.getId(), false, null);
+                }
             });
         });
 
