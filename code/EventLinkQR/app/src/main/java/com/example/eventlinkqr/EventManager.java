@@ -181,7 +181,7 @@ public class EventManager extends Manager {
                 for(DocumentSnapshot doc : querySnapshots.getDocuments()){
                     getCollection().document(doc.getId()).collection("attendees").document(userID)
                             .addSnapshotListener((value, error1) -> {
-                        if(value != null){
+                        if(value != null && value.exists()){
                             events.add(EventManager.fromDocument(doc, null));
                             eventCallback.accept(events);
                         }
@@ -206,7 +206,7 @@ public class EventManager extends Manager {
                 for(DocumentSnapshot doc : querySnapshots.getDocuments()){
                     getCollection().document(doc.getId()).collection("attendees").document(userID)
                             .addSnapshotListener((value, error1) -> {
-                                if(value != null){
+                                if(value != null && !value.exists()){
                                     events.add(EventManager.fromDocument(doc, null));
                                     eventCallback.accept(events);
                                 }

@@ -65,6 +65,7 @@ public class Event {
     public Event() {
         // Default constructor required for calls to DataSnapshot.getValue(Event.class)
     }
+
     /**
      * gets the event's name
      * @return the event's name
@@ -175,8 +176,13 @@ public class Event {
         return checkedInAttendeesCount;
     }
 
-    public void setCheckedInAttendeesCount(int count) {
-        checkedInAttendeesCount = count;
+    public void setCheckedInAttendeesCount(Integer count) {
+
+        if (count == null) {
+            this.checkedInAttendeesCount = 0;
+        } else {
+            this.checkedInAttendeesCount = count;
+        }
     }
 
     /**

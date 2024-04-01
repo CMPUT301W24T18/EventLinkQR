@@ -39,4 +39,11 @@
     <string name="choose_image">Choose Image</string>
     <string name="editProfilImg">Edit Profile Img</string>
     <string name="account_select">Select account type</string>
+    <string name="events">Events</string>
+    <string name="users">Users\n</string>
+    <string name="images">Images</string>
+    <string name="profile">Profile</string>
+    <string name="exit">Exit</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -23,7 +23,8 @@ public class AttendeeManager extends Manager {
                 document.getString("phone_number"),
                 document.getString("homepage"),
                 document.getString("fcmToken"),
-                document.getBoolean("location_enabled")
+                document.getBoolean("location_enabled"),
+                document.getBoolean("isAdmin")
         );
         return a;
     }

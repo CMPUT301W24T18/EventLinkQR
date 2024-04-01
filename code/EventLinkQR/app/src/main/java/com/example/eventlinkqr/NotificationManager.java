@@ -1,13 +1,15 @@
 package com.example.eventlinkqr;
 
-import android.util.Log;
+import static android.content.Context.MODE_PRIVATE;
 
+import android.util.Log;
+import android.content.Context;
+import android.content.SharedPreferences;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Transaction;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -21,13 +23,19 @@ public class NotificationManager {
     private static final String TAG = "NotificationManager";
     private final FirebaseFirestore db;
 
+    private Context context; // Add this line
+
+    // Modify the constructor to accept Context
+    public NotificationManager(Context context) {
+        this.context = context;
+        db = FirebaseFirestore.getInstance();
+    }
+
+
     /**
      * Initializes a new instance of the NotificationManager class.
      * This constructor specifically initializes a Firestore instance for use in notification management.
      */
-    public NotificationManager() {
-        db = FirebaseFirestore.getInstance();
-    }
 
     /**
      * Sends a notification to the Firestore database under the "notifications_testing" collection.
@@ -46,7 +54,6 @@ public class NotificationManager {
         notificationData.put("description", description);
         notificationData.put("timestamp", new Date());
         notificationData.put("isMilestone", isMilestone);
-
 
         // Use a transaction to ensure that the operation is atomic
         db.runTransaction((Transaction.Function<Void>) transaction -> {
@@ -100,13 +107,14 @@ public class NotificationManager {
                             String body = (String) notifMap.get("body");
                             String eventId = (String) notifMap.get("eventId"); // Assuming eventId is stored here
                             Timestamp ts = (Timestamp) notifMap.get("timestamp");
+                            Boolean isRead = (Boolean) notifMap.get("isRead") ;
                             Date notificationDate = ts.toDate();
                             String timeSinceNotification = getTimeSince(notificationDate);
 
                             // Fetch event name using eventId
                             db.collection("Events").document(eventId).get().addOnSuccessListener(eventDoc -> {
                                 String eventName = eventDoc.getString("name"); // Assuming event name is stored as 'name'
-                                Notification notification = new Notification(title, body, eventId, timeSinceNotification);
+                                Notification notification = new Notification(title, body, eventId, timeSinceNotification, isRead);
                                 notification.setEventName(eventName); // Set the event name
                                 notifications.add(notification);
 
@@ -168,6 +176,44 @@ public class NotificationManager {
                     }
                 });
     }
+
+    /**
+     * Marks a notification as read based on its title and description. It updates the 'isRead' flag
+     * for the matched notification in the Firestore database. Assumes only one notification matches
+     * the criteria and updates the first one found.
+     *
+     * @param title The title of the notification.
+     * @param description The description of the notification.
+     * @param timeSinceNotification Not used in the current implementation, reserved for future use.
+     */
+    public void markNotificationAsRead(String title, String description, String timeSinceNotification) {
+        SharedPreferences prefs = context.getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String uuid = prefs.getString("UUID", null);
+
+        DocumentReference docRef = db.collection("userNotifications").document(uuid);
+
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                List<Map<String, Object>> notifications = (List<Map<String, Object>>) documentSnapshot.get("notifications");
+                if (notifications != null) {
+                    for (Map<String, Object> notification : notifications) {
+                        if (title.equals(notification.get("title")) &&
+                                description.equals(notification.get("body"))) {
+                            notification.put("isRead", true);
+                            // Assuming only one notification matches, break after finding it
+                            break;
+                        }
+                    }
+
+                    // Update the entire notifications array back to Firestore
+                    docRef.update("notifications", notifications)
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification marked as read"))
+                            .addOnFailureListener(e -> Log.w(TAG, "Error marking notification as read", e));
+                }
+            }
+        }).addOnFailureListener(e -> Log.w(TAG, "Error fetching document", e));
+    }
+
 
     /**
      * Calculates the time elapsed since a given past date.
