@@ -12,6 +12,12 @@ android {
         useJUnitPlatform()
     }
 
+    android {
+        lint {
+            baseline = file("lint-baseline.xml")
+        }
+    }
+
     defaultConfig {
         applicationId = "com.example.eventlinkqr"
         minSdk = 24
@@ -39,22 +45,27 @@ android {
 
 dependencies {
 
+    implementation ("com.squareup.picasso:picasso:2.71828")
     implementation("com.google.zxing:core:3.5.3")
 
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.1.0")
 
+
     implementation("com.google.firebase:firebase-messaging:23.4.1")
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.google.firebase:firebase-config:21.6.3")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.10.0")
     testImplementation("org.mockito:mockito-junit-jupiter:5.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+
+
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test:runner:1.5.2")
@@ -73,6 +84,10 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
 
+<<<<<<< HEAD
     implementation("com.squareup.picasso:picasso:2.71828")
 
 }
+=======
+}
+>>>>>>> origin/main

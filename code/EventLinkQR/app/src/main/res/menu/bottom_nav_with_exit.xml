@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="@string/events"
+        android:icon="@drawable/baseline_event_note_24"
+        android:id="@+id/events"
+        />
+    <item
+        android:title="@string/users"
+        android:icon="@drawable/baseline_people_24"
+        android:id="@+id/users"/>
+    <item
+        android:title="@string/images"
+        android:icon="@drawable/baseline_image_24"
+        android:id="@+id/images"/>
+    <item
+        android:title="@string/exit"
+        android:icon="@drawable/exit"
+        android:id="@+id/profile"
+        />
+</menu>
