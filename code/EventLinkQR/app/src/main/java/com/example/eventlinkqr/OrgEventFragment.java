@@ -47,11 +47,13 @@ public class OrgEventFragment extends Fragment {
         Button attendeesButton = view.findViewById(R.id.attendees_button);
         Button promotionalButton = view.findViewById(R.id.promotional_qr_button);
         Button sharebutton = view.findViewById(R.id.share_qr_button);
+        Button editbutton = view.findViewById(R.id.edit_event_button);
         ImageView notificationSendIcon = view.findViewById(R.id.notification_send_icon);
         TextView eventTitle = view.findViewById(R.id.org_event_name);
         TextView eventLocation = view.findViewById(R.id.org_event_location);
         TextView eventDescription = view.findViewById(R.id.org_event_description);
         TextView eventDate = view.findViewById(R.id.org_event_datetime);
+        TextView eventCategaory = view.findViewById(R.id.org_event_category);
         qrCodeImage = view.findViewById(R.id.imageView);
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
@@ -72,6 +74,7 @@ public class OrgEventFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_viewNotification));
 
 
+
         Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
 
         // temporary message since it is not yet completely implemented
@@ -86,11 +89,26 @@ public class OrgEventFragment extends Fragment {
             }
         });
 
+        // set the onClick listener for the edit button
+        editbutton.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("id", event.getId());
+            bundle.putString("name", event.getName());
+            bundle.putString("location", event.getLocation());
+            bundle.putString("description", event.getDescription());
+            bundle.putString("category", event.getCategory());
+            long milliseconds = event.getDate().getSeconds() *1000 +event.getDate().getNanoseconds()/1000000;
+            bundle.putLong("date", milliseconds);
+            bundle.putBoolean("geo", event.getGeoTracking());
+            Navigation.findNavController(view).navigate(R.id.orgCreateEventFragment, bundle);
+        });
+
         // Set the values to be displayed
         eventTitle.setText(event.getName());
         eventLocation.setText(event.getLocation());
         eventDescription.setText(event.getDescription());
         eventDate.setText(event.getDate().toDate().toString());
+        eventCategaory.setText(event.getCategory());
 
 
         QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {

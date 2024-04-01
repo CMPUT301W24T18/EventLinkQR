@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,8 +22,10 @@ import androidx.navigation.Navigation;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Timestamp;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * this class takes care of taking in the input for a new event and adding it to the data
@@ -43,9 +46,11 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String [] eventCategories = {"Networking","Entertainment", "Conference", "Trade show", "Workshop", "Product Launch", "Charity", "Category"};
+        List<String> eventCategories = Arrays.asList("Networking", "Entertainment", "Conference", "Trade show", "Workshop", "Product Launch", "Charity", "Category");
+        Bundle arguments = getArguments();
 
         //Map all the input fields
+        TextView pageTitle = view.findViewById(R.id.create_event_title);
         EditText nameInput = view.findViewById(R.id.event_name_input);
         EditText descriptionInput = view.findViewById(R.id.event_description_input);
         EditText maxAttendeesInput = view.findViewById(R.id.max_attendees);
@@ -60,6 +65,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle(null);
+        pageTitle.setText("Create event");
 
         // make the back button return to the home page
         toolbar.setNavigationOnClickListener(v ->
@@ -73,13 +79,34 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
             @Override
             public int getCount() {
                 //Truncate so "Categories" isn't one of the options
-                return(eventCategories.length-1);
+                return(eventCategories.size()-1);
             }
         };
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryInput.setAdapter(adapter);
-        categoryInput.setSelection(eventCategories.length-1);
+        categoryInput.setSelection(eventCategories.size()-1);
 
+        // set the values if we are editing an event instead of creating one
+        if(arguments != null){
+            pageTitle.setText("Edit event");
+            nameInput.setText(arguments.getString("name"));
+            descriptionInput.setText(arguments.getString("description"));
+            maxAttendeesInput.setHint("You cannot change the attendee limit");
+            maxAttendeesInput.setEnabled(false);
+            locationInput.setText(arguments.getString("location"));
+
+            // set the spinner to the position of the previous category
+            String cat = arguments.getString("category");
+            int descriptionPos = eventCategories.indexOf(cat);
+            categoryInput.setSelection(descriptionPos);
+
+            // set the time previously chosen
+            long timeMilli = arguments.getLong("date");
+            timestamp = new Timestamp(timeMilli / 1000, (int) ((timeMilli % 1000) * 1000000));
+            dateButton.setHint(timestamp.toDate().toString());
+
+            geoTracking.setChecked(arguments.getBoolean("geo"));
+        }
         publishButton.setOnClickListener(v -> {
 
             // store all the inputted values
@@ -91,18 +118,24 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
             Boolean tracking = geoTracking.isChecked();
 
             if(name.equals("") || description.equals("") || location.equals("") || category.equals("Category") || timestamp == null){
-                // send wrong password message
+                // send error message
                 Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
             } else {
                 // create new event form data and add it toi the database using the event manager
-                Event newEvent = new Event(name, description, category, timestamp, location, tracking);
+                Event event = new Event(name, description, category, timestamp, location, tracking);
                 String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
 
-                // if the user, hasn't set a limit, set it to a default value
-                if(maxAttendee.equals("")) {
-                    EventManager.createEvent(newEvent, organizer, customQRString, Integer.MAX_VALUE);
+                if(arguments != null) {
+                    //edit the information of the event of the event
+                    event.setId(arguments.getString("id"));
+                    EventManager.editEvent(event);
                 }else{
-                    EventManager.createEvent(newEvent, organizer, customQRString, Integer.parseInt(maxAttendee));
+                    // if the user, hasn't set a limit, set it to a default value
+                    if(maxAttendee.equals("")) {
+                        EventManager.createEvent(event, organizer, customQRString, Integer.MAX_VALUE);
+                    }else{
+                        EventManager.createEvent(event, organizer, customQRString, Integer.parseInt(maxAttendee));
+                    }
                 }
 
                 // return to the home page

@@ -38,14 +38,14 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
 
         //Map all the TextViews
         TextView eventName = view.findViewById(R.id.event_title);
-        TextView eventDate = view.findViewById(R.id.event_description);
+        TextView eventCategory = view.findViewById(R.id.event_description);
 
         assert event != null;
 
         //Set the value of all the TextViews
         // this is a basic implementation that will be updated later on
         eventName.setText(event.getName());
-        eventDate.setText(event.getDescription());
+        eventCategory.setText(event.getCategory());
         return view;
     }
 }
