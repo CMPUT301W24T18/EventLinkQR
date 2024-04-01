@@ -27,6 +27,7 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Timestamp;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -49,8 +50,9 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
     private final ActivityResultLauncher<String> getImage = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
             uri -> {
-                imageUri = uri;
-                posterImage.setImageURI(uri);
+                if(uri != null){
+                    setImageUri(uri);
+                }
             });
 
     @Override
@@ -73,12 +75,14 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         EditText maxAttendeesInput = view.findViewById(R.id.max_attendees);
         EditText locationInput = view.findViewById(R.id.event_location_input);
 
+        posterImage = view.findViewById(R.id.poster_image);
+
         Spinner categoryInput = view.findViewById(R.id.category_selector);
         SwitchCompat geoTracking = view.findViewById(R.id.new_event_geo_switch);
         Toolbar toolbar = view.findViewById(R.id.create_event_toolbar);
 
         dateButton = view.findViewById(R.id.date_picker);
-        Button posterButton = view.findViewById(R.id.poster_button);
+        Button clearPoster = view.findViewById(R.id.poster_button);
         Button publishButton = view.findViewById(R.id.publish_button);
         Button chooseQrButton = view.findViewById(R.id.choose_qr_button);
 
@@ -91,7 +95,12 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                 Navigation.findNavController(view).navigate(R.id.action_orgCreateEventFragment_to_attendeeHomePage));
 
         // set the onclick listener for selecting a poster for the event
-        posterButton.setOnClickListener(v -> getImage.launch("image/*"));
+        posterImage.setOnClickListener(v ->
+            getImage.launch("image/*"));
+
+        // deselect the image poster
+        clearPoster.setOnClickListener(v ->
+                posterImage.setImageResource(R.drawable.ic_add_photo));
 
         //Add the categories options to the spinner objects and hiding the descriptor "Categories" from selection
         //https://stackoverflow.com/questions/9863378/how-to-hide-one-item-in-an-android-spinner Romich, uploaded Feb 2, 2014
@@ -161,17 +170,16 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                     }
                 }
 
-//                // set the value of the image
-//                if (imageUri != null) {
-//                    // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
-//                    Bitmap image;
-//                    try {
-////                        ImageManager.uploadPoster(getContext(), );
-//                        image = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
+                // set the value of the image
+                if (imageUri != null) {
+                    // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                    Bitmap image;
+                    try {
+                        image = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
                 // return to the home page
                 Navigation.findNavController(view).navigate(R.id.attendeeHomePage);
@@ -208,6 +216,13 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         // display the time chosen on the screen so the user can confirm
         dateButton.setHint(timeChosen);
         this.timestamp = new Timestamp(date);
+    }
+
+    private void setImageUri(Uri uri){
+        this.imageUri = uri;
+        if(imageUri != null){
+            Picasso.get().load(imageUri).fit().into(posterImage);
+        }
     }
 
 }
