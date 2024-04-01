@@ -47,6 +47,14 @@ public class MilestoneManager extends Manager {
                 });
     }
 
+    /**
+    * Checks if the number of attendees checked in for a given event has reached a predefined milestone.
+    * If a milestone is reached, a new {@link Milestone} object is created and added to the database,
+    * and a notification is sent out to highlight the achievement.
+    * 
+    * @param eventId The unique identifier for the event being checked.
+    * @param organizerId The unique identifier for the organizer of the event.
+    */
     public static void checkForCheckInMilestone(String eventId, String organizerId) {
         Log.d("MilestoneManager", "Checking for checkIn milestone for eventId: " + eventId + " and organizerId: " + organizerId);
         getFirebase().collection(EVENT_COLLECTION_PATH)
@@ -68,10 +76,16 @@ public class MilestoneManager extends Manager {
                         }
                     }
                 });
-
-
     }
 
+    /**
+    * Checks if the number of attendees signed up for a given event has reached a predefined milestone.
+    * Upon reaching a milestone, it creates and stores a {@link Milestone} object in the database for
+    * record-keeping and sends a notification to highlight the achievement.
+    *
+    * @param eventId The unique identifier for the event.
+    * @param organizerId The unique identifier for the organizer of the event.
+    */
     public static void checkForSignUpMilestone(String eventId, String organizerId) {
         getFirebase().collection(EVENT_COLLECTION_PATH)
                 .document(eventId)
@@ -93,7 +107,12 @@ public class MilestoneManager extends Manager {
                     }
                 });
     }
-
+    
+    /**
+    * Adds a milestone to the database.
+    *
+    * @param milestone The milestone to add.
+    */
     public static void addMilestone(Milestone milestone) {
         getFirebase().collection(COLLECTION_PATH)
                 .add(milestone)
