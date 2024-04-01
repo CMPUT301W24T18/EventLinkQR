@@ -41,6 +41,17 @@ public class Event {
         this.geoTracking = geoTracking;
     }
 
+    /**
+     * Event creator with all attributes
+     * @param name the event's name
+     * @param description the event's description
+     * @param category the event's category
+     * @param date the event's date
+     * @param location the event's location
+     * @param geoTracking whether the event has geolocation tracking or not
+     * @param checkedInAttendeesCount checked in attendance count of the attendees
+     * @param signedUpCount signed up attendance count of the attendees
+     */
     public Event(String name, String description, String category, Timestamp date, String location, Boolean geoTracking, int checkedInAttendeesCount, int signedUpCount) {
         this.name = name;
         this.description = description;
@@ -172,10 +183,18 @@ public class Event {
         return checkedInAttendees;
     }
 
+    /**
+     * get the checked In attendees count
+     * @return checkedInAttendeesCount
+     */
     public int getCheckedInAttendeesCount() {
         return checkedInAttendeesCount;
     }
 
+    /**
+     * set the checked In attendees count
+     * @param count checkedInAttendeesCount
+     */
     public void setCheckedInAttendeesCount(Integer count) {
 
         if (count == null) {
@@ -193,22 +212,26 @@ public class Event {
         return this.checkInLocations;
     }
 
+    /**
+     * set the checked In location
+     * @param checkInLocations the check in location
+     */
     public void setCheckInLocations(ArrayList<LatLng> checkInLocations) {
         this.checkInLocations = checkInLocations;
     }
 
-//    public int getTotalAttendees() {
-//        if (checkedInAttendees == null || checkedInAttendees.isEmpty()) {
-//            return 0;
-//        } else {
-//            return checkedInAttendees.size();
-//        }
-//    }
-
+    /**
+     * get the signed up attendees count
+     * @return signedUpCount
+     */
     public int getSignedUpCount() {
         return signedUpCount;
     }
 
+    /**
+     * set the signed up attendees count
+     * @param signedUpCount Signed up Attendees Count
+     */
     public void setSignedUpCount(int signedUpCount) {
         this.signedUpCount = signedUpCount;
     }

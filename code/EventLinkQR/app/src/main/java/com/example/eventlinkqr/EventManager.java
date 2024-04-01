@@ -61,7 +61,7 @@ public class EventManager extends Manager {
                         Toast.makeText(context, "Checked In", Toast.LENGTH_SHORT).show();
                         getCollection().document(eventId).update("checkedInAttendeesCount", FieldValue.increment(1));
                         EventManager.getOrganizerId(eventId, organizerId -> {
-                            MilestoneManager.checkForCheckInMilestone(eventId, organizerId);
+                            MilestoneManager.checkForCheckInMilestone(context, eventId, organizerId);
                         });
                     }else{
                         Toast.makeText(context, "Failed to check in", Toast.LENGTH_SHORT).show();
@@ -92,7 +92,7 @@ public class EventManager extends Manager {
                         Toast.makeText(context, "Checked In", Toast.LENGTH_SHORT).show();
                         getCollection().document(eventId).update("checkedInAttendeesCount", FieldValue.increment(1));
                         EventManager.getOrganizerId(eventId, organizerId -> {
-                            MilestoneManager.checkForCheckInMilestone(eventId, organizerId);
+                            MilestoneManager.checkForCheckInMilestone(context, eventId, organizerId);
                         });
                     }else{
                         Toast.makeText(context, "Failed to check in", Toast.LENGTH_SHORT).show();
@@ -130,7 +130,7 @@ public class EventManager extends Manager {
 
                                 EventManager.getOrganizerId(eventId, organizerId -> {
                                     getCollection().document(eventId).update("signedUpCount", FieldValue.increment(1));
-                                    MilestoneManager.checkForSignUpMilestone(eventId, organizerId);
+                                    MilestoneManager.checkForSignUpMilestone(context, eventId, organizerId);
                                 });
 
                                 // checkin if the method was called form the checkIn method
@@ -397,6 +397,12 @@ public class EventManager extends Manager {
         });
     }
 
+    /**
+     * Gets the organizer's ID for an event.
+     *
+     * @param eventId The ID of the event.
+     * @param eventCallback The function to call with the organizer's ID.
+     */
     public static void getOrganizerId(String eventId, Consumer<String> eventCallback) {
         getCollection().document(eventId).get().addOnCompleteListener((Task<DocumentSnapshot> task) -> {
             if (task.isSuccessful()) {

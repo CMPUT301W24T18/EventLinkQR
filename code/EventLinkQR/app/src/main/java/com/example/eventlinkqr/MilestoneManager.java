@@ -1,10 +1,10 @@
 package com.example.eventlinkqr;
 
-
+import java.util.ArrayList;
+import android.content.Context;
 import android.util.Log;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Query;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -55,7 +55,7 @@ public class MilestoneManager extends Manager {
     * @param eventId The unique identifier for the event being checked.
     * @param organizerId The unique identifier for the organizer of the event.
     */
-    public static void checkForCheckInMilestone(String eventId, String organizerId) {
+    public static void checkForCheckInMilestone(Context context, String eventId, String organizerId) {
         Log.d("MilestoneManager", "Checking for checkIn milestone for eventId: " + eventId + " and organizerId: " + organizerId);
         getFirebase().collection(EVENT_COLLECTION_PATH)
                 .document(eventId)
@@ -70,13 +70,14 @@ public class MilestoneManager extends Manager {
                                 Milestone milestone = new Milestone(eventId, organizerId, "checkIn", checkedInAttendeesCount, Timestamp.now());
                                 addMilestone(milestone);
 
-                                NotificationManager notificationManager = new NotificationManager();
+                                NotificationManager notificationManager = new NotificationManager(context);
                                 notificationManager.sendNotificationToDatabase(eventId, "Check-in Milestone", event.getName() + " has reached a check-in milestone of " + checkedInAttendeesCount + " attendee" + (checkedInAttendeesCount > 1 ? "s!" : "!"), true);
                             }
                         }
                     }
                 });
     }
+
 
     /**
     * Checks if the number of attendees signed up for a given event has reached a predefined milestone.
@@ -86,7 +87,7 @@ public class MilestoneManager extends Manager {
     * @param eventId The unique identifier for the event.
     * @param organizerId The unique identifier for the organizer of the event.
     */
-    public static void checkForSignUpMilestone(String eventId, String organizerId) {
+    public static void checkForSignUpMilestone(Context context, String eventId, String organizerId) {
         getFirebase().collection(EVENT_COLLECTION_PATH)
                 .document(eventId)
                 .get()
@@ -100,7 +101,7 @@ public class MilestoneManager extends Manager {
                                 Log.d("MilestoneManager", "OrganizerId: " + organizerId + " reached a milestone ");
                                 addMilestone(milestone);
 
-                                NotificationManager notificationManager = new NotificationManager();
+                                NotificationManager notificationManager = new NotificationManager(context);
                                 notificationManager.sendNotificationToDatabase(eventId, "Sign-up Milestone", event.getName() + " has reached a sign-up milestone of " + signedUpAttendeesCount + " attendee" + (signedUpAttendeesCount > 1 ? "s!" : "!"), true);
                             }
                         }
