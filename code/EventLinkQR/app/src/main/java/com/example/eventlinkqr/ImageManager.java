@@ -11,6 +11,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -113,7 +115,51 @@ public class ImageManager extends Manager {
     }
 
     /**
-     * Checks if the event has a poster associated to it
+     * Uploads an image to Firebase Storage that is linked to the uuid that uploaded it and updates the Firestore database with the image path as Base64.
+     *
+     * @param context The context that the function is being called in.
+     * @param eventId The event ID to associate the uploaded poster with.
+     * @param image The path within Firebase Storage where the image will be stored.
+     */
+    public static void updatePoster(Context context, String eventId, Bitmap image) {
+
+        String base64Encoded = Base64.encodeToString(ImageManager.bitmapToByteArray(image), Base64.DEFAULT);
+
+        Map<String, Object> imageMap = new HashMap<>();
+
+        imageMap.put("base64Image", base64Encoded);
+
+        getCollection().document(eventId).update(imageMap) // changed add to set
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(context, "Poster updated successfully", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Poster upload failed", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    /**
+     * Removes the poster of an event from the database
+     *
+     * @param eventId The event ID to associate the deleted poster with.
+     */
+    public static void deletePoster(String eventId) {
+        ImageManager.isPoster(eventId, hasPoster -> {
+            if(hasPoster){
+                getCollection().document(eventId).delete()
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            Log.d("Firestore", "poster of event " + eventId + " deleted");
+                        }else{
+                            Log.d("Firestore", "delete failed with ", task.getException());
+                        }
+                    });
+            }
+        });
+    }
+
+    /**
+     * Gets the bitmap of the event poster
      *
      * @param eventId the event id
      * @param poster consumer to receive the bitmap of the poster

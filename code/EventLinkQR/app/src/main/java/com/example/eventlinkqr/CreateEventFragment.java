@@ -136,6 +136,18 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
             dateButton.setHint(timestamp.toDate().toString());
 
             geoTracking.setChecked(arguments.getBoolean("geo"));
+
+            ImageManager.isPoster(arguments.getString("id"), hasPoster -> {
+                if(hasPoster){
+                    ImageManager.getPoster(arguments.getString("id"), posterBitmap -> {
+                        Bitmap scaleImage = Bitmap
+                                .createScaledBitmap(posterBitmap, posterImage.getWidth(), 500, true);
+                        posterImage.setImageBitmap(scaleImage);
+                    });
+                }else{
+                    posterImage.setImageBitmap(ImageManager.generateDeterministicImage(arguments.getString("id")));
+                }
+            });
         }
 
 
@@ -161,23 +173,26 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                     //edit the information of the event of the event
                     event.setId(arguments.getString("id"));
                     EventManager.editEvent(event);
+
+                    // set the value of the image
+                    if (imageUri != null) {
+                        // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                        Bitmap image;
+                        try {
+                            image = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
+                            ImageManager.uploadPoster(getContext(), event.getId(), image);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }else{
+                        ImageManager.deletePoster(event.getId());
+                    }
                 }else{
                     // if the user, hasn't set a limit, set it to a default value
                     if(maxAttendee.equals("")) {
                         EventManager.createEvent(event, organizer, customQRString, Integer.MAX_VALUE);
                     }else{
                         EventManager.createEvent(event, organizer, customQRString, Integer.parseInt(maxAttendee));
-                    }
-                }
-
-                // set the value of the image
-                if (imageUri != null) {
-                    // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
-                    Bitmap image;
-                    try {
-                        image = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
                     }
                 }
 

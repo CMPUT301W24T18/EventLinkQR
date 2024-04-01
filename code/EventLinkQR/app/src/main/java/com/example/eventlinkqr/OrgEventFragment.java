@@ -84,7 +84,9 @@ public class OrgEventFragment extends Fragment {
         ImageManager.isPoster(event.getId(), hasPoster -> {
             if(hasPoster){
                 ImageManager.getPoster(event.getId(), posterBitmap -> {
-                    eventPoster.setImageBitmap(posterBitmap);
+                    Bitmap scaleImage = Bitmap
+                            .createScaledBitmap(posterBitmap, 500, 500, true);
+                    eventPoster.setImageBitmap(scaleImage);
                 });
             }else{
                 eventPoster.setImageBitmap(ImageManager.generateDeterministicImage(event.getId()));
