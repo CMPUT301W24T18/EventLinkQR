@@ -1,10 +1,12 @@
 package com.example.eventlinkqr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +41,8 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         //Map all the TextViews
         TextView eventName = view.findViewById(R.id.event_title);
         TextView eventCategory = view.findViewById(R.id.event_description);
+        ImageView eventPoster = view.findViewById(R.id.event_image);
+
 
         assert event != null;
 
@@ -46,6 +50,13 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         // this is a basic implementation that will be updated later on
         eventName.setText(event.getName());
         eventCategory.setText(event.getCategory());
+
+        // set the poster
+        ImageManager.getPoster(event.getId(), posterBitmap -> {
+            Bitmap scaleImage = Bitmap
+                    .createScaledBitmap(posterBitmap, eventPoster.getWidth(), eventPoster.getHeight(), true);
+            eventPoster.setImageBitmap(scaleImage);
+        });
         return view;
     }
 }

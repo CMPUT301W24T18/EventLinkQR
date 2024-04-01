@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,8 +55,12 @@ public class AttendeeEventFragment extends Fragment {
         eventDate.setText(event.getDate().toDate().toString());
         eventCategaory.setText(event.getCategory());
 
-        // generate a picture for the image based on the event ID
-        eventPic.setImageBitmap(ImageManager.generateDeterministicImage(event.getId()));
+        // generate the event poster
+        ImageManager.getPoster(event.getId(), posterBitmap -> {
+            Bitmap scaleImage = Bitmap
+                    .createScaledBitmap(posterBitmap, 500, 500, true);
+            eventPic.setImageBitmap(scaleImage);
+        });
 
         // make the back button return to the home page
         eventToolBar.setNavigationOnClickListener(v ->

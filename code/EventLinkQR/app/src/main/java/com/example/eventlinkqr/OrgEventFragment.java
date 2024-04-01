@@ -81,16 +81,12 @@ public class OrgEventFragment extends Fragment {
         eventDescription.setText(event.getDescription());
         eventDate.setText(event.getDate().toDate().toString());
         eventCategaory.setText(event.getCategory());
-        ImageManager.isPoster(event.getId(), hasPoster -> {
-            if(hasPoster){
-                ImageManager.getPoster(event.getId(), posterBitmap -> {
-                    Bitmap scaleImage = Bitmap
-                            .createScaledBitmap(posterBitmap, 500, 500, true);
-                    eventPoster.setImageBitmap(scaleImage);
-                });
-            }else{
-                eventPoster.setImageBitmap(ImageManager.generateDeterministicImage(event.getId()));
-            }
+
+        // set the poster
+        ImageManager.getPoster(event.getId(), posterBitmap -> {
+            Bitmap scaleImage = Bitmap
+                    .createScaledBitmap(posterBitmap, 500, 500, true);
+            eventPoster.setImageBitmap(scaleImage);
         });
 
         // temporary message since it is not yet completely implemented

@@ -38,6 +38,7 @@ import java.util.function.Consumer;
  */
 public class ImageManager extends Manager {
     private final FirebaseFirestore db;
+
     /**
      * The Firestore collection path for images
      */
@@ -91,11 +92,11 @@ public class ImageManager extends Manager {
     }
 
     /**
-     * Uploads an image to Firebase Storage that is linked to the uuid that uploaded it and updates the Firestore database with the image path as Base64.
+     * Uploads a poster for an event into the database
      *
      * @param context The context that the function is being called in.
      * @param eventId The event ID to associate the uploaded poster with.
-     * @param image The path within Firebase Storage where the image will be stored.
+     * @param image The bitmap of the event poster
      */
     public static void uploadPoster(Context context, String eventId, Bitmap image) {
 
@@ -105,33 +106,9 @@ public class ImageManager extends Manager {
 
         imageMap.put("base64Image", base64Encoded);
 
-        getCollection().document(eventId).set(imageMap) // changed add to set
+        getCollection().document(eventId).set(imageMap)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(context, "Poster uploaded successfully", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Poster upload failed", Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    /**
-     * Uploads an image to Firebase Storage that is linked to the uuid that uploaded it and updates the Firestore database with the image path as Base64.
-     *
-     * @param context The context that the function is being called in.
-     * @param eventId The event ID to associate the uploaded poster with.
-     * @param image The path within Firebase Storage where the image will be stored.
-     */
-    public static void updatePoster(Context context, String eventId, Bitmap image) {
-
-        String base64Encoded = Base64.encodeToString(ImageManager.bitmapToByteArray(image), Base64.DEFAULT);
-
-        Map<String, Object> imageMap = new HashMap<>();
-
-        imageMap.put("base64Image", base64Encoded);
-
-        getCollection().document(eventId).update(imageMap) // changed add to set
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(context, "Poster updated successfully", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Poster upload failed", Toast.LENGTH_SHORT).show();
@@ -144,8 +121,8 @@ public class ImageManager extends Manager {
      * @param eventId The event ID to associate the deleted poster with.
      */
     public static void deletePoster(String eventId) {
-        ImageManager.isPoster(eventId, hasPoster -> {
-            if(hasPoster){
+        ImageManager.isPoster(eventId, posterExists -> {
+            if(posterExists){
                 getCollection().document(eventId).delete()
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()){
@@ -165,17 +142,26 @@ public class ImageManager extends Manager {
      * @param poster consumer to receive the bitmap of the poster
      */
     public static void getPoster(String eventId, Consumer<Bitmap> poster){
-        getCollection().document(eventId).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                DocumentSnapshot document = task.getResult();
-                String base64Image = document.getString("base64Image");
-                if (base64Image != null && !base64Image.isEmpty()) {
-                    byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    poster.accept(decodedByte);
-                }
+        //check if the event has a poster
+        ImageManager.isPoster(eventId, posterExists -> {
+            if(posterExists){
+                //fetch the event's poster
+                getCollection().document(eventId).get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot document = task.getResult();
+                        String base64Image = document.getString("base64Image");
+                        if (base64Image != null && !base64Image.isEmpty()) {
+                            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            poster.accept(decodedByte);
+                        }
+                    }else{
+                        Log.d("Firestore", "get failed with ", task.getException());
+                    }
+                });
             }else{
-                Log.d("Firestore", "get failed with ", task.getException());
+                // return a deterministic poster
+                poster.accept(ImageManager.generateDeterministicImage(eventId));
             }
         });
     }

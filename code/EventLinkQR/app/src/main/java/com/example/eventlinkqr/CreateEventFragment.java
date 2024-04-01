@@ -137,16 +137,11 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
             geoTracking.setChecked(arguments.getBoolean("geo"));
 
-            ImageManager.isPoster(arguments.getString("id"), hasPoster -> {
-                if(hasPoster){
-                    ImageManager.getPoster(arguments.getString("id"), posterBitmap -> {
-                        Bitmap scaleImage = Bitmap
-                                .createScaledBitmap(posterBitmap, posterImage.getWidth(), 500, true);
-                        posterImage.setImageBitmap(scaleImage);
-                    });
-                }else{
-                    posterImage.setImageBitmap(ImageManager.generateDeterministicImage(arguments.getString("id")));
-                }
+
+            ImageManager.getPoster(arguments.getString("id"), posterBitmap -> {
+                Bitmap scaleImage = Bitmap
+                        .createScaledBitmap(posterBitmap, posterImage.getWidth(), 500, true);
+                posterImage.setImageBitmap(scaleImage);
             });
         }
 
