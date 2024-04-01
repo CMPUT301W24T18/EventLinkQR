@@ -51,7 +51,6 @@
                     android:id="@+id/poster_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingEnd="50dp"
                     android:hint="poster"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -60,8 +59,7 @@
                     android:id="@+id/poster_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="false"
-                    android:layout_toEndOf="@id/poster_title"
+                    android:layout_centerInParent="true"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_add_photo" />
             </RelativeLayout>
