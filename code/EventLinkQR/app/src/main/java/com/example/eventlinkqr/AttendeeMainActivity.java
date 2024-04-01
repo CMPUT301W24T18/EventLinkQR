@@ -9,10 +9,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
+import android.view.View;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentContainerView;
@@ -41,6 +42,10 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private QRCodeScanner scanner;
     private String attUUID;
     private String profileName;
+
+    private int clickCount = 10;
+    private Handler clickHandler = new Handler();
+    private Runnable clickResetRunnable;
 
     public interface LocationCallback {
         void onLocationReceived(LatLng location);
@@ -99,6 +104,54 @@ public class AttendeeMainActivity extends AppCompatActivity {
      */
     private void setupProfileButton() {
 
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isOnProfilePage()) {
+                    Navigation.findNavController(navController).navigate(R.id.attendeeProfilePage);
+                } else {
+
+                    // Cancel any existing callbacks
+                    clickHandler.removeCallbacks(clickResetRunnable);
+
+                    clickCount--;
+
+                    // Set up a delayed action to reset click count
+                    clickResetRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            clickCount = 10;
+                        }
+                    };
+
+                    // Reset the click count if the button isn't pressed again within 1.5 seconds
+                    clickHandler.postDelayed(clickResetRunnable, 1500);
+
+                    if (clickCount <= 1 && clickCount > 0) {
+                        Toast.makeText(AttendeeMainActivity.this, "About to Enter Admin Mode", Toast.LENGTH_SHORT).show();
+                    } else if (clickCount == 0) {
+
+                        AttendeeManager.getAttendee(attUUID, attendee -> {
+
+                            System.out.println(attendee.isAdmin());
+                            System.out.println(attendee.getUuid());
+                            System.out.println(attendee.getFcmToken());
+
+                            if(attendee != null && attendee.isAdmin()) {
+                                startActivity(new Intent(AttendeeMainActivity.this, AdmMainActivity.class));
+                            } else {
+                                startActivity(new Intent(AttendeeMainActivity.this, EnterPinActivity.class));
+                            }
+                        });
+
+                        clickCount = 10; // Reset the click count
+
+                    }
+
+                }
+            }
+        });
+
         // Handles the click event on the notification button. For devices running Android 13 (API level 33) or higher,
         // checks if notification permission is granted. If permission is granted, navigates to the NotificationDisplayFragment.
         // If not, shows a custom dialog to guide users to enable notifications. For devices below Android 13, directly
@@ -120,6 +173,15 @@ public class AttendeeMainActivity extends AppCompatActivity {
         });
 
     }
+
+    private boolean isOnProfilePage() {
+        // Obtain the current destination ID from the NavController
+        int currentDestinationId = Navigation.findNavController(navController).getCurrentDestination().getId();
+
+        // Check if the current destination ID matches the profile page ID
+        return currentDestinationId == R.id.attendeeProfilePage;
+    }
+
 
     /**
      * Initialize the onClick listener for the scan button

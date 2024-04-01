@@ -69,3 +69,59 @@ exports.sendNotificationToEventAttendees = functions.firestore
             console.error('Error sending updated notifications:', error);
         }
     });
+
+
+    exports.addAdminRole = functions.https.onCall((data, context) => {
+        // check if request is made by an admin
+        if (context.auth.token.admin !== true) {
+            return { error: 'Only admins can add other admins, sucker' };
+        }
+    
+        // get user and add custom claim (admin)
+        return admin.auth().getUserByEmail(data.email)
+            .then(user => {
+                return admin.auth().setCustomUserClaims(user.uid, {
+                    admin: true
+                });
+            })
+            .then(() => {
+                return {
+                    message: `Success! ${data.email} has been made an admin.`
+                };
+            })
+            .catch(err => {
+                return err;
+            });
+    });
+
+    
+// Helper function to generate a random code
+function generateRandomCode(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+}
+
+// Cloud Function to generate and store an admin code
+exports.generateAdminCode = functions.https.onCall((data, context) => {
+    // Optional: Check if the user requesting the code has permission
+    if (!context.auth || !context.auth.token.admin) { // Adjust based on your auth setup
+        throw new functions.https.HttpsError('permission-denied', 'Only admins can generate codes.');
+    }
+
+    const code = generateRandomCode(6); // Generate a 6-character code
+    const expiresAt = admin.firestore.Timestamp.fromDate(new Date(Date.now() + 24 * 3600 * 1000)); // 24 hours from now
+
+    // Store the code in Firestore
+    return admin.firestore().collection('AdminCodes').doc(code).set({
+        code,
+        expiresAt,
+    }).then(() => {
+        return { code, expiresAt };
+    }).catch(error => {
+        throw new functions.https.HttpsError('unknown', error.message, error);
+    });
+});
