@@ -25,15 +25,12 @@ import com.google.firebase.storage.FirebaseStorage;
  * generate deterministic images based on a given input, and convert Bitmap images to byte arrays for uploading.
  */
 public class ImageManager {
-
-    private final FirebaseStorage storage;
     private final FirebaseFirestore db;
 
     /**
      * ImageManager constructor that instantiates the Firebase Storage and Firestore instances
      */
     public ImageManager(){
-        storage = FirebaseStorage.getInstance();
         db = FirebaseFirestore.getInstance();
     }
 
@@ -119,21 +116,21 @@ public class ImageManager {
 
         // Background
         paint.setColor(backgroundColor);
-        canvas.drawRect(0F, 0F, 100F, 100F, paint);
+        canvas.drawRect(0F, 0F, 500F, 500F, paint);
 
         // Face
         paint.setColor(featureColor);
-        canvas.drawCircle(50F, 50F, 30F, paint);
+        canvas.drawCircle(250F, 250F, 200F, paint);
 
         // Eyes
         paint.setColor(Color.BLACK);
-        canvas.drawCircle(35F, 40F, 5F, paint);
-        canvas.drawCircle(65F, 40F, 5F, paint);
+        canvas.drawCircle(160F, 200F, 25F, paint);
+        canvas.drawCircle(340F, 200F, 25F, paint);
 
         // Mouth
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(2F);
-        canvas.drawArc(35F, 50F, 65F, 70F, 0F, 180F, false, paint);
+        paint.setStrokeWidth(10F);
+        canvas.drawArc(160F, 300F, 340F, 400F, 0F, 180F, false, paint);
 
         return bitmap;
     }

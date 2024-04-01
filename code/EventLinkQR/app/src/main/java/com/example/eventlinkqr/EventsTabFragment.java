@@ -76,6 +76,12 @@ public class EventsTabFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        generateDataForTab(getArguments().getInt(ARG_TAB_POSITION, 0));
+    }
+
     /**
      * generates the data of the tab depending on which one it and adds it to the dataList
      * @param tabPosition the position of the tab
@@ -96,7 +102,7 @@ public class EventsTabFragment extends Fragment {
                     // redirect to the attendee event page
                     Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_attendeeEventFragment);
                 });
-                EventManager.addAllEventSnapshotCallback(eventsCallback);
+                EventManager.addAllEventSnapshotCallback(((AttendeeMainActivity) requireActivity()).getAttUUID(), eventsCallback);
                 break;
             case 1:
                 createEventButton.setVisibility(View.VISIBLE);

@@ -30,6 +30,15 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBeCUsaXGlcOZGxvRQUQP2Ab-Sis37ihSg" />
 
+        <!--https://developer.android.com/reference/androidx/core/content/FileProvider -->
+        <provider
+            android:name="com.example.eventlinkqr.QRFileProvider"
+            android:authorities="com.example.eventlinkqr.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+        </provider>
+
         <activity
             android:name=".UploadImageActivity"
             android:exported="true">
@@ -43,6 +52,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter></activity>
 
+        <activity android:name=".AdmMainActivity"/>
         <activity
             android:name=".OrganizerEventStats"
             android:exported="true"
@@ -53,7 +63,7 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
-
+        <activity android:name=".EnterPinActivity"/>
 
         <activity
             android:name=".AttendeeMainActivity"
@@ -67,14 +77,19 @@
 
         <service
             android:name=".MyFirebaseMessagingService"
-            android:exported="false">
+            android:exported="false"
+            android:enableOnBackInvokedCallback="true"
+            tools:targetApi="tiramisu">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-
         <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="event_notifications"/>
+
+         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode_ui" />
 
