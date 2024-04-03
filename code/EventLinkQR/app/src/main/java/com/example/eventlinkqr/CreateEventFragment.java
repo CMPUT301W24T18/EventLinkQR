@@ -65,7 +65,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        List<String> eventCategories = Arrays.asList("Networking", "Entertainment", "Conference", "Trade show", "Workshop", "Product Launch", "Charity", "Category");
+        List<String> eventCategories = Arrays.asList("Networking", "Entertainment", "Conference", "Trade show", "Workshop", "Product Launch", "Charity", "other", "Category");
         Bundle arguments = getArguments();
 
         //Map all the input fields
@@ -160,7 +160,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                 // send error message
                 Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
             } else {
-                // create new event form data and add it toi the database using the event manager
+                // create new event form data and add it to the database using the event manager
                 Event event = new Event(name, description, category, timestamp, location, tracking);
                 String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
                 Bitmap image = null;
@@ -173,15 +173,18 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                }else{
-                    ImageManager.deletePoster(event.getId());
                 }
 
                 if(arguments != null) {
                     //edit the information of the event of the event
                     event.setId(arguments.getString("id"));
                     EventManager.editEvent(event);
-                    ImageManager.uploadPoster(getContext(), event.getId(), image);
+                    // delete the previous poster if the user removed the poster
+                    if(image == null){
+                        ImageManager.deletePoster(event.getId());
+                    }else{
+                        ImageManager.uploadPoster(getContext(), event.getId(), image);
+                    }
                 }else{
                     // if the user, hasn't set a limit, set it to a default value
                     if(maxAttendee.equals("")) {
