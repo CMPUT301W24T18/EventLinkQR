@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -23,7 +25,7 @@ public class EventsTabFragment extends Fragment {
     private EventArrayAdapter eventAdapter;
     private ArrayList<Event> dataList;
     private ListView eventsList;
-    private Button createEventButton;
+    private FloatingActionButton createEventButton;
     private static final String ARG_TAB_POSITION = "TAB_POSITION";
 
     /**
