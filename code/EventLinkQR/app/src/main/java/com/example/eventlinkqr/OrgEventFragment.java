@@ -20,6 +20,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,14 +48,14 @@ public class OrgEventFragment extends Fragment {
         Button detailsButton = view.findViewById(R.id.details_button);
         Button attendeesButton = view.findViewById(R.id.attendees_button);
         Button promotionalButton = view.findViewById(R.id.promotional_qr_button);
-        Button sharebutton = view.findViewById(R.id.share_qr_button);
-        Button editbutton = view.findViewById(R.id.edit_event_button);
+        FloatingActionButton sharebutton = view.findViewById(R.id.share_qr_button);
+        FloatingActionButton editbutton = view.findViewById(R.id.edit_event_button);
         ImageView notificationSendIcon = view.findViewById(R.id.notification_send_icon);
         TextView eventTitle = view.findViewById(R.id.org_event_name);
         TextView eventLocation = view.findViewById(R.id.org_event_location);
         TextView eventDescription = view.findViewById(R.id.org_event_description);
         TextView eventDate = view.findViewById(R.id.org_event_datetime);
-        TextView eventCategaory = view.findViewById(R.id.org_event_category);
+        TextView eventCategory = view.findViewById(R.id.org_event_category);
         eventPoster = view.findViewById(R.id.imageView);
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
@@ -80,7 +82,7 @@ public class OrgEventFragment extends Fragment {
         eventLocation.setText(event.getLocation());
         eventDescription.setText(event.getDescription());
         eventDate.setText(event.getDate().toDate().toString());
-        eventCategaory.setText(event.getCategory());
+        eventCategory.setText(event.getCategory());
 
         // set the poster
         ImageManager.getPoster(event.getId(), posterBitmap -> {
