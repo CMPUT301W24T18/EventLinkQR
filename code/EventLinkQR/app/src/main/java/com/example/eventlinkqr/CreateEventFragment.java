@@ -138,10 +138,17 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
             geoTracking.setChecked(arguments.getBoolean("geo"));
 
+            // sst the poster of the event
             ImageManager.getPoster(arguments.getString("id"), posterBitmap -> {
                 if(posterBitmap != null) {
+                    float scale;
+                    if (posterBitmap.getWidth() >= posterBitmap.getHeight()) {
+                        scale = (float) posterImage.getWidth() / posterBitmap.getWidth();
+                    } else {
+                        scale = (float) posterImage.getHeight() / posterBitmap.getHeight();
+                    }
                     Bitmap scaleImage = Bitmap
-                            .createScaledBitmap(posterBitmap, posterImage.getWidth(), 500, true);
+                            .createScaledBitmap(posterBitmap, (int) (posterBitmap.getWidth() *scale), (int) (posterBitmap.getHeight() *scale), true);
                     posterImage.setImageBitmap(scaleImage);
                 }
             });

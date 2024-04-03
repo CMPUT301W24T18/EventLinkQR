@@ -80,8 +80,14 @@ public class AttendeeEventFragment extends Fragment {
         // generate the event poster
         ImageManager.getPoster(event.getId(), posterBitmap -> {
             if(posterBitmap != null) {
+                float scale;
+                if (posterBitmap.getWidth() >= posterBitmap.getHeight()) {
+                    scale = (float) eventPic.getWidth() / posterBitmap.getWidth();
+                } else {
+                    scale = (float) eventPic.getHeight() / posterBitmap.getHeight();
+                }
                 Bitmap scaleImage = Bitmap
-                        .createScaledBitmap(posterBitmap, 500, 500, true);
+                        .createScaledBitmap(posterBitmap, (int) (posterBitmap.getWidth() *scale), (int) (posterBitmap.getHeight() *scale), true);
                 eventPic.setImageBitmap(scaleImage);
             }
         });

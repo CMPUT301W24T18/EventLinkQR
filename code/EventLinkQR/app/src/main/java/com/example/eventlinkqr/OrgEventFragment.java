@@ -87,8 +87,14 @@ public class OrgEventFragment extends Fragment {
         // set the poster
         ImageManager.getPoster(event.getId(), posterBitmap -> {
             if(posterBitmap != null) {
+                float scale;
+                if (posterBitmap.getWidth() >= posterBitmap.getHeight()) {
+                    scale = (float) eventPoster.getWidth() / posterBitmap.getWidth();
+                } else {
+                    scale = (float) eventPoster.getHeight() / posterBitmap.getHeight();
+                }
                 Bitmap scaleImage = Bitmap
-                        .createScaledBitmap(posterBitmap, 500, 500, true);
+                        .createScaledBitmap(posterBitmap, (int) (posterBitmap.getWidth() *scale), (int) (posterBitmap.getHeight() *scale), true);
                 eventPoster.setImageBitmap(scaleImage);
             }
         });
