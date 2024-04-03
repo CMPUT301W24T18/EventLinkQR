@@ -55,15 +55,19 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         ImageManager.getPoster(event.getId(), posterBitmap -> {
             // chatGPT "scale bitmap to another bitmap while retaining its shape"
             // Calculate the scaling factor to retain the aspect ratio
-            float scale;
-            if (posterBitmap.getWidth() >= posterBitmap.getHeight()) {
-                scale = (float) eventPoster.getWidth() / posterBitmap.getWidth();
-            } else {
-                scale = (float) eventPoster.getHeight() / posterBitmap.getHeight();
+            if(posterBitmap != null){
+                float scale;
+                if (posterBitmap.getWidth() >= posterBitmap.getHeight()) {
+                    scale = (float) eventPoster.getWidth() / posterBitmap.getWidth();
+                } else {
+                    scale = (float) eventPoster.getHeight() / posterBitmap.getHeight();
+                }
+                Bitmap scaleImage = Bitmap
+                        .createScaledBitmap(posterBitmap, (int) (posterBitmap.getWidth() *scale), (int) (posterBitmap.getHeight() *scale), true);
+                eventPoster.setImageBitmap(scaleImage);
+            }else{
+                eventPoster.setImageResource(R.drawable.ic_event);
             }
-            Bitmap scaleImage = Bitmap
-                    .createScaledBitmap(posterBitmap, (int) (posterBitmap.getWidth() *scale), (int) (posterBitmap.getHeight() *scale), true);
-            eventPoster.setImageBitmap(scaleImage);
         });
         return view;
     }

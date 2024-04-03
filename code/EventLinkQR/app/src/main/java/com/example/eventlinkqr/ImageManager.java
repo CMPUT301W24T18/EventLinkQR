@@ -161,7 +161,7 @@ public class ImageManager extends Manager {
                 });
             }else{
                 // return a deterministic poster
-                poster.accept(ImageManager.generateDeterministicImage(eventId));
+                poster.accept(null);
             }
         });
     }

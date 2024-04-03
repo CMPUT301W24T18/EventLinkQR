@@ -79,9 +79,11 @@ public class AttendeeEventFragment extends Fragment {
 
         // generate the event poster
         ImageManager.getPoster(event.getId(), posterBitmap -> {
-            Bitmap scaleImage = Bitmap
-                    .createScaledBitmap(posterBitmap, 500, 500, true);
-            eventPic.setImageBitmap(scaleImage);
+            if(posterBitmap != null) {
+                Bitmap scaleImage = Bitmap
+                        .createScaledBitmap(posterBitmap, 500, 500, true);
+                eventPic.setImageBitmap(scaleImage);
+            }
         });
 
         // make the back button return to the home page

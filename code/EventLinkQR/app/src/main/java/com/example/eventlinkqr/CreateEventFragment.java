@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Timestamp;
 import com.squareup.picasso.Picasso;
 
@@ -82,7 +83,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         Toolbar toolbar = view.findViewById(R.id.create_event_toolbar);
 
         dateButton = view.findViewById(R.id.date_picker);
-        Button clearPoster = view.findViewById(R.id.poster_button);
+        FloatingActionButton clearPoster = view.findViewById(R.id.poster_button);
         Button publishButton = view.findViewById(R.id.publish_button);
         Button chooseQrButton = view.findViewById(R.id.choose_qr_button);
 
@@ -137,11 +138,12 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
             geoTracking.setChecked(arguments.getBoolean("geo"));
 
-
             ImageManager.getPoster(arguments.getString("id"), posterBitmap -> {
-                Bitmap scaleImage = Bitmap
-                        .createScaledBitmap(posterBitmap, posterImage.getWidth(), 500, true);
-                posterImage.setImageBitmap(scaleImage);
+                if(posterBitmap != null) {
+                    Bitmap scaleImage = Bitmap
+                            .createScaledBitmap(posterBitmap, posterImage.getWidth(), 500, true);
+                    posterImage.setImageBitmap(scaleImage);
+                }
             });
         }
 
