@@ -138,7 +138,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
             geoTracking.setChecked(arguments.getBoolean("geo"));
 
-            // sst the poster of the event
+            // set the poster of the event
             ImageManager.getPoster(arguments.getString("id"), posterBitmap -> {
                 if(posterBitmap != null) {
                     float scale;
@@ -242,7 +242,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
     private void setImageUri(Uri uri){
         this.imageUri = uri;
         if(imageUri != null){
-            Picasso.get().load(imageUri).fit().into(posterImage);
+            Picasso.get().load(imageUri).resize(0, posterImage.getHeight()).into(posterImage);
         }
     }
 
