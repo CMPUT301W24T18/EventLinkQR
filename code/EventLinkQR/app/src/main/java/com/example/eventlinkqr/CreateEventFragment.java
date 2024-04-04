@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
     Timestamp timestamp;
     private ImageView posterImage;
     private Uri imageUri;
+    private ImageButton clearPoster;
 
     // ActivityResultLauncher for handling gallery selection result
     private final ActivityResultLauncher<String> getImage = registerForActivityResult(
@@ -83,8 +85,8 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         Toolbar toolbar = view.findViewById(R.id.create_event_toolbar);
 
         dateButton = view.findViewById(R.id.date_picker);
-        FloatingActionButton clearPoster = view.findViewById(R.id.poster_button);
-        Button publishButton = view.findViewById(R.id.publish_button);
+        clearPoster = view.findViewById(R.id.remove_poster_button);
+        FloatingActionButton publishButton = view.findViewById(R.id.publish_button);
         Button chooseQrButton = view.findViewById(R.id.choose_qr_button);
 
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
@@ -100,8 +102,10 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
             getImage.launch("image/*"));
 
         // deselect the image poster
-        clearPoster.setOnClickListener(v ->
-                posterImage.setImageResource(R.drawable.ic_add_photo));
+        clearPoster.setOnClickListener(v -> {
+                posterImage.setImageResource(R.drawable.ic_add_photo);
+                clearPoster.setVisibility(View.INVISIBLE);
+        });
 
         //Add the categories options to the spinner objects and hiding the descriptor "Categories" from selection
         //https://stackoverflow.com/questions/9863378/how-to-hide-one-item-in-an-android-spinner Romich, uploaded Feb 2, 2014
@@ -171,7 +175,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
             } else {
 
                 // create new event form data and add it toi the database using the event manager
-                Event event = new Event(name, description, category, timestamp, location, tracking, 0, 0);
+                Event newEvent = new Event(name, description, category, timestamp, location, tracking, 0, 0);
               
                 String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
                 Bitmap image = null;
@@ -188,26 +192,25 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
                 if(arguments != null) {
                     //edit the information of the event of the event
-                    event.setId(arguments.getString("id"));
-                    EventManager.editEvent(event);
+                    newEvent.setId(arguments.getString("id"));
+                    EventManager.editEvent(newEvent);
                     // delete the previous poster if the user removed the poster
                     if(image == null){
-                        ImageManager.deletePoster(event.getId());
+                        ImageManager.deletePoster(newEvent.getId());
                     }else{
-                        ImageManager.uploadPoster(getContext(), event.getId(), image);
+                        ImageManager.uploadPoster(getContext(), newEvent.getId(), image);
                     }
                 }else{
                     // if the user, hasn't set a limit, set it to a default value
                     if(maxAttendee.equals("")) {
-                        EventManager.createEvent(getContext(), event, organizer, customQRString, Integer.MAX_VALUE, image);
+                        EventManager.createEvent(getContext(), newEvent, organizer, customQRString, Integer.MAX_VALUE, image);
                     }else{
-                        EventManager.createEvent(getContext(), event, organizer, customQRString, Integer.parseInt(maxAttendee), image);
+                        EventManager.createEvent(getContext(), newEvent, organizer, customQRString, Integer.parseInt(maxAttendee), image);
                     }
                 }
                 // return to the home page
                 Navigation.findNavController(view).navigate(R.id.attendeeHomePage);
             }
-
         });
 
         // Scan in a custom code.
@@ -245,6 +248,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         this.imageUri = uri;
         if(imageUri != null){
             Picasso.get().load(imageUri).resize(0, posterImage.getHeight()).into(posterImage);
+            clearPoster.setVisibility(View.VISIBLE);
         }
     }
 

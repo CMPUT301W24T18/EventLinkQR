@@ -34,7 +34,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/event_buttons"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/create_event_toolbar">
@@ -52,9 +54,9 @@
                     android:id="@+id/poster_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="poster"
+                    android:hint="@string/event_poster_hint"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <ImageView
                     android:id="@+id/poster_image"
@@ -64,15 +66,19 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_add_photo" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/poster_button"
+                <ImageButton
+                    android:id="@+id/remove_poster_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentTop="true"
                     android:layout_toEndOf="@+id/poster_image"
                     android:contentDescription="@string/event_poster"
                     android:src="@android:drawable/ic_menu_close_clear_cancel"
-                    app:layout_constraintStart_toEndOf="@+id/poster_image" />
+                    app:layout_constraintStart_toEndOf="@+id/poster_image"
+                    android:background="@android:color/transparent"
+                    app:tint="?attr/iconTintColor"
+                    android:visibility="invisible"
+                    android:layout_margin="8dp"/>
 
             </RelativeLayout>
 
@@ -193,31 +199,29 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-
+            <Button
+                android:id="@+id/choose_qr_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_make_qr_string"
+                android:drawableEnd="@drawable/ic_qr"
+                android:background="@android:color/transparent"
+                android:textColor="@color/text_color"
+                android:drawableTint="@color/text_color"/>
         </LinearLayout>
+
 
     </ScrollView>
 
-    <RelativeLayout
-        android:id="@+id/event_buttons"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/publish_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_save"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/save_and_publish"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/choose_qr_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/choose_make_qr_string" />
-
-        <Button
-            android:id="@+id/publish_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="@string/save_publish_string" />
-    </RelativeLayout>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
