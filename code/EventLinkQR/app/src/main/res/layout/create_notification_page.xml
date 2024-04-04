@@ -21,35 +21,86 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Notification Title EditText -->
+    <!-- Notifications Header -->
+    <TextView
+        android:id="@+id/tvNotificationsHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="?attr/textColor"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Horizontal Line below the Header -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="?attr/textColor"
+        android:layout_below="@id/tvNotificationsHeader" />
+
+    <!-- Announcement Heading Title -->
+    <TextView
+        android:id="@+id/tvAnnouncementHeadingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/org_event_toolbar"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
+        android:text="Announcement Heading"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvAnnouncementMessageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etNotificationTitle"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:text="Announcement Body"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
     <EditText
         android:id="@+id/etNotificationTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/org_event_toolbar"
-        android:layout_marginTop="16dp"
-        android:height="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginRight="20dp"
+        android:height="100dp"
+        android:background="@drawable/edit_text_background"
+        android:gravity="top|start"
         android:hint="@string/message_title"
-        android:inputType="textPersonName"/>
+        android:inputType="textMultiLine" />
 
-    <!-- Notification Message EditText -->
     <EditText
         android:id="@+id/etNotificationMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/etNotificationTitle"
-        android:layout_marginTop="16dp"
-        android:height="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginRight="20dp"
+        android:height="300dp"
+        android:background="@drawable/edit_text_background"
+        android:gravity="top|start"
         android:hint="@string/notification_message"
-        android:inputType="textMultiLine"/>
+        android:inputType="textMultiLine" />
 
-    <!-- Button to create notification -->
     <Button
         android:id="@+id/btnCreateNotification"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/etNotificationMessage"
-        android:layout_marginTop="24dp"
-        android:text="@string/send_notification"/>
+        android:layout_alignParentBottom="true"
+        android:text="Send Notification"
+        android:padding="16dp"
+        android:layout_centerHorizontal="true"
+        />
 
 </RelativeLayout>

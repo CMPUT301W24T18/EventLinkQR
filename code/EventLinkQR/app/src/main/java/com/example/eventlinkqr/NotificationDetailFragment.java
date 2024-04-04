@@ -27,12 +27,22 @@ public class NotificationDetailFragment extends Fragment {
         Bundle arguments = getArguments();
         String title = arguments.getString("title", "Default Title");
         String message = arguments.getString("message", "Default Message");
-        String event = arguments.getString("", "Default Message");
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(orgEventToolBar);
         orgEventToolBar.setTitle(null);
         // make the back button return to the home page
+
+        TextView header = view.findViewById(R.id.tvNotificationsHeader);
+
+        if ("organizer".equals(arguments.getString("source"))) {
+            Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+            String eventName = event.getName(); // Define eventName from event object
+            header.setText(eventName);
+        } else{
+            String eventName = arguments.getString("eventName", "Eventssss");
+            header.setText(eventName);
+        }
 
         orgEventToolBar.setNavigationOnClickListener(v -> {
             if ("organizer".equals(arguments.getString("source"))) {

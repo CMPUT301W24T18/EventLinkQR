@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +42,11 @@ public class OrgSendNotification extends Fragment {
         notificationManager = new NotificationManager(requireContext());
 
         Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+
+        String eventName = event.getName(); // Define eventName from event object
+
+        TextView header = view.findViewById(R.id.tvNotificationsHeader);
+        header.setText(eventName);
 
         String eventId = event.getId(); // Define eventId from event object
         final EditText titleInput = view.findViewById(R.id.etNotificationTitle);

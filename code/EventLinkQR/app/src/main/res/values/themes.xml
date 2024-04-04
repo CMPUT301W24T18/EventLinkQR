@@ -6,6 +6,7 @@
         <item name="buttonTextColor">@color/button_text_color</item>
         <item name="notificationHeading">@color/notification_heading</item>
         <item name="unreadNotification">@color/unreadNotification</item>
+        <item name="fillBgColor">@color/fill_color</item>
     </style>
 
     <style name="Theme.EventLinkQR" parent="Base.Theme.EventLinkQR" />
