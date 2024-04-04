@@ -10,7 +10,6 @@ public class Notification {
     private boolean isRead;
     private String eventId;
     private String eventName; // Add this field
-    private String eventPoster;
 
     /**
      * Constructs a new Notification with the specified title, description, and time elapsed since notification.
@@ -143,37 +142,20 @@ public class Notification {
         this.eventName = eventName;
     }
 
-    /**
-     * Returns the event name of the notification.
-     *
-     * @return The Event Name of the notification.
-     */
-    public String getEventPoster() {
-        return eventPoster;
-    }
 
     /**
-     * Sets the EventName associated with the notification.
+     * Returns the event id associated with the notification.
      *
-     * @param eventPoster The Event Name associated with the notification.
-     */
-    public void setEventPoster(String eventPoster) {
-        this.eventPoster = eventPoster;
-    }
-
-    /**
-     * Returns the event name of the notification.
-     *
-     * @return The Event Name of the notification.
+     * @return The Event id associated with the notification.
      */
     public String getEventId() {
         return eventId;
     }
 
     /**
-     * Sets the EventName associated with the notification.
+     * Sets the EventId associated with the notification.
      *
-     * @param eventId The Event Name associated with the notification.
+     * @param eventId The EventId associated with the notification.
      */
     public void setEventId(String eventId) {
         this.eventId = eventId;
