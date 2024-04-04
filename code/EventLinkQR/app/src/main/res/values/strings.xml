@@ -58,4 +58,5 @@
     <string name="share_qr_code">Share QR Code</string>
     <string name="save_and_publish">Save and Publish</string>
     <string name="event_poster_hint">Event Poster</string>
+    <string name="sign_up">Sign Up</string>
 </resources>

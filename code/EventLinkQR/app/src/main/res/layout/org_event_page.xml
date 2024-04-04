@@ -79,7 +79,7 @@
             <ImageView
                 android:id="@+id/org_event_poster"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="320dp"
                 android:contentDescription="@string/event_poster_description"
                 android:src="@drawable/ic_event"
                 app:layout_constraintTop_toTopOf="parent" />
