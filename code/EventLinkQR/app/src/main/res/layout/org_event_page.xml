@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,10 +80,9 @@
                 android:id="@+id/org_event_poster"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:src="@drawable/ic_event"
-                app:layout_constraintTop_toTopOf="parent"
                 android:contentDescription="@string/event_poster_description"
-                android:tint="?attr/iconTintColor"/>
+                android:src="@drawable/ic_event"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/org_event_name"
@@ -107,27 +106,27 @@
 
                 <Button
                     android:id="@+id/checkin_qr_button"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:contentDescription="@string/check_in_qr_code"
                     android:drawableEnd="@drawable/ic_qr"
+                    android:drawableTint="?attr/iconTintColor"
                     android:text="@string/check_in"
-                    android:textColor="@color/text_color"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:drawableTint="?attr/iconTintColor"/>
+                    android:textColor="@color/text_color" />
 
                 <Button
                     android:id="@+id/promotional_qr_button"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:contentDescription="@string/share_event"
                     android:drawableEnd="@drawable/ic_qr"
+                    android:drawableTint="?attr/iconTintColor"
                     android:text="@string/promote"
-                    android:textColor="@color/text_color"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:drawableTint="?attr/iconTintColor"/>
+                    android:textColor="@color/text_color" />
             </LinearLayout>
 
             <TextView
