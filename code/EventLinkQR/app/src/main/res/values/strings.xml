@@ -36,6 +36,7 @@
     <string name="choose_make_qr_string">Scan Custom Code</string>
     <string name="prompt">Upload your image here</string>
     <string name="upload">Upload</string>
+    <string name="event_poster">Clear poster</string>
     <string name="cancel">Cancel</string>
     <string name="edit_event">Edit Event</string>
     <string name="choose_image">Choose Image</string>
