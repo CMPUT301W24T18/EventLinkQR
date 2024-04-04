@@ -45,7 +45,7 @@ public class NotificationManager {
      * @param title       The title of the notification to be sent.
      * @param description The description of the notification to be sent.
      */
-    public void sendNotificationToDatabase(String eventId, String title, String description) {
+    public void sendNotificationToDatabase(String eventId, String title, String description, Boolean isMilestone) {
         DocumentReference eventDocumentRef = db.collection("Notifications").document(eventId);
 
         // Create a new notification Map to represent the notification details
@@ -53,6 +53,7 @@ public class NotificationManager {
         notificationData.put("heading", title);
         notificationData.put("description", description);
         notificationData.put("timestamp", new Date());
+        notificationData.put("isMilestone", isMilestone);
 
         // Use a transaction to ensure that the operation is atomic
         db.runTransaction((Transaction.Function<Void>) transaction -> {
