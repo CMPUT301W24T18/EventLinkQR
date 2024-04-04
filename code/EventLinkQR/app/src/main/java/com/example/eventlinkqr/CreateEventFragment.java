@@ -188,20 +188,20 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
                 if(arguments != null) {
                     //edit the information of the event of the event
-                    event.setId(arguments.getString("id"));
-                    EventManager.editEvent(event);
+                    newEvent.setId(arguments.getString("id"));
+                    EventManager.editEvent(newEvent);
                     // delete the previous poster if the user removed the poster
                     if(image == null){
-                        ImageManager.deletePoster(event.getId());
+                        ImageManager.deletePoster(newEvent.getId());
                     }else{
-                        ImageManager.uploadPoster(getContext(), event.getId(), image);
+                        ImageManager.uploadPoster(getContext(), newEvent.getId(), image);
                     }
                 }else{
                     // if the user, hasn't set a limit, set it to a default value
                     if(maxAttendee.equals("")) {
-                        EventManager.createEvent(getContext(), event, organizer, customQRString, Integer.MAX_VALUE, image);
+                        EventManager.createEvent(getContext(), newEvent, organizer, customQRString, Integer.MAX_VALUE, image);
                     }else{
-                        EventManager.createEvent(getContext(), event, organizer, customQRString, Integer.parseInt(maxAttendee), image);
+                        EventManager.createEvent(getContext(), newEvent, organizer, customQRString, Integer.parseInt(maxAttendee), image);
                     }
                 }
                 // return to the home page
