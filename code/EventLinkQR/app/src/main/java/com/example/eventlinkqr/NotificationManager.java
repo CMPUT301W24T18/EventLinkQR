@@ -25,14 +25,17 @@ public class NotificationManager {
 
     private Context context; // Add this line
 
-    /**
-     * Initializes a new instance of the NotificationManager class.
-     * This constructor specifically initializes a Firestore instance for use in notification management.
-     */
+    // Modify the constructor to accept Context
     public NotificationManager(Context context) {
         this.context = context;
         db = FirebaseFirestore.getInstance();
     }
+
+
+    /**
+     * Initializes a new instance of the NotificationManager class.
+     * This constructor specifically initializes a Firestore instance for use in notification management.
+     */
 
     /**
      * Sends a notification to the Firestore database under the "notifications_testing" collection.
@@ -159,6 +162,8 @@ public class NotificationManager {
                                 Date notificationDate = ts.toDate();
                                 String timeSinceNotification = getTimeSince(notificationDate);
                                 notifications.add(new Notification(heading, description,  timeSinceNotification));
+
+
                             }
                             listener.onNotificationsFetched(notifications);
                         } else {
@@ -198,6 +203,7 @@ public class NotificationManager {
                             break;
                         }
                     }
+
                     // Update the entire notifications array back to Firestore
                     docRef.update("notifications", notifications)
                             .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification marked as read"))
