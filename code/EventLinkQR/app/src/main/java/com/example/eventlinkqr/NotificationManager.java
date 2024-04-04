@@ -25,17 +25,17 @@ public class NotificationManager {
 
     private Context context; // Add this line
 
-    // Modify the constructor to accept Context
+    /**
+     * Initializes a new instance of the NotificationManager class.
+     * This constructor specifically initializes a Firestore instance for use in notification management.
+     */
     public NotificationManager(Context context) {
         this.context = context;
         db = FirebaseFirestore.getInstance();
     }
 
 
-    /**
-     * Initializes a new instance of the NotificationManager class.
-     * This constructor specifically initializes a Firestore instance for use in notification management.
-     */
+
 
     /**
      * Sends a notification to the Firestore database under the "notifications_testing" collection.

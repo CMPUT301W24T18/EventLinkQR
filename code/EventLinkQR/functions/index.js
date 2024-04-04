@@ -93,6 +93,7 @@ exports.sendNotificationToEventAttendees = functions.firestore
                                     body: lastNotification.description,
                                     eventId: eventId,
                                     timestamp: new Date(),
+                                    isRead: false,
                                 })
                             }, { merge: true });
                     } else {
@@ -101,10 +102,15 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 });
 
                 await Promise.all(attendeesTokensPromises);
-                console.log(`Notifications updated for ${tokens.length} attendees.`);
+                console.log(`Notifications updated for ${tokens.length} attendees. [Not unique]`);
+
+                // New lines added to remove duplicate tokens:
+                const uniqueTokens = [...new Set(tokens)];
+                console.log(`Notifications updated for ${uniqueTokens.length} unique devices.`);
+
 
                 // Send updated notifications via FCM
-                const messages = tokens.map(token => ({
+                const messages = uniqueTokens.map(token => ({
                     token,
                     notification: {
                         title: lastNotification.heading,
@@ -118,6 +124,5 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 console.error('Error sending updated notifications:', error);
             }
         }
-
-
     });
+
