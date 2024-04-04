@@ -58,7 +58,7 @@ public class OrgSendNotification extends Fragment {
             public void onClick(View v) {
                 String title = titleInput.getText().toString();
                 String message = messageInput.getText().toString();
-                notificationManager.sendNotificationToDatabase(eventId, title, message);
+                notificationManager.sendNotificationToDatabase(eventId, title, message, false);
                 Navigation.findNavController(view).popBackStack();
             }
         });

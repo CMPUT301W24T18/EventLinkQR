@@ -124,6 +124,5 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 console.error('Error sending updated notifications:', error);
             }
         }
-
-
     });
+

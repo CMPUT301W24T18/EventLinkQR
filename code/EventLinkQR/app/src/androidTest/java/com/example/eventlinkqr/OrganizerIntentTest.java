@@ -46,7 +46,9 @@ public class OrganizerIntentTest {
         onView(withText("Create Profile")).perform(click());
         onView(withId(R.id.new_full_name)).perform(typeText("Test User"));
         onView(withId(R.id.new_full_name)).perform(closeSoftKeyboard());
+        onView(withId(R.id.new_save_button)).perform(click());
         SystemClock.sleep(3000);
+
         onView(withText("My Events")).perform(click());
         // Simulate a click on the create event button
         onView(allOf(ViewMatchers.withText("Create event"), ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());

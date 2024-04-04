@@ -25,6 +25,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Collection;
+
 /**
  * Main activity class for attendees in the event management application.
  */
@@ -227,6 +229,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                 });
             }, e -> {
                 Toast.makeText(this, "Invalid QR Code", Toast.LENGTH_SHORT).show();
+                Log.d("QRCode", "Failed to scan code: " + e.getMessage());
             });
         });
     }
@@ -294,6 +297,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                     callback.onLocationReceived(location);
                 } else {
                     Toast.makeText(this, "Failed to get location", Toast.LENGTH_SHORT).show();
+                    Log.d("Location", "Failed to get location with error: " + task.getException());
                 }
             });
         } else {
@@ -340,11 +344,13 @@ public class AttendeeMainActivity extends AppCompatActivity {
         return scanner;
     }
 
-    /**
-     * Get the nav controller for this activity
+
+
+     /** Get the nav controller for this activity
      * @return The nav controller
      */
     public FragmentContainerView getNavController() {
         return navController;
     }
+
 }

@@ -169,8 +169,10 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                 // send error message
                 Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
             } else {
-                // create new event form data and add it to the database using the event manager
-                Event event = new Event(name, description, category, timestamp, location, tracking);
+
+                // create new event form data and add it toi the database using the event manager
+                Event newEvent = new Event(name, description, category, timestamp, location, tracking, 0, 0);
+              
                 String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
                 Bitmap image = null;
 

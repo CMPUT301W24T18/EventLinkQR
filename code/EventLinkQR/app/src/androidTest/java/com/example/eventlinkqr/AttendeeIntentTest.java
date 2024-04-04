@@ -83,17 +83,6 @@ public class AttendeeIntentTest {
         onView(withId(R.id.etFullName)).check(matches(withText("Jason")));
         onView(withId(R.id.phoneNumberEdit)).check(matches(withText("1234567891")));
         onView(withId(R.id.homepageEdit)).check(matches(withText("www.Jason.com")));
-    }
-
-    /**
-     * Tests the back button functionality in the AttendeeProfileActivity.
-     * This method navigates to the AttendeeProfileActivity and then uses
-     * the back button to check if the navigation works correctly.
-     */
-    @Test
-    public void testBackButtonNavigation() {
-        // Navigate to AttendeeProfileActivity
-        onView(withId(R.id.attendee_profile_button)).perform(click());
 
         // Check if the AttendeeProfileActivity is started
         onView(ViewMatchers.withId(R.id.attendee_profile_button)) // Replace with a view ID unique to the AttendeeProfileActivity
