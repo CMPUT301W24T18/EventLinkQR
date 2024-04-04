@@ -51,7 +51,7 @@ public class OrganizerIntentTest {
 
         onView(withText("My Events")).perform(click());
         // Simulate a click on the create event button
-        onView(allOf(ViewMatchers.withText("Create event"), ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
+        onView(allOf(withId(R.id.create_event_button), ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
 
         // Check if the create event page is open
         onView(ViewMatchers.withId(R.id.event_location_input)).check(matches(isDisplayed()));
@@ -66,7 +66,7 @@ public class OrganizerIntentTest {
         onView(ViewMatchers.withId(R.id.date_picker)).perform(click());
         onView(withText("OK")).perform(click());
         onView(withText("OK")).perform(click());
-        onView(withText("Save and Publish")).perform(click());
+        onView(withId(R.id.publish_button)).perform(click());
         SystemClock.sleep(1000);
         onView(withText("My Events")).perform(click());
         onView(withId(R.id.event_list_view)).check(ViewAssertions.selectedDescendantsMatch(withText("Intent Test Event"), isDisplayed()));
