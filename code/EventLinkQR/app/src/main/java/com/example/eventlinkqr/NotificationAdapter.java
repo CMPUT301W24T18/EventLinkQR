@@ -90,8 +90,6 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         description.setText(notification.getDescription());
         timestampView.setText(notification.getTimeSinceNotification());
 
-
-
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,7 +101,7 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
                 bundle.putString("source", NotificationAdapter.this.source);
 
                 if ("user".equals(NotificationAdapter.this.source)) {
-
+                    bundle.putString("eventId", notification.getEventId());
                     notificationManager.markNotificationAsRead(notification.getTitle(), notification.getDescription(), notification.getTimeSinceNotification());
 
                     // Logic to navigate to the detail page for users

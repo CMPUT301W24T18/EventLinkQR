@@ -29,8 +29,8 @@
     <string name="channel_name">notifications</string>
     <string name="channel_description">this is a notification channel\n</string>
     <string name="send_notification">Send Notification\n</string>
-    <string name="message_title">Message Title</string>
-    <string name="notification_message">Notification Message</string>
+    <string name="message_title">Write your heading/title here!</string>
+    <string name="notification_message">Write your message here!</string>
     <string name="what_to_expect">What to expect</string>
     <string name="save_publish_string">Save and Publish</string>
     <string name="choose_make_qr_string">Scan Custom Code</string>
@@ -59,4 +59,5 @@
     <string name="save_and_publish">Save and Publish</string>
     <string name="event_poster_hint">Event Poster</string>
     <string name="sign_up">Sign Up</string>
+    <string name="notifications">Notifications</string>
 </resources>

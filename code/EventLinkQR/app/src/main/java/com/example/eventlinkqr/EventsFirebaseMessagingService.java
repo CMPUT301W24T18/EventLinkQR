@@ -17,7 +17,7 @@ import com.google.firebase.messaging.RemoteMessage;
  * these messages and creates user-visible notifications to inform the user of new messages. Additionally, it handles
  * the creation of new FCM registration tokens which are crucial for receiving messages.
  */
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+public class EventsFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "FCM Service";
 
@@ -31,10 +31,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-        System.out.println("HELLO0!!!!!!!!!!!!!!!!!!!!!!!!1 I HAVE ENTEREED SHOW NOTIFICATION!!!");
         // Handling data payload
         if (remoteMessage.getData().size() > 0) {
-            System.out.println("byeeeeeeeeeeeeeeee!!!!!!!!!!!!!!!!!!!!!!!!1 I HAVE ENTEREED SHOW NOTIFICATION!!!");
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             // Extract the title and body from the data payload.
             String title = remoteMessage.getData().get("title");

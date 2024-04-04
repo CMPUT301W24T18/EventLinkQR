@@ -175,7 +175,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
             } else {
 
                 // create new event form data and add it toi the database using the event manager
-                Event newEvent = new Event(name, description, category, timestamp, location, tracking, 0, 0);
+                Event event = new Event(name, description, category, timestamp, location, tracking, 0, 0);
               
                 String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
                 Bitmap image = null;

@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +44,11 @@ public class OrgSendNotification extends Fragment {
 
         Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
 
+        String eventName = event.getName(); // Define eventName from event object
+
+        TextView header = view.findViewById(R.id.tvNotificationsHeader);
+        header.setText(eventName);
+
         String eventId = event.getId(); // Define eventId from event object
         final EditText titleInput = view.findViewById(R.id.etNotificationTitle);
         final EditText messageInput = view.findViewById(R.id.etNotificationMessage);
@@ -52,8 +59,16 @@ public class OrgSendNotification extends Fragment {
             public void onClick(View v) {
                 String title = titleInput.getText().toString();
                 String message = messageInput.getText().toString();
-                notificationManager.sendNotificationToDatabase(eventId, title, message, false);
-                Navigation.findNavController(view).popBackStack();
+                // Check if either the title or message is empty
+                if (title.isEmpty() || message.isEmpty()) {
+                    // Display a toast message and return without sending the notification
+                    Toast.makeText(requireContext(), "Both title and message are required.", Toast.LENGTH_LONG).show();
+                } else {
+                    // Both title and message contain text, proceed with sending the notification
+                    notificationManager.sendNotificationToDatabase(eventId, title, message, false);
+                    // Navigate back or perform any other required actions after sending
+                    Navigation.findNavController(view).popBackStack();
+                }
             }
         });
 
