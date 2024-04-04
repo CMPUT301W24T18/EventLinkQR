@@ -1,10 +1,12 @@
 package com.example.eventlinkqr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,14 +40,35 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
 
         //Map all the TextViews
         TextView eventName = view.findViewById(R.id.event_title);
-        TextView eventDate = view.findViewById(R.id.event_description);
+        TextView eventCategory = view.findViewById(R.id.event_description);
+        ImageView eventPoster = view.findViewById(R.id.event_image);
+
 
         assert event != null;
 
         //Set the value of all the TextViews
         // this is a basic implementation that will be updated later on
         eventName.setText(event.getName());
-        eventDate.setText(event.getDescription());
+        eventCategory.setText(event.getCategory());
+
+        // set the poster
+        ImageManager.getPoster(event.getId(), posterBitmap -> {
+            // chatGPT "scale bitmap to another bitmap while retaining its shape"
+            // Calculate the scaling factor to retain the aspect ratio
+            if(posterBitmap != null){
+                float scale;
+                if (posterBitmap.getWidth() >= posterBitmap.getHeight()) {
+                    scale = (float) eventPoster.getWidth() / posterBitmap.getWidth();
+                } else {
+                    scale = (float) eventPoster.getHeight() / posterBitmap.getHeight();
+                }
+                Bitmap scaleImage = Bitmap
+                        .createScaledBitmap(posterBitmap, (int) (posterBitmap.getWidth() *scale), (int) (posterBitmap.getHeight() *scale), true);
+                eventPoster.setImageBitmap(scaleImage);
+            }else{
+                eventPoster.setImageResource(R.drawable.ic_event);
+            }
+        });
         return view;
     }
 }

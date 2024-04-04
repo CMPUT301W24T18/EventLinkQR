@@ -28,23 +28,6 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.appcompat.widget.Toolbar>
 
-    <SearchView
-        android:id="@+id/search_attendee"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:queryHint="@string/search_attendees_string"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/checked_in_count"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Total checked in attendees"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/attendees_tab_layout"
         android:layout_width="match_parent"

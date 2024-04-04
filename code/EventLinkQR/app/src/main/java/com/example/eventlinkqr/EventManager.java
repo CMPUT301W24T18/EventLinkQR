@@ -1,6 +1,7 @@
 package com.example.eventlinkqr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -426,7 +427,7 @@ public class EventManager extends Manager {
      * @param organizer the organizer of the event
      * @param customQR  (optional) encoded text for the qr code
      */
-    public static void createEvent(Event newEvent, String organizer, String customQR, int maxAttendees) {
+    public static void createEvent(Context context, Event newEvent, String organizer, String customQR, int maxAttendees, Bitmap poster) {
         HashMap<String, Object> newEventData = new HashMap<>();
         newEventData.put("name", newEvent.getName());
         newEventData.put("description", newEvent.getDescription());
@@ -448,6 +449,10 @@ public class EventManager extends Manager {
                     String codeText = customQR;
                     String promotionalText = "eventlinkqr:promotion:" + eventId;
 
+                    // upload the poster if there is one
+                    if(poster != null){
+                        ImageManager.uploadPoster(context, eventId, poster);
+                    }
                     if (codeText == null) {
                         codeText = "eventlinkqr:" + eventId;
                     }
@@ -460,6 +465,30 @@ public class EventManager extends Manager {
                     Log.e("Firestore", "Event failed to be added");
                 });
     }
+
+    /**
+     * Adds a new event to the database
+     *
+     * @param editedEvent the event containing the new values
+     */
+    public static void editEvent(Event editedEvent) {
+        HashMap<String, Object> editedEventData = new HashMap<>();
+        editedEventData.put("name", editedEvent.getName());
+        editedEventData.put("description", editedEvent.getDescription());
+        editedEventData.put("category", editedEvent.getCategory());
+        editedEventData.put("location", editedEvent.getLocation());
+        editedEventData.put("dateAndTime", editedEvent.getDate());
+        editedEventData.put("geoTracking", editedEvent.getGeoTracking());
+
+        getCollection().document(editedEvent.getId()).update(editedEventData)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("Firestore", "event succesfully edited");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Event failed to be edited");
+                });
+    }
+
 
     /**
      * Checks if the user is signed up to the event

@@ -1,5 +1,6 @@
 package com.example.eventlinkqr;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,7 @@ public class AttendeeEventFragment extends Fragment {
         Button signUpButton = view.findViewById(R.id.sign_up_button);
         TextView eventTitle = view.findViewById(R.id.att_event_name);
         TextView eventDate = view.findViewById(R.id.att_event_datetime);
+        TextView eventCategaory = view.findViewById(R.id.att_event_category);
         TextView eventDescription = view.findViewById(R.id.att_event_description);
         TextView eventLocation = view.findViewById(R.id.att_event_location);
         Toolbar eventToolBar = view.findViewById(R.id.att_event_toolbar);
@@ -73,9 +75,22 @@ public class AttendeeEventFragment extends Fragment {
         eventLocation.setText(event.getLocation());
         eventDescription.setText(event.getDescription());
         eventDate.setText(event.getDate().toDate().toString());
+        eventCategaory.setText(event.getCategory());
 
-        // generate a picture for the image based on the event ID
-        eventPic.setImageBitmap(ImageManager.generateDeterministicImage(event.getId()));
+        // generate the event poster
+        ImageManager.getPoster(event.getId(), posterBitmap -> {
+            if(posterBitmap != null) {
+                float scale;
+                if (posterBitmap.getWidth() >= posterBitmap.getHeight()) {
+                    scale = (float) eventPic.getWidth() / posterBitmap.getWidth();
+                } else {
+                    scale = (float) eventPic.getHeight() / posterBitmap.getHeight();
+                }
+                Bitmap scaleImage = Bitmap
+                        .createScaledBitmap(posterBitmap, (int) (posterBitmap.getWidth() *scale), (int) (posterBitmap.getHeight() *scale), true);
+                eventPic.setImageBitmap(scaleImage);
+            }
+        });
 
         // make the back button return to the home page
         eventToolBar.setNavigationOnClickListener(v ->

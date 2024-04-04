@@ -7,6 +7,7 @@
     <string name="search_attendees_string">Search attendees</string>
     <string name="My_events_string">My Events</string>
     <string name="Create_event_string">Create event</string>
+    <string name="edit_event_string">Edit event</string>
     <string name="Home_string">Home</string>
     <string name="Scan_string">Scan</string>
     <string name="Profile_string">Profile</string>
@@ -35,7 +36,9 @@
     <string name="choose_make_qr_string">Scan Custom Code</string>
     <string name="prompt">Upload your image here</string>
     <string name="upload">Upload</string>
+    <string name="event_poster">Clear poster</string>
     <string name="cancel">Cancel</string>
+    <string name="edit_event">Edit Event</string>
     <string name="choose_image">Choose Image</string>
     <string name="editProfilImg">Edit Profile Img</string>
     <string name="account_select">Select account type</string>

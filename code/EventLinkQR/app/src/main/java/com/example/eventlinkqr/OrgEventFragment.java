@@ -20,6 +20,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,7 +32,7 @@ import java.io.IOException;
  */
 public class OrgEventFragment extends Fragment {
 
-    private ImageView qrCodeImage;
+    private ImageView eventPoster;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,13 +48,15 @@ public class OrgEventFragment extends Fragment {
         Button detailsButton = view.findViewById(R.id.details_button);
         Button attendeesButton = view.findViewById(R.id.attendees_button);
         Button promotionalButton = view.findViewById(R.id.promotional_qr_button);
-        Button sharebutton = view.findViewById(R.id.share_qr_button);
+        FloatingActionButton sharebutton = view.findViewById(R.id.share_qr_button);
+        FloatingActionButton editbutton = view.findViewById(R.id.edit_event_button);
         ImageView notificationSendIcon = view.findViewById(R.id.notification_send_icon);
         TextView eventTitle = view.findViewById(R.id.org_event_name);
         TextView eventLocation = view.findViewById(R.id.org_event_location);
         TextView eventDescription = view.findViewById(R.id.org_event_description);
         TextView eventDate = view.findViewById(R.id.org_event_datetime);
-        qrCodeImage = view.findViewById(R.id.imageView);
+        TextView eventCategory = view.findViewById(R.id.org_event_category);
+        eventPoster = view.findViewById(R.id.imageView);
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
 
@@ -71,8 +75,29 @@ public class OrgEventFragment extends Fragment {
         notificationSendIcon.setOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_viewNotification));
 
-
         Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+
+        // Set the values to be displayed
+        eventTitle.setText(event.getName());
+        eventLocation.setText(event.getLocation());
+        eventDescription.setText(event.getDescription());
+        eventDate.setText(event.getDate().toDate().toString());
+        eventCategory.setText(event.getCategory());
+
+        // set the poster
+        ImageManager.getPoster(event.getId(), posterBitmap -> {
+            if(posterBitmap != null) {
+                float scale;
+                if (posterBitmap.getWidth() >= posterBitmap.getHeight()) {
+                    scale = (float) eventPoster.getWidth() / posterBitmap.getWidth();
+                } else {
+                    scale = (float) eventPoster.getHeight() / posterBitmap.getHeight();
+                }
+                Bitmap scaleImage = Bitmap
+                        .createScaledBitmap(posterBitmap, (int) (posterBitmap.getWidth() *scale), (int) (posterBitmap.getHeight() *scale), true);
+                eventPoster.setImageBitmap(scaleImage);
+            }
+        });
 
         // temporary message since it is not yet completely implemented
         detailsButton.setOnClickListener(v -> {
@@ -86,22 +111,26 @@ public class OrgEventFragment extends Fragment {
             }
         });
 
-        // Set the values to be displayed
-        eventTitle.setText(event.getName());
-        eventLocation.setText(event.getLocation());
-        eventDescription.setText(event.getDescription());
-        eventDate.setText(event.getDate().toDate().toString());
+        // set the onClick listener for the edit button
+        editbutton.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("id", event.getId());
+            bundle.putString("name", event.getName());
+            bundle.putString("location", event.getLocation());
+            bundle.putString("description", event.getDescription());
+            bundle.putString("category", event.getCategory());
+            long milliseconds = event.getDate().getSeconds() *1000 +event.getDate().getNanoseconds()/1000000;
+            bundle.putLong("date", milliseconds);
+            bundle.putBoolean("geo", event.getGeoTracking());
+            Navigation.findNavController(view).navigate(R.id.orgCreateEventFragment, bundle);
+        });
+
 
 
         QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {
-            try {
-                qrCodeImage.setImageBitmap(q.toBitmap(512, 512));
-                sharebutton.setOnClickListener(v -> {
-                    shareImage(q);
-                });
-            } catch (QRCodeGeneratorException e) {
-                throw new RuntimeException(e);
-            }
+            sharebutton.setOnClickListener(v -> {
+                shareImage(q);
+            });
         });
 
         // When clicked, bring up the promotional QR code
