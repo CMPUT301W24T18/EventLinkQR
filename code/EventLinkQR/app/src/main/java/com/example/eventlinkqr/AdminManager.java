@@ -47,7 +47,7 @@ public class AdminManager extends Manager {
         List<ImageModel> imageList = new ArrayList<>();
         List<String> documentIds = new ArrayList<>();
 
-        db.collection("images_testing").get()
+        db.collection("Images").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
@@ -62,7 +62,7 @@ public class AdminManager extends Manager {
     }
 
     public void deleteImage(String documentId, final AdminEventOperationCallback callback) {
-        db.collection("images_testing").document(documentId)
+        db.collection("Images").document(documentId)
                 .delete()
                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));

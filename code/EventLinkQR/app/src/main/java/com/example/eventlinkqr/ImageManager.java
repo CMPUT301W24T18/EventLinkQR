@@ -34,7 +34,7 @@ public class ImageManager extends Manager {
     /**
      * The Firestore collection path for images
      */
-    private static final String COLLECTION_PATH = "images_testing";
+    private static final String COLLECTION_PATH = "Images";
 
     /**
      * ImageManager constructor that instantiates the Firebase Storage and Firestore instances
@@ -206,7 +206,7 @@ public class ImageManager extends Manager {
      */
     public static Bitmap generateDeterministicImage(String input) {
 
-        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
