@@ -55,6 +55,12 @@ exports.sendNotificationToEventAttendees = functions.firestore
                         notification: {
                             title: lastNotification.heading,
                             body: lastNotification.description,
+                        },
+                        data: {
+                            // Custom data that you want to send and handle in onMessageReceived
+                            title: lastNotification.heading,
+                            body: lastNotification.description,
+                            // You can add more key-value pairs as needed
                         }
                     };
 
@@ -132,7 +138,14 @@ exports.sendNotificationToEventAttendees = functions.firestore
                     notification: {
                         title: lastNotification.heading,
                         body: lastNotification.description,
+                    },
+                    data: {
+                        // Custom data that you want to send and handle in onMessageReceived
+                        title: lastNotification.heading,
+                        body: lastNotification.description,
+                        // You can add more key-value pairs as needed
                     }
+
                 }));
 
                 const response = await admin.messaging().sendAll(messages);
