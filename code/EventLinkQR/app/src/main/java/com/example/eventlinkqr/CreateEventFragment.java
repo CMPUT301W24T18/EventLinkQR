@@ -1,5 +1,7 @@
 package com.example.eventlinkqr;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -88,6 +90,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         clearPoster = view.findViewById(R.id.remove_poster_button);
         FloatingActionButton publishButton = view.findViewById(R.id.publish_button);
         Button chooseQrButton = view.findViewById(R.id.choose_qr_button);
+        ImageButton deleteButton = view.findViewById(R.id.delete_event_button);
 
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle(null);
@@ -123,6 +126,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
         // set the values if we are editing an event instead of creating one
         if(arguments != null){
+            deleteButton.setVisibility(View.VISIBLE);
             pageTitle.setText("Edit event");
             nameInput.setText(arguments.getString("name"));
             descriptionInput.setText(arguments.getString("description"));
@@ -228,6 +232,21 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         // launches the date picker dialog fragment
         dateButton.setOnClickListener(v ->
                 new DateTimePickerFragment().show(getChildFragmentManager(), "Select Date and Time"));
+
+        // makes the user confirm they wish to del;ete the event
+        deleteButton.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle("Confirm deletion")
+                    .setMessage("Are you sure you want to delete this event?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        EventManager.deleteEvent(arguments.getString("id"));
+                        Navigation.findNavController(view).navigate(R.id.attendeeHomePage);
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+        });
 
     }
 

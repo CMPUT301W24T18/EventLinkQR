@@ -467,6 +467,21 @@ public class EventManager extends Manager {
     }
 
     /**
+     * deletes an event from the database
+     * @param eventId the event to be deleted
+     */
+    public static void deleteEvent(String eventId){
+        getCollection().document(eventId).delete()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Log.d("Firestore", "event " + eventId + " deleted");
+                    }else{
+                        Log.d("Firestore", "delete failed with ", task.getException());
+                    }
+                });
+    }
+
+    /**
      * Adds a new event to the database
      *
      * @param editedEvent the event containing the new values
