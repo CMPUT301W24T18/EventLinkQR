@@ -213,7 +213,9 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                     }
                 } else {
                     // Check if the QR code is already in use
-                    if (customQRString != null && customPromotionalQRString != null) {
+                    if (customQRString != null && customQRString.equals(customPromotionalQRString)) {
+                        Toast.makeText(requireActivity(), "Check in and promotional code cannot be the same", Toast.LENGTH_LONG).show();
+                    } else if (customQRString != null && customPromotionalQRString != null) {
                         Bitmap finalImage = image;
                         QRCodeManager.fetchQRCode(customQRString).addOnSuccessListener(code ->{
                             try {

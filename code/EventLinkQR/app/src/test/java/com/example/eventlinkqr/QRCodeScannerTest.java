@@ -53,6 +53,7 @@ public class QRCodeScannerTest {
     public void testCodeFromScan() {
         when(mockScanner.startScan()).thenReturn(mockTask);
         when(mockTask.addOnSuccessListener(any())).thenReturn(mockTask);
+        when(mockTask.addOnFailureListener(any())).thenReturn(mockTask);
         qrCodeScanner.codeFromScan(mockSuccessConsumer, mockFailuerConsumer, mockCancledRunnable);
 
         verify(mockTask, times(1)).addOnSuccessListener(any());
