@@ -42,6 +42,7 @@
     <string name="choose_image">Choose Image</string>
     <string name="editProfilImg">Edit Profile Img</string>
     <string name="account_select">Select account type</string>
+    <string name="delete_image">Delete Image</string>
     <string name="events">Events</string>
     <string name="users">Users\n</string>
     <string name="images">Images</string>

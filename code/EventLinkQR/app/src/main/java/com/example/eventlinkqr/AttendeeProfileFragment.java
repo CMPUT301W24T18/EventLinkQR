@@ -73,9 +73,7 @@ public class AttendeeProfileFragment extends Fragment {
 
         deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
 
-
         preview = view.findViewById(R.id.ivProfileImage);
-        preview.setImageBitmap(deterministicBitmap);
 
         photoButton.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), UploadImageActivity.class);
@@ -241,7 +239,7 @@ public class AttendeeProfileFragment extends Fragment {
      */
     public void refreshProfileImage(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("images_testing").document(uuid).get()
+        db.collection("Images").document(uuid).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String base64Image = documentSnapshot.getString("base64Image");
@@ -253,8 +251,11 @@ public class AttendeeProfileFragment extends Fragment {
                             // If no uploaded image is present, display the deterministic image
                             preview.setImageBitmap(deterministicBitmap);
                         }
+                    } else {
+                        preview.setImageBitmap(deterministicBitmap);
                     }
                 }).addOnFailureListener(e -> {
+                    preview.setImageBitmap(deterministicBitmap);
                     Toast.makeText(getContext(), "Error displaying profile Image", Toast.LENGTH_SHORT).show();// Handle any errors
                 });
     }
