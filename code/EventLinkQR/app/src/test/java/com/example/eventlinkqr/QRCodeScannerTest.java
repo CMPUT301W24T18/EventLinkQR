@@ -36,6 +36,8 @@ public class QRCodeScannerTest {
     @Mock
     private Consumer<Exception> mockFailuerConsumer;
     @Mock
+    private Runnable mockCancledRunnable;
+    @Mock
     private Task<Barcode> mockTask;
 
     @BeforeEach
@@ -51,10 +53,11 @@ public class QRCodeScannerTest {
     public void testCodeFromScan() {
         when(mockScanner.startScan()).thenReturn(mockTask);
         when(mockTask.addOnSuccessListener(any())).thenReturn(mockTask);
-        qrCodeScanner.codeFromScan(mockSuccessConsumer, mockFailuerConsumer);
+        qrCodeScanner.codeFromScan(mockSuccessConsumer, mockFailuerConsumer, mockCancledRunnable);
 
         verify(mockTask, times(1)).addOnSuccessListener(any());
         verify(mockTask, times(1)).addOnFailureListener(any());
+        verify(mockTask, times(1)).addOnCanceledListener(any());
     }
 
     @Test

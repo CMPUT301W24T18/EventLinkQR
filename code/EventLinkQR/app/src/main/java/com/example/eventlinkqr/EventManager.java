@@ -427,7 +427,7 @@ public class EventManager extends Manager {
      * @param organizer the organizer of the event
      * @param customQR  (optional) encoded text for the qr code
      */
-    public static void createEvent(Context context, Event newEvent, String organizer, String customQR, int maxAttendees, Bitmap poster) {
+    public static void createEvent(Context context, Event newEvent, String organizer, String customQR, String customPromotionalQR, int maxAttendees, Bitmap poster) {
         HashMap<String, Object> newEventData = new HashMap<>();
         newEventData.put("name", newEvent.getName());
         newEventData.put("description", newEvent.getDescription());
@@ -447,7 +447,7 @@ public class EventManager extends Manager {
                 .addOnSuccessListener(documentReference -> {
                     String eventId = documentReference.getId();
                     String codeText = customQR;
-                    String promotionalText = "eventlinkqr:promotion:" + eventId;
+                    String promotionalText = customPromotionalQR;
 
                     // upload the poster if there is one
                     if(poster != null){
@@ -455,6 +455,9 @@ public class EventManager extends Manager {
                     }
                     if (codeText == null) {
                         codeText = "eventlinkqr:" + eventId;
+                    }
+                    if (promotionalText == null) {
+                        promotionalText = "eventlinkqr:promotion:" + eventId;
                     }
                     // Automatically generate a QR Code for now. In the future support uploading custom.
                     QRCodeManager.addQRCode(codeText, QRCode.CHECK_IN_TYPE, eventId);

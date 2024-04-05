@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ import java.util.List;
 public class CreateEventFragment extends Fragment implements DateTimePickerFragment.DateTimePickerListener{
 
     private String customQRString;
+    private String customPromotionalQRString;
     private MaterialButton dateButton;
     Timestamp timestamp;
     private ImageView posterImage;
@@ -57,6 +59,12 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                     setImageUri(uri);
                 }
             });
+
+    private static void checkQRCodeActive(QRCode code) throws QRCodeAlreadyActiveException {
+        if (code != null && code.isActive()) {
+            throw new QRCodeAlreadyActiveException();
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -88,6 +96,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         clearPoster = view.findViewById(R.id.remove_poster_button);
         FloatingActionButton publishButton = view.findViewById(R.id.publish_button);
         Button chooseQrButton = view.findViewById(R.id.choose_qr_button);
+        Button choosePromotionalQrButton = view.findViewById(R.id.choose_promotional_qr_button);
 
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle(null);
@@ -122,7 +131,9 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         categoryInput.setSelection(eventCategories.size()-1);
 
         // set the values if we are editing an event instead of creating one
-        if(arguments != null){
+        if(arguments != null) {
+            chooseQrButton.setVisibility(View.INVISIBLE);
+            choosePromotionalQrButton.setVisibility(View.INVISIBLE);
             pageTitle.setText("Edit event");
             nameInput.setText(arguments.getString("name"));
             descriptionInput.setText(arguments.getString("description"));
@@ -197,15 +208,71 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                     // delete the previous poster if the user removed the poster
                     if(image == null){
                         ImageManager.deletePoster(newEvent.getId());
-                    }else{
+                    } else {
                         ImageManager.uploadPoster(getContext(), newEvent.getId(), image);
                     }
-                }else{
-                    // if the user, hasn't set a limit, set it to a default value
-                    if(maxAttendee.equals("")) {
-                        EventManager.createEvent(getContext(), newEvent, organizer, customQRString, Integer.MAX_VALUE, image);
-                    }else{
-                        EventManager.createEvent(getContext(), newEvent, organizer, customQRString, Integer.parseInt(maxAttendee), image);
+                } else {
+                    // Check if the QR code is already in use
+                    if (customQRString != null && customPromotionalQRString != null) {
+                        Bitmap finalImage = image;
+                        QRCodeManager.fetchQRCode(customQRString).addOnSuccessListener(code ->{
+                            try {
+                                checkQRCodeActive(code);
+                            } catch (QRCodeAlreadyActiveException e) {
+                                Toast.makeText(requireActivity(), "Check in code already in use", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            QRCodeManager.fetchQRCode(customPromotionalQRString).addOnSuccessListener(pCode -> {
+                                try {
+                                    checkQRCodeActive(pCode);
+                                } catch (QRCodeAlreadyActiveException e) {
+                                    Toast.makeText(requireActivity(), "Promotional code already in use", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+
+                                createEvent(newEvent, organizer, maxAttendee, finalImage);
+                            }).addOnFailureListener(e -> {
+                                createEvent(newEvent, organizer, maxAttendee, finalImage);
+                            });
+                        }).addOnFailureListener(x -> {
+                            createEvent(newEvent, organizer, maxAttendee, finalImage);
+                        });
+                    } else if (customQRString != null) {
+                        Bitmap finalImage = image;
+                        QRCodeManager.fetchQRCode(customQRString).addOnSuccessListener(code -> {
+                            try {
+                                checkQRCodeActive(code);
+                            } catch (QRCodeAlreadyActiveException e) {
+                                Toast.makeText(requireActivity(), "Check in code already in use", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            createEvent(newEvent, organizer, maxAttendee, finalImage);
+                        }).addOnFailureListener(e -> {
+                            createEvent(newEvent, organizer, maxAttendee, finalImage);
+                        });
+                    } else if (customPromotionalQRString != null) {
+                        Bitmap finalImage = image;
+                        QRCodeManager.fetchQRCode(customPromotionalQRString).addOnSuccessListener(code -> {
+                            try {
+                                checkQRCodeActive(code);
+                            } catch (QRCodeAlreadyActiveException e) {
+                                Toast.makeText(requireActivity(), "Promotional code already in use", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            createEvent(newEvent, organizer, maxAttendee, finalImage);
+                        }).addOnFailureListener(e -> {
+                            createEvent(newEvent, organizer, maxAttendee, finalImage);
+                        });
+                    } else {
+                        // if the user, hasn't set a limit, set it to a default value
+                        if (maxAttendee.equals("")) {
+                            EventManager.createEvent(getContext(), newEvent, organizer, customQRString, customPromotionalQRString, Integer.MAX_VALUE, image);
+                        } else {
+                            EventManager.createEvent(getContext(), newEvent, organizer, customQRString, customPromotionalQRString, Integer.parseInt(maxAttendee), image);
+                        }
+
                     }
                 }
                 // return to the home page
@@ -221,6 +288,21 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                 publishButton.setEnabled(true);
             }, e -> {
                 Toast.makeText(requireActivity(), "Code scan failed", Toast.LENGTH_SHORT).show();
+                publishButton.setEnabled(true);
+            }, () -> {
+                publishButton.setEnabled(true);
+            });
+        });
+
+        choosePromotionalQrButton.setOnClickListener(v -> {
+            publishButton.setEnabled(false);
+            ((AttendeeMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {
+                this.customPromotionalQRString = codeText;
+                publishButton.setEnabled(true);
+            }, e -> {
+                Toast.makeText(requireActivity(), "Code scan failed", Toast.LENGTH_SHORT).show();
+                publishButton.setEnabled(true);
+            }, () -> {
                 publishButton.setEnabled(true);
             });
         });
@@ -242,6 +324,15 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         // display the time chosen on the screen so the user can confirm
         dateButton.setHint(timeChosen);
         this.timestamp = new Timestamp(date);
+    }
+
+    private void createEvent(Event newEvent, String organizer, String maxAttendee, Bitmap image) {
+        // if the user, hasn't set a limit, set it to a default value
+        if (maxAttendee.equals("")) {
+            EventManager.createEvent(getContext(), newEvent, organizer, customQRString, customPromotionalQRString, Integer.MAX_VALUE, image);
+        } else {
+            EventManager.createEvent(getContext(), newEvent, organizer, customQRString, customPromotionalQRString, Integer.parseInt(maxAttendee), image);
+        }
     }
 
     private void setImageUri(Uri uri){

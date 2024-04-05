@@ -33,7 +33,7 @@
     <string name="notification_message">Write your message here!</string>
     <string name="what_to_expect">What to expect</string>
     <string name="save_publish_string">Save and Publish</string>
-    <string name="choose_make_qr_string">Scan Custom Code</string>
+    <string name="choose_make_qr_string">Custom Check In Code</string>
     <string name="prompt">Upload your image here</string>
     <string name="upload">Upload</string>
     <string name="event_poster">Clear poster</string>
@@ -60,4 +60,5 @@
     <string name="event_poster_hint">Event Poster</string>
     <string name="sign_up">Sign Up</string>
     <string name="notifications">Notifications</string>
+    <string name="custom_promotional_code">Custom Promotional Code</string>
 </resources>
