@@ -31,13 +31,12 @@ public class EventsFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-        // Handling data payload
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+
             // Extract the title and body from the data payload.
             String title = remoteMessage.getData().get("title");
             String messageBody = remoteMessage.getData().get("body");
-//             If both and body are present, display the notification.
             if (title != null && messageBody != null) {
                 showNotification(title, messageBody);
             }
@@ -51,10 +50,12 @@ public class EventsFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody The body text of the message to be displayed in the notification.
      */
     private void showNotification(String title, String messageBody) {
-        // Create an intent that will open the NotificationDisplayFragment when the user taps the notification.
-        Intent intent = new Intent(this, NotificationDisplayFragment.class);
+        Intent intent = new Intent(this, NotificationHostActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("title", title);
+        intent.putExtra("message", messageBody);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+
         // Define the notification channel ID.
         String channelId = "event_notifications";
         // Build the notification.

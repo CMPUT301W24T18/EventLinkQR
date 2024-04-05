@@ -44,6 +44,12 @@
             android:exported="true">
         </activity>
 
+        <activity
+            android:name=".NotificationHostActivity"
+            android:exported="true">
+        </activity>
+
+
         <activity android:name=".LandingPage"
             android:exported="true">
             <intent-filter>

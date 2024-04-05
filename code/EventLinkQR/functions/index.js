@@ -27,7 +27,6 @@ exports.sendNotificationToEventAttendees = functions.firestore
         console.log('Is the notification a Milestone???? ', lastNotification.isMilestone);
 
         if (lastNotification.isMilestone) {
-            // Notify the event organizer instead of attendees
             try {
                 const eventDoc = await admin.firestore().collection('Events').doc(eventId).get();
                 if (!eventDoc.exists) {
@@ -36,32 +35,50 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 }
 
                 const organizerId = eventDoc.data().organizer;
-                const userDoc = await admin.firestore().collection('Users').doc(organizerId).get();
+                let recipients = [organizerId];
+                
+                const attendeesSnapshot = await admin.firestore().collection('Events').doc(eventId).collection('attendees').get();
+                attendeesSnapshot.forEach(doc => {
+                    recipients.push(doc.id);
+                });
 
-                if (!userDoc.exists || !userDoc.data().fcmToken) {
-                    console.log(`FCM token not found for organizer: ${organizerId}`);
-                    return null;
-                }
-
-                const fcmToken = userDoc.data().fcmToken;
-                // Assuming the notification to send is the last one added to the array
-                // const lastNotification = notificationData.notifications[notificationData.notifications.length - 1];
-
-                const message = {
-                    token: fcmToken,
-                    notification: {
-                        title: lastNotification.heading,
-                        body: lastNotification.description,
+                for (const userId of recipients) {
+                    const userDoc = await admin.firestore().collection('Users').doc(userId).get();
+                    if (!userDoc.exists || !userDoc.data().fcmToken) {
+                        console.log(`FCM token not found for user: ${userId}`);
+                        continue;
                     }
-                };
 
-                await admin.messaging().send(message);
-                console.log(`Notification sent to the event organizer: ${organizerId}`);
+                    const fcmToken = userDoc.data().fcmToken;
+                    const message = {
+                        token: fcmToken,
+                        notification: {
+                            title: lastNotification.heading,
+                            body: lastNotification.description,
+                        }
+                    };
+
+                    await admin.messaging().send(message);
+                    console.log(`Notification sent to user: ${userId}`);
+
+                    // Update notifications in userNotifications collection for each user
+                    await admin.firestore().collection('userNotifications').doc(userId)
+                        .set({
+                            notifications: admin.firestore.FieldValue.arrayUnion({
+                                title: lastNotification.heading,
+                                body: lastNotification.description,
+                                eventId: eventId,
+                                timestamp: new Date(),
+                                isRead: false,
+                            })
+                        }, { merge: true });
+                }
             } catch (error) {
-                console.error('Error sending notification to organizer:', error);
+                console.error('Error sending notification:', error);
                 return null;
             }
-        } else {
+        } 
+        else {
             // Existing logic to notify event attendees...
             // This is your current logic to handle notifications for attendees
 
