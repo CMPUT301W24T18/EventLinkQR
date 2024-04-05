@@ -21,12 +21,20 @@ public class AdminManager extends Manager {
     private final FirebaseFirestore db;
     private final Context context;
 
-    
+    /**
+     * Constructs an instance of AdminManager with the provided context.
+     * @param context The context in which the AdminManager operates.
+     */
     public AdminManager(Context context) {
         this.context = context;
         this.db = FirebaseFirestore.getInstance();
     }
 
+    /**
+     * Deletes an event with the specified eventId from the Firestore database.
+     * @param eventId The ID of the event to delete.
+     * @param callback Callback to handle the result of the deletion operation.
+     */
     public void deleteEvent(String eventId, final AdminEventOperationCallback callback) {
         db.collection("Events").document(eventId)
                 .delete()
@@ -38,19 +46,48 @@ public class AdminManager extends Manager {
                 });
     }
 
+
+    /**
+     * Callback interface for handling the outcome of administrative operations.
+     */
     public interface AdminEventOperationCallback {
+        /**
+         * Called when the operation is successful.
+         */
         void onSuccess();
+
+        /**
+         * Called when the operation fails.
+         * @param errorMessage A string describing the error that occurred.
+         */
         void onFailure(String errorMessage);
     }
 
+    /**
+     * Callback interface for handling the results of fetching images from the Firestore database.
+     */
     public interface FetchImagesCallback {
+        /**
+         * Called when images are successfully fetched.
+         * @param images A list of ImageModel objects representing the fetched images.
+         * @param documentIds A list of document IDs corresponding to the fetched images.
+         */
         void onSuccess(List<ImageModel> images, List<String> documentIds);
+
+        /**
+         * Called when there is an error fetching images.
+         * @param errorMessage A string describing the error that occurred.
+         */
         void onFailure(String errorMessage);
     }
 
-public void fetchImages(final FetchImagesCallback callback) {
+    /**
+     * Fetches images from the Firestore database, excluding those with base64 matching the violated images.
+     * @param callback Callback to handle the result of the fetch operation, providing a list of ImageModels and their document IDs.
+     */
+    public void fetchImages(final FetchImagesCallback callback) {
     // First, fetch the base64 strings for the violated images
-    fetchViolatedImagesBase64(new ViolatedImagesBase64Callback() {
+        fetchViolatedImagesBase64(new ViolatedImagesBase64Callback() {
         @Override
         public void onSuccess(Map<String, String> violatedBase64Images) {
             List<ImageModel> imageList = new ArrayList<>();
@@ -83,7 +120,10 @@ public void fetchImages(final FetchImagesCallback callback) {
     });
 }
 
-    // Method to fetch the base64 strings for violated images
+    /**
+     * Fetches the base64 strings of predefined "violated" images to facilitate filtering during the fetchImages operation.
+     * @param callback Callback to handle the fetched base64 strings or any errors.
+     */
     private void fetchViolatedImagesBase64(ViolatedImagesBase64Callback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, String> violatedBase64Images = new HashMap<>();
@@ -109,12 +149,28 @@ public void fetchImages(final FetchImagesCallback callback) {
         }
     }
 
+    /**
+     * Callback interface for handling the fetched base64 strings of "violated" images.
+     */
     interface ViolatedImagesBase64Callback {
+        /**
+         * Called when base64 strings for "violated" images are successfully fetched.
+         * @param violatedBase64Images A map with document IDs as keys and their corresponding base64 strings as values.
+         */
         void onSuccess(Map<String, String> violatedBase64Images);
+
+        /**
+         * Called when there is an error fetching the base64 strings.
+         * @param errorMessage A string describing the error that occurred.
+         */
         void onFailure(String errorMessage);
     }
 
-
+    /**
+     * Replaces the image for a given document ID with a default image based on its classification.
+     * @param documentId The ID of the document for which to replace the image.
+     * @param callback Callback to handle the result of the replace operation.
+     */
     public void replaceImageWithDefault(String documentId, final AdminEventOperationCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -144,7 +200,11 @@ public void fetchImages(final FetchImagesCallback callback) {
         });
     }
 
-    // Method to fetch an image from a document with a known ID
+    /**
+     * Fetches an image's base64 string from a document with a known ID.
+     * @param documentId The ID of the document from which to fetch the image.
+     * @param callback Callback to handle the result of the fetch operation, providing the base64 string of the image.
+     */
     public void fetchImageFromKnownId(String documentId, final ImageFetchCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -181,7 +241,11 @@ public void fetchImages(final FetchImagesCallback callback) {
         void onError(String errorMessage);
     }
 
-
+    /**
+     * Deletes a user with the specified userId from the Firestore database.
+     * @param userId The ID of the user to delete.
+     * @param callback Callback to handle the result of the deletion operation.
+     */
     public void deleteUser(String userId, final AdminEventOperationCallback callback) {
         db.collection("Users").document(userId)
                 .delete()
@@ -189,6 +253,10 @@ public void fetchImages(final FetchImagesCallback callback) {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
+    /**
+     * Fetches users from the Firestore database and optionally sorts them alphabetically by name.
+     * @param callback Callback to handle the result of the fetch operation, providing a list of Attendees.
+     */
     public void fetchUsers(final FetchUsersCallback callback) {
         List<Attendee> usersList = new ArrayList<>();
 
@@ -214,10 +282,23 @@ public void fetchImages(final FetchImagesCallback callback) {
         });
     }
 
+    /**
+     * Callback interface for handling the results of fetching users from the Firestore database.
+     */
     public interface FetchUsersCallback {
+        /**
+         * Called when users are successfully fetched.
+         * @param usersList A list of Attendee objects representing the fetched users.
+         */
         void onSuccess(List<Attendee> usersList);
+
+        /**
+         * Called when there is an error fetching users.
+         * @param errorMessage A string describing the error that occurred.
+         */
         void onFailure(String errorMessage);
     }
+
 
 
 }
