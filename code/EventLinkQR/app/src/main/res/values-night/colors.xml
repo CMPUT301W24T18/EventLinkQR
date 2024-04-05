@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background_color">#f0ecdd</color>
+    <color name="text_primary">#2D8789</color>
+    <color name="text_secondary">#2D8789</color>
+    <color name="grey"> #CFCFCFCF</color>
+    <color name="icon_tint">#FFFFFF</color>
+    <color name="fill_color">#1C1A1A</color>
+    <color name="text_color">#FFFFFF</color>
+    <color name="button_text_color">#000000</color>
+    <color name="notification_heading">#E4E4E4</color>
+    <color name="unreadNotification">#FFFFFF</color>
+</resources>

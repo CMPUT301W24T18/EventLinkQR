@@ -6,4 +6,10 @@
     <color name="text_primary">#2D8789</color>
     <color name="text_secondary">#2D8789</color>
     <color name="grey"> #CFCFCFCF</color>
+    <color name="icon_tint">#000000</color>
+    <color name="fill_color">#FFFFFF</color>
+    <color name="text_color">#000000</color>
+    <color name="button_text_color">#FFFFFF</color>
+    <color name="notification_heading">#0E0E0E</color>
+    <color name="unreadNotification">#000000</color>
 </resources>

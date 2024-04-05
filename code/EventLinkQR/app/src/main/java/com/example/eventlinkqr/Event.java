@@ -1,14 +1,28 @@
 package com.example.eventlinkqr;
 
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
+
+import java.util.ArrayList;
+
+
 /**
  * This class contains all necessary data for an event instance
  */
 public class Event {
     /** All the attributes of an event*/
-    private String name, description, category, date, location;
+    private String name, description, category, location;
+    private Timestamp date;
     private String id;
     private Boolean geoTracking;
 
+    private ArrayList<Attendee> checkedInAttendees;
+    private ArrayList<LatLng> checkInLocations;
+
+    private int signedUpCount;
+
+    private int checkedInAttendeesCount;
     /**
      * Event creator with all attributes
      * @param name the event's name
@@ -18,13 +32,35 @@ public class Event {
      * @param location the event's location
      * @param geoTracking whether the event has geolocation tracking or not
      */
-    public Event(String name, String description, String category, String date, String location, Boolean geoTracking) {
+    public Event(String name, String description, String category, Timestamp date, String location, Boolean geoTracking) {
         this.name = name;
         this.description = description;
         this.category = category;
         this.date = date;
         this.location = location;
         this.geoTracking = geoTracking;
+    }
+
+    /**
+     * Event creator with all attributes
+     * @param name the event's name
+     * @param description the event's description
+     * @param category the event's category
+     * @param date the event's date
+     * @param location the event's location
+     * @param geoTracking whether the event has geolocation tracking or not
+     * @param checkedInAttendeesCount checked in attendance count of the attendees
+     * @param signedUpCount signed up attendance count of the attendees
+     */
+    public Event(String name, String description, String category, Timestamp date, String location, Boolean geoTracking, int checkedInAttendeesCount, int signedUpCount) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.date = date;
+        this.location = location;
+        this.geoTracking = geoTracking;
+        this.checkedInAttendeesCount = checkedInAttendeesCount;
+        this.signedUpCount = signedUpCount;
     }
 
     /**
@@ -35,6 +71,10 @@ public class Event {
     public Event(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public Event() {
+        // Default constructor required for calls to DataSnapshot.getValue(Event.class)
     }
 
     /**
@@ -65,7 +105,7 @@ public class Event {
      * gets the event's date
      * @return the event's date
      */
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
@@ -100,4 +140,100 @@ public class Event {
     public void setId(String id) {
         this.id = id;
     }
+
+    /**
+     * check in an attendee to the event and add their location if geotracking is enabled
+     * @param attendee
+     * @param checkInLocation
+     * @return
+     */
+    public Boolean checkIn(Attendee attendee, LatLng checkInLocation){
+        //Check if the attendee is already checked in
+        if(checkedInAttendees.contains(attendee)){
+            return false;
+        } else {
+            checkedInAttendees.add(attendee);
+            if (geoTracking) {
+                checkInLocations.add(checkInLocation);
+            }
+            return true;
+        }
+    }
+
+    /**
+     * check in an attendee to the event without a location
+     * @param attendee
+     * @return
+     */
+    public Boolean checkIn(Attendee attendee){
+        //Check if the attendee is already checked in
+        if(checkedInAttendees.contains(attendee)){
+            return false;
+        } else {
+            checkedInAttendees.add(attendee);
+            return true;
+        }
+    }
+
+    /**
+     * get the list of checked in attendees
+     * @return checkedInAttendees
+     */
+    public ArrayList<Attendee> getCheckedInAttendees() {
+        return checkedInAttendees;
+    }
+
+    /**
+     * get the checked In attendees count
+     * @return checkedInAttendeesCount
+     */
+    public int getCheckedInAttendeesCount() {
+        return checkedInAttendeesCount;
+    }
+
+    /**
+     * set the checked In attendees count
+     * @param count checkedInAttendeesCount
+     */
+    public void setCheckedInAttendeesCount(Integer count) {
+
+        if (count == null) {
+            this.checkedInAttendeesCount = 0;
+        } else {
+            this.checkedInAttendeesCount = count;
+        }
+    }
+
+    /**
+     * get the list of check in locations
+     * @return checkInLocations
+     */
+    public ArrayList<LatLng> getCheckInLocations() {
+        return this.checkInLocations;
+    }
+
+    /**
+     * set the checked In location
+     * @param checkInLocations the check in location
+     */
+    public void setCheckInLocations(ArrayList<LatLng> checkInLocations) {
+        this.checkInLocations = checkInLocations;
+    }
+
+    /**
+     * get the signed up attendees count
+     * @return signedUpCount
+     */
+    public int getSignedUpCount() {
+        return signedUpCount;
+    }
+
+    /**
+     * set the signed up attendees count
+     * @param signedUpCount Signed up Attendees Count
+     */
+    public void setSignedUpCount(int signedUpCount) {
+        this.signedUpCount = signedUpCount;
+    }
+
 }

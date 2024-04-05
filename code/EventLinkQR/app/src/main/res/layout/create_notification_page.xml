@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/org_event_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:navigationIcon="?attr/actionModeCloseDrawable">
+
+        <TextView
+            android:id="@+id/attendees_toolBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Notifications Header -->
+    <TextView
+        android:id="@+id/tvNotificationsHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="?attr/textColor"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Horizontal Line below the Header -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="?attr/textColor"
+        android:layout_below="@id/tvNotificationsHeader" />
+
+    <!-- Announcement Heading Title -->
+    <TextView
+        android:id="@+id/tvAnnouncementHeadingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/org_event_toolbar"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
+        android:text="Announcement Heading"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvAnnouncementMessageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etNotificationTitle"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:text="Announcement Body"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etNotificationTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/org_event_toolbar"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginRight="20dp"
+        android:height="100dp"
+        android:background="@drawable/edit_text_background"
+        android:gravity="top|start"
+        android:hint="@string/message_title"
+        android:inputType="textMultiLine" />
+
+    <EditText
+        android:id="@+id/etNotificationMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etNotificationTitle"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginRight="20dp"
+        android:height="300dp"
+        android:background="@drawable/edit_text_background"
+        android:gravity="top|start"
+        android:hint="@string/notification_message"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/btnCreateNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Send Announcement"
+        android:padding="16dp"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>

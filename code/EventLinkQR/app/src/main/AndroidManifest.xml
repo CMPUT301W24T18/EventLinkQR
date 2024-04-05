@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -23,33 +26,33 @@
             In local.properties, add the line:
             MAPS_API_KEY=AIz...
         -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <!--https://developer.android.com/reference/androidx/core/content/FileProvider -->
+        <provider
+            android:name="com.example.eventlinkqr.QRFileProvider"
+            android:authorities="com.example.eventlinkqr.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        </provider>
+
         <activity
             android:name=".UploadImageActivity"
             android:exported="true">
+        </activity>
+
+        <activity android:name=".LandingPage"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            </intent-filter></activity>
 
-        <activity android:name=".LandingPage"/>
-
-        <activity android:name=".OrgMainActivity"/>
-
-        <activity android:name=".NotificationDetailActivity"/>
-
-
+        <activity android:name=".AdmMainActivity"/>
         <activity
             android:name=".OrganizerEventStats"
             android:exported="true"
@@ -60,7 +63,7 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
-
+        <activity android:name=".EnterPinActivity"/>
 
         <activity
             android:name=".AttendeeMainActivity"
@@ -72,29 +75,24 @@
             <!--            </intent-filter>-->
         </activity>
 
-        <activity
-            android:name=".AttendeeProfileActivity"
-            android:exported="true">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
-
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
-        </activity>
-
-        <activity android:name=".NotificationCreationActivity"></activity>
-        <activity android:name=".NotificationDisplayActivity"></activity>
         <service
-            android:name=".MyFirebaseMessagingService"
-            android:exported="false">
+            android:name=".EventsFirebaseMessagingService"
+            android:exported="false"
+            android:enableOnBackInvokedCallback="true"
+            tools:targetApi="tiramisu">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="event_notifications"/>
+
+         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode_ui" />
+
     </application>
 </manifest>
 

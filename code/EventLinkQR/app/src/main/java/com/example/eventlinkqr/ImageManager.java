@@ -2,39 +2,52 @@ package com.example.eventlinkqr;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import androidx.annotation.NonNull;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.ByteArrayOutputStream;
+import java.util.function.Consumer;
 
 /**
  * Manages uploading, fetching, and generating images for Firebase Storage and Firestore.
  * This class provides methods to upload images to Firebase Storage, fetch images from Firebase Storage,
  * generate deterministic images based on a given input, and convert Bitmap images to byte arrays for uploading.
  */
-public class ImageManager {
-
-    private final FirebaseStorage storage;
+public class ImageManager extends Manager {
     private final FirebaseFirestore db;
+
+    /**
+     * The Firestore collection path for images
+     */
+    private static final String COLLECTION_PATH = "images_testing";
 
     /**
      * ImageManager constructor that instantiates the Firebase Storage and Firestore instances
      */
     public ImageManager(){
-        storage = FirebaseStorage.getInstance();
         db = FirebaseFirestore.getInstance();
     }
 
@@ -44,10 +57,8 @@ public class ImageManager {
     public interface UploadCallback {
         /**
          * Called when the image has been successfully uploaded to Firebase Storage.
-         *
-         * @param imageUrl is the URL of the uploaded image as returned by Firebase Storage.
          */
-        void onSuccess(String imageUrl);
+        void onSuccess();
         /**
          * Called when the image upload operation fails.
          *
@@ -57,33 +68,123 @@ public class ImageManager {
     }
 
     /**
-     * Uploads an image to Firebase Storage and updates the Firestore database with the image path.
+     * Uploads an image to Firebase Storage that is linked to the uuid that uploaded it and updates the Firestore database with the image path as Base64.
      *
      * @param context The context that the function is being called in.
-     * @param fileUri The URI of the file to upload.
-     * @param userId The user ID to associate the uploaded image with.
-     * @param imagePath The path within Firebase Storage where the image will be stored.
+     * @param uuid The user ID to associate the uploaded image with.
+     * @param image The path within Firebase Storage where the image will be stored.
      * @param callback The callback interface that handles the outcome of the upload operation.
      */
-    public void uploadImage(Context context, Uri fileUri, String userId, String imagePath, UploadCallback callback) {
-        // Create a storage reference
-        StorageReference storageRef = storage.getReference();
-        StorageReference imageRef = storageRef.child(imagePath);
+    public void uploadImage(Context context, String uuid, Bitmap image, UploadCallback callback) {
+        String base64Encoded = Base64.encodeToString(ImageManager.bitmapToByteArray(image), Base64.DEFAULT);
+        Map<String, String> imageMap = new HashMap<>();
+        imageMap.put("base64Image", base64Encoded);
 
-        // Upload file to Firebase Storage and simulate success or failure
-        imageRef.putFile(fileUri)
-            .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                String downloadUrl = uri.toString();
-                callback.onSuccess(downloadUrl);
-                // Store the image URL in Firestore under the user's document
-                db.collection("users").document(userId).update("imageUrl", downloadUrl)
-                    .addOnSuccessListener(aVoid -> Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(e -> Toast.makeText(context, "Failed to store image URL", Toast.LENGTH_SHORT).show());
-            }))
-            .addOnFailureListener(e -> {
-                            Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT).show();
-                            callback.onFailure(e);
-            });
+        db.collection("images_testing").document(uuid).set(imageMap) // changed add to set
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
+                    callback.onSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT).show();
+                    callback.onFailure(e);
+                });
+    }
+
+    /**
+     * Uploads a poster for an event into the database
+     *
+     * @param context The context that the function is being called in.
+     * @param eventId The event ID to associate the uploaded poster with.
+     * @param image The bitmap of the event poster
+     */
+    public static void uploadPoster(Context context, String eventId, Bitmap image) {
+
+        String base64Encoded = Base64.encodeToString(ImageManager.bitmapToByteArray(image), Base64.DEFAULT);
+
+        Map<String, String> imageMap = new HashMap<>();
+
+        imageMap.put("base64Image", base64Encoded);
+
+        getCollection().document(eventId).set(imageMap)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(context, "Poster uploaded successfully", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Poster upload failed", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    /**
+     * Removes the poster of an event from the database
+     *
+     * @param eventId The event ID to associate the deleted poster with.
+     */
+    public static void deletePoster(String eventId) {
+        ImageManager.isPoster(eventId, posterExists -> {
+            if(posterExists){
+                getCollection().document(eventId).delete()
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            Log.d("Firestore", "poster of event " + eventId + " deleted");
+                        }else{
+                            Log.d("Firestore", "delete failed with ", task.getException());
+                        }
+                    });
+            }
+        });
+    }
+
+    /**
+     * Gets the bitmap of the event poster
+     *
+     * @param eventId the event id
+     * @param poster consumer to receive the bitmap of the poster
+     */
+    public static void getPoster(String eventId, Consumer<Bitmap> poster){
+        //check if the event has a poster
+        ImageManager.isPoster(eventId, posterExists -> {
+            if(posterExists){
+                //fetch the event's poster
+                getCollection().document(eventId).get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot document = task.getResult();
+                        String base64Image = document.getString("base64Image");
+                        if (base64Image != null && !base64Image.isEmpty()) {
+                            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            poster.accept(decodedByte);
+                        }
+                    }else{
+                        Log.d("Firestore", "get failed with ", task.getException());
+                    }
+                });
+            }else{
+                // return a deterministic poster
+                poster.accept(null);
+            }
+        });
+    }
+
+    /**
+     * Checks if the event has a poster associated to it
+     *
+     * @param eventId the event id
+     * @param hasPoster consumer to receive the boolean result
+     */
+    public static void isPoster(String eventId, Consumer<Boolean> hasPoster){
+        getCollection().document(eventId).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                if(document.exists()){
+                    hasPoster.accept(true);
+                }else{
+                    hasPoster.accept(false);
+                }
+            }else{
+                Log.d("Firestore", "get failed with ", task.getException());
+            }
+        });
     }
 
     /**
@@ -95,7 +196,7 @@ public class ImageManager {
      */
     public static Bitmap generateDeterministicImage(String input) {
 
-        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -106,21 +207,21 @@ public class ImageManager {
 
         // Background
         paint.setColor(backgroundColor);
-        canvas.drawRect(0F, 0F, 100F, 100F, paint);
+        canvas.drawRect(0F, 0F, 500F, 500F, paint);
 
         // Face
         paint.setColor(featureColor);
-        canvas.drawCircle(50F, 50F, 30F, paint);
+        canvas.drawCircle(250F, 250F, 200F, paint);
 
         // Eyes
         paint.setColor(Color.BLACK);
-        canvas.drawCircle(35F, 40F, 5F, paint);
-        canvas.drawCircle(65F, 40F, 5F, paint);
+        canvas.drawCircle(160F, 200F, 25F, paint);
+        canvas.drawCircle(340F, 200F, 25F, paint);
 
         // Mouth
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(2F);
-        canvas.drawArc(35F, 50F, 65F, 70F, 0F, 180F, false, paint);
+        paint.setStrokeWidth(10F);
+        canvas.drawArc(160F, 300F, 340F, 400F, 0F, 180F, false, paint);
 
         return bitmap;
     }
@@ -134,7 +235,16 @@ public class ImageManager {
      */
     public static byte[] bitmapToByteArray(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         return baos.toByteArray();
+    }
+
+    /**
+     * Get the images collection from firebase
+     *
+     * @return The collection
+     */
+    private static CollectionReference getCollection() {
+        return getFirebase().collection(COLLECTION_PATH);
     }
 }

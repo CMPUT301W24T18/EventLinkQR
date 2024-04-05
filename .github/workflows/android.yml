@@ -1,0 +1,36 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    # OpenAI, 2024, ChatGPT, Create dummy local.properties in CI
+    - name: Create dummy local.properties   
+      run: |
+        echo "sdk.dir=/usr/local/lib/android/sdk" > local.properties
+        echo "MAPS_API_KEY=dummyapikey" >> local.properties
+      working-directory: ./code/EventLinkQR
+      
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      working-directory: ./code/EventLinkQR
+      
+    - name: Build with Gradle
+      run: ./gradlew build
+      working-directory: ./code/EventLinkQR

@@ -5,40 +5,73 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <!-- Notification Title and Description Container -->
+    <!-- Left Container for Event Name, Notification Heading and Description -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <!-- Notification Title -->
+        <!-- Event Name -->
         <TextView
-            android:id="@+id/tvNotificationTitle"
+            android:id="@+id/tvEventName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?attr/notificationHeading"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
             android:ellipsize="end" />
 
-        <!-- Notification Short Description -->
+        <!-- Notification Heading -->
+        <TextView
+            android:id="@+id/tvNotificationHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:textColor="?attr/notificationHeading"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingTop="4dp"/>
+
+        <!-- Notification Description -->
         <TextView
             android:id="@+id/tvNotificationDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:maxLines="1"
-            android:ellipsize="end" />
+            android:textColor="?attr/notificationHeading"
+            android:textStyle="italic"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:paddingTop="4dp"/>
     </LinearLayout>
 
-    <!-- Timestamp TextView -->
-    <TextView
-        android:id="@+id/tvNotificationTime"
+    <!-- Right Container for Timestamp and Status Icon -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:textSize="14sp"
-        android:textColor="#757575" /> <!-- Use your desired color for the timestamp -->
+        android:orientation="vertical"
+        android:gravity="end">
+
+        <!-- Timestamp TextView -->
+        <TextView
+            android:id="@+id/tvNotificationTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="?attr/notificationHeading"
+            android:paddingTop="4dp" />
+
+        <!-- Status Indicator Icon -->
+        <ImageView
+            android:id="@+id/notificationStatusIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_unread_tick"
+            android:layout_marginTop="30dp"/>
+    </LinearLayout>
 
 </LinearLayout>

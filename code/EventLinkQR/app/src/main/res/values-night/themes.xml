@@ -1,7 +1,9 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.EventLinkQR" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="iconTintColor">@color/icon_tint</item>
+        <item name="textColor">@color/text_color</item>
+        <item name="buttonTextColor">@color/button_text_color</item>
+        <item name="notificationHeading">@color/notification_heading</item>
     </style>
 </resources>

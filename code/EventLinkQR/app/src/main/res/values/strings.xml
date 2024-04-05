@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">EventLinkQR</string>
-
     <string name="all_string">All</string>
     <string name="Checked_in_string">Checked In</string>
     <string name="Not_checked_in_string">Not Checked In</string>
@@ -8,6 +7,7 @@
     <string name="search_attendees_string">Search attendees</string>
     <string name="My_events_string">My Events</string>
     <string name="Create_event_string">Create event</string>
+    <string name="edit_event_string">Edit event</string>
     <string name="Home_string">Home</string>
     <string name="Scan_string">Scan</string>
     <string name="Profile_string">Profile</string>
@@ -28,12 +28,36 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="channel_name">notifications</string>
     <string name="channel_description">this is a notification channel\n</string>
+    <string name="send_notification">Send Notification\n</string>
+    <string name="message_title">Write your heading/title here!</string>
+    <string name="notification_message">Write your message here!</string>
     <string name="what_to_expect">What to expect</string>
     <string name="save_publish_string">Save and Publish</string>
-    <string name="choose_make_qr_string">Make/choose QR Code</string>
+    <string name="choose_make_qr_string">Scan Custom Code</string>
     <string name="prompt">Upload your image here</string>
     <string name="upload">Upload</string>
+    <string name="event_poster">Clear poster</string>
     <string name="cancel">Cancel</string>
+    <string name="edit_event">Edit Event</string>
     <string name="choose_image">Choose Image</string>
     <string name="editProfilImg">Edit Profile Img</string>
+    <string name="account_select">Select account type</string>
+    <string name="events">Events</string>
+    <string name="users">Users\n</string>
+    <string name="images">Images</string>
+    <string name="profile">Profile</string>
+    <string name="exit">Exit</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="event_poster_description">Event Poster</string>
+    <string name="check_in_qr_code">Check-in qr code</string>
+    <string name="check_in">Check In</string>
+    <string name="share_event">Share event</string>
+    <string name="promote">Promote</string>
+    <string name="qr_code">QR Code</string>
+    <string name="share_qr_code">Share QR Code</string>
+    <string name="save_and_publish">Save and Publish</string>
+    <string name="event_poster_hint">Event Poster</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="notifications">Notifications</string>
 </resources>

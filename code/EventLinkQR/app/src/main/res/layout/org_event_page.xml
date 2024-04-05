@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".OrgEventFragment">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_event_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/edit_event"
+        android:src="@android:drawable/ic_menu_edit"
+
+        app:layout_anchor="@id/org_event_scrollview"
+        app:layout_anchorGravity="bottom|end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/org_event_toolbar"
+        app:layout_constraintVertical_bias="0.96" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/org_event_toolbar"
@@ -27,95 +43,186 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/notification_send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/send_notification"
+            android:drawableEnd="@drawable/baseline_edit_notifications_24"
+            android:text="@string/send_notification"
+            android:textColor="@color/text_color"
+            app:drawableTint="?attr/iconTintColor"
+            tools:layout_editor_absoluteX="221dp"
+            tools:layout_editor_absoluteY="4dp" />
     </androidx.appcompat.widget.Toolbar>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:src="@drawable/ic_profile" />
-
-    <TextView
-        android:id="@+id/org_event_name"
+    <ScrollView
+        android:id="@+id/org_event_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fontFamily="serif"
-        android:gravity="center"
-        android:text="@string/My_events_string"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/org_event_toolbar">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_location" />
-
-        <TextView
-            android:id="@+id/org_event_location"
+        <LinearLayout
+            android:id="@+id/org_event_contents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:textSize="24sp" />
-    </LinearLayout>
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
-        android:fontFamily="serif"
-        android:gravity="bottom"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:text="@string/what_to_expect"
-        android:textSize="34sp"
-        android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/org_event_poster"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:contentDescription="@string/event_poster_description"
+                android:src="@drawable/ic_event"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/org_event_description"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/org_event_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/My_events_string"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/checkin_qr_button"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/transparent"
+                    android:contentDescription="@string/check_in_qr_code"
+                    android:drawableEnd="@drawable/ic_qr"
+                    android:drawableTint="?attr/iconTintColor"
+                    android:text="@string/check_in"
+                    android:textColor="@color/text_color" />
+
+                <Button
+                    android:id="@+id/promotional_qr_button"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/transparent"
+                    android:contentDescription="@string/share_event"
+                    android:drawableEnd="@drawable/ic_qr"
+                    android:drawableTint="?attr/iconTintColor"
+                    android:text="@string/promote"
+                    android:textColor="@color/text_color" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/org_event_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                app:drawableStartCompat="@drawable/ic_location" />
+
+            <TextView
+                android:id="@+id/org_event_datetime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                app:drawableStartCompat="@drawable/ic_time" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:text="@string/event_category_string"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/org_event_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="TextView"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:fontFamily="serif"
+                android:gravity="bottom"
+                android:text="@string/what_to_expect"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/org_event_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:layout_marginEnd="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/details_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/details_string" />
+            android:background="@android:color/transparent"
+            android:text="@string/details_string"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text_color"
+            android:textSize="18sp"
+            android:drawableEnd="@drawable/exit"
+            android:drawableTint="?attr/iconTintColor"/>
 
         <Button
+            android:layout_marginTop="4dp"
             android:id="@+id/attendees_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/Attendees_string" />
+            android:text="@string/Attendees_string"
+            android:textColor="@color/text_color"
+            android:background="@android:color/transparent"
+            android:textAlignment="viewStart"
+            android:textSize="18sp"
+            android:drawableEnd="@drawable/exit"
+            android:drawableTint="?attr/iconTintColor"/>
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

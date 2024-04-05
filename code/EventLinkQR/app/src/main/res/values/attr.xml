@@ -1,0 +1,8 @@
+<resources>
+    <attr name="iconTintColor" format="color"/>
+    <attr name="fillBgColor" format="color"/>
+    <attr name="unreadNotification" format="color"/>
+    <attr name="textColor" format="color"/>
+    <attr name="buttonTextColor" format="color"/>
+    <attr name="notificationHeading" format="color"/>
+</resources>

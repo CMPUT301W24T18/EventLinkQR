@@ -7,6 +7,20 @@ public class Notification {
     private String title;
     private String description;
     private String timeSinceNotification;
+    private boolean isRead;
+    private String eventId;
+    private String eventName; // Add this field
+
+    /**
+     * Constructs a new Notification with the specified title, description, and time elapsed since notification.
+     *
+     * @param title                The title of the notification.
+     * @param description          The description of the notification.
+     */
+    public Notification(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 
     /**
      * Constructs a new Notification with the specified title, description, and time elapsed since notification.
@@ -19,6 +33,23 @@ public class Notification {
         this.title = title;
         this.description = description;
         this.timeSinceNotification = timeSinceNotification;
+    }
+
+    /**
+     * Constructs a new Notification with the specified title, description, and time elapsed since notification.
+     *
+     * @param title                The title of the notification.
+     * @param description          The description of the notification.
+     * @param eventId              The eventId of the event which the notification belongs to.
+     * @param timeSinceNotification The time elapsed since the notification was created or received, formatted as a string (e.g., "2h" for two hours).
+     * @param isRead                A boolean values which tells whether the notification is yet read or unread.
+     */
+    public Notification(String title, String description, String eventId, String timeSinceNotification, Boolean isRead) {
+        this.title = title;
+        this.description = description;
+        this.eventId = eventId;
+        this.timeSinceNotification = timeSinceNotification;
+        this.isRead = isRead;
     }
 
     /**
@@ -67,6 +98,24 @@ public class Notification {
     }
 
     /**
+     * Returns whether the notification is read or unread by the user
+     *
+     * @return The read status of the notification.
+     */
+    public boolean isRead() {
+        return isRead;
+    }
+
+    /**
+     * Sets the read status of a notification
+     *
+     * @param read The read status of a notification.
+     */
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
+    /**
      * Returns the time elapsed since the notification was received.
      *
      * @return The time elapsed since the notification was received.
@@ -74,4 +123,42 @@ public class Notification {
     public String getTimeSinceNotification() {
         return timeSinceNotification;
     }
+
+    /**
+     * Returns the event name of the notification.
+     *
+     * @return The Event Name of the notification.
+     */
+    public String getEventName() {
+        return eventName;
+    }
+
+    /**
+     * Sets the EventName associated with the notification.
+     *
+     * @param eventName The Event Name associated with the notification.
+     */
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+
+    /**
+     * Returns the event id associated with the notification.
+     *
+     * @return The Event id associated with the notification.
+     */
+    public String getEventId() {
+        return eventId;
+    }
+
+    /**
+     * Sets the EventId associated with the notification.
+     *
+     * @param eventId The EventId associated with the notification.
+     */
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
 }
