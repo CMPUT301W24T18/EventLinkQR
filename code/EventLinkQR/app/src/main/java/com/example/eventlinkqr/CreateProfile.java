@@ -6,7 +6,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +39,7 @@ public class CreateProfile extends Fragment {
     private Switch toggleLocation; // Used for location permission
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String uuid; // Unique identifier for the attendee\
+    private ImageView image;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,7 @@ public class CreateProfile extends Fragment {
                              Bundle savedInstanceState) {
         uuid = UUID.randomUUID().toString();
         View view = inflater.inflate(R.layout.create_profile, container, false);
-        ImageView image = view.findViewById(R.id.new_prof_image);
+        image = view.findViewById(R.id.new_prof_image);
 
         image.setImageBitmap(ImageManager.generateDeterministicImage(uuid));
 
@@ -164,6 +168,41 @@ public class CreateProfile extends Fragment {
                 });
     }
 
+    /**
+     * Is called to refresh the profile image everytime the AttendeeProfilActivity is on the foreground
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshProfileImage();
+    }
+
+    /**
+     * Handles updating the ImageView preview when an image has been uploaded or removed
+     */
+    public void refreshProfileImage(){
+        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage(uuid);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Images").document(uuid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String base64Image = documentSnapshot.getString("base64Image");
+                        if (base64Image != null && !base64Image.isEmpty()) {
+                            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            image.setImageBitmap(decodedByte);
+                        } else {
+                            // If no uploaded image is present, display the deterministic image
+                            image.setImageBitmap(deterministicBitmap);
+                        }
+                    } else {
+                        image.setImageBitmap(deterministicBitmap);
+                    }
+                }).addOnFailureListener(e -> {
+                    image.setImageBitmap(deterministicBitmap);
+                    Toast.makeText(getContext(), "Error displaying profile Image", Toast.LENGTH_SHORT).show();// Handle any errors
+                });
+    }
 }
 
 
