@@ -76,7 +76,7 @@
         </activity>
 
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name=".EventsFirebaseMessagingService"
             android:exported="false"
             android:enableOnBackInvokedCallback="true"
             tools:targetApi="tiramisu">

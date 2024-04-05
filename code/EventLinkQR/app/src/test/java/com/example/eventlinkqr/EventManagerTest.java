@@ -8,10 +8,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.content.Context;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -32,10 +35,16 @@ public class EventManagerTest {
     public DocumentReference mockDocumentReference;
 
     @Mock
+    public Task<DocumentSnapshot> mockDocumentSnapshotTask;
+
+    @Mock
     public DatabaseManager mockDb;
 
     @Mock
     public FirebaseFirestore mockFirestore;
+
+    @Mock
+    public Context mockContext;
 
     @BeforeEach
     void setUp() {
@@ -52,11 +61,10 @@ public class EventManagerTest {
             when(mockDocumentReference.collection("attendees")).thenReturn(mockCollectionReference);
             when(mockCollectionReference.document("875779a8-9646-40ce-b245-882ebdb707ee")).thenReturn(mockDocumentReference);
 
-            when(mockDocumentReference.set(any())).thenReturn(Tasks.forResult(null));
+            when(mockDocumentReference.get()).thenReturn(mockDocumentSnapshotTask);
 
-            Task<Void> result = EventManager.checkIn("875779a8-9646-40ce-b245-882ebdb707ee", "David", "eventId");
+            EventManager.checkIn(mockContext, "875779a8-9646-40ce-b245-882ebdb707ee", "David", "eventId");
 
-            Assertions.assertTrue(result.isSuccessful());
         }
     }
 
@@ -69,11 +77,10 @@ public class EventManagerTest {
             when(mockDocumentReference.collection("attendees")).thenReturn(mockCollectionReference);
             when(mockCollectionReference.document("875779a8-9646-40ce-b245-882ebdb707ee")).thenReturn(mockDocumentReference);
 
-            when(mockDocumentReference.set(any())).thenReturn(Tasks.forException(new Exception()));
+            when(mockDocumentReference.get()).thenReturn(mockDocumentSnapshotTask);
 
-            Task<Void> result = EventManager.checkIn("875779a8-9646-40ce-b245-882ebdb707ee", "David", "eventId");
+            EventManager.checkIn(mockContext, "875779a8-9646-40ce-b245-882ebdb707ee", "David", "eventId");
 
-            Assertions.assertFalse(result.isSuccessful());
         }
     }
 

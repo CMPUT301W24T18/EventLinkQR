@@ -1,6 +1,7 @@
 package com.example.eventlinkqr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,10 +18,14 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.Filter;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +60,10 @@ public class EventManager extends Manager {
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         Toast.makeText(context, "Checked In", Toast.LENGTH_SHORT).show();
+                        getCollection().document(eventId).update("checkedInAttendeesCount", FieldValue.increment(1));
+                        EventManager.getOrganizerId(eventId, organizerId -> {
+                            MilestoneManager.checkForCheckInMilestone(context, eventId, organizerId);
+                        });
                     }else{
                         Toast.makeText(context, "Failed to check in", Toast.LENGTH_SHORT).show();
                     }
@@ -82,6 +91,10 @@ public class EventManager extends Manager {
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         Toast.makeText(context, "Checked In", Toast.LENGTH_SHORT).show();
+                        getCollection().document(eventId).update("checkedInAttendeesCount", FieldValue.increment(1));
+                        EventManager.getOrganizerId(eventId, organizerId -> {
+                            MilestoneManager.checkForCheckInMilestone(context, eventId, organizerId);
+                        });
                     }else{
                         Toast.makeText(context, "Failed to check in", Toast.LENGTH_SHORT).show();
                     }
@@ -116,6 +129,11 @@ public class EventManager extends Manager {
 
                                 Toast.makeText(context, "Signed Up", Toast.LENGTH_SHORT).show();
 
+                                EventManager.getOrganizerId(eventId, organizerId -> {
+                                    getCollection().document(eventId).update("signedUpCount", FieldValue.increment(1));
+                                    MilestoneManager.checkForSignUpMilestone(context, eventId, organizerId);
+                                });
+
                                 // checkin if the method was called form the checkIn method
                                 if(checkingIn && location != null){
                                     EventManager.checkIn(context, uuid, attendeeName, eventId, location);
@@ -129,8 +147,6 @@ public class EventManager extends Manager {
                 }
             });
         });
-
-
     }
 
     /**
@@ -320,6 +336,8 @@ public class EventManager extends Manager {
                 document.get("dateAndTime", Timestamp.class),
                 document.get("location", String.class),
                 document.get("geoTracking", Boolean.class));
+//                document.get("checkedInCount", Integer.class),
+//                document.get("signedUpCount", Integer.class));
         if (attendees != null) {
             e.setCheckedInAttendeesCount(attendees.size());
         }
@@ -381,13 +399,35 @@ public class EventManager extends Manager {
     }
 
     /**
+     * Gets the organizer's ID for an event.
+     *
+     * @param eventId The ID of the event.
+     * @param eventCallback The function to call with the organizer's ID.
+     */
+    public static void getOrganizerId(String eventId, Consumer<String> eventCallback) {
+        getCollection().document(eventId).get().addOnCompleteListener((Task<DocumentSnapshot> task) -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Log.d("Firestore", "DocumentSnapshot data: " + document.getData());
+                    eventCallback.accept(document.getString("organizer"));
+                } else {
+                    Log.d("Firestore", "No such document");
+                }
+            } else {
+                Log.d("Firestore", "get failed with ", task.getException());
+            }
+        });
+    }
+
+    /**
      * Adds a new event to the database
      *
      * @param newEvent  the new event to be added to the database
      * @param organizer the organizer of the event
      * @param customQR  (optional) encoded text for the qr code
      */
-    public static void createEvent(Event newEvent, String organizer, String customQR, int maxAttendees) {
+    public static void createEvent(Context context, Event newEvent, String organizer, String customQR, int maxAttendees, Bitmap poster) {
         HashMap<String, Object> newEventData = new HashMap<>();
         newEventData.put("name", newEvent.getName());
         newEventData.put("description", newEvent.getDescription());
@@ -400,12 +440,19 @@ public class EventManager extends Manager {
         newEventData.put("signedUpCount", 0);
         newEventData.put("checkedInAttendeesCount", 0);
 
+        newEventData.put("signedUpCount", newEvent.getSignedUpCount());
+        newEventData.put("checkedInAttendeesCount", newEvent.getCheckedInAttendeesCount());
+
         getCollection().add(newEventData)
                 .addOnSuccessListener(documentReference -> {
                     String eventId = documentReference.getId();
                     String codeText = customQR;
                     String promotionalText = "eventlinkqr:promotion:" + eventId;
 
+                    // upload the poster if there is one
+                    if(poster != null){
+                        ImageManager.uploadPoster(context, eventId, poster);
+                    }
                     if (codeText == null) {
                         codeText = "eventlinkqr:" + eventId;
                     }
@@ -418,6 +465,30 @@ public class EventManager extends Manager {
                     Log.e("Firestore", "Event failed to be added");
                 });
     }
+
+    /**
+     * Adds a new event to the database
+     *
+     * @param editedEvent the event containing the new values
+     */
+    public static void editEvent(Event editedEvent) {
+        HashMap<String, Object> editedEventData = new HashMap<>();
+        editedEventData.put("name", editedEvent.getName());
+        editedEventData.put("description", editedEvent.getDescription());
+        editedEventData.put("category", editedEvent.getCategory());
+        editedEventData.put("location", editedEvent.getLocation());
+        editedEventData.put("dateAndTime", editedEvent.getDate());
+        editedEventData.put("geoTracking", editedEvent.getGeoTracking());
+
+        getCollection().document(editedEvent.getId()).update(editedEventData)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("Firestore", "event succesfully edited");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Event failed to be edited");
+                });
+    }
+
 
     /**
      * Checks if the user is signed up to the event

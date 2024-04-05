@@ -141,4 +141,24 @@ public class Notification {
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
+
+
+    /**
+     * Returns the event id associated with the notification.
+     *
+     * @return The Event id associated with the notification.
+     */
+    public String getEventId() {
+        return eventId;
+    }
+
+    /**
+     * Sets the EventId associated with the notification.
+     *
+     * @param eventId The EventId associated with the notification.
+     */
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
 }
