@@ -168,6 +168,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                     Bitmap scaleImage = Bitmap
                             .createScaledBitmap(posterBitmap, (int) (posterBitmap.getWidth() *scale), (int) (posterBitmap.getHeight() *scale), true);
                     posterImage.setImageBitmap(scaleImage);
+                    clearPoster.setVisibility(View.VISIBLE);
                 }
             });
         }

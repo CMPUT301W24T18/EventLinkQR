@@ -3,6 +3,7 @@ package com.example.eventlinkqr;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -86,7 +87,18 @@ public class AttendeeProfileFragment extends Fragment {
         Button btnResetApp = view.findViewById(R.id.btnResetApp);
 
         // Reset app data on button click
-        btnResetApp.setOnClickListener(v -> resetAppData());
+        btnResetApp.setOnClickListener(v ->{
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle("Confirm deletion")
+                    .setMessage("Are you sure you want to delete your account?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        resetAppData();
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+        });
         return view;
     }
 

@@ -60,11 +60,8 @@
     <string name="save_and_publish">Save and Publish</string>
     <string name="event_poster_hint">Event Poster</string>
     <string name="sign_up">Sign Up</string>
-<<<<<<< HEAD
     <string name="notifications">Notifications</string>>
     <string name="delete_event">Delete event</string>
-=======
-    <string name="notifications">Notifications</string>
     <string name="custom_promotional_code">Custom Promotional Code</string>
 >>>>>>> origin/main
 </resources>
