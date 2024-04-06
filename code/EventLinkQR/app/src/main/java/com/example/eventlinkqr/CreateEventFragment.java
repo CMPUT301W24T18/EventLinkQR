@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -233,12 +232,12 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                                     return;
                                 }
 
-                                createEvent(newEvent, organizer, maxAttendee, finalImage);
+                                uploadEventToDb(newEvent, organizer, maxAttendee, finalImage);
                             }).addOnFailureListener(e -> {
-                                createEvent(newEvent, organizer, maxAttendee, finalImage);
+                                uploadEventToDb(newEvent, organizer, maxAttendee, finalImage);
                             });
                         }).addOnFailureListener(x -> {
-                            createEvent(newEvent, organizer, maxAttendee, finalImage);
+                            uploadEventToDb(newEvent, organizer, maxAttendee, finalImage);
                         });
                     } else if (customQRString != null) {
                         Bitmap finalImage = image;
@@ -250,9 +249,9 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                                 return;
                             }
 
-                            createEvent(newEvent, organizer, maxAttendee, finalImage);
+                            uploadEventToDb(newEvent, organizer, maxAttendee, finalImage);
                         }).addOnFailureListener(e -> {
-                            createEvent(newEvent, organizer, maxAttendee, finalImage);
+                            uploadEventToDb(newEvent, organizer, maxAttendee, finalImage);
                         });
                     } else if (customPromotionalQRString != null) {
                         Bitmap finalImage = image;
@@ -263,9 +262,9 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                                 Toast.makeText(requireActivity(), "Promotional code already in use", Toast.LENGTH_LONG).show();
                                 return;
                             }
-                            createEvent(newEvent, organizer, maxAttendee, finalImage);
+                            uploadEventToDb(newEvent, organizer, maxAttendee, finalImage);
                         }).addOnFailureListener(e -> {
-                            createEvent(newEvent, organizer, maxAttendee, finalImage);
+                            uploadEventToDb(newEvent, organizer, maxAttendee, finalImage);
                         });
                     } else {
                         // if the user, hasn't set a limit, set it to a default value
@@ -328,12 +327,20 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         this.timestamp = new Timestamp(date);
     }
 
-    private void createEvent(Event newEvent, String organizer, String maxAttendee, Bitmap image) {
+    /**
+     * Helper method used to add an event to the database by first checking if there is a max
+     * attendee limit and then appropriately converting it to an int
+     * @param newEvent The event to be added to the database
+     * @param organizer The name of the organizer of the event
+     * @param maxAttendee String representation optionally containing the user input for the max number of attendees
+     * @param posterImage The image to be uploaded as the event poster (optional).
+     */
+    private void uploadEventToDb(Event newEvent, String organizer, String maxAttendee, Bitmap posterImage) {
         // if the user, hasn't set a limit, set it to a default value
         if (maxAttendee.equals("")) {
-            EventManager.createEvent(getContext(), newEvent, organizer, customQRString, customPromotionalQRString, Integer.MAX_VALUE, image);
+            EventManager.createEvent(getContext(), newEvent, organizer, customQRString, customPromotionalQRString, Integer.MAX_VALUE, posterImage);
         } else {
-            EventManager.createEvent(getContext(), newEvent, organizer, customQRString, customPromotionalQRString, Integer.parseInt(maxAttendee), image);
+            EventManager.createEvent(getContext(), newEvent, organizer, customQRString, customPromotionalQRString, Integer.parseInt(maxAttendee), posterImage);
         }
     }
 
