@@ -208,6 +208,15 @@
                 android:background="@android:color/transparent"
                 android:textColor="@color/text_color"
                 android:drawableTint="@color/text_color"/>
+            <Button
+                android:id="@+id/choose_promotional_qr_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_promotional_code"
+                android:drawableEnd="@drawable/ic_qr"
+                android:background="@android:color/transparent"
+                android:textColor="@color/text_color"
+                android:drawableTint="@color/text_color"/>
         </LinearLayout>
 
 

@@ -230,7 +230,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
             }, e -> {
                 Toast.makeText(this, "Invalid QR Code", Toast.LENGTH_SHORT).show();
                 Log.d("QRCode", "Failed to scan code: " + e.getMessage());
-            });
+            }, () -> {});
         });
     }
 
