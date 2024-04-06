@@ -62,7 +62,7 @@ public class QRCodeManagerTest {
             when(mockFirestore.document("/Events/eventId")).thenReturn(mockEventReference);
 
             // Act
-            Task<Void> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
+            Task<DocumentReference> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
 
             // Assert
             Assertions.assertTrue(result.isSuccessful());
@@ -89,7 +89,7 @@ public class QRCodeManagerTest {
             String eventId = "eventId";
 
             // Act
-            Task<Void> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
+            Task<DocumentReference> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
 
             // Assert
             Assertions.assertFalse(result.isSuccessful());
