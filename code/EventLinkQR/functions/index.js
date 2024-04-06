@@ -58,18 +58,10 @@ exports.sendNotificationToEventAttendees = functions.firestore
                         continue;
                     }
 
-                    const action = "TARGET_NOTIFICATION";
-
                     const eventName = eventDoc.data().name
 
                     const message = {
                         token: fcmToken,
-                        notification: {
-                            title: lastNotification.heading,
-                            body: lastNotification.description,
-                            click_action: action
-                        
-                        },
                         data: {
                             // Custom data that you want to send and handle in onMessageReceived
                             title: lastNotification.heading,
@@ -156,46 +148,17 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 }
 
                 const eventName = eventDoc.data().name
-            
-                const action_ = "TARGET_NOTIFICATION";
-
-                // Send updated notifications via FCM
-                // const messages = uniqueTokens.map(token => ({
-                //     tokens: token,
-                //     notification: {
-                //         title: lastNotification.heading,
-                //         body: lastNotification.description,
-                //         // click_action: action_
-                
-                //     },
-                //     data: {
-                //         // Custom data that you want to send and handle in onMessageReceived
-                //         title: lastNotification.heading,
-                //         body: lastNotification.description,
-                //         eventId: eventId,
-                //         eventName: eventName,
-                //         click_action: action_
-                //         // You can add more key-value pairs as needed
-                //     }
-
-                // }));
+    
 
                 if (uniqueTokens.length > 0) {
                     const multicastMessage = {
                         tokens: uniqueTokens,
-                        // notification: {
-                        //     title: lastNotification.heading,
-                        //     body: lastNotification.description,
-                        //     click_action: action_
-
-                        // },
                         data: {
                             // Custom data
                             title: lastNotification.heading,
                             body: lastNotification.description,
                             eventId: eventId,
                             eventName: eventName,
-                            click_action: action_
                         }
                     };
 

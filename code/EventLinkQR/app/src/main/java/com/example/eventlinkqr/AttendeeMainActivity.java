@@ -181,13 +181,23 @@ public class AttendeeMainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Processes new intent for the activity. Used for handling notification clicks when the app is already running.
+     *
+     * @param intent New intent containing notification data.
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        setIntent(intent);
-        handleNotificationIntent(intent);
+        setIntent(intent); // Update the current intent
+        handleNotificationIntent(intent); // Handle the notification data
     }
 
+    /**
+     * Handles the intent from a notification click. Extracts notification details and navigates to the notification detail page.
+     *
+     * @param intent Intent from notification with data to process.
+     */
     private void handleNotificationIntent(Intent intent) {
         // Check if this intent is a notification click
         if (intent.hasExtra("notification_title")) {
@@ -211,7 +221,11 @@ public class AttendeeMainActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Determines if the current view is the profile page.
+     *
+     * @return true if the current view is the profile page, false otherwise.
+     */
     private boolean isOnProfilePage() {
         // Obtain the current destination ID from the NavController
         int currentDestinationId = Navigation.findNavController(navController).getCurrentDestination().getId();

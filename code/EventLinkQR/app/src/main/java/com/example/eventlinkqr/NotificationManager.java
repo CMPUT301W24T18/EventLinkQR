@@ -26,15 +26,15 @@ public class NotificationManager {
     private Context context; // Add this line
 
     /**
-     * Initializes a new instance of the NotificationManager class.
-     * This constructor specifically initializes a Firestore instance for use in notification management.
+     * Constructor for NotificationManager.
+     * Initializes the context and sets up a Firestore instance for managing notifications.
+     *
+     * @param context The current context, used to access Firestore.
      */
     public NotificationManager(Context context) {
         this.context = context;
         db = FirebaseFirestore.getInstance();
     }
-
-
 
 
     /**
@@ -213,6 +213,12 @@ public class NotificationManager {
         }).addOnFailureListener(e -> Log.w(TAG, "Error fetching document", e));
     }
 
+    /**
+     * Marks the most recent notification as read in the user's notification list.
+     * This method retrieves the user's UUID from shared preferences, fetches their notifications from Firestore,
+     * and updates the "isRead" status of the last notification to true. It then saves the updated notifications
+     * back to Firestore.
+     */
     public void markLastNotificationAsRead() {
         SharedPreferences prefs = context.getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String uuid = prefs.getString("UUID", null);

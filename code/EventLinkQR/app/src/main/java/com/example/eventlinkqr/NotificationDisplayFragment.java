@@ -21,10 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An activity class for displaying notifications to the user.
- * It retrieves notification data from a Firebase Firestore database and displays the notifications in a list.
- * The class also supports pull-to-refresh functionality using a SwipeRefreshLayout and allows navigation
- * to other activities through MaterialButtons.
+ * A Fragment subclass for displaying a list of notifications to the user.
+ * It fetches notification data from a Firebase Firestore database and updates the UI accordingly.
+ * This class also implements pull-to-refresh functionality and auto-refreshes the notifications list periodically.
  */
 public class NotificationDisplayFragment extends Fragment {
     /**
@@ -47,12 +46,15 @@ public class NotificationDisplayFragment extends Fragment {
      */
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    // Handler and Runnable for auto-refresh
+    /**
+     * Handler and Runnable for implementing auto-refresh functionality.
+     */
     private Handler autoRefreshHandler = new Handler();
     private Runnable autoRefreshRunnable;
 
+
     /**
-     * Initializes the activity, its views, and fetches the initial set of notifications.
+     * Inflates the fragment layout, initializes the UI components, and sets up auto-refresh for notifications.
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -97,9 +99,9 @@ public class NotificationDisplayFragment extends Fragment {
     }
 
     /**
-     * Fetches notifications from Firestore based on the current FCM token and updates the UI.
-     * It uses the NotificationManager class to retrieve notifications and handles success or error
-     * with appropriate actions.
+     * Fetches notifications from Firestore based on the user's UUID and updates the UI with the fetched data.
+     *
+     * @param uuid The UUID of the user whose notifications are to be fetched.
      */
     private void fetchNotifications(String uuid) {
         NotificationManager manager = new NotificationManager(requireContext());
@@ -113,11 +115,13 @@ public class NotificationDisplayFragment extends Fragment {
             @Override
             public void onError(Exception e) {
                 Log.e(TAG, "Error fetching notifications", e);
-                // Will Handle error later
             }
         });
     }
 
+    /**
+     * Pauses the auto-refresh functionality when the fragment is no longer in the foreground.
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -125,6 +129,9 @@ public class NotificationDisplayFragment extends Fragment {
         autoRefreshHandler.removeCallbacks(autoRefreshRunnable);
     }
 
+    /**
+     * Resumes the auto-refresh functionality when the fragment comes back to the foreground.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -132,6 +139,9 @@ public class NotificationDisplayFragment extends Fragment {
         autoRefreshHandler.post(autoRefreshRunnable);
     }
 
+    /**
+     * Stops the auto-refresh handler to avoid memory leaks when the fragment is destroyed.
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
