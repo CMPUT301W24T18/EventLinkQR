@@ -41,7 +41,6 @@ public class EventsFirebaseMessagingService extends FirebaseMessagingService {
             String messageBody = remoteMessage.getData().get("body");
             String eventId = remoteMessage.getData().get("eventId");
             String eventName = remoteMessage.getData().get("eventName");
-            ;
             String click_action = "TARGET_NOTIFICATION";
 
             if (title != null && messageBody != null) {
@@ -57,7 +56,7 @@ public class EventsFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody The body text of the message to be displayed in the notification.
      */
     private void showNotification(String title, String messageBody, String eventId, String eventName, String intentTest) {
-        Intent intent = new Intent(this, AttendeeMainActivity.class);
+        Intent intent = new Intent(intentTest);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("notification_title", title);
         intent.putExtra("notification_message", messageBody);

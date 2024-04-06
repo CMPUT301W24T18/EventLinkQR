@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,9 @@ public class NotificationDisplayFragment extends Fragment {
      */
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    // Handler and Runnable for auto-refresh
+    private Handler autoRefreshHandler = new Handler();
+    private Runnable autoRefreshRunnable;
 
     /**
      * Initializes the activity, its views, and fetches the initial set of notifications.
@@ -73,6 +77,20 @@ public class NotificationDisplayFragment extends Fragment {
             }
         });
 
+        autoRefreshRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if(getActivity() != null && isAdded()) { // Check if Fragment is attached
+                    fetchNotifications(uuid); // Call your method to fetch notifications
+                    autoRefreshHandler.postDelayed(this, 2500); // Schedule the next execution every 5 seconds
+                }
+            }
+        };
+
+        // Start auto-refresh
+        autoRefreshHandler.post(autoRefreshRunnable);
+
+
         // Get current FCM token and fetch notifications
         fetchNotifications(uuid);
         return view;
@@ -98,5 +116,26 @@ public class NotificationDisplayFragment extends Fragment {
                 // Will Handle error later
             }
         });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Stop the auto-refresh when the fragment is not visible
+        autoRefreshHandler.removeCallbacks(autoRefreshRunnable);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Resume auto-refresh when the fragment becomes visible again
+        autoRefreshHandler.post(autoRefreshRunnable);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Ensure the handler is stopped to avoid memory leaks
+        autoRefreshHandler.removeCallbacks(autoRefreshRunnable);
     }
 }
