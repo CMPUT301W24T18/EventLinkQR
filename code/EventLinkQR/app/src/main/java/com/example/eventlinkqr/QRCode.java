@@ -15,6 +15,8 @@ public class QRCode {
 
     private String eventId;
 
+    private boolean active = true;
+
     /**
      * Create a QR Code object from data that can be retrieved from the firestore.
      * @param codeText Text encoded in the QR Code
@@ -82,5 +84,21 @@ public class QRCode {
      */
     public Bitmap toBitmap(int width, int height) throws QRCodeGeneratorException {
         return QRCodeGenerator.imageFromQRCode(this, width, height);
+    }
+
+    /**
+     * Get the active state of the QR code (active QR codes cannot be reused).
+     * @return The active state of the QR code
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Set the active state of the QR code
+     * @param active The new state of the code
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

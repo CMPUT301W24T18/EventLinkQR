@@ -33,7 +33,7 @@
     <string name="notification_message">Write your message here!</string>
     <string name="what_to_expect">What to expect</string>
     <string name="save_publish_string">Save and Publish</string>
-    <string name="choose_make_qr_string">Scan Custom Code</string>
+    <string name="choose_make_qr_string">Custom Check In Code</string>
     <string name="prompt">Upload your image here</string>
     <string name="upload">Upload</string>
     <string name="event_poster">Clear poster</string>
@@ -42,6 +42,7 @@
     <string name="choose_image">Choose Image</string>
     <string name="editProfilImg">Edit Profile Img</string>
     <string name="account_select">Select account type</string>
+    <string name="delete_image">Delete Image</string>
     <string name="events">Events</string>
     <string name="users">Users\n</string>
     <string name="images">Images</string>
@@ -59,6 +60,11 @@
     <string name="save_and_publish">Save and Publish</string>
     <string name="event_poster_hint">Event Poster</string>
     <string name="sign_up">Sign Up</string>
+<<<<<<< HEAD
     <string name="notifications">Notifications</string>>
     <string name="delete_event">Delete event</string>
+=======
+    <string name="notifications">Notifications</string>
+    <string name="custom_promotional_code">Custom Promotional Code</string>
+>>>>>>> origin/main
 </resources>

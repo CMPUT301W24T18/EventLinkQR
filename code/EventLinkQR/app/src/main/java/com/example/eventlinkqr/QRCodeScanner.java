@@ -32,8 +32,9 @@ public class QRCodeScanner {
      * Activate the QRCode scanner and create a QR Code object from the result.
      * @param successCallback Callback to be invoked when a QR code is successfully scanned.
      * @param failureCallback Callback to be invoked when an error occurs during scan.
+     * @param cancelCallback Callback to be invoked when the scan is cancelled
      */
-    public void codeFromScan(Consumer<String> successCallback, Consumer<Exception> failureCallback) {
+    public void codeFromScan(Consumer<String> successCallback, Consumer<Exception> failureCallback, Runnable cancelCallback) {
         scanner.startScan()
                 .addOnSuccessListener(barcode -> {
                     String barcodeText = barcode.getRawValue();
@@ -45,7 +46,8 @@ public class QRCodeScanner {
 
                     successCallback.accept(barcodeText);
                 })
-                .addOnFailureListener(failureCallback::accept);
+                .addOnFailureListener(failureCallback::accept)
+                .addOnCanceledListener(cancelCallback::run);
     }
 
     /**

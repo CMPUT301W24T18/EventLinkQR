@@ -33,10 +33,11 @@ import java.io.IOException;
 public class UploadImageActivity extends AppCompatActivity {
 
     private ImageView imagePreview;
-    private Button upload_button, cancel_button, chooseImage_button;
-    private TextView prompt;
+    private Button upload_button, cancel_button, chooseImage_button, delete_button;
     private Uri imageUri;
     String userUuid;
+    Bitmap deterministicImage;
+    ImageManager imageManager;
 
 
     // ActivityResultLauncher for handling gallery selection result
@@ -56,28 +57,38 @@ public class UploadImageActivity extends AppCompatActivity {
         chooseImage_button = findViewById(R.id.button_choose_image);
         upload_button = findViewById(R.id.button_confirm_upload);
         cancel_button = findViewById(R.id.button_cancel_upload);
-        prompt = findViewById(R.id.prompt);
+        delete_button = findViewById(R.id.button_delete_image);
+        imagePreview = findViewById(R.id.image_preview);
 
         Intent intent = getIntent();
         String origin = intent.getStringExtra("origin");
-        String uuid = intent.getStringExtra("uuid");
-        if(origin != null && uuid != null && origin.equals("Attendee")) {
+        userUuid = intent.getStringExtra("uuid"); // to get the uuid of the user
+
+        if(origin != null && userUuid != null && origin.equals("Attendee")) {
+            refreshImageView();
             // Call the method to generate a deterministic image
-            Bitmap deterministicImage = ImageManager.generateDeterministicImage(uuid);
+            deterministicImage = ImageManager.generateDeterministicImage(userUuid);
             imagePreview.setImageBitmap(deterministicImage);
+        }else{
+            // find a way to display the image that's in the database
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("Images").document(userUuid)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if(documentSnapshot.exists() && documentSnapshot.contains("base64Image")) {
+                            String base64Image = documentSnapshot.getString("base64Image");
+                            ImageManager.displayBase64Image(base64Image, imagePreview); // Static method called directly with class name
+                        }
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(UploadImageActivity.this, "Failed to fetch image: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
         }
-
-
-//        For Testing Purposes
-//        Bitmap deterministicBitmap = ImageManager.generateDeterministicImage("Basia"); //(Attendee.getUuid);
-//        imagePreview.setImageBitmap(deterministicBitmap);
 
         chooseImage_button.setOnClickListener(view -> getImage.launch("image/*"));
 
         upload_button.setOnClickListener(view -> {
-
             if (imageUri != null) {
-                ImageManager imageManager = new ImageManager();
+                imageManager = new ImageManager();
 
                 // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                 Bitmap image;
@@ -87,7 +98,6 @@ public class UploadImageActivity extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
 
-                userUuid = intent.getStringExtra("uuid"); // to get the uuid of the user
                 imageManager.uploadImage(UploadImageActivity.this,  userUuid, image, new ImageManager.UploadCallback() {
                     @Override
                     public void onSuccess() {
@@ -113,5 +123,41 @@ public class UploadImageActivity extends AppCompatActivity {
         });
 
         cancel_button.setOnClickListener(view -> this.finish());
+
+        delete_button.setOnClickListener(view -> {
+            Bitmap deterministicImage = ImageManager.generateDeterministicImage(userUuid);
+            ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage, userUuid);
+            confirmDeleteDialogFragment.show(getSupportFragmentManager(), "confirmDelete");
+        });
+    }
+
+    /**
+     * To refresh the image preview in the uploadImageActivity so that the user can see what image is being uploaded or deleted
+     */
+    public void refreshImageView() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Images").document(userUuid)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists() && documentSnapshot.contains("base64Image")) {
+                        String base64Image = documentSnapshot.getString("base64Image");
+                        if (base64Image != null && !base64Image.isEmpty()) {
+                            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            imagePreview.setImageBitmap(decodedByte);
+                        } else {
+                            // Handle the case where there is no image
+                            imagePreview.setImageBitmap(deterministicImage);
+                        }
+                    } else {
+                        // Document doesn't exist or doesn't have the image; handle accordingly
+                        imagePreview.setImageBitmap(deterministicImage);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle any failure in fetching the document
+                    Toast.makeText(UploadImageActivity.this, "Failed to refresh image view: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    imagePreview.setImageBitmap(null); // or set a default image upon failure
+                });
     }
 }

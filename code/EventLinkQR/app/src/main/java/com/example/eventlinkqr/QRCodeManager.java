@@ -21,11 +21,12 @@ public class QRCodeManager extends Manager {
      * @param eventId The event that the code belongs to
      * @return Task to listen for success / failure
      */
-    public static Task<Void> addQRCode(String codeText, int codeType, String eventId) {
+    public static Task<DocumentReference> addQRCode(String codeText, int codeType, String eventId) {
         Map<String, Object> qrCode = new HashMap<>();
         qrCode.put("codeType", codeType);
         qrCode.put("event", getFirebase().document("/Events/" + eventId));
-        return getCollection().document(codeText).set(qrCode);
+        qrCode.put("codeText", codeText);
+        return getCollection().add(qrCode);
     }
 
     /**
@@ -34,8 +35,8 @@ public class QRCodeManager extends Manager {
      * @return A task with the QRCode object
      */
     public static Task<QRCode> fetchQRCode(String barcodeText) {
-        return getCollection().document(barcodeText).get().continueWith(d -> {
-            DocumentSnapshot doc = d.getResult();
+        return getCollection().where(Filter.equalTo("codeText", barcodeText)).get().continueWith(d -> {
+            DocumentSnapshot doc = d.getResult().getDocuments().get(0);
             String eventId = doc.get("event", DocumentReference.class).getId();
             return new QRCode(barcodeText, doc.get("codeType", Integer.class), eventId);
         });
@@ -51,7 +52,7 @@ public class QRCodeManager extends Manager {
         return getCollection().where(Filter.and(Filter.equalTo("event", getFirebase().document("/Events/" + event.getId())), Filter.equalTo("codeType", codeType))).get().continueWith(q -> {
             QuerySnapshot querySnapshot = q.getResult();
             DocumentSnapshot doc = querySnapshot.getDocuments().get(0);
-            return new QRCode(doc.getId(), doc.get("codeType", Integer.class), event.getId());
+            return new QRCode(doc.getString("codeText"), doc.get("codeType", Integer.class), event.getId());
         });
     }
 

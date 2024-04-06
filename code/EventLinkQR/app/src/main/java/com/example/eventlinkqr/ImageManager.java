@@ -6,29 +6,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.util.Base64;
-import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import android.util.Log;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import androidx.annotation.NonNull;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.io.ByteArrayOutputStream;
 import java.util.function.Consumer;
 
 /**
@@ -42,7 +34,7 @@ public class ImageManager extends Manager {
     /**
      * The Firestore collection path for images
      */
-    private static final String COLLECTION_PATH = "images_testing";
+    private static final String COLLECTION_PATH = "Images";
 
     /**
      * ImageManager constructor that instantiates the Firebase Storage and Firestore instances
@@ -80,7 +72,7 @@ public class ImageManager extends Manager {
         Map<String, String> imageMap = new HashMap<>();
         imageMap.put("base64Image", base64Encoded);
 
-        db.collection("images_testing").document(uuid).set(imageMap) // changed add to set
+        db.collection("Images").document(uuid).set(imageMap) // changed add to set
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
                     callback.onSuccess();
@@ -89,6 +81,24 @@ public class ImageManager extends Manager {
                     Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT).show();
                     callback.onFailure(e);
                 });
+    }
+
+    /**
+     * Deletes the image from the firebase storage using the uuid that it is linked to
+     *
+     * @param context The context that the function is being called in.
+     * @param uuid The user ID to associate the uploaded image with.
+     */
+    static void deleteImageFromFirebase(ConfirmDeleteDialogFragment context, String uuid, UploadCallback callback) {
+        // reference to image file in Firebase Storage
+        DocumentReference imageRef = Manager.getFirebase().collection("Images")
+                .document(uuid);
+
+        // Image deleted unsuccessfully
+        imageRef.delete().addOnSuccessListener(aVoid -> {
+            // Image deleted successfully
+            callback.onSuccess();
+        }).addOnFailureListener(callback::onFailure);
     }
 
     /**
@@ -237,6 +247,18 @@ public class ImageManager extends Manager {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         return baos.toByteArray();
+    }
+
+    /**
+     * Decodes the base64Image back t a bitmap and displays it to the specified imageView
+     *
+     * @param base64Image is retrieved from the database as the image that the user uploaded as either profile or poster
+     * @param imageView to display the decoded base64image
+     */
+    public static void displayBase64Image(String base64Image, ImageView imageView) {
+        byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        imageView.setImageBitmap(decodedByte);
     }
 
     /**

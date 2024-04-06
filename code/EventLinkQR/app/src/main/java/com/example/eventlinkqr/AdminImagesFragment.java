@@ -59,7 +59,7 @@ public class AdminImagesFragment extends Fragment {
 
     /**
      * Fetches images from the Firestore database and populates them into the image list.
-     * The method queries the 'images_testing' collection in Firestore, extracts image data,
+     * The method queries the 'Images' collection in Firestore, extracts image data,
      * and updates the ListView adapter.
      */
     private void fetchImages() {
@@ -117,9 +117,8 @@ public class AdminImagesFragment extends Fragment {
      * @param documentId The Firestore document ID of the image to be deleted.
      * @param position   The position of the image in the ListView.
      */
-
     private void deleteImage(String documentId, int position) {
-        adminManager.deleteImage(documentId, new AdminManager.AdminEventOperationCallback() {
+        adminManager.replaceImageWithDefault(documentId, new AdminManager.AdminEventOperationCallback() {
             @Override
             public void onSuccess() {
                 imageList.remove(position);

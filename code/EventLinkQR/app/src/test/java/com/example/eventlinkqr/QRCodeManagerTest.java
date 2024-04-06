@@ -42,7 +42,6 @@ public class QRCodeManagerTest {
     void setUp() {
         when(mockDb.getFirebaseFirestore()).thenReturn(mockFirestore);
         when(mockFirestore.collection("QRCode")).thenReturn(mockCollectionReference);
-        when(mockCollectionReference.document(anyString())).thenReturn(mockDocumentReference);
     }
 
     @Test
@@ -51,7 +50,7 @@ public class QRCodeManagerTest {
         // OpenAI, 2024, ChatGPT, Test add QR code
         try (MockedStatic<DatabaseManager> mockedDbManager = mockStatic(DatabaseManager.class)) {
             mockedDbManager.when(DatabaseManager::getInstance).thenReturn(mockDb);
-            when(mockDocumentReference.set(any())).thenReturn(Tasks.forResult(null));
+            when(mockCollectionReference.add(any())).thenReturn(Tasks.forResult(mockDocumentReference));
 
             // Arrange
             String codeText = "sampleCode";
@@ -62,12 +61,12 @@ public class QRCodeManagerTest {
             when(mockFirestore.document("/Events/eventId")).thenReturn(mockEventReference);
 
             // Act
-            Task<Void> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
+            Task<DocumentReference> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
 
             // Assert
             Assertions.assertTrue(result.isSuccessful());
             ArgumentCaptor<Map<String, Object>> argumentCaptor = ArgumentCaptor.forClass(Map.class);
-            verify(mockDocumentReference).set(argumentCaptor.capture());
+            verify(mockCollectionReference).add(argumentCaptor.capture());
             Map<String, Object> capturedArgument = argumentCaptor.getValue();
             Assertions.assertEquals(codeType, capturedArgument.get("codeType"));
             Assertions.assertEquals(mockEventReference, capturedArgument.get("event"));
@@ -80,8 +79,7 @@ public class QRCodeManagerTest {
         // OpenAI, 2024, ChatGPT, Test add QR code
         try (MockedStatic<DatabaseManager> mockedDbManager = mockStatic(DatabaseManager.class)) {
             mockedDbManager.when(DatabaseManager::getInstance).thenReturn(mockDb);
-            when(mockDocumentReference.set(any())).thenReturn(Tasks.forException(new Exception()));
-
+            when(mockCollectionReference.add(any())).thenReturn(Tasks.forException(new Exception()));
             // Arrange
             String codeText = "sampleCode";
             int codeType = 1;
@@ -89,7 +87,7 @@ public class QRCodeManagerTest {
             String eventId = "eventId";
 
             // Act
-            Task<Void> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
+            Task<DocumentReference> result = QRCodeManager.addQRCode(codeText, codeType, eventId);
 
             // Assert
             Assertions.assertFalse(result.isSuccessful());
