@@ -59,7 +59,7 @@ public class AdminImagesFragment extends Fragment {
 
     /**
      * Fetches images from the Firestore database and populates them into the image list.
-     * The method queries the 'images_testing' collection in Firestore, extracts image data,
+     * The method queries the 'Images' collection in Firestore, extracts image data,
      * and updates the ListView adapter.
      */
     private void fetchImages() {

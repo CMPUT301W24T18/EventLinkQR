@@ -2,6 +2,7 @@ package com.example.eventlinkqr;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,15 +50,15 @@ public class OrgEventFragment extends Fragment {
         Button detailsButton = view.findViewById(R.id.details_button);
         Button attendeesButton = view.findViewById(R.id.attendees_button);
         Button promotionalButton = view.findViewById(R.id.promotional_qr_button);
-        FloatingActionButton sharebutton = view.findViewById(R.id.share_qr_button);
-        FloatingActionButton editbutton = view.findViewById(R.id.edit_event_button);
-        ImageView notificationSendIcon = view.findViewById(R.id.notification_send_icon);
+        Button checkinQrButton = view.findViewById(R.id.checkin_qr_button);
+        FloatingActionButton editButton = view.findViewById(R.id.edit_event_button);
+        Button notificationSendIcon = view.findViewById(R.id.notification_send_button);
         TextView eventTitle = view.findViewById(R.id.org_event_name);
         TextView eventLocation = view.findViewById(R.id.org_event_location);
         TextView eventDescription = view.findViewById(R.id.org_event_description);
         TextView eventDate = view.findViewById(R.id.org_event_datetime);
         TextView eventCategory = view.findViewById(R.id.org_event_category);
-        eventPoster = view.findViewById(R.id.imageView);
+        eventPoster = view.findViewById(R.id.org_event_poster);
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
 
@@ -112,7 +114,7 @@ public class OrgEventFragment extends Fragment {
         });
 
         // set the onClick listener for the edit button
-        editbutton.setOnClickListener(v -> {
+        editButton.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putString("id", event.getId());
             bundle.putString("name", event.getName());
@@ -125,17 +127,13 @@ public class OrgEventFragment extends Fragment {
             Navigation.findNavController(view).navigate(R.id.orgCreateEventFragment, bundle);
         });
 
-
-
-        QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(q -> {
-            sharebutton.setOnClickListener(v -> {
-                shareImage(q);
-            });
+        checkinQrButton.setOnClickListener(v -> {
+            QRCodeManager.fetchQRCode(event, QRCode.CHECK_IN_TYPE).addOnSuccessListener(this::setupDialog);
         });
 
         // When clicked, bring up the promotional QR code
         promotionalButton.setOnClickListener(v -> {
-            QRCodeManager.fetchQRCode(event, QRCode.PROMOTIONAL_TYPE).addOnSuccessListener(this::shareImage);
+            QRCodeManager.fetchQRCode(event, QRCode.PROMOTIONAL_TYPE).addOnSuccessListener(this::setupDialog);
         });
 
         // Inflate the layout for this fragment
@@ -163,5 +161,21 @@ public class OrgEventFragment extends Fragment {
         } catch (IOException | QRCodeGeneratorException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void setupDialog(QRCode q) {
+        Dialog qrCodeDialog = new Dialog(requireActivity());
+        qrCodeDialog.setContentView(R.layout.view_qr_layout);
+        ImageView modalQrCodeImage = qrCodeDialog.findViewById(R.id.view_qr_image);
+        ImageButton shareButton = qrCodeDialog.findViewById(R.id.share_qr_image);
+
+        try {
+            modalQrCodeImage.setImageBitmap(q.toBitmap(512, 512));
+        } catch (QRCodeGeneratorException e) {
+            throw new RuntimeException(e);
+        }
+
+        shareButton.setOnClickListener(x -> shareImage(q));
+        qrCodeDialog.show();
     }
 }

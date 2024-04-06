@@ -93,7 +93,7 @@ public class AdminManager extends Manager {
             List<ImageModel> imageList = new ArrayList<>();
             List<String> documentIds = new ArrayList<>();
 
-            db.collection("images_testing").get()
+            db.collection("Images").get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
@@ -134,7 +134,7 @@ public class AdminManager extends Manager {
         AtomicInteger count = new AtomicInteger(violatedImageDocIds.size());
 
         for (String docId : violatedImageDocIds) {
-            db.collection("images_testing").document(docId).get().addOnCompleteListener(task -> {
+            db.collection("Images").document(docId).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful() && task.getResult() != null && task.getResult().exists()) {
                     String base64Image = task.getResult().getString("base64Image");
                     if (base64Image != null) {
@@ -186,7 +186,7 @@ public class AdminManager extends Manager {
                 updatedImageData.put("base64Image", base64Image);
 
                 // Update the document with the new image
-                db.collection("images_testing").document(documentId)
+                db.collection("Images").document(documentId)
                         .update(updatedImageData)
                         .addOnSuccessListener(aVoid -> callback.onSuccess())
                         .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
@@ -209,7 +209,7 @@ public class AdminManager extends Manager {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Directly access the document with ID "poster_violated"
-        db.collection("images_testing").document(documentId)
+        db.collection("Images").document(documentId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

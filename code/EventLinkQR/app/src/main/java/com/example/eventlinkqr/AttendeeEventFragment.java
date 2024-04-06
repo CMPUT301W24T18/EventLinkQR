@@ -96,20 +96,29 @@ public class AttendeeEventFragment extends Fragment {
         eventToolBar.setNavigationOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.attendeeHomePage));
 
+        String uuid = ((AttendeeMainActivity) requireActivity()).getAttUUID();
+        String profileName = ((AttendeeMainActivity) requireActivity()).getProfileName();
+
+        EventManager.isSignedUp(uuid, event.getId(), isSignedUp -> {
+            if(!isSignedUp){
+                signUpButton.setEnabled(true);
+            }
+        });
+
         // sign the user up for the event
         signUpButton.setOnClickListener(v -> {
-            String uuid = ((AttendeeMainActivity) requireActivity()).getAttUUID();
-            String profileName = ((AttendeeMainActivity) requireActivity()).getProfileName();
-
             EventManager.isSignedUp(uuid, event.getId(), isSignedUp -> {
                 if(isSignedUp){
                     // send message when user is already signed up
                     Toast.makeText(getContext(), "You are already signed up to this event", Toast.LENGTH_SHORT).show();
                 }else{
                     EventManager.signUp(getContext(), uuid, profileName, event.getId(), false, null);
+                    signUpButton.setEnabled(false);
                 }
             });
         });
+
+
 
         return view;
     }

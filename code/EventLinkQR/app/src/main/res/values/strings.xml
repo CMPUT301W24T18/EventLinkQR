@@ -42,6 +42,7 @@
     <string name="choose_image">Choose Image</string>
     <string name="editProfilImg">Edit Profile Img</string>
     <string name="account_select">Select account type</string>
+    <string name="delete_image">Delete Image</string>
     <string name="events">Events</string>
     <string name="users">Users\n</string>
     <string name="images">Images</string>
@@ -49,5 +50,15 @@
     <string name="exit">Exit</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="event_poster_description">Event Poster</string>
+    <string name="check_in_qr_code">Check-in qr code</string>
+    <string name="check_in">Check In</string>
+    <string name="share_event">Share event</string>
+    <string name="promote">Promote</string>
+    <string name="qr_code">QR Code</string>
+    <string name="share_qr_code">Share QR Code</string>
+    <string name="save_and_publish">Save and Publish</string>
+    <string name="event_poster_hint">Event Poster</string>
+    <string name="sign_up">Sign Up</string>
     <string name="notifications">Notifications</string>
 </resources>
