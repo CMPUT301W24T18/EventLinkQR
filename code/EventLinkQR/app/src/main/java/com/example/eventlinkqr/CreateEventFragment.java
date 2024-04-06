@@ -133,7 +133,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         categoryInput.setSelection(eventCategories.size()-1);
 
         // set the values if we are editing an event instead of creating one
-        if(arguments != null){
+        if(arguments != null) {
             deleteButton.setVisibility(View.VISIBLE);
             chooseQrButton.setVisibility(View.INVISIBLE);
             choosePromotionalQrButton.setVisibility(View.INVISIBLE);
