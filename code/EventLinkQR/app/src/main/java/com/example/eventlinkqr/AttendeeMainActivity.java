@@ -44,7 +44,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private QRCodeScanner scanner;
     private String attUUID;
     private String profileName;
-    NotificationManager notificationManager;
+    private NotificationManager notificationManager;
     private int clickCount = 10;
     private Handler clickHandler = new Handler();
     private Runnable clickResetRunnable;
