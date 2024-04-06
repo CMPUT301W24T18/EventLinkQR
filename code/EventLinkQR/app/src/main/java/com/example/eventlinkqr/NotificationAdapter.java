@@ -102,7 +102,7 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
 
                 if ("user".equals(NotificationAdapter.this.source)) {
                     bundle.putString("eventId", notification.getEventId());
-                    notificationManager.markNotificationAsRead(notification.getTitle(), notification.getDescription(), notification.getTimeSinceNotification());
+                    notificationManager.markNotificationAsRead(notification.getTitle(), notification.getDescription());
 
                     // Logic to navigate to the detail page for users
                     Navigation.findNavController(view).navigate(R.id.action_notificationDisplayPage_to_DetailPage, bundle);

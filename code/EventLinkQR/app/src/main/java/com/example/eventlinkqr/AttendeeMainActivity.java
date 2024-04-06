@@ -44,7 +44,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
     private QRCodeScanner scanner;
     private String attUUID;
     private String profileName;
-
+    NotificationManager notificationManager;
     private int clickCount = 10;
     private Handler clickHandler = new Handler();
     private Runnable clickResetRunnable;
@@ -95,6 +95,11 @@ public class AttendeeMainActivity extends AppCompatActivity {
                 profileName = d.getString("name");
             });
         }
+
+        notificationManager = new NotificationManager(this); // Add this line to initialize notificationManager
+
+
+        handleNotificationIntent(getIntent());
 
         setupProfileButton();
 
@@ -175,6 +180,37 @@ public class AttendeeMainActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleNotificationIntent(intent);
+    }
+
+    private void handleNotificationIntent(Intent intent) {
+        // Check if this intent is a notification click
+        if (intent.hasExtra("notification_title")) {
+            String title = intent.getStringExtra("notification_title");
+            String message = intent.getStringExtra("notification_message");
+            String eventId = intent.getStringExtra("eventId");
+            String eventName = intent.getStringExtra("eventName");
+            Log.d("NotificationIntent", "Title: " + title + ", Message: " + message + ", EventID: " + eventId + ", EventName: " + eventName);
+
+            // Navigate to NotificationDetailFragment with the notification data
+            Bundle bundle = new Bundle();
+            bundle.putString("title", title);
+            bundle.putString("message", message);
+            bundle.putString("eventId", eventId);
+            bundle.putString("source", "user");
+            bundle.putString("eventName", eventName);
+
+            notificationManager.markLastNotificationAsRead();
+
+            Navigation.findNavController(this, R.id.att_nav_controller).navigate(R.id.notificationDetailedPage, bundle);
+        }
+    }
+
 
     private boolean isOnProfilePage() {
         // Obtain the current destination ID from the NavController

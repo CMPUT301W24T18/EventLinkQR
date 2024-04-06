@@ -43,6 +43,7 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 });
 
                 for (const userId of recipients) {
+
                     const userDoc = await admin.firestore().collection('Users').doc(userId).get();
                     if (!userDoc.exists || !userDoc.data().fcmToken) {
                         console.log(`FCM token not found for user: ${userId}`);
@@ -50,16 +51,32 @@ exports.sendNotificationToEventAttendees = functions.firestore
                     }
 
                     const fcmToken = userDoc.data().fcmToken;
+
+                    const eventDoc = await admin.firestore().collection('Events').doc(eventId).get();
+                    if (!eventDoc.exists || !eventDoc.data().name) {
+                        console.log(`Event name not found for event: ${eventId}`);
+                        continue;
+                    }
+
+                    const action = "TARGET_NOTIFICATION";
+
+                    const eventName = eventDoc.data().name
+
                     const message = {
                         token: fcmToken,
                         notification: {
                             title: lastNotification.heading,
                             body: lastNotification.description,
+                            click_action: action
+                        
                         },
                         data: {
                             // Custom data that you want to send and handle in onMessageReceived
                             title: lastNotification.heading,
                             body: lastNotification.description,
+                            eventId: eventId,
+                            eventName: eventName,
+                            
                             // You can add more key-value pairs as needed
                         }
                     };
@@ -132,26 +149,77 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 console.log(`Notifications updated for ${uniqueTokens.length} unique devices.`);
 
 
+    
+                const eventDoc = await admin.firestore().collection('Events').doc(eventId).get();
+                if (!eventDoc.exists || !eventDoc.data().name) {
+                    console.log(`Event name not found for event: ${eventId}`);
+                }
+
+                const eventName = eventDoc.data().name
+            
+                const action_ = "TARGET_NOTIFICATION";
+
                 // Send updated notifications via FCM
-                const messages = uniqueTokens.map(token => ({
-                    token,
-                    notification: {
-                        title: lastNotification.heading,
-                        body: lastNotification.description,
-                    },
-                    data: {
-                        // Custom data that you want to send and handle in onMessageReceived
-                        title: lastNotification.heading,
-                        body: lastNotification.description,
-                        // You can add more key-value pairs as needed
-                    }
+                // const messages = uniqueTokens.map(token => ({
+                //     tokens: token,
+                //     notification: {
+                //         title: lastNotification.heading,
+                //         body: lastNotification.description,
+                //         // click_action: action_
+                
+                //     },
+                //     data: {
+                //         // Custom data that you want to send and handle in onMessageReceived
+                //         title: lastNotification.heading,
+                //         body: lastNotification.description,
+                //         eventId: eventId,
+                //         eventName: eventName,
+                //         click_action: action_
+                //         // You can add more key-value pairs as needed
+                //     }
 
-                }));
+                // }));
 
-                const response = await admin.messaging().sendAll(messages);
-                console.log('Successfully sent messages:', response.successCount);
-            } catch (error) {
-                console.error('Error sending updated notifications:', error);
+                if (uniqueTokens.length > 0) {
+                    const multicastMessage = {
+                        tokens: uniqueTokens,
+                        // notification: {
+                        //     title: lastNotification.heading,
+                        //     body: lastNotification.description,
+                        //     click_action: action_
+
+                        // },
+                        data: {
+                            // Custom data
+                            title: lastNotification.heading,
+                            body: lastNotification.description,
+                            eventId: eventId,
+                            eventName: eventName,
+                            click_action: action_
+                        }
+                    };
+
+                try {
+                    // Correcting the method call to reflect your original query
+                    const response = await admin.messaging().sendEachForMulticast(multicastMessage);
+                    console.log('Successfully sent messages:', response.successCount);
+        
+                    // Handling individual message responses
+                    response.responses.forEach((resp, idx) => {
+                        if (resp.success) {
+                            console.log(`Message sent to token ${uniqueTokens[idx]}`);
+                        } else {
+                            console.error(`Failed to send message to token ${uniqueTokens[idx]}`, resp.error);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error sending multicast messages:', error);
+                }
+                // const response = await admin.messaging().sendEachForMulticast(messages);
+                // console.log('Successfully sent messages:', response.successCount);
+            } }
+            catch (error) {
+                console.error('Error sending updated notifications:', error.error);
             }
         }
     });

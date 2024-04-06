@@ -11,6 +11,8 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Date;
+
 /**
  * Handles incoming messages from Firebase Cloud Messaging (FCM).
  * This service is responsible for receiving messages sent via FCM. It processes the data payload contained within
@@ -37,8 +39,13 @@ public class EventsFirebaseMessagingService extends FirebaseMessagingService {
             // Extract the title and body from the data payload.
             String title = remoteMessage.getData().get("title");
             String messageBody = remoteMessage.getData().get("body");
+            String eventId = remoteMessage.getData().get("eventId");
+            String eventName = remoteMessage.getData().get("eventName");
+            ;
+            String click_action = "TARGET_NOTIFICATION";
+
             if (title != null && messageBody != null) {
-                showNotification(title, messageBody);
+                showNotification(title, messageBody, eventId, eventName, click_action);
             }
         }
     }
@@ -49,12 +56,17 @@ public class EventsFirebaseMessagingService extends FirebaseMessagingService {
      * @param title       The title of the message to be displayed in the notification.
      * @param messageBody The body text of the message to be displayed in the notification.
      */
-    private void showNotification(String title, String messageBody) {
-        Intent intent = new Intent(this, NotificationHostActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("title", title);
-        intent.putExtra("message", messageBody);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+    private void showNotification(String title, String messageBody, String eventId, String eventName, String intentTest) {
+        Intent intent = new Intent(this, AttendeeMainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("notification_title", title);
+        intent.putExtra("notification_message", messageBody);
+        intent.putExtra("eventId", eventId);
+        intent.putExtra("eventName", eventName);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
 
         // Define the notification channel ID.
         String channelId = "event_notifications";
