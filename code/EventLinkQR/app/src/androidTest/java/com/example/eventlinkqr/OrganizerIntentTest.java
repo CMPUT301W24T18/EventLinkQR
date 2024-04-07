@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class OrganizerIntentTest {
+public class OrganizerIntentTest extends BaseIntentTest{
 
     /**
      * Rule to start the AttendeeMainActivity before each test method.
@@ -44,31 +44,10 @@ public class OrganizerIntentTest {
     @Test
     public void testCreateEvent() {
         onView(withText("Create Profile")).perform(click());
-        onView(withId(R.id.new_full_name)).perform(typeText("Test User"));
-        onView(withId(R.id.new_full_name)).perform(closeSoftKeyboard());
-        onView(withId(R.id.new_save_button)).perform(click());
+        enterProfileDetails("Test User",  "7805555555", "eventlinkqr.com");
         SystemClock.sleep(3000);
 
-        onView(withText("My Events")).perform(click());
-        // Simulate a click on the create event button
-        onView(allOf(withId(R.id.create_event_button), ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
+        enterEventDetails("Intent Test Event", "Intent testing event", "123 456 Street, Cityville, Ohio");
 
-        // Check if the create event page is open
-        onView(ViewMatchers.withId(R.id.event_location_input)).check(matches(isDisplayed()));
-
-        onView(ViewMatchers.withId(R.id.event_name_input)).perform(typeText("Intent Test Event"));
-        onView(ViewMatchers.withId(R.id.event_description_input)).perform(typeText("Intent testing event"));
-        onView(ViewMatchers.withId(R.id.event_description_input)).perform(closeSoftKeyboard());
-        onView(withId(R.id.new_event_geo_switch)).perform(click());
-        onView(withId(R.id.category_selector)).perform(click());
-        onView(withText("Workshop")).perform(click());
-        onView(ViewMatchers.withId(R.id.event_location_input)).perform(typeText("123 456 Street, Cityville, Ohio"));
-        onView(ViewMatchers.withId(R.id.date_picker)).perform(click());
-        onView(withText("OK")).perform(click());
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.publish_button)).perform(click());
-        SystemClock.sleep(1000);
-        onView(withText("My Events")).perform(click());
-        onView(withId(R.id.event_list_view)).check(ViewAssertions.selectedDescendantsMatch(withText("Intent Test Event"), isDisplayed()));
     }
 }

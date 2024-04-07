@@ -11,7 +11,4 @@ public class ImageModel {
         return base64Image;
     }
 
-    public void setBase64Image(String base64Image) {
-        this.base64Image = base64Image;
-    }
 }
