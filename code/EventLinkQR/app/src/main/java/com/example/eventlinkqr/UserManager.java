@@ -7,17 +7,30 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.function.Consumer;
 
+/**
+ * Manages operations related to attendees in the database
+ */
 public class UserManager extends Manager {
     /**
      * The Firestore collection path for attendees
      */
     private static final String COLLECTION_PATH = "Users";
 
-
+    /**
+     * Provides a reference to the Firestore collection containing attendee data.
+     *
+     * @return A reference to the Firestore 'Users' collection.
+     */
     private static CollectionReference getCollection() {
         return getFirebase().collection(COLLECTION_PATH);
     }
 
+    /**
+     * Creates a User object from a Firestore document snapshot.
+     *
+     * @param document The document snapshot from which to create the User object.
+     * @return A User object populated with data from the document snapshot.
+     */
     private static User fromDocument(DocumentSnapshot document) {
         User a = new User(
                 document.getString("uuid"),

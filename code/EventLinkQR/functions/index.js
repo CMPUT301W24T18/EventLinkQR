@@ -35,7 +35,7 @@ exports.sendNotificationToEventAttendees = functions.firestore
 
                 const organizerId = eventDoc.data().organizer;
                 let recipients = [organizerId];
-
+                
                 const attendeesSnapshot = await admin.firestore().collection('Events').doc(eventId).collection('attendees').get();
                 attendeesSnapshot.forEach(doc => {
                     recipients.push(doc.id);
@@ -67,7 +67,7 @@ exports.sendNotificationToEventAttendees = functions.firestore
                             body: lastNotification.description,
                             eventId: eventId,
                             eventName: eventName,
-
+                            
                             // You can add more key-value pairs as needed
                         }
                     };
@@ -91,7 +91,7 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 console.error('Error sending notification:', error);
                 return null;
             }
-        }
+        } 
         else {
 
             try {
@@ -136,14 +136,14 @@ exports.sendNotificationToEventAttendees = functions.firestore
                 // New lines added to remove duplicate tokens:
                 const uniqueTokens = [...new Set(tokens)];
                 console.log(`Notifications updated for ${uniqueTokens.length} unique devices.`);
-
+    
                 const eventDoc = await admin.firestore().collection('Events').doc(eventId).get();
                 if (!eventDoc.exists || !eventDoc.data().name) {
                     console.log(`Event name not found for event: ${eventId}`);
                 }
 
                 const eventName = eventDoc.data().name
-
+    
 
                 if (uniqueTokens.length > 0) {
                     const multicastMessage = {
@@ -161,7 +161,7 @@ exports.sendNotificationToEventAttendees = functions.firestore
                     // Correcting the method call to reflect your original query
                     const response = await admin.messaging().sendEachForMulticast(multicastMessage);
                     console.log('Successfully sent messages:', response.successCount);
-
+        
                     // Handling individual message responses
                     response.responses.forEach((resp, idx) => {
                         if (resp.success) {

@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An activity class for displaying notifications to the user.
- * It retrieves notification data from a Firebase Firestore database and displays the notifications in a list.
- * The class also supports pull-to-refresh functionality using a SwipeRefreshLayout and allows navigation
- * to other activities through MaterialButtons.
+ * A Fragment subclass for displaying a list of notifications to the user.
+ * It fetches notification data from a Firebase Firestore database and updates the UI accordingly.
+ * This class also implements pull-to-refresh functionality and auto-refreshes the notifications list periodically.
  */
 public class NotificationDisplayFragment extends Fragment {
     /**
@@ -46,9 +46,15 @@ public class NotificationDisplayFragment extends Fragment {
      */
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    /**
+     * Handler and Runnable for implementing auto-refresh functionality.
+     */
+    private Handler autoRefreshHandler = new Handler();
+    private Runnable autoRefreshRunnable;
+
 
     /**
-     * Initializes the activity, its views, and fetches the initial set of notifications.
+     * Inflates the fragment layout, initializes the UI components, and sets up auto-refresh for notifications.
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -73,15 +79,29 @@ public class NotificationDisplayFragment extends Fragment {
             }
         });
 
+        autoRefreshRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if(getActivity() != null && isAdded()) { // Check if Fragment is attached
+                    fetchNotifications(uuid); // Call your method to fetch notifications
+                    autoRefreshHandler.postDelayed(this, 2500); // Schedule the next execution every 5 seconds
+                }
+            }
+        };
+
+        // Start auto-refresh
+        autoRefreshHandler.post(autoRefreshRunnable);
+
+
         // Get current FCM token and fetch notifications
         fetchNotifications(uuid);
         return view;
     }
 
     /**
-     * Fetches notifications from Firestore based on the current FCM token and updates the UI.
-     * It uses the NotificationManager class to retrieve notifications and handles success or error
-     * with appropriate actions.
+     * Fetches notifications from Firestore based on the user's UUID and updates the UI with the fetched data.
+     *
+     * @param uuid The UUID of the user whose notifications are to be fetched.
      */
     private void fetchNotifications(String uuid) {
         NotificationManager manager = new NotificationManager(requireContext());
@@ -95,8 +115,37 @@ public class NotificationDisplayFragment extends Fragment {
             @Override
             public void onError(Exception e) {
                 Log.e(TAG, "Error fetching notifications", e);
-                // Will Handle error later
             }
         });
+    }
+
+    /**
+     * Pauses the auto-refresh functionality when the fragment is no longer in the foreground.
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Stop the auto-refresh when the fragment is not visible
+        autoRefreshHandler.removeCallbacks(autoRefreshRunnable);
+    }
+
+    /**
+     * Resumes the auto-refresh functionality when the fragment comes back to the foreground.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Resume auto-refresh when the fragment becomes visible again
+        autoRefreshHandler.post(autoRefreshRunnable);
+    }
+
+    /**
+     * Stops the auto-refresh handler to avoid memory leaks when the fragment is destroyed.
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Ensure the handler is stopped to avoid memory leaks
+        autoRefreshHandler.removeCallbacks(autoRefreshRunnable);
     }
 }

@@ -26,15 +26,15 @@ public class NotificationManager {
     private Context context; // Add this line
 
     /**
-     * Initializes a new instance of the NotificationManager class.
-     * This constructor specifically initializes a Firestore instance for use in notification management.
+     * Constructor for NotificationManager.
+     * Initializes the context and sets up a Firestore instance for managing notifications.
+     *
+     * @param context The current context, used to access Firestore.
      */
     public NotificationManager(Context context) {
         this.context = context;
         db = FirebaseFirestore.getInstance();
     }
-
-
 
 
     /**
@@ -184,9 +184,8 @@ public class NotificationManager {
      *
      * @param title The title of the notification.
      * @param description The description of the notification.
-     * @param timeSinceNotification Not used in the current implementation, reserved for future use.
      */
-    public void markNotificationAsRead(String title, String description, String timeSinceNotification) {
+    public void markNotificationAsRead(String title, String description) {
         SharedPreferences prefs = context.getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String uuid = prefs.getString("UUID", null);
 
@@ -209,6 +208,37 @@ public class NotificationManager {
                     docRef.update("notifications", notifications)
                             .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification marked as read"))
                             .addOnFailureListener(e -> Log.w(TAG, "Error marking notification as read", e));
+                }
+            }
+        }).addOnFailureListener(e -> Log.w(TAG, "Error fetching document", e));
+    }
+
+    /**
+     * Marks the most recent notification as read in the user's notification list.
+     * This method retrieves the user's UUID from shared preferences, fetches their notifications from Firestore,
+     * and updates the "isRead" status of the last notification to true. It then saves the updated notifications
+     * back to Firestore.
+     */
+    public void markLastNotificationAsRead() {
+        SharedPreferences prefs = context.getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String uuid = prefs.getString("UUID", null);
+
+        DocumentReference docRef = db.collection("userNotifications").document(uuid);
+
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                List<Map<String, Object>> notifications = (List<Map<String, Object>>) documentSnapshot.get("notifications");
+                if (notifications != null && !notifications.isEmpty()) {
+                    // Get the last notification
+                    Map<String, Object> lastNotification = notifications.get(notifications.size() - 1);
+
+                    // Mark it as read
+                    lastNotification.put("isRead", true);
+
+                    // Update the entire notifications array back to Firestore
+                    docRef.update("notifications", notifications)
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Last notification marked as read"))
+                            .addOnFailureListener(e -> Log.w(TAG, "Error marking last notification as read", e));
                 }
             }
         }).addOnFailureListener(e -> Log.w(TAG, "Error fetching document", e));

@@ -27,7 +27,7 @@ import org.junit.runner.RunWith;
  * This class performs automated UI tests on Attendee functionality.
  */
 @RunWith(AndroidJUnit4.class)
-public class AttendeeIntentTest {
+public class AttendeeIntentTest extends BaseIntentTest{
 
     /**
      * Rule to launch the AttendeeMainActivity before each test.
@@ -50,15 +50,11 @@ public class AttendeeIntentTest {
     @Test
     public void testProfileInfoPersistence() throws InterruptedException {
         onView(withText("Create Profile")).perform(click());
-        onView(withId(R.id.new_full_name)).perform(typeText("Test User"), closeSoftKeyboard());
-        onView(withId(R.id.new_phone)).perform(typeText("7805555555"), closeSoftKeyboard());
-        onView(withId(R.id.new_home_page)).perform(typeText("eventlinkqr.com"), closeSoftKeyboard());
-        onView(withId(R.id.new_loc_permission)).perform(click());
-        onView(withId(R.id.new_save_button)).perform(click());
-        SystemClock.sleep(3000);
+        enterProfileDetails("Test User",  "7805555555", "eventlinkqr.com");
 
         // Navigate to AttendeeProfileFragment
-        onView(withId(R.id.attendee_profile_button)).perform(click());
+        performActionWithRetry(R.id.attendee_profile_button, click(), 5, 2000);
+        SystemClock.sleep(6000);
 
         // Check persistence from creating account
         onView(withId(R.id.etFullName)).check(matches(withText("Test User")));
@@ -72,13 +68,11 @@ public class AttendeeIntentTest {
         onView(withId(R.id.homepageEdit)).perform(replaceText("www.Jason.com"), ViewActions.closeSoftKeyboard());
 
         // Click on the Save button
-        onView(withId(R.id.btnSave)).perform(click());
-
-        SystemClock.sleep(3000);
+        performActionWithRetry(R.id.btnSave, click(), 5, 2000);
 
         // Navigate back to AttendeeProfileFragment
-        onView(withId(R.id.attendee_profile_button)).perform(click());
-
+        performActionWithRetry(R.id.attendee_profile_button, click(), 5, 2000);
+        SystemClock.sleep(6000);
         // Verify that the name "Jason" is displayed
         onView(withId(R.id.etFullName)).check(matches(withText("Jason")));
         onView(withId(R.id.phoneNumberEdit)).check(matches(withText("1234567891")));
