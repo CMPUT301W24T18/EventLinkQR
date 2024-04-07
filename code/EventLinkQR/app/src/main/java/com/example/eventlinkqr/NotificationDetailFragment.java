@@ -45,7 +45,7 @@ public class NotificationDetailFragment extends Fragment {
 
         // Check the source of the notification and adjust UI accordingly
         if ("organizer".equals(arguments.getString("source"))) {
-            Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+            Event event = ((UserMainActivity) requireActivity()).getCurrentEvent();
             String eventName = event.getName(); // Define eventName from event object
             header.setText(eventName);
             eventId = event.getId();

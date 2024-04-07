@@ -2,7 +2,6 @@ package com.example.eventlinkqr;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -25,12 +24,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Collection;
-
 /**
  * Main activity class for attendees in the event management application.
  */
-public class AttendeeMainActivity extends AppCompatActivity {
+public class UserMainActivity extends AppCompatActivity {
 
     // UI components: buttons and a list view
     private MaterialButton homeButton, scanButton, profileButton, notificationButton;
@@ -135,19 +132,19 @@ public class AttendeeMainActivity extends AppCompatActivity {
                     clickHandler.postDelayed(clickResetRunnable, 1500);
 
                     if (clickCount <= 1 && clickCount > 0) {
-                        Toast.makeText(AttendeeMainActivity.this, "About to Enter Admin Mode", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserMainActivity.this, "About to Enter Admin Mode", Toast.LENGTH_SHORT).show();
                     } else if (clickCount == 0) {
 
-                        AttendeeManager.getAttendee(attUUID, attendee -> {
+                        UserManager.getUser(attUUID, attendee -> {
 
                             System.out.println(attendee.isAdmin());
                             System.out.println(attendee.getUuid());
                             System.out.println(attendee.getFcmToken());
 
                             if(attendee != null && attendee.isAdmin()) {
-                                startActivity(new Intent(AttendeeMainActivity.this, AdmMainActivity.class));
+                                startActivity(new Intent(UserMainActivity.this, AdmMainActivity.class));
                             } else {
-                                startActivity(new Intent(AttendeeMainActivity.this, EnterPinActivity.class));
+                                startActivity(new Intent(UserMainActivity.this, EnterPinActivity.class));
                             }
                         });
 
@@ -246,7 +243,7 @@ public class AttendeeMainActivity extends AppCompatActivity {
                         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
                         String uuid = prefs.getString("UUID", null);
 
-                        AttendeeManager.getAttendee(uuid, attendee -> {
+                        UserManager.getUser(uuid, attendee -> {
                             if(attendee.getLocation_enabled()) {
                                 getLastLocation(location -> {
                                     EventManager.isSignedUp(uuid, code.getEventId(), isSignedUp -> {

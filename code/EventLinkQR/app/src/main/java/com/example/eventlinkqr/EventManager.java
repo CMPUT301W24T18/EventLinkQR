@@ -223,16 +223,16 @@ public class EventManager extends Manager {
      * @param eventName        Event to get attendees for
      * @param attendeeCallback The callback to be invoked when the event attendees change
      */
-    public static void addEventAttendeeSnapshotCallback(String eventName, Consumer<List<Attendees>> attendeeCallback) {
+    public static void addEventAttendeeSnapshotCallback(String eventName, Consumer<List<Attendee>> attendeeCallback) {
         getCollection().document(eventName).collection("attendees").addSnapshotListener((querySnapshots, error) -> {
             if (error != null) {
                 Log.e("Firestore", error.toString());
                 return;
             }
             if (querySnapshots != null) {
-                List<Attendees> attendees = new ArrayList<>();
+                List<Attendee> attendees = new ArrayList<>();
                 for(DocumentSnapshot doc : querySnapshots.getDocuments()){
-                    Attendees attendee = doc.toObject(Attendees.class);
+                    Attendee attendee = doc.toObject(Attendee.class);
                     if(attendee != null) {
                         attendees.add(attendee);
                     }
@@ -250,7 +250,7 @@ public class EventManager extends Manager {
      * @param checkedIn        Filter on checked-in / not-checked-in attendees
      * @param attendeeCallback The callback to be invoked when the event attendees change
      */
-    public static void addEventAttendeeSnapshotCallback(String eventName, boolean checkedIn, Consumer<List<Attendees>> attendeeCallback) {
+    public static void addEventAttendeeSnapshotCallback(String eventName, boolean checkedIn, Consumer<List<Attendee>> attendeeCallback) {
         getCollection().document(eventName).collection("attendees").whereEqualTo("checkedIn", checkedIn).addSnapshotListener((querySnapshots, error) -> {
             // add all attendees that have checked in
             if (error != null) {
@@ -258,9 +258,9 @@ public class EventManager extends Manager {
                 return;
             }
             if (querySnapshots != null) {
-                List<Attendees> attendees = new ArrayList<>();
+                List<Attendee> attendees = new ArrayList<>();
                 for(DocumentSnapshot doc : querySnapshots.getDocuments()){
-                    Attendees attendee = doc.toObject(Attendees.class);
+                    Attendee attendee = doc.toObject(Attendee.class);
                     if(attendee != null) {
                         attendees.add(attendee);
                     }
@@ -466,6 +466,21 @@ public class EventManager extends Manager {
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Event failed to be added");
+                });
+    }
+
+    /**
+     * deletes an event from the database
+     * @param eventId the event to be deleted
+     */
+    public static void deleteEvent(String eventId){
+        getCollection().document(eventId).delete()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Log.d("Firestore", "event " + eventId + " deleted");
+                    }else{
+                        Log.d("Firestore", "delete failed with ", task.getException());
+                    }
                 });
     }
 

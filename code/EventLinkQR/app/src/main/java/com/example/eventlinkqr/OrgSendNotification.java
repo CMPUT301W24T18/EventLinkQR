@@ -42,7 +42,7 @@ public class OrgSendNotification extends Fragment {
 
         notificationManager = new NotificationManager(requireContext());
 
-        Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+        Event event = ((UserMainActivity) requireActivity()).getCurrentEvent();
 
         String eventName = event.getName(); // Define eventName from event object
 

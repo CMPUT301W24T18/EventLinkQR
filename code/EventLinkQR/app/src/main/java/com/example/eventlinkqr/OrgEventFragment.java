@@ -77,7 +77,7 @@ public class OrgEventFragment extends Fragment {
         notificationSendIcon.setOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.action_orgEventFragment_to_viewNotification));
 
-        Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+        Event event = ((UserMainActivity) requireActivity()).getCurrentEvent();
 
         // Set the values to be displayed
         eventTitle.setText(event.getName());

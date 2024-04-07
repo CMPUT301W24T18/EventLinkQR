@@ -49,7 +49,7 @@ public class AdmMainActivity extends AppCompatActivity {
                         .setMessage("Are you sure you would like to exit the Admin mode?")
                         .setPositiveButton("Yes", (dialog, which) -> {
                             // Positive button logic
-                            Intent intent = new Intent(this, AttendeeMainActivity.class);
+                            Intent intent = new Intent(this, UserMainActivity.class);
                             startActivity(intent);
                         })
                         .setNegativeButton("No", (dialog, which) -> {

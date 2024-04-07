@@ -77,7 +77,7 @@ public class LandingPage extends AppCompatActivity {
 
         Button createProfileButton = findViewById(R.id.createProfile);
 
-        Intent intent = new Intent(LandingPage.this, AttendeeMainActivity.class);
+        Intent intent = new Intent(LandingPage.this, UserMainActivity.class);
         if (uuid == null) {
             createProfileButton.setOnClickListener(v -> {
                 ((RelativeLayout) findViewById(R.id.landing_rel_layout)).setVisibility(View.GONE);

@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
+
 import androidx.appcompat.widget.Toolbar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,8 +18,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.Serializable;
-
 /**
  * A Fragment subclass that displays the details of an attendee.
  * It includes functionality for fetching attendee details from Firestore
@@ -28,14 +26,14 @@ import java.io.Serializable;
  * Usage: This fragment should be used within an activity where details of a specific
  * attendee need to be displayed and managed.
  */
-public class AttendeeDetailsFragment extends Fragment {
+public class UserDetailsFragment extends Fragment {
 
-    private String attendeeUuid;
+    private String userUuid;
 
     /**
      * Default constructor. Required for the instantiation of the fragment.
      */
-    public AttendeeDetailsFragment() {
+    public UserDetailsFragment() {
         // Required empty public constructor
     }
 
@@ -43,13 +41,13 @@ public class AttendeeDetailsFragment extends Fragment {
     /**
      * Factory method to create a new instance of this fragment using the provided UUID.
      *
-     * @param attendeeUuid UUID of the attendee whose details are to be displayed.
+     * @param userUuid UUID of the attendee whose details are to be displayed.
      * @return A new instance of fragment AttendeeDetailsFragment.
      */
-    public static AttendeeDetailsFragment newInstance(String attendeeUuid) {
-        AttendeeDetailsFragment fragment = new AttendeeDetailsFragment();
+    public static UserDetailsFragment newInstance(String userUuid) {
+        UserDetailsFragment fragment = new UserDetailsFragment();
         Bundle args = new Bundle();
-        args.putString("attendeeUuid", attendeeUuid);
+        args.putString("userUuid", userUuid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,15 +76,15 @@ public class AttendeeDetailsFragment extends Fragment {
         });
 
         if (getArguments() != null) {
-            attendeeUuid = getArguments().getString("attendeeUuid");
-            fetchAttendeeDetails(attendeeUuid, view);
+            userUuid = getArguments().getString("userUuid");
+            fetchAttendeeDetails(userUuid, view);
         }
 
         Button deleteButton = view.findViewById(R.id.deleteAttendeeButton);
         deleteButton.setOnClickListener(v -> {
             if (getArguments() != null) {
-                String attendeeUuid = getArguments().getString("attendeeUuid");
-                deleteAttendee(attendeeUuid, view);
+                String userUuid = getArguments().getString("userUuid");
+                deleteAttendee(userUuid, view);
             }
         });
 
@@ -94,25 +92,25 @@ public class AttendeeDetailsFragment extends Fragment {
     }
 
     /**
-     * Fetches the details of an attendee from Firestore and populates the views in the fragment.
+     * Fetches the details of an user from Firestore and populates the views in the fragment.
      *
-     * @param uuid The UUID of the attendee.
+     * @param uuid The UUID of the user.
      * @param view The view of the fragment.
      */
     private void fetchAttendeeDetails(String uuid, View view) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Users").document(uuid).get().addOnSuccessListener(documentSnapshot -> {
-            Attendee attendee = documentSnapshot.toObject(Attendee.class);
+            User user = documentSnapshot.toObject(User.class);
 
-            if (attendee != null) {
-                // Populate your views with the attendee data here
+            if (user != null) {
+                // Populate your views with the user data here
                 TextView nameTextView = view.findViewById(R.id.attendeeNameTextView);
                 TextView phoneNumberTextView = view.findViewById(R.id.attendeePhoneNumberTextView);
                 TextView HomepageTextview = view.findViewById(R.id.attendeeHomepageTextView);
 
-                nameTextView.setText(attendee.getName());
-                phoneNumberTextView.setText(attendee.getPhone_number());
-                HomepageTextview.setText(attendee.getHomepage());
+                nameTextView.setText(user.getName());
+                phoneNumberTextView.setText(user.getPhone_number());
+                HomepageTextview.setText(user.getHomepage());
             }
         }).addOnFailureListener(e -> {
             // Handle any errors here
@@ -120,13 +118,13 @@ public class AttendeeDetailsFragment extends Fragment {
     }
 
     /**
-     * Deletes the attendee from Firestore and displays a toast message on success or failure.
+     * Deletes the user from Firestore and displays a toast message on success or failure.
      * This method also handles the display of a confirmation dialog before deletion.
      *
-     * @param attendeeUuid The UUID of the attendee to be deleted.
+     * @param userUuid The UUID of the user to be deleted.
      * @param view         The view of the fragment.
      */
-    private void deleteAttendee(String attendeeUuid, View view) {
+    private void deleteAttendee(String userUuid, View view) {
         new AlertDialog.Builder(getContext())
                 .setTitle("Delete User")
                 .setMessage("Are you sure you want to permanently delete this User?")
@@ -134,10 +132,10 @@ public class AttendeeDetailsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // User confirmed deletion
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        db.collection("Users").document(attendeeUuid)
+                        db.collection("Users").document(userUuid)
                                 .delete()
                                 .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(view.getContext(), "Attendee deleted successfully", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(view.getContext(), "User deleted successfully", Toast.LENGTH_SHORT).show();
                                     if (getActivity() != null) {
                                         FragmentManager fragmentManager = getParentFragmentManager();
                                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -146,7 +144,7 @@ public class AttendeeDetailsFragment extends Fragment {
                                     }
                                 })
                                 .addOnFailureListener(e -> {
-                                    Toast.makeText(view.getContext(), "Error deleting attendee", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(view.getContext(), "Error deleting user", Toast.LENGTH_SHORT).show();
                                 });
                     }
                 })

@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  */
 public class AttendeesTabFragment extends Fragment {
     private AttendeeArrayAdapter attendeesAdapter;
-    private ArrayList<Attendees> dataList;
+    private ArrayList<Attendee> dataList;
     private ListView attendeesList;
     private Event event;
     private static final String ARG_TAB_POSITION = "TAB_POSITION";
@@ -49,7 +49,7 @@ public class AttendeesTabFragment extends Fragment {
         // Get the tab position from arguments
         assert getArguments() != null;
         int tabPosition = getArguments().getInt(ARG_TAB_POSITION, 0);
-        event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+        event = ((UserMainActivity) requireActivity()).getCurrentEvent();
 
         dataList = new ArrayList<>();
 
@@ -82,7 +82,7 @@ public class AttendeesTabFragment extends Fragment {
      * @param tabPosition the position of the tab
      */
     private void generateDataForTab(int tabPosition) {
-        Consumer<List<Attendees>> attendeeNamesCallback = attendees -> {
+        Consumer<List<Attendee>> attendeeNamesCallback = attendees -> {
             dataList.clear();
             dataList.addAll(attendees);
             attendeesAdapter.notifyDataSetChanged();

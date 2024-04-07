@@ -179,4 +179,3 @@ exports.sendNotificationToEventAttendees = functions.firestore
             }
         }
     });
-

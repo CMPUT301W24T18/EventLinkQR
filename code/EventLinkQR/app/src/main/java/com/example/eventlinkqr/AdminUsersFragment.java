@@ -39,7 +39,7 @@ import android.widget.Toast;
 public class AdminUsersFragment extends Fragment {
 
     private ListView userListView;
-    private ArrayList<Attendee> usersList = new ArrayList<>();
+    private ArrayList<User> usersList = new ArrayList<>();
     private SwipeRefreshLayout swipeRefreshLayout;
     private AdminUserAdapter adapter;
     private AdminManager adminManager;
@@ -94,7 +94,7 @@ public class AdminUsersFragment extends Fragment {
     private void fetchUsers() {
         adminManager.fetchUsers(new AdminManager.FetchUsersCallback() {
             @Override
-            public void onSuccess(List<Attendee> fetchedUsers) {
+            public void onSuccess(List<User> fetchedUsers) {
                 usersList.clear();
                 usersList.addAll(fetchedUsers);
                 adapter.notifyDataSetChanged();

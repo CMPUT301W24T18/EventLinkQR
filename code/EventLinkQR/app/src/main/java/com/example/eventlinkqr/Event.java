@@ -17,7 +17,7 @@ public class Event {
     private String id;
     private Boolean geoTracking;
 
-    private ArrayList<Attendee> checkedInAttendees;
+    private ArrayList<User> checkedInAttendees;
     private ArrayList<LatLng> checkInLocations;
 
     private int signedUpCount;
@@ -147,7 +147,7 @@ public class Event {
      * @param checkInLocation
      * @return
      */
-    public Boolean checkIn(Attendee attendee, LatLng checkInLocation){
+    public Boolean checkIn(User attendee, LatLng checkInLocation){
         //Check if the attendee is already checked in
         if(checkedInAttendees.contains(attendee)){
             return false;
@@ -165,7 +165,7 @@ public class Event {
      * @param attendee
      * @return
      */
-    public Boolean checkIn(Attendee attendee){
+    public Boolean checkIn(User attendee){
         //Check if the attendee is already checked in
         if(checkedInAttendees.contains(attendee)){
             return false;
@@ -179,7 +179,7 @@ public class Event {
      * get the list of checked in attendees
      * @return checkedInAttendees
      */
-    public ArrayList<Attendee> getCheckedInAttendees() {
+    public ArrayList<User> getCheckedInAttendees() {
         return checkedInAttendees;
     }
 

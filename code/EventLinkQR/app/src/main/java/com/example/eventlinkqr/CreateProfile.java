@@ -33,7 +33,7 @@ import java.util.UUID;
  * Fragment for creating a profile the first time a user opens the app
  */
 public class CreateProfile extends Fragment {
-    private static final String TAG = "AttendeeProfile";
+    private static final String TAG = "CreateProfile";
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
     private Switch toggleLocation; // Used for location permission
@@ -111,7 +111,7 @@ public class CreateProfile extends Fragment {
      * Redirects to AttendeeMainActivity.
      */
     private void redirectToMainActivity() {
-        Intent intent = new Intent(requireActivity(), AttendeeMainActivity.class);
+        Intent intent = new Intent(requireActivity(), UserMainActivity.class);
         startActivity(intent);
     }
 
@@ -138,7 +138,7 @@ public class CreateProfile extends Fragment {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("UUID", uuid);
             editor.apply();
-            Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
+            User attendee = new User(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Users").document(uuid).set(attendee)
                     .addOnSuccessListener(aVoid -> {

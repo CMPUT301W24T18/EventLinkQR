@@ -56,7 +56,7 @@ public class OrgNotificationDisplay extends Fragment {
         View view = inflater.inflate(R.layout.organizer_notification_display, container, false);
         Button notificationButton = view.findViewById(R.id.btnSendNotification);
 
-        Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+        Event event = ((UserMainActivity) requireActivity()).getCurrentEvent();
         String eventName = event.getName(); // Define eventName from event object
         String eventId = event.getId(); // Define eventId from event object
 
