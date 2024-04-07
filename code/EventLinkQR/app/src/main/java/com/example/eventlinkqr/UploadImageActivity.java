@@ -2,12 +2,9 @@ package com.example.eventlinkqr;
 
 import android.app.Activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -99,7 +96,7 @@ public class UploadImageActivity extends AppCompatActivity {
                 // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                 Bitmap image;
 
-                int orientation = getOrientation(getApplicationContext(), imageUri);
+                int orientation = ImageManager.getOrientation(getApplicationContext(), imageUri);
 
                 try {
                     image = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
@@ -107,7 +104,7 @@ public class UploadImageActivity extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
 
-                image = rotateBitmap(image, orientation);
+                image = ImageManager.rotateBitmap(image, orientation);
 
                 imageManager.uploadImage(UploadImageActivity.this,  userUuid, image, new ImageManager.UploadCallback() {
                     @Override
@@ -171,28 +168,4 @@ public class UploadImageActivity extends AppCompatActivity {
                     imagePreview.setImageBitmap(null); // or set a default image upon failure
                 });
     }
-
-    // OpenAI, 2024, ChatGPT, Rotate bitmap based on file metadata
-    public static int getOrientation(Context context, Uri photoUri) {
-        Cursor cursor = context.getContentResolver().query(photoUri,
-                new String[] { MediaStore.Images.ImageColumns.ORIENTATION }, null, null, null);
-
-        if (cursor.getCount() != 1) {
-            cursor.close();
-            return -1;
-        }
-
-        cursor.moveToFirst();
-        int orientation = cursor.getInt(0);
-        cursor.close();
-        return orientation;
-    }
-
-    // OpenAI, 2024, ChatGPT, Rotate bitmap based on file metadata
-    public static Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(orientation);
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-    }
-
 }

@@ -1,11 +1,15 @@
 package com.example.eventlinkqr;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -259,6 +263,44 @@ public class ImageManager extends Manager {
         byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         imageView.setImageBitmap(decodedByte);
+    }
+
+    /**
+     * OpenAI, 2024, ChatGPT, Rotate bitmap based on file metadata
+     *
+     * Get the orientation of the photo from the metadata
+     * @param context App context
+     * @param photoUri Uri of the target photo
+     * @return Int representing photo orientation in degrees
+     */
+    public static int getOrientation(Context context, Uri photoUri) {
+        Cursor cursor = context.getContentResolver().query(photoUri,
+                new String[] { MediaStore.Images.ImageColumns.ORIENTATION }, null, null, null);
+
+        if (cursor.getCount() != 1) {
+            cursor.close();
+            return -1;
+        }
+
+        cursor.moveToFirst();
+        int orientation = cursor.getInt(0);
+        cursor.close();
+        return orientation;
+    }
+
+    /**
+     * OpenAI, 2024, ChatGPT, Rotate bitmap based on file metadata
+     *
+     * Rotate a bitmap image.
+     *
+     * @param bitmap Bitmap to be rotated
+     * @param orientation Number of degrees to rotate
+     * @return Rotated bitmap
+     */
+    public static Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(orientation);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
     /**

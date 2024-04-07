@@ -197,12 +197,15 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
                 // set the value of the image
                 if (imageUri != null) {
+                    int orientation = ImageManager.getOrientation(requireContext(), imageUri);
                     // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                     try {
                         image = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+
+                    image = ImageManager.rotateBitmap(image, orientation);
                 }
 
                 if(arguments != null) {
@@ -367,7 +370,8 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
     private void setImageUri(Uri uri){
         this.imageUri = uri;
         if(imageUri != null){
-            Picasso.get().load(imageUri).resize(0, posterImage.getHeight()).into(posterImage);
+            float orientation = ImageManager.getOrientation(requireContext(), imageUri);
+            Picasso.get().load(imageUri).rotate(orientation).resize(0, posterImage.getHeight()).into(posterImage);
             clearPoster.setVisibility(View.VISIBLE);
         }
     }
