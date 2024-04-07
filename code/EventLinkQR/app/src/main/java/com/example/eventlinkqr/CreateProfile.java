@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -60,7 +61,7 @@ public class CreateProfile extends Fragment {
         etPhoneNumber = view.findViewById(R.id.new_phone);
         etHomepage = view.findViewById(R.id.new_home_page);
 
-        Button btnSave = view.findViewById(R.id.new_save_button);
+        FloatingActionButton btnSave = view.findViewById(R.id.new_save_button);
         Button btnBack = view.findViewById(R.id.new_back_button);
         Button photoButton = view.findViewById(R.id.new_edit_photo);
         toggleLocation = view.findViewById(R.id.new_loc_permission);

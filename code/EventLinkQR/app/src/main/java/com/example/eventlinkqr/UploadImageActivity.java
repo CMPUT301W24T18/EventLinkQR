@@ -1,29 +1,28 @@
 package com.example.eventlinkqr;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
+
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.view.LayoutInflater;
-import android.view.View;
 
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
@@ -38,7 +37,9 @@ import java.io.IOException;
 public class UploadImageActivity extends AppCompatActivity {
 
     private ImageView imagePreview;
-    private Button upload_button, cancel_button, chooseImage_button, delete_button;
+    private Button cancelButton, chooseImageButton;
+    private ImageButton deleteButton;
+    private FloatingActionButton uploadButton;
     private Uri imageUri;
     String userUuid;
     Bitmap deterministicImage;
@@ -59,10 +60,10 @@ public class UploadImageActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_image_upload);
 
         imagePreview = findViewById(R.id.image_preview);
-        chooseImage_button = findViewById(R.id.button_choose_image);
-        upload_button = findViewById(R.id.button_confirm_upload);
-        cancel_button = findViewById(R.id.button_cancel_upload);
-        delete_button = findViewById(R.id.button_delete_image);
+        chooseImageButton = findViewById(R.id.button_choose_image);
+        uploadButton = findViewById(R.id.button_confirm_upload);
+        cancelButton = findViewById(R.id.button_cancel_upload);
+        deleteButton = findViewById(R.id.button_delete_image);
         imagePreview = findViewById(R.id.image_preview);
 
         Intent intent = getIntent();
@@ -89,19 +90,24 @@ public class UploadImageActivity extends AppCompatActivity {
 
         }
 
-        chooseImage_button.setOnClickListener(view -> getImage.launch("image/*"));
+        chooseImageButton.setOnClickListener(view -> getImage.launch("image/*"));
 
-        upload_button.setOnClickListener(view -> {
+        uploadButton.setOnClickListener(view -> {
             if (imageUri != null) {
                 imageManager = new ImageManager();
 
                 // https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
                 Bitmap image;
+
+                int orientation = getOrientation(getApplicationContext(), imageUri);
+
                 try {
                     image = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+
+                image = rotateBitmap(image, orientation);
 
                 imageManager.uploadImage(UploadImageActivity.this,  userUuid, image, new ImageManager.UploadCallback() {
                     @Override
@@ -127,9 +133,9 @@ public class UploadImageActivity extends AppCompatActivity {
             }
         });
 
-        cancel_button.setOnClickListener(view -> this.finish());
+        cancelButton.setOnClickListener(view -> this.finish());
 
-        delete_button.setOnClickListener(view -> {
+        deleteButton.setOnClickListener(view -> {
             Bitmap deterministicImage = ImageManager.generateDeterministicImage(userUuid);
             ConfirmDeleteDialogFragment confirmDeleteDialogFragment = new ConfirmDeleteDialogFragment(imagePreview, deterministicImage, userUuid);
             confirmDeleteDialogFragment.show(getSupportFragmentManager(), "confirmDelete");
@@ -165,4 +171,28 @@ public class UploadImageActivity extends AppCompatActivity {
                     imagePreview.setImageBitmap(null); // or set a default image upon failure
                 });
     }
+
+    // OpenAI, 2024, ChatGPT, Rotate bitmap based on file metadata
+    public static int getOrientation(Context context, Uri photoUri) {
+        Cursor cursor = context.getContentResolver().query(photoUri,
+                new String[] { MediaStore.Images.ImageColumns.ORIENTATION }, null, null, null);
+
+        if (cursor.getCount() != 1) {
+            cursor.close();
+            return -1;
+        }
+
+        cursor.moveToFirst();
+        int orientation = cursor.getInt(0);
+        cursor.close();
+        return orientation;
+    }
+
+    // OpenAI, 2024, ChatGPT, Rotate bitmap based on file metadata
+    public static Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(orientation);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
 }
