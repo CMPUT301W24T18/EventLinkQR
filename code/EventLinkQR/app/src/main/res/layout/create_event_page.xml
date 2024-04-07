@@ -153,21 +153,6 @@
                 app:iconTint="?attr/iconTintColor"/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    " />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Set Attendee limit"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/max_attendees"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Optional"
-                android:inputType="number" />
-
-            <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -198,6 +183,21 @@
                 android:layout_weight="1"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Attendee limit"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/max_attendees"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Optional"
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/choose_qr_button"
