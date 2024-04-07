@@ -1,113 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:orientation="vertical"
     tools:context=".ProfileFragment">
 
-    <TextView
-        android:id="@+id/tvProfileHeader"
-        android:layout_width="79dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Profile"
-        android:textSize="24sp" />
-
-    <ImageView
-        android:id="@+id/ivProfileImage"
-        android:layout_width="match_parent"
-        android:layout_height="229dp"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/btnEditProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:enabled="true"
-        android:text="Edit Profile Photo" />
-
-    <TextView
-        android:id="@+id/tvFullNameLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Full Name" />
-
-    <EditText
-        android:id="@+id/etFullName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Allison TheRock Johnson"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/phoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Phone Number" />
-
-    <EditText
-        android:id="@+id/phoneNumberEdit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="1233456789"
-        android:inputType="textEmailAddress" />
-
-    <TextView
-        android:id="@+id/homepage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Homepage" />
-
-    <EditText
-        android:id="@+id/homepageEdit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Enter Homepage Link"
-        android:inputType="textMultiLine" />
-
-    <TextView
-        android:id="@+id/LocationPermission"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Location Permission" />
-
-    <Switch
-        android:id="@+id/toggleLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <!-- Layout for Save and Back buttons -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvProfileHeader"
+            android:layout_width="79dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Save" />
+            android:text="Profile"
+            android:textSize="24sp" />
+
+        <ImageView
+            android:id="@+id/ivProfileImage"
+            android:layout_width="match_parent"
+            android:layout_height="229dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="true"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:drawableTint="?attr/iconTintColor"
+            android:textColor="@color/text_color"
+            android:text="Change Profile Photo"
+            android:drawableEnd="@drawable/baseline_account_circle_24"/>
+
+        <TextView
+            android:id="@+id/tvFullNameLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Full Name" />
+
+        <EditText
+            android:id="@+id/etFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Allison TheRock Johnson"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/phoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Phone Number" />
+
+        <EditText
+            android:id="@+id/phoneNumberEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="1233456789"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/homepage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Homepage" />
+
+        <EditText
+            android:id="@+id/homepageEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter Homepage Link"
+            android:inputType="textMultiLine" />
+
+        <TextView
+            android:id="@+id/LocationPermission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Location Permission" />
+
+        <Switch
+            android:id="@+id/toggleLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/btnResetApp"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@android:color/holo_red_light"
+            android:background="@android:color/transparent"
+            android:textAlignment="viewStart"
+            android:textSize="18sp"
             android:text="Reset Data" />
     </LinearLayout>
 
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_save"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/save_and_publish"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Save" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
