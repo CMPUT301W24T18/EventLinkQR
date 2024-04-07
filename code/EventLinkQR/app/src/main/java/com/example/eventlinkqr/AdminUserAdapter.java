@@ -2,7 +2,6 @@ package com.example.eventlinkqr;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 
 /**
@@ -23,16 +20,16 @@ import java.util.ArrayList;
  * viewing attendee details and deleting attendees.
  */
 
-public class AdminUserAdapter extends ArrayAdapter<Attendee> {
+public class AdminUserAdapter extends ArrayAdapter<User> {
 
     /**
      * Constructor for the AdminUserAdapter.
      *
      * @param context  The current context. This value cannot be null.
-     * @param Attendee The list of attendees to display. This value cannot be null.
+     * @param users The list of attendees to display. This value cannot be null.
      */
-    public AdminUserAdapter(Context context, ArrayList<Attendee> Attendee) {
-        super(context, 0, Attendee);
+    public AdminUserAdapter(Context context, ArrayList<User> users) {
+        super(context, 0, users);
     }
 
     /**
@@ -47,7 +44,7 @@ public class AdminUserAdapter extends ArrayAdapter<Attendee> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        Attendee Attendee = getItem(position);
+        User user = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.admin_list_item_user, parent, false);
@@ -55,16 +52,16 @@ public class AdminUserAdapter extends ArrayAdapter<Attendee> {
         // Lookup view for data population
         TextView tvName = convertView.findViewById(R.id.textViewUserName);
         // Populate the data into the template view using the data object
-        tvName.setText(Attendee.getName());
+        tvName.setText(user.getName());
 
 
         ImageView deleteButton = convertView.findViewById(R.id.deleteUserButton);
 
         convertView.setOnClickListener(v -> {
-            Attendee selectedAttendee = getItem(position);
+            User selectedAttendee = getItem(position);
             AppCompatActivity activity = (AppCompatActivity) v.getContext();
             activity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_layout, AttendeeDetailsFragment.newInstance(selectedAttendee.getUuid()))
+                    .replace(R.id.frame_layout, UserDetailsFragment.newInstance(selectedAttendee.getUuid()))
                     .addToBackStack(null)
                     .commit();
         });
@@ -74,12 +71,12 @@ public class AdminUserAdapter extends ArrayAdapter<Attendee> {
                     .setTitle("Delete User")
                     .setMessage("Are you sure you want to permanently delete this User?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                        Attendee attendeeToDelete = getItem(position);
+                        User userToDelete = getItem(position);
                         AdminManager adminManager = new AdminManager(getContext());
-                        adminManager.deleteUser(attendeeToDelete.getUuid(), new AdminManager.AdminEventOperationCallback() {
+                        adminManager.deleteUser(userToDelete.getUuid(), new AdminManager.AdminEventOperationCallback() {
                             @Override
                             public void onSuccess() {
-                                remove(attendeeToDelete); // Remove from the adapter's dataset
+                                remove(userToDelete); // Remove from the adapter's dataset
                                 notifyDataSetChanged(); // Refresh the list
                                 Toast.makeText(getContext(), "User deleted successfully", Toast.LENGTH_SHORT).show();
                             }

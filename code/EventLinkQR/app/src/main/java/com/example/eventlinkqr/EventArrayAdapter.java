@@ -33,7 +33,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         View view = convertview;
 
         if(convertview == null){
-            view = LayoutInflater.from(context).inflate(R.layout.org_events_content, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.events_content, parent, false);
         }
 
         Event event = events.get(position);

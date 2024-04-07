@@ -28,9 +28,9 @@
     </fragment>
     <fragment
         android:id="@+id/attendeeProfilePage"
-        android:name="com.example.eventlinkqr.AttendeeProfileFragment"
+        android:name="com.example.eventlinkqr.ProfileFragment"
         android:label="attendee_profile"
-        tools:layout="@layout/attendee_profile" >
+        tools:layout="@layout/profile" >
         <action
             android:id="@+id/action_attendeeProfilePage_to_attendeeHomePage"
             app:destination="@id/attendeeHomePage" />

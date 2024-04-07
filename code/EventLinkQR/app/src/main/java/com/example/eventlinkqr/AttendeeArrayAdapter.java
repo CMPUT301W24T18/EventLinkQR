@@ -15,10 +15,10 @@ import java.util.ArrayList;
 /**
  * custom array adapter for an array of attendees to an event
  */
-public class AttendeeArrayAdapter extends ArrayAdapter<Attendees> {
+public class AttendeeArrayAdapter extends ArrayAdapter<Attendee> {
 
 
-    public AttendeeArrayAdapter(@NonNull Context context, ArrayList<Attendees> attendee) {
+    public AttendeeArrayAdapter(@NonNull Context context, ArrayList<Attendee> attendee) {
         super(context, 0, attendee);
     }
 
@@ -32,7 +32,7 @@ public class AttendeeArrayAdapter extends ArrayAdapter<Attendees> {
             view = convertView;
         }
 
-        Attendees attendee = getItem(position);
+        Attendee attendee = getItem(position);
 
         TextView attendeeName = view.findViewById(R.id.attendee_name);
         TextView checkinCount = view.findViewById(R.id.attendee_checkin_count);

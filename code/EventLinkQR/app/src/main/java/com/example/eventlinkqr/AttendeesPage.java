@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 /**
- * Class that creates the organizer view and keep-s track of events
+ * Class that creates the organizer view and keeps track of events
  */
 //https://www.youtube.com/watch?v=LXl7D57fgOQ
 public class AttendeesPage extends Fragment  {
@@ -39,7 +39,7 @@ public class AttendeesPage extends Fragment  {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+        event = ((UserMainActivity) requireActivity()).getCurrentEvent();
 
         // the tool bar on top of the page
         /** the toolbar for the page*/

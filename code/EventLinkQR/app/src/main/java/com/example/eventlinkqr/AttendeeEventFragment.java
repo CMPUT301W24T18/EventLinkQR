@@ -68,7 +68,7 @@ public class AttendeeEventFragment extends Fragment {
         ImageView eventPic = view.findViewById(R.id.att_event_picture);
 
         // get the event
-        Event event = ((AttendeeMainActivity) requireActivity()).getCurrentEvent();
+        Event event = ((UserMainActivity) requireActivity()).getCurrentEvent();
 
         // Set the values to be displayed
         eventTitle.setText(event.getName());
@@ -96,8 +96,8 @@ public class AttendeeEventFragment extends Fragment {
         eventToolBar.setNavigationOnClickListener(v ->
                 Navigation.findNavController(view).navigate(R.id.attendeeHomePage));
 
-        String uuid = ((AttendeeMainActivity) requireActivity()).getAttUUID();
-        String profileName = ((AttendeeMainActivity) requireActivity()).getProfileName();
+        String uuid = ((UserMainActivity) requireActivity()).getAttUUID();
+        String profileName = ((UserMainActivity) requireActivity()).getProfileName();
 
         EventManager.isSignedUp(uuid, event.getId(), isSignedUp -> {
             if(!isSignedUp){

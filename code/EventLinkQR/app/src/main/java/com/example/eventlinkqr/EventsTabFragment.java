@@ -100,29 +100,29 @@ public class EventsTabFragment extends Fragment {
             case 0:
                 createEventButton.setVisibility(View.GONE);
                 eventsList.setOnItemClickListener((parent, view, position, id) -> {
-                    ((AttendeeMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
+                    ((UserMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
                     // redirect to the attendee event page
                     Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_attendeeEventFragment);
                 });
-                EventManager.addAllEventSnapshotCallback(((AttendeeMainActivity) requireActivity()).getAttUUID(), eventsCallback);
+                EventManager.addAllEventSnapshotCallback(((UserMainActivity) requireActivity()).getAttUUID(), eventsCallback);
                 break;
             case 1:
                 createEventButton.setVisibility(View.VISIBLE);
                 eventsList.setOnItemClickListener((parent, view, position, id) -> {
-                    ((AttendeeMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
+                    ((UserMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
                     // redirect to the organizer event page
                     Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_orgEventFragment);
                 });
-                EventManager.addEventSnapshotCallback(((AttendeeMainActivity) requireActivity()).getAttUUID(), eventsCallback);
+                EventManager.addEventSnapshotCallback(((UserMainActivity) requireActivity()).getAttUUID(), eventsCallback);
                 break;
             case 2:
                 createEventButton.setVisibility(View.GONE);
                 eventsList.setOnItemClickListener((parent, view, position, id) -> {
-                    ((AttendeeMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
+                    ((UserMainActivity) requireActivity()).setCurrentEvent(dataList.get(position));
                     // redirect to the attendee event page
                     Navigation.findNavController(view).navigate(R.id.action_attendeeHomePage_to_attendeeEventFragment);
                 });
-                EventManager.addSignedUpEventsSnapshotcallback(((AttendeeMainActivity) requireActivity()).getAttUUID(), eventsCallback);
+                EventManager.addSignedUpEventsSnapshotcallback(((UserMainActivity) requireActivity()).getAttUUID(), eventsCallback);
                 break;
         }
     }

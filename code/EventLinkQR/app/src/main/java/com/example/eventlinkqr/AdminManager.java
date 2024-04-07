@@ -255,22 +255,22 @@ public class AdminManager extends Manager {
 
     /**
      * Fetches users from the Firestore database and optionally sorts them alphabetically by name.
-     * @param callback Callback to handle the result of the fetch operation, providing a list of Attendees.
+     * @param callback Callback to handle the result of the fetch operation, providing a list of Users.
      */
     public void fetchUsers(final FetchUsersCallback callback) {
-        List<Attendee> usersList = new ArrayList<>();
+        List<User> usersList = new ArrayList<>();
 
         db.collection("Users").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    Attendee attendee = document.toObject(Attendee.class);
-                    usersList.add(attendee);
+                    User user = document.toObject(User.class);
+                    usersList.add(user);
                 }
 
                 // Optionally, sort the usersList here if needed
-                Collections.sort(usersList, new Comparator<Attendee>() {
+                Collections.sort(usersList, new Comparator<User>() {
                     @Override
-                    public int compare(Attendee user1, Attendee user2) {
+                    public int compare(User user1, User user2) {
                         return user1.getName().compareToIgnoreCase(user2.getName());
                     }
                 });
@@ -288,9 +288,9 @@ public class AdminManager extends Manager {
     public interface FetchUsersCallback {
         /**
          * Called when users are successfully fetched.
-         * @param usersList A list of Attendee objects representing the fetched users.
+         * @param usersList A list of User objects representing the fetched users.
          */
-        void onSuccess(List<Attendee> usersList);
+        void onSuccess(List<User> usersList);
 
         /**
          * Called when there is an error fetching users.

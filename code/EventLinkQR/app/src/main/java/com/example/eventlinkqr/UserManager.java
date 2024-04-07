@@ -1,11 +1,13 @@
 package com.example.eventlinkqr;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.function.Consumer;
 
-public class AttendeeManager extends Manager {
+public class UserManager extends Manager {
     /**
      * The Firestore collection path for attendees
      */
@@ -16,8 +18,8 @@ public class AttendeeManager extends Manager {
         return getFirebase().collection(COLLECTION_PATH);
     }
 
-    private static Attendee fromDocument(DocumentSnapshot document) {
-        Attendee a = new Attendee(
+    private static User fromDocument(DocumentSnapshot document) {
+        User a = new User(
                 document.getString("uuid"),
                 document.getString("name"),
                 document.getString("phone_number"),
@@ -32,7 +34,7 @@ public class AttendeeManager extends Manager {
     /**
      *  Given a UUID, retrieve the attendee object from the database
      */
-    public static void getAttendee(String uuid, Consumer<Attendee> callback) {
+    public static void getUser(String uuid, Consumer<User> callback) {
         getCollection().document(uuid).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 callback.accept(fromDocument(documentSnapshot));
@@ -40,5 +42,21 @@ public class AttendeeManager extends Manager {
                 callback.accept(null);
             }
         });
+    }
+
+    /**
+     * Deletes a user with the specified userId from the Firestore database.
+     * @param userId The ID of the user to delete.
+     */
+    public static void deleteUser(String userId) {
+        getCollection().document(userId)
+            .delete()
+            .addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    Log.d("Firestore", "user " + userId + " deleted");
+                }else{
+                    Log.d("Firestore", "delete failed with ", task.getException());
+                }
+            });
     }
 }

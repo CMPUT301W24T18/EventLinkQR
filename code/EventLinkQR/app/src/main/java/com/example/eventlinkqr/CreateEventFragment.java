@@ -192,7 +192,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
                 // create new event form data and add it toi the database using the event manager
                 Event newEvent = new Event(name, description, category, timestamp, location, tracking, 0, 0);
               
-                String organizer = ((AttendeeMainActivity) requireActivity()).getAttUUID();
+                String organizer = ((UserMainActivity) requireActivity()).getAttUUID();
                 Bitmap image = null;
 
                 // set the value of the image
@@ -289,7 +289,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         // Scan in a custom code.
         chooseQrButton.setOnClickListener(v -> {
             publishButton.setEnabled(false);
-            ((AttendeeMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {
+            ((UserMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {
                 this.customQRString = codeText;
                 publishButton.setEnabled(true);
             }, e -> {
@@ -302,7 +302,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
 
         choosePromotionalQrButton.setOnClickListener(v -> {
             publishButton.setEnabled(false);
-            ((AttendeeMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {
+            ((UserMainActivity) requireActivity()).getScanner().codeFromScan(codeText -> {
                 this.customPromotionalQRString = codeText;
                 publishButton.setEnabled(true);
             }, e -> {

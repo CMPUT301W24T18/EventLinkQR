@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -35,8 +34,8 @@ import java.util.UUID;
 /**
  * Activity for managing an attendee's profile.
  */
-public class AttendeeProfileFragment extends Fragment {
-    private static final String TAG = "AttendeeProfile";
+public class ProfileFragment extends Fragment {
+    private static final String TAG = "Profile";
     // UI components: input fields, buttons, and switch
     private EditText etName, etPhoneNumber, etHomepage;
     private Switch toggleLocation; // Used for location permission
@@ -55,7 +54,7 @@ public class AttendeeProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.attendee_profile, container, false);
+        View view = inflater.inflate(R.layout.profile, container, false);
         // Initialize UI components
         etName = view.findViewById(R.id.etFullName);
         etPhoneNumber = view.findViewById(R.id.phoneNumberEdit);
@@ -106,7 +105,7 @@ public class AttendeeProfileFragment extends Fragment {
      * Checks UUID and loads profile data.
      */
     private void checkUUIDAndLoadProfile() {
-        uuid = ((AttendeeMainActivity) requireActivity()).getAttUUID();
+        uuid = ((UserMainActivity) requireActivity()).getAttUUID();
         if (uuid == null) {
             SharedPreferences prefs = requireActivity().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
             // New profile: generate a new UUID
@@ -150,7 +149,7 @@ public class AttendeeProfileFragment extends Fragment {
         Boolean locationEnabled = toggleLocation.isChecked();
 
 
-        Attendee attendee = new Attendee(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
+        User attendee = new User(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
 
         // Validate name is not null or empty
         if (name == null || name.trim().isEmpty()) {
@@ -181,7 +180,7 @@ public class AttendeeProfileFragment extends Fragment {
      * Redirects to AttendeeMainActivity.
      */
     private void redirectToMainActivity() {
-        Navigation.findNavController(((AttendeeMainActivity)requireActivity()).getNavController()).navigate(R.id.action_attendeeProfilePage_to_attendeeHomePage);
+        Navigation.findNavController(((UserMainActivity)requireActivity()).getNavController()).navigate(R.id.action_attendeeProfilePage_to_attendeeHomePage);
     }
 
     /**
@@ -192,7 +191,7 @@ public class AttendeeProfileFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Users").document(uuid).get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    Attendee attendee = documentSnapshot.toObject(Attendee.class);
+                    User attendee = documentSnapshot.toObject(User.class);
 
                     Log.d("uuid added", "here");
                     if (attendee != null) {
@@ -219,6 +218,9 @@ public class AttendeeProfileFragment extends Fragment {
         SharedPreferences.Editor notificationEditor = notificationPrefs.edit();
         notificationEditor.clear(); // Clear all preferences related to notification
         notificationEditor.apply();
+
+        // remove the user from the database
+        UserManager.deleteUser(uuid);
 
         // Redirect to LandingPage
         Intent intent = new Intent(requireActivity(), LandingPage.class);
