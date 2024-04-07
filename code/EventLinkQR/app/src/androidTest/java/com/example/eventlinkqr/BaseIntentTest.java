@@ -87,6 +87,7 @@ public abstract class BaseIntentTest {
         onView(ViewMatchers.withId(R.id.event_location_input)).perform(typeText(location));
         onView(ViewMatchers.withId(R.id.date_picker)).perform(click());
         onView(withText("OK")).perform(click());
+        SystemClock.sleep(500);
         onView(withText("OK")).perform(click());
         performActionWithRetry(R.id.publish_button, click(), 5, 2000);
     }
