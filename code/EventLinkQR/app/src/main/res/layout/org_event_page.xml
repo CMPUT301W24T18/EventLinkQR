@@ -184,6 +184,39 @@
                 android:paddingEnd="5dp"
                 android:textSize="20sp" />
 
+            <Button
+                android:id="@+id/details_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:text="@string/details_string"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text_color"
+                android:textSize="18sp"
+                android:drawableEnd="@drawable/exit"
+                android:drawableTint="?attr/iconTintColor"/>
+
+            <Button
+                android:layout_marginTop="4dp"
+                android:id="@+id/attendees_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Attendees_string"
+                android:textColor="@color/text_color"
+                android:background="@android:color/transparent"
+                android:textAlignment="viewStart"
+                android:textSize="18sp"
+                android:drawableEnd="@drawable/exit"
+                android:drawableTint="?attr/iconTintColor"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_as_attendee"
+                android:text="View as attendee"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
     </ScrollView>
 
@@ -197,32 +230,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/details_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:text="@string/details_string"
-            android:textAlignment="viewStart"
-            android:textColor="@color/text_color"
-            android:textSize="18sp"
-            android:drawableEnd="@drawable/exit"
-            android:drawableTint="?attr/iconTintColor"/>
 
-        <Button
-            android:layout_marginTop="4dp"
-            android:id="@+id/attendees_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/Attendees_string"
-            android:textColor="@color/text_color"
-            android:background="@android:color/transparent"
-            android:textAlignment="viewStart"
-            android:textSize="18sp"
-            android:drawableEnd="@drawable/exit"
-            android:drawableTint="?attr/iconTintColor"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -68,11 +68,11 @@ public abstract class BaseIntentTest {
     /**
      * Enters event details into the UI.
      *
-     * @param eventName    The name of the event.
-     * @param description  The description of the event.
-     * @param location     The location of the event.
+     * @param eventName   The name of the event.
+     * @param description The description of the event.
+     * @param location    The location of the event.
      */
-    protected void enterEventDetails(String eventName, String description, String location){
+    protected void enterEventDetails(String eventName, String description, String location) {
         performActionWithRetryOnText("My Events", click(), 5, 1000); // Attempts to click "Aaa Admin", 5 attempts with 1-second delay
         onView(allOf(ViewMatchers.withId(R.id.create_event_button), ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).perform(click());
 
@@ -95,10 +95,10 @@ public abstract class BaseIntentTest {
     /**
      * Performs a given action on a view identified by its ID, with retry logic.
      *
-     * @param viewId                 The ID of the view on which to perform the action.
-     * @param action                 The action to be performed.
-     * @param maxAttempts            The maximum number of attempts for the action.
-     * @param delayBetweenAttempts   The delay in milliseconds between attempts.
+     * @param viewId               The ID of the view on which to perform the action.
+     * @param action               The action to be performed.
+     * @param maxAttempts          The maximum number of attempts for the action.
+     * @param delayBetweenAttempts The delay in milliseconds between attempts.
      */
     protected void performActionWithRetry(int viewId, ViewAction action, int maxAttempts, long delayBetweenAttempts) {
         NoMatchingViewException lastException = null;
@@ -117,10 +117,10 @@ public abstract class BaseIntentTest {
     /**
      * Performs a check on a view identified by its ID, with retry logic.
      *
-     * @param viewId                 The ID of the view to be checked.
-     * @param users            The matcher to verify the view against.
-     * @param maxAttempts            The maximum number of attempts for the check.
-     * @param delayBetweenAttempts   The delay in milliseconds between attempts.
+     * @param viewId               The ID of the view to be checked.
+     * @param users                The matcher to verify the view against.
+     * @param maxAttempts          The maximum number of attempts for the check.
+     * @param delayBetweenAttempts The delay in milliseconds between attempts.
      */
     protected void performCheckWithRetry(int viewId, Matcher<View> users, int maxAttempts, int delayBetweenAttempts) {
         NoMatchingViewException lastException = null;
@@ -139,10 +139,10 @@ public abstract class BaseIntentTest {
     /**
      * Performs a given action on a view identified by its text content, with retry logic.
      *
-     * @param text                   The text of the view on which to perform the action.
-     * @param action                 The action to be performed.
-     * @param maxAttempts            The maximum number of attempts for the action.
-     * @param delayBetweenAttempts   The delay in milliseconds between attempts.
+     * @param text                 The text of the view on which to perform the action.
+     * @param action               The action to be performed.
+     * @param maxAttempts          The maximum number of attempts for the action.
+     * @param delayBetweenAttempts The delay in milliseconds between attempts.
      */
     protected void performActionWithRetryOnText(String text, ViewAction action, int maxAttempts, long delayBetweenAttempts) {
         NoMatchingViewException lastException = null;
@@ -161,10 +161,10 @@ public abstract class BaseIntentTest {
     /**
      * Performs a check on a view identified by its text content, with retry logic.
      *
-     * @param text                   The text content of the view to be checked.
-     * @param viewMatcher            The matcher to verify the view against.
-     * @param maxAttempts            The maximum number of attempts for the check.
-     * @param delayBetweenAttempts   The delay in milliseconds between attempts.
+     * @param text                 The text content of the view to be checked.
+     * @param viewMatcher          The matcher to verify the view against.
+     * @param maxAttempts          The maximum number of attempts for the check.
+     * @param delayBetweenAttempts The delay in milliseconds between attempts.
      */
     protected void performCheckWithRetryOnText(String text, Matcher<View> viewMatcher, int maxAttempts, long delayBetweenAttempts) {
         NoMatchingViewException lastException = null;
