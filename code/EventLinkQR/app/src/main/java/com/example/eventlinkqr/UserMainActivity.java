@@ -273,6 +273,8 @@ public class UserMainActivity extends AppCompatActivity {
                             Navigation.findNavController(navController).navigate(R.id.attendeeEventFragment);
                         });
                     }
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(this, "No events found for this code", Toast.LENGTH_SHORT).show();
                 });
             }, e -> {
                 Toast.makeText(this, "Invalid QR Code", Toast.LENGTH_SHORT).show();
