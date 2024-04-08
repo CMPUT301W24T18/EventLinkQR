@@ -59,6 +59,7 @@ public class OrgEventFragment extends Fragment {
         TextView eventDate = view.findViewById(R.id.org_event_datetime);
         TextView eventCategory = view.findViewById(R.id.org_event_category);
         eventPoster = view.findViewById(R.id.org_event_poster);
+        Button viewAsAttendeeButton = view.findViewById(R.id.view_as_attendee);
 
         Toolbar orgEventToolBar = view.findViewById(R.id.org_event_toolbar);
 
@@ -134,6 +135,12 @@ public class OrgEventFragment extends Fragment {
         // When clicked, bring up the promotional QR code
         promotionalButton.setOnClickListener(v -> {
             QRCodeManager.fetchQRCode(event, QRCode.PROMOTIONAL_TYPE).addOnSuccessListener(this::setupDialog);
+        });
+
+        viewAsAttendeeButton.setOnClickListener(v -> {
+            ((UserMainActivity) requireActivity()).setCurrentEvent(event);
+            // redirect to the attendee event page
+            Navigation.findNavController(view).navigate(R.id.attendeeEventFragment);
         });
 
         // Inflate the layout for this fragment
