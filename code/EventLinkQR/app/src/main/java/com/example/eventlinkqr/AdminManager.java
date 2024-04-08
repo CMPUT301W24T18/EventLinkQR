@@ -44,7 +44,6 @@ public class AdminManager extends Manager {
                 });
     }
 
-
     /**
      * Callback interface for handling the outcome of administrative operations.
      */

@@ -6,11 +6,17 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.init;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.SystemClock;
 
 import androidx.test.espresso.action.ViewActions;
@@ -49,6 +55,8 @@ public class AttendeeIntentTest extends BaseIntentTest{
      */
     @Test
     public void testProfileInfoPersistence() throws InterruptedException {
+        init(); // For intent matching later
+
         onView(withText("Create Profile")).perform(click());
         enterProfileDetails("Test User",  "7805555555", "eventlinkqr.com");
 
@@ -81,5 +89,13 @@ public class AttendeeIntentTest extends BaseIntentTest{
         // Check if the AttendeeProfileActivity is started
         onView(ViewMatchers.withId(R.id.attendee_profile_button)) // Replace with a view ID unique to the AttendeeProfileActivity
                 .check(matches(ViewMatchers.isDisplayed()));
+
+        onView(withId(R.id.btnEditProfile)).perform(click());
+        onView(withText("Upload your image here")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.button_choose_image)).perform(click());
+
+        intended(hasAction(Intent.ACTION_GET_CONTENT));
+        intended(hasType("image/*"));
     }
 }

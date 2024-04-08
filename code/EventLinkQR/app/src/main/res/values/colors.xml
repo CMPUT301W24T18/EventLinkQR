@@ -12,4 +12,5 @@
     <color name="button_text_color">#FFFFFF</color>
     <color name="notification_heading">#0E0E0E</color>
     <color name="unreadNotification">#000000</color>
+    <color name="landing_black">#000305</color>
 </resources>
