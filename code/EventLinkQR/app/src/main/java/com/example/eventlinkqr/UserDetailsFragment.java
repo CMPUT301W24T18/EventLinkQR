@@ -19,12 +19,12 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * A Fragment subclass that displays the details of an attendee.
- * It includes functionality for fetching attendee details from Firestore
- * and deleting the attendee's data.
+ * A Fragment subclass that displays the details of a user.
+ * It includes functionality for fetching user details from Firestore
+ * and deleting the user's data.
  *
  * Usage: This fragment should be used within an activity where details of a specific
- * attendee need to be displayed and managed.
+ * user need to be displayed and managed.
  */
 public class UserDetailsFragment extends Fragment {
 
@@ -41,7 +41,7 @@ public class UserDetailsFragment extends Fragment {
     /**
      * Factory method to create a new instance of this fragment using the provided UUID.
      *
-     * @param userUuid UUID of the attendee whose details are to be displayed.
+     * @param userUuid UUID of the user whose details are to be displayed.
      * @return A new instance of fragment AttendeeDetailsFragment.
      */
     public static UserDetailsFragment newInstance(String userUuid) {

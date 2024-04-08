@@ -8,6 +8,9 @@ import com.google.firebase.firestore.Query;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
+/**
+ * manages the milestones communications between the database and the users
+ */
 public class MilestoneManager extends Manager {
 
     private static final String COLLECTION_PATH = "Milestones";

@@ -13,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * dialog fragment used to confirm the user wants to delete their profile picture
+ */
 public class ConfirmDeleteDialogFragment extends DialogFragment {
 
     private final ImageView imageView;

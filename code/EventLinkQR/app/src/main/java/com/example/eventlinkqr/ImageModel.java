@@ -1,5 +1,8 @@
 package com.example.eventlinkqr;
 
+/**
+ * used to represent an image using base 64
+ */
 public class ImageModel {
     private String base64Image;
 
