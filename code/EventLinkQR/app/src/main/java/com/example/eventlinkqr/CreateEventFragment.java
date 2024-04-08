@@ -40,7 +40,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * this class takes care of taking in the input for a new event and adding it to the data
+ * Fragment class for creating a new event or editing an existing one.
+ * This class handles user input for event details and interacts with Firebase to store event data.
  */
 public class CreateEventFragment extends Fragment implements DateTimePickerFragment.DateTimePickerListener{
 
@@ -367,6 +368,10 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
         }
     }
 
+    /**
+     * Sets the image URI and updates the UI to display the chosen poster image.
+     * @param uri The URI of the selected image.
+     */
     private void setImageUri(Uri uri){
         this.imageUri = uri;
         if(imageUri != null){

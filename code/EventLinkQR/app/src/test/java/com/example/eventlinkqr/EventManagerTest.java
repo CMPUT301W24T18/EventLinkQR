@@ -46,12 +46,18 @@ public class EventManagerTest {
     @Mock
     public Context mockContext;
 
+    /**
+     * Sets up common mock behavior used in the tests.
+     */
     @BeforeEach
     void setUp() {
         when(mockDb.getFirebaseFirestore()).thenReturn(mockFirestore);
         when(mockFirestore.collection("Events")).thenReturn(mockCollectionReference);
     }
 
+    /**
+     * Tests the check-in process to validate successful attendee check-in.
+     */
     @Test
     public void testCheckIn() {
         try (MockedStatic<DatabaseManager> mockedDbManager = mockStatic(DatabaseManager.class)) {
@@ -68,6 +74,9 @@ public class EventManagerTest {
         }
     }
 
+    /**
+     * Tests the check-in process to handle failures or exceptions.
+     */
     @Test
     public void testCheckInFailed() {
         try (MockedStatic<DatabaseManager> mockedDbManager = mockStatic(DatabaseManager.class)) {
@@ -84,6 +93,9 @@ public class EventManagerTest {
         }
     }
 
+    /**
+     * Tests the addition of a real-time snapshot listener for event data.
+     */
     @Test
     public void testAddEventSnapshotCallback() {
         try (MockedStatic<DatabaseManager> mockedDbManager = mockStatic(DatabaseManager.class)) {
@@ -95,6 +107,9 @@ public class EventManagerTest {
         }
     }
 
+    /**
+     * Tests the addition of a real-time snapshot listener for event attendees.
+     */
     @Test
     public void testAddEventAttendeeSnapshotCallback() {
         try (MockedStatic<DatabaseManager> mockedDbManager = mockStatic(DatabaseManager.class)) {
@@ -106,6 +121,9 @@ public class EventManagerTest {
         }
     }
 
+    /**
+     * Tests the addition of a real-time snapshot listener for event attendees with a filter applied.
+     */
     @Test
     public void testAddEventAttendeeSnapshotCallbackWithFilter() {
         try (MockedStatic<DatabaseManager> mockedDbManager = mockStatic(DatabaseManager.class)) {

@@ -24,6 +24,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.function.Consumer;
 
+/**
+ * Test class for QRCodeScanner.
+ * Performs unit testing on QRCodeScanner's functionality, particularly the scanning and handling of QR codes.
+ */
 @ExtendWith(MockitoExtension.class)
 public class QRCodeScannerTest {
     private QRCodeScanner qrCodeScanner;
@@ -40,6 +44,9 @@ public class QRCodeScannerTest {
     @Mock
     private Task<Barcode> mockTask;
 
+    /**
+     * Sets up the QRCodeScanner instance with mocked dependencies for testing.
+     */
     @BeforeEach
     public void setup() {
         try (MockedStatic<GmsBarcodeScanning> mockedGmsBarcodeScanning = mockStatic(GmsBarcodeScanning.class)) {
@@ -49,6 +56,10 @@ public class QRCodeScannerTest {
         }
     }
 
+    /**
+     * Tests the codeFromScan method of QRCodeScanner.
+     * Validates if the scanning process correctly interacts with success, failure, and canceled listeners.
+     */
     @Test
     public void testCodeFromScan() {
         when(mockScanner.startScan()).thenReturn(mockTask);
@@ -61,6 +72,10 @@ public class QRCodeScannerTest {
         verify(mockTask, times(1)).addOnCanceledListener(any());
     }
 
+    /**
+     * Tests the hashBarcodeText method of QRCodeScanner.
+     * Checks if the method correctly hashes a given barcode text.
+     */
     @Test
     public void testHashBarcodeText() {
         String testText = "ABC-1234-/+"; // Simulate barcode text
