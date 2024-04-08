@@ -26,13 +26,14 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.UUID;
 
 /**
- * Activity for managing an attendee's profile.
+ * Fragment for managing an attendee's profile.
  */
 public class ProfileFragment extends Fragment {
     private static final String TAG = "Profile";
@@ -59,7 +60,7 @@ public class ProfileFragment extends Fragment {
         etName = view.findViewById(R.id.etFullName);
         etPhoneNumber = view.findViewById(R.id.phoneNumberEdit);
         etHomepage = view.findViewById(R.id.homepageEdit);
-        Button btnSave = view.findViewById(R.id.btnSave);
+        FloatingActionButton btnSave = view.findViewById(R.id.btnSave);
         Button photoButton = view.findViewById(R.id.btnEditProfile);
         toggleLocation = view.findViewById(R.id.toggleLocation);
         // Set a listener for the location switch

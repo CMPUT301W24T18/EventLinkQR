@@ -14,8 +14,8 @@
         errorLine1="    private Switch toggleLocation; // Used for location permission"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/example/eventlinkqr/AttendeeProfileFragment.java"
-            line="41"
+            file="src/main/java/com/example/eventlinkqr/CreateProfile.java"
+            line="40"
             column="5"/>
     </issue>
 
@@ -25,31 +25,31 @@
         errorLine1="    private Switch toggleLocation; // Used for location permission"
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/example/eventlinkqr/CreateProfile.java"
-            line="35"
+            file="src/main/java/com/example/eventlinkqr/ProfileFragment.java"
+            line="42"
             column="5"/>
     </issue>
 
     <issue
         id="UseSwitchCompatOrMaterialXml"
         message="Use `SwitchCompat` from AppCompat or `SwitchMaterial` from Material library"
-        errorLine1="    &lt;Switch"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="83"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UseSwitchCompatOrMaterialXml"
-        message="Use `SwitchCompat` from AppCompat or `SwitchMaterial` from Material library"
-        errorLine1="    &lt;Switch"
-        errorLine2="    ^">
+        errorLine1="        &lt;Switch"
+        errorLine2="        ^">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="82"
-            column="5"/>
+            line="94"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialXml"
+        message="Use `SwitchCompat` from AppCompat or `SwitchMaterial` from Material library"
+        errorLine1="        &lt;Switch"
+        errorLine2="        ^">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="97"
+            column="9"/>
     </issue>
 
     <issue
@@ -59,7 +59,7 @@
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="build.gradle.kts"
-            line="53"
+            line="58"
             column="21"/>
     </issue>
 
@@ -70,8 +70,19 @@
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="build.gradle.kts"
-            line="59"
+            line="64"
             column="21"/>
+    </issue>
+
+    <issue
+        id="ExtraText"
+        message="Unexpected text found in layout file: &quot;&quot; />&quot;"
+        errorLine1="                app:iconTint=&quot;?attr/iconTintColor&quot;/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    &quot; />"
+        errorLine2="                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ~~~~">
+        <location
+            file="src/main/res/layout/create_event_page.xml"
+            line="167"
+            column="825"/>
     </issue>
 
     <issue
@@ -97,47 +108,25 @@
     </issue>
 
     <issue
-        id="ObsoleteLayoutParam"
-        message="Invalid layout param in a `LinearLayout`: `layout_centerHorizontal`"
-        errorLine1="        android:layout_centerHorizontal=&quot;true&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/create_profile.xml"
-            line="28"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="ObsoleteLayoutParam"
-        message="Invalid layout param in a `LinearLayout`: `layout_below`"
-        errorLine1="        android:layout_below=&quot;@id/toggleLocation&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/create_profile.xml"
-            line="93"
-            column="9"/>
-    </issue>
-
-    <issue
         id="UseCompoundDrawables"
         message="This tag and its children can be replaced by one `&lt;TextView/>` and a compound drawable"
         errorLine1="            &lt;LinearLayout"
         errorLine2="             ~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/att_event_page.xml"
-            line="75"
+            line="74"
             column="14"/>
     </issue>
 
     <issue
         id="UseCompoundDrawables"
         message="This tag and its children can be replaced by one `&lt;TextView/>` and a compound drawable"
-        errorLine1="            &lt;LinearLayout"
-        errorLine2="             ~~~~~~~~~~~~">
+        errorLine1="    &lt;LinearLayout"
+        errorLine2="     ~~~~~~~~~~~~">
         <location
-            file="src/main/res/layout/org_event_page.xml"
-            line="103"
-            column="14"/>
+            file="src/main/res/layout/notification_item.xml"
+            line="53"
+            column="6"/>
     </issue>
 
     <issue
@@ -152,36 +141,25 @@
     </issue>
 
     <issue
+        id="DisableBaselineAlignment"
+        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance"
+        errorLine1="&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2=" ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/notification_item.xml"
+            line="2"
+            column="2"/>
+    </issue>
+
+    <issue
         id="InefficientWeight"
         message="Use a `layout_height` of `0dp` instead of `wrap_content` for better performance"
         errorLine1="                android:layout_height=&quot;wrap_content&quot;"
         errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/res/layout/org_event_page.xml"
-            line="126"
+            file="src/main/res/layout/att_event_page.xml"
+            line="118"
             column="17"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.baseline_account_circle_24` appears to be unused"
-        errorLine1="&lt;vector android:height=&quot;24dp&quot; android:tint=&quot;#000000&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/baseline_account_circle_24.xml"
-            line="1"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.baseline_arrow_back_24` appears to be unused"
-        errorLine1="&lt;vector android:autoMirrored=&quot;true&quot; android:height=&quot;24dp&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/baseline_arrow_back_24.xml"
-            line="1"
-            column="1"/>
     </issue>
 
     <issue
@@ -208,12 +186,41 @@
 
     <issue
         id="UnusedResources"
+        message="The resource `R.drawable.image_violation` appears to be unused">
+        <location
+            file="src/main/res/drawable/image_violation.png"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.search_attendees_string` appears to be unused"
+        errorLine1="    &lt;string name=&quot;search_attendees_string&quot;>Search attendees&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="7"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.edit_event_string` appears to be unused"
+        errorLine1="    &lt;string name=&quot;edit_event_string&quot;>Edit event&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="10"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
         message="The resource `R.string.Home_string` appears to be unused"
         errorLine1="    &lt;string name=&quot;Home_string&quot;>Home&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="10"
+            line="11"
             column="13"/>
     </issue>
 
@@ -224,7 +231,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="11"
+            line="12"
             column="13"/>
     </issue>
 
@@ -235,7 +242,18 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="12"
+            line="13"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.enter_string` appears to be unused"
+        errorLine1="    &lt;string name=&quot;enter_string&quot;>Enter&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="15"
             column="13"/>
     </issue>
 
@@ -246,7 +264,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="23"
+            line="24"
             column="13"/>
     </issue>
 
@@ -257,7 +275,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="24"
+            line="25"
             column="13"/>
     </issue>
 
@@ -268,7 +286,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="25"
+            line="26"
             column="13"/>
     </issue>
 
@@ -279,7 +297,40 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="26"
+            line="27"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.save_publish_string` appears to be unused"
+        errorLine1="    &lt;string name=&quot;save_publish_string&quot;>Save and Publish&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="35"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.upload` appears to be unused"
+        errorLine1="    &lt;string name=&quot;upload&quot;>Upload&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="38"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.cancel` appears to be unused"
+        errorLine1="    &lt;string name=&quot;cancel&quot;>Cancel&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="40"
             column="13"/>
     </issue>
 
@@ -290,7 +341,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="40"
+            line="43"
             column="13"/>
     </issue>
 
@@ -301,7 +352,18 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="41"
+            line="44"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.delete_image` appears to be unused"
+        errorLine1="    &lt;string name=&quot;delete_image&quot;>Delete Image&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="45"
             column="13"/>
     </issue>
 
@@ -312,7 +374,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="45"
+            line="49"
             column="13"/>
     </issue>
 
@@ -323,7 +385,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="48"
+            line="52"
             column="13"/>
     </issue>
 
@@ -340,117 +402,47 @@
 
     <issue
         id="IconLocation"
+        message="Found bitmap drawable `res/drawable/image_violation.png` in densityless folder">
+        <location
+            file="src/main/res/drawable/image_violation.png"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
         message="Found bitmap drawable `res/drawable/qr_code_image.png` in densityless folder">
         <location
             file="src/main/res/drawable/qr_code_image.png"/>
     </issue>
 
     <issue
-        id="ButtonOrder"
-        message="Cancel button should be on the left (was &quot;Save | Cancel&quot;, should be &quot;Cancel | Save&quot;)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/create_profile.xml"
-            line="103"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="96"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="103"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/create_profile.xml"
-            line="96"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/create_profile.xml"
-            line="103"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/org_event_page.xml"
-            line="156"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/org_event_page.xml"
-            line="163"
-            column="10"/>
-    </issue>
-
-    <issue
         id="TextFields"
-        message="The view name (`@+id/phoneNumberEdit`) suggests this is a phone number, but it does not include &apos;`phone`&apos; in the `inputType`"
-        errorLine1="        android:inputType=&quot;textEmailAddress&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        message="The view name (`@+id/new_phone`) suggests this is a phone number, but it does not include &apos;`phone`&apos; in the `inputType`"
+        errorLine1="            android:inputType=&quot;number&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="59"
-            column="9"/>
+            file="src/main/res/layout/create_profile.xml"
+            line="71"
+            column="13"/>
         <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="54"
-            column="9"
+            file="src/main/res/layout/create_profile.xml"
+            line="66"
+            column="13"
             message="id defined here"/>
     </issue>
 
     <issue
         id="TextFields"
-        message="The view name (`@+id/new_phone`) suggests this is a phone number, but it does not include &apos;`phone`&apos; in the `inputType`"
-        errorLine1="        android:inputType=&quot;number&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        message="The view name (`@+id/phoneNumberEdit`) suggests this is a phone number, but it does not include &apos;`phone`&apos; in the `inputType`"
+        errorLine1="            android:inputType=&quot;textEmailAddress&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/res/layout/create_profile.xml"
-            line="59"
-            column="9"/>
+            file="src/main/res/layout/profile.xml"
+            line="73"
+            column="13"/>
         <location
-            file="src/main/res/layout/create_profile.xml"
-            line="54"
-            column="9"
+            file="src/main/res/layout/profile.xml"
+            line="68"
+            column="13"
             message="id defined here"/>
     </issue>
 
@@ -501,12 +493,45 @@
     <issue
         id="Autofill"
         message="Missing `autofillHints` attribute"
-        errorLine1="    &lt;EditText"
-        errorLine2="     ~~~~~~~~">
+        errorLine1="            &lt;EditText"
+        errorLine2="             ~~~~~~~~">
         <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="38"
-            column="6"/>
+            file="src/main/res/layout/create_event_page.xml"
+            line="108"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="            &lt;EditText"
+        errorLine2="             ~~~~~~~~">
+        <location
+            file="src/main/res/layout/create_event_page.xml"
+            line="124"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="            &lt;EditText"
+        errorLine2="             ~~~~~~~~">
+        <location
+            file="src/main/res/layout/create_event_page.xml"
+            line="177"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="            &lt;EditText"
+        errorLine2="             ~~~~~~~~">
+        <location
+            file="src/main/res/layout/create_event_page.xml"
+            line="208"
+            column="14"/>
     </issue>
 
     <issue
@@ -515,18 +540,7 @@
         errorLine1="    &lt;EditText"
         errorLine2="     ~~~~~~~~">
         <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="53"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="Autofill"
-        message="Missing `autofillHints` attribute"
-        errorLine1="    &lt;EditText"
-        errorLine2="     ~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
+            file="src/main/res/layout/create_notification_page.xml"
             line="68"
             column="6"/>
     </issue>
@@ -537,86 +551,42 @@
         errorLine1="    &lt;EditText"
         errorLine2="     ~~~~~~~~">
         <location
-            file="src/main/res/layout/create_event_page.xml"
-            line="38"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="Autofill"
-        message="Missing `autofillHints` attribute"
-        errorLine1="    &lt;EditText"
-        errorLine2="     ~~~~~~~~">
-        <location
-            file="src/main/res/layout/create_event_page.xml"
-            line="54"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="Autofill"
-        message="Missing `autofillHints` attribute"
-        errorLine1="    &lt;EditText"
-        errorLine2="     ~~~~~~~~">
-        <location
-            file="src/main/res/layout/create_event_page.xml"
-            line="107"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="Autofill"
-        message="Missing `autofillHints` attribute"
-        errorLine1="    &lt;EditText"
-        errorLine2="     ~~~~~~~~">
-        <location
             file="src/main/res/layout/create_notification_page.xml"
-            line="25"
+            line="82"
             column="6"/>
     </issue>
 
     <issue
         id="Autofill"
         message="Missing `autofillHints` attribute"
-        errorLine1="    &lt;EditText"
-        errorLine2="     ~~~~~~~~">
-        <location
-            file="src/main/res/layout/create_notification_page.xml"
-            line="36"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="Autofill"
-        message="Missing `autofillHints` attribute"
-        errorLine1="    &lt;EditText"
-        errorLine2="     ~~~~~~~~">
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="39"
-            column="6"/>
+            line="51"
+            column="10"/>
     </issue>
 
     <issue
         id="Autofill"
         message="Missing `autofillHints` attribute"
-        errorLine1="    &lt;EditText"
-        errorLine2="     ~~~~~~~~">
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="53"
-            column="6"/>
+            line="65"
+            column="10"/>
     </issue>
 
     <issue
         id="Autofill"
         message="Missing `autofillHints` attribute"
-        errorLine1="    &lt;EditText"
-        errorLine2="     ~~~~~~~~">
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="68"
-            column="6"/>
+            line="80"
+            column="10"/>
     </issue>
 
     <issue
@@ -628,6 +598,50 @@
             file="src/main/res/layout/fragment_enter_pin.xml"
             line="7"
             column="6"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="52"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="67"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="82"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_notification_detail.xml"
+            line="46"
+            column="14"/>
     </issue>
 
     <issue
@@ -670,7 +684,7 @@
         errorLine2="                 ~~~~~~~~~">
         <location
             file="src/main/res/layout/att_event_page.xml"
-            line="60"
+            line="59"
             column="18"/>
     </issue>
 
@@ -681,30 +695,19 @@
         errorLine2="                 ~~~~~~~~~">
         <location
             file="src/main/res/layout/att_event_page.xml"
-            line="80"
+            line="79"
             column="18"/>
     </issue>
 
     <issue
         id="ContentDescription"
         message="Missing `contentDescription` attribute on image"
-        errorLine1="    &lt;ImageView"
-        errorLine2="     ~~~~~~~~~">
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
         <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="17"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="    &lt;ImageView"
-        errorLine2="     ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/create_profile.xml"
-            line="18"
-            column="6"/>
+            file="src/main/res/layout/create_event_page.xml"
+            line="75"
+            column="18"/>
     </issue>
 
     <issue
@@ -713,9 +716,64 @@
         errorLine1="        &lt;ImageView"
         errorLine2="         ~~~~~~~~~">
         <location
-            file="src/main/res/layout/fragment_image_upload.xml"
+            file="src/main/res/layout/create_profile.xml"
             line="24"
             column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/events_content.xml"
+            line="9"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;com.google.android.material.floatingactionbutton.FloatingActionButton"
+        errorLine2="     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/events_tab.xml"
+            line="18"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_image_upload.xml"
+            line="49"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageButton"
+        errorLine2="             ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_image_upload.xml"
+            line="72"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;com.google.android.material.floatingactionbutton.FloatingActionButton"
+        errorLine2="     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_image_upload.xml"
+            line="83"
+            column="6"/>
     </issue>
 
     <issue
@@ -732,78 +790,67 @@
     <issue
         id="ContentDescription"
         message="Missing `contentDescription` attribute on image"
-        errorLine1="            &lt;ImageView"
-        errorLine2="             ~~~~~~~~~">
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
         <location
-            file="src/main/res/layout/org_event_page.xml"
-            line="62"
-            column="14"/>
+            file="src/main/res/layout/notification_item.xml"
+            line="69"
+            column="10"/>
     </issue>
 
     <issue
         id="ContentDescription"
         message="Missing `contentDescription` attribute on image"
-        errorLine1="                &lt;ImageView"
-        errorLine2="                 ~~~~~~~~~">
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
         <location
-            file="src/main/res/layout/org_event_page.xml"
-            line="88"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="                &lt;ImageView"
-        errorLine2="                 ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/org_event_page.xml"
-            line="108"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="    &lt;ImageView"
-        errorLine2="     ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/org_events_content.xml"
-            line="8"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="    &lt;ImageView"
-        errorLine2="     ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/view_qr_layout.xml"
-            line="7"
-            column="6"/>
+            file="src/main/res/layout/profile.xml"
+            line="25"
+            column="10"/>
     </issue>
 
     <issue
         id="SetTextI18n"
         message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
-        errorLine1="            checkedInCountView.setText(&quot;Total checked in attendees: &quot; + count);"
-        errorLine2="                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="        checkinCount.setText(&quot;Check-in count: &quot; + attendee.getCheckInCount());"
+        errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/example/eventlinkqr/AttendeesPage.java"
-            line="84"
-            column="40"/>
+            file="src/main/java/com/example/eventlinkqr/AttendeeArrayAdapter.java"
+            line="44"
+            column="30"/>
     </issue>
 
     <issue
         id="SetTextI18n"
         message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="            checkedInCountView.setText(&quot;Total checked in attendees: &quot; + count);"
-        errorLine2="                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="        checkinCount.setText(&quot;Check-in count: &quot; + attendee.getCheckInCount());"
+        errorLine2="                             ~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/com/example/eventlinkqr/AttendeesPage.java"
-            line="84"
-            column="40"/>
+            file="src/main/java/com/example/eventlinkqr/AttendeeArrayAdapter.java"
+            line="44"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="        pageTitle.setText(&quot;Create event&quot;);"
+        errorLine2="                          ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/example/eventlinkqr/CreateEventFragment.java"
+            line="105"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="            pageTitle.setText(&quot;Edit event&quot;);"
+        errorLine2="                              ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/example/eventlinkqr/CreateEventFragment.java"
+            line="140"
+            column="31"/>
     </issue>
 
     <issue
@@ -853,286 +900,209 @@
     <issue
         id="HardcodedText"
         message="Hardcoded string &quot;Notification Title&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Notification Title&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="                android:text=&quot;Notification Title&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/activity_notification_detail.xml"
-            line="32"
-            column="9"/>
+            line="58"
+            column="17"/>
     </issue>
 
     <issue
         id="HardcodedText"
         message="Hardcoded string &quot;Notification Message&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Notification Message&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="                android:text=&quot;Notification Message&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/activity_notification_detail.xml"
-            line="40"
-            column="9"/>
+            line="68"
+            column="17"/>
     </issue>
 
     <issue
         id="HardcodedText"
-        message="Hardcoded string &quot;Sign Up&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Sign Up&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        message="Hardcoded string &quot;TextView&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;TextView&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/att_event_page.xml"
-            line="125"
-            column="9"/>
+            line="112"
+            column="21"/>
     </issue>
 
     <issue
         id="HardcodedText"
-        message="Hardcoded string &quot;Profile&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Profile&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        message="Hardcoded string &quot;Check-in count: &quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;Check-in count: &quot;>"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="14"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Edit Profile Photo&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Edit Profile Photo&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="28"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Full Name&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Full Name&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="36"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Allison TheRock Johnson&quot;, should use `@string` resource"
-        errorLine1="        android:hint=&quot;Allison TheRock Johnson&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="43"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Phone Number&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Phone Number&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="51"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;1233456789&quot;, should use `@string` resource"
-        errorLine1="        android:hint=&quot;1233456789&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="58"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Homepage&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Homepage&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="66"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Enter Homepage Link&quot;, should use `@string` resource"
-        errorLine1="        android:hint=&quot;Enter Homepage Link&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="73"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Location Permission&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Location Permission&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="81"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Save&quot;, should use `@string` resource"
-        errorLine1="            android:text=&quot;Save&quot; />"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="101"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Reset Data&quot;, should use `@string` resource"
-        errorLine1="            android:text=&quot;Reset Data&quot; />"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendee_profile.xml"
-            line="108"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Total checked in attendees&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Total checked in attendees&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/attendees_page.xml"
-            line="44"
+            file="src/main/res/layout/attendees_content.xml"
+            line="20"
             column="9"/>
     </issue>
 
     <issue
         id="HardcodedText"
         message="Hardcoded string &quot;Select&quot;, should use `@string` resource"
-        errorLine1="        android:hint=&quot;Select&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="                android:hint=&quot;Select&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_event_page.xml"
-            line="92"
+            line="162"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Set Attendee limit&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Set Attendee limit&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/create_event_page.xml"
+            line="204"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Optional&quot;, should use `@string` resource"
+        errorLine1="                android:hint=&quot;Optional&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/create_event_page.xml"
+            line="213"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Announcement Heading&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;Announcement Heading&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/create_notification_page.xml"
+            line="53"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Announcement Body&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;Announcement Body&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/create_notification_page.xml"
+            line="64"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Send Announcement&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;Send Announcement&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/create_notification_page.xml"
+            line="101"
             column="9"/>
     </issue>
 
     <issue
         id="HardcodedText"
         message="Hardcoded string &quot;Create Profile&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Create Profile&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="            android:text=&quot;Create Profile&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="15"
-            column="9"/>
+            line="21"
+            column="13"/>
     </issue>
 
     <issue
         id="HardcodedText"
-        message="Hardcoded string &quot;Edit Profile Photo&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Edit Profile Photo&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        message="Hardcoded string &quot;Change Profile Photo&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Change Profile Photo&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="30"
-            column="9"/>
+            line="42"
+            column="13"/>
     </issue>
 
     <issue
         id="HardcodedText"
         message="Hardcoded string &quot;Full Name&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Full Name&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="            android:text=&quot;Full Name&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="37"
-            column="9"/>
+            line="49"
+            column="13"/>
     </issue>
 
     <issue
         id="HardcodedText"
-        message="Hardcoded string &quot;Allison TheRock Johnson&quot;, should use `@string` resource"
-        errorLine1="        android:hint=&quot;Allison TheRock Johnson&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        message="Hardcoded string &quot;Your Name&quot;, should use `@string` resource"
+        errorLine1="            android:hint=&quot;Your Name&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="44"
-            column="9"/>
+            line="56"
+            column="13"/>
     </issue>
 
     <issue
         id="HardcodedText"
         message="Hardcoded string &quot;Phone Number&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Phone Number&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="            android:text=&quot;Phone Number&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="51"
-            column="9"/>
+            line="63"
+            column="13"/>
     </issue>
 
     <issue
         id="HardcodedText"
         message="Hardcoded string &quot;1233456789&quot;, should use `@string` resource"
-        errorLine1="        android:hint=&quot;1233456789&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="            android:hint=&quot;1233456789&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="58"
-            column="9"/>
+            line="70"
+            column="13"/>
     </issue>
 
     <issue
         id="HardcodedText"
         message="Hardcoded string &quot;Homepage&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Homepage&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="            android:text=&quot;Homepage&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="66"
-            column="9"/>
+            line="78"
+            column="13"/>
     </issue>
 
     <issue
         id="HardcodedText"
         message="Hardcoded string &quot;Enter Homepage Link&quot;, should use `@string` resource"
-        errorLine1="        android:hint=&quot;Enter Homepage Link&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="            android:hint=&quot;Enter Homepage Link&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="73"
-            column="9"/>
+            line="85"
+            column="13"/>
     </issue>
 
     <issue
         id="HardcodedText"
         message="Hardcoded string &quot;Location Permission&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Location Permission&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="            android:text=&quot;Location Permission&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="80"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Save&quot;, should use `@string` resource"
-        errorLine1="            android:text=&quot;Save&quot; />"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/create_profile.xml"
-            line="101"
+            line="92"
             column="13"/>
     </issue>
 
@@ -1143,7 +1113,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/create_profile.xml"
-            line="108"
+            line="109"
             column="13"/>
     </issue>
 
@@ -1479,24 +1449,13 @@
 
     <issue
         id="HardcodedText"
-        message="Hardcoded string &quot;Attendee Notifications&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Attendee Notifications&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/notifications_page.xml"
-            line="13"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="HardcodedText"
-        message="Hardcoded string &quot;Promote&quot;, should use `@string` resource"
-        errorLine1="            android:text=&quot;Promote&quot; />"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        message="Hardcoded string &quot;TextView&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;TextView&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/org_event_page.xml"
-            line="35"
-            column="13"/>
+            line="165"
+            column="21"/>
     </issue>
 
     <issue
@@ -1545,13 +1504,123 @@
 
     <issue
         id="HardcodedText"
-        message="Hardcoded string &quot;Send Notification&quot;, should use `@string` resource"
-        errorLine1="        android:text=&quot;Send Notification&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        message="Hardcoded string &quot;Create Announcement&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;Create Announcement&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/organizer_notification_display.xml"
             line="81"
             column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Profile&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Profile&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="22"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Change Profile Photo&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Change Profile Photo&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="42"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Full Name&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Full Name&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="50"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Your Name&quot;, should use `@string` resource"
+        errorLine1="            android:hint=&quot;Your Name&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="57"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Phone Number&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Phone Number&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="65"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;1233456789&quot;, should use `@string` resource"
+        errorLine1="            android:hint=&quot;1233456789&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="72"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Homepage&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Homepage&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="80"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Enter Homepage Link&quot;, should use `@string` resource"
+        errorLine1="            android:hint=&quot;Enter Homepage Link&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="87"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Location Permission&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Location Permission&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="95"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Reset Data&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Reset Data&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/profile.xml"
+            line="112"
+            column="13"/>
     </issue>
 
     <issue
@@ -1577,14 +1646,25 @@
     </issue>
 
     <issue
-        id="RelativeOverlap"
-        message="`@id/publish_button` can overlap `@id/choose_qr_button` if @string/choose_make_qr_string, @string/save_publish_string grow due to localized text expansion"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
+        id="RtlSymmetry"
+        message="When you define `paddingStart` you should probably also define `paddingEnd` for right-to-left symmetry"
+        errorLine1="                    android:paddingStart=&quot;10dp&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/res/layout/create_event_page.xml"
-            line="141"
-            column="10"/>
+            file="src/main/res/layout/att_event_page.xml"
+            line="111"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="RtlSymmetry"
+        message="When you define `paddingStart` you should probably also define `paddingEnd` for right-to-left symmetry"
+        errorLine1="    android:paddingStart=&quot;8dp&quot;>"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/events_content.xml"
+            line="7"
+            column="5"/>
     </issue>
 
     <issue
@@ -1611,6 +1691,28 @@
 
     <issue
         id="RtlHardcoded"
+        message="Consider replacing `android:layout_marginLeft` with `android:layout_marginStart=&quot;20dp&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_marginLeft=&quot;20dp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/create_notification_page.xml"
+            line="51"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:layout_marginLeft` with `android:layout_marginStart=&quot;20dp&quot;` to better support right-to-left layouts"
+        errorLine1="        android:layout_marginLeft=&quot;20dp&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/create_notification_page.xml"
+            line="62"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
         message="Consider replacing `android:paddingLeft` with `android:paddingStart=&quot;100dp&quot;` to better support right-to-left layouts"
         errorLine1="            android:paddingLeft=&quot;100dp&quot;"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
@@ -1629,6 +1731,17 @@
             file="src/main/res/layout/fragment_event_details.xml"
             line="20"
             column="13"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:drawableLeft` with `android:drawableStart=&quot;@drawable/baseline_arrow_back_24&quot;` to better support right-to-left layouts"
+        errorLine1="        android:drawableLeft=&quot;@drawable/baseline_arrow_back_24&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/fragment_image_upload.xml"
+            line="14"
+            column="9"/>
     </issue>
 
 </issues>
