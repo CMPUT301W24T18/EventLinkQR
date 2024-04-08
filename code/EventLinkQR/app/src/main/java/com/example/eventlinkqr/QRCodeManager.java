@@ -56,6 +56,11 @@ public class QRCodeManager extends Manager {
         });
     }
 
+    /**
+     * Retrieves the CollectionReference for the QRCode collection in Firestore.
+     *
+     * @return CollectionReference for the QRCode collection.
+     */
     private static CollectionReference getCollection() {
         return getFirebase().collection(COLLECTION_PATH);
     }

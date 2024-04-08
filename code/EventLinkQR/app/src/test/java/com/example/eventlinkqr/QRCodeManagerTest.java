@@ -24,6 +24,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
 
+/**
+ * Test class for QRCodeManager.
+ * This class conducts unit tests on QRCodeManager's methods, focusing primarily on the functionality to add QR codes to the database.
+ */
 @ExtendWith(MockitoExtension.class)
 public class QRCodeManagerTest {
     @Mock
@@ -38,12 +42,19 @@ public class QRCodeManagerTest {
     @Mock
     public FirebaseFirestore mockFirestore;
 
+    /**
+     * Sets up the mocked instances of Firestore and CollectionReference for each test.
+     */
     @BeforeEach
     void setUp() {
         when(mockDb.getFirebaseFirestore()).thenReturn(mockFirestore);
         when(mockFirestore.collection("QRCode")).thenReturn(mockCollectionReference);
     }
 
+    /**
+     * Tests the addQRCode method for successful addition of a QR code.
+     * Validates if the QR code is added correctly to the database and asserts the success of the task.
+     */
     @Test
     void addQRCodeTest() {
         // Note, this test was adapted from Chat GPTs suggestion, still citing it here.
@@ -73,6 +84,10 @@ public class QRCodeManagerTest {
         }
     }
 
+    /**
+     * Tests the addQRCode method for handling failure scenarios.
+     * Verifies if the task is unsuccessful when there is an exception in the process of adding a QR code.
+     */
     @Test
     public void addQrCodeFailed() {
         // Note, this test was adapted from Chat GPTs suggestion, still citing it here.

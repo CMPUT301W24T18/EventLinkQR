@@ -14,9 +14,22 @@ public class Milestone {
     private Integer value;
     private Timestamp timestamp;
 
+    /**
+     * Default constructor required for Firebase's DataSnapshot.getValue method when fetching Milestone data.
+     */
     public Milestone() {
         // Default constructor required for calls to DataSnapshot.getValue(Milestone.class)
     }
+
+    /**
+     * Constructs a Milestone with specified details.
+     *
+     * @param eventId The ID of the event associated with this milestone.
+     * @param organizerId The ID of the organizer who created the milestone.
+     * @param info Information or description of the milestone.
+     * @param value Numerical value or quantifier of the milestone.
+     * @param timestamp Timestamp indicating the creation or relevant time of the milestone.
+     */
     public Milestone(String eventId, String organizerId, String info, Integer value, Timestamp timestamp) {
         this.eventId = eventId;
         this.organizerId = organizerId;
@@ -25,6 +38,7 @@ public class Milestone {
         this.timestamp = timestamp;
     }
 
+    // Getter and setter methods below...
     public String getInfo() {
         return info;
     }

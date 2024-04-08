@@ -12,7 +12,11 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
+/**
+ * Test class for DatabaseManager.
+ * This class tests the functionality and behavior of the DatabaseManager class, particularly
+ * its initialization and interaction with Firebase services.
+ */
 @ExtendWith(MockitoExtension.class)
 public class DatabaseManagerTest {
 
@@ -21,6 +25,12 @@ public class DatabaseManagerTest {
 
     @Mock FirebaseFirestore mockFirebaseFirestore;
 
+    /**
+     * Tests the initialization of the DatabaseManager.
+     * Validates if the DatabaseManager properly initializes and retrieves instances
+     * of FirebaseDatabase and FirebaseFirestore. It uses mock objects to ensure
+     * independence from the actual Firebase services.
+     */
     @Test
     public void testDatabaseInitialization() {
         try (MockedStatic<FirebaseDatabase> mockedDatabase = mockStatic(FirebaseDatabase.class);

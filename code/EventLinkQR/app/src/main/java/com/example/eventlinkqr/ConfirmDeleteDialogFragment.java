@@ -14,21 +14,38 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 /**
- * dialog fragment used to confirm the user wants to delete their profile picture
+ * This class represents a dialog fragment for confirming the deletion of an image.
+ * It displays a dialog with options to delete or cancel the action.
  */
 public class ConfirmDeleteDialogFragment extends DialogFragment {
 
+    /**
+     * ImageView where the image is displayed.
+     */
     private final ImageView imageView;
     private final Bitmap bitmapToRestore;
     private final String uuid;
 
+    /**
+     * Constructs a new ConfirmDeleteDialogFragment with specified parameters.
+     *
+     * @param imageView        The ImageView displaying the image.
+     * @param bitmapToRestore  The Bitmap to restore if the image deletion is canceled.
+     * @param uuid             The unique identifier of the image.
+     */
     public ConfirmDeleteDialogFragment(ImageView imageView, Bitmap bitmapToRestore, String uuid) {
         this.imageView = imageView;
         this.bitmapToRestore = bitmapToRestore;
         this.uuid = uuid;
     }
 
-
+    /**
+     * Called to create the dialog.
+     * Sets up the dialog with a message, positive button for deleting the image, and negative button for canceling the action.
+     *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
+     * @return The newly created Dialog instance.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

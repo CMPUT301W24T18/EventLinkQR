@@ -23,6 +23,10 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * Test class for ImageManager.
+ * Performs unit testing for methods in ImageManager, focusing on interactions with Firebase Firestore and image processing.
+ */
 @ExtendWith(MockitoExtension.class)
 public class ImageManagerTest {
     @Mock
@@ -36,6 +40,10 @@ public class ImageManagerTest {
     @Mock
     private Context mockContext;
 
+    /**
+     * Tests the creation and functionality of ImageManager.
+     * Validates the process of uploading an image to Firestore and handling the task callbacks.
+     */
     @Test
     public void testCreateImageManager() {
         try(MockedStatic<FirebaseFirestore> mockedFirestore = mockStatic(FirebaseFirestore.class);
