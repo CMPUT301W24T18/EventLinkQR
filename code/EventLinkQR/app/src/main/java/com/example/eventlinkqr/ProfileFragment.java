@@ -42,7 +42,6 @@ public class ProfileFragment extends Fragment {
     private Switch toggleLocation; // Used for location permission
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private String uuid; // Unique identifier for the attendee
-    private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
     private ImageView preview;
     private Bitmap deterministicBitmap;
 

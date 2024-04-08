@@ -47,7 +47,7 @@ public class CreateEventFragment extends Fragment implements DateTimePickerFragm
     private String customQRString;
     private String customPromotionalQRString;
     private MaterialButton dateButton;
-    Timestamp timestamp;
+    private Timestamp timestamp;
     private ImageView posterImage;
     private Uri imageUri;
     private ImageButton clearPoster;
