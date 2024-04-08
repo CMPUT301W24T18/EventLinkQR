@@ -2,7 +2,6 @@ package com.example.eventlinkqr;
 
 
 import com.google.firebase.Timestamp;
-import java.util.Date;
 /**
  * Milestone class to keep track of the milestones that the user has reached
  * and to provide a way to add a milestone to the database.
