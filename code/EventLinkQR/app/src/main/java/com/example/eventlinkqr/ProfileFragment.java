@@ -33,7 +33,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.UUID;
 
 /**
- * Fragment for managing an attendee's profile.
+ * Fragment for managing an user's profile.
  */
 public class ProfileFragment extends Fragment {
     private static final String TAG = "Profile";
@@ -41,8 +41,7 @@ public class ProfileFragment extends Fragment {
     private EditText etName, etPhoneNumber, etHomepage;
     private Switch toggleLocation; // Used for location permission
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private String uuid; // Unique identifier for the attendee
-    private AttendeeArrayAdapter attendeeArrayAdapter; // Adapter for managing attendees
+    private String uuid; // Unique identifier for the user
     private ImageView preview;
     private Bitmap deterministicBitmap;
 
@@ -122,7 +121,7 @@ public class ProfileFragment extends Fragment {
 
     /**
      * Fetches the current FCM token. Upon successful retrieval, calls {@code saveProfile} to save the
-     * attendee's profile data along with the token.
+     * user's profile data along with the token.
      */
     private void fetchAndUpdateFCMToken() {
         FirebaseMessaging.getInstance().getToken()
@@ -150,7 +149,7 @@ public class ProfileFragment extends Fragment {
         Boolean locationEnabled = toggleLocation.isChecked();
 
 
-        User attendee = new User(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
+        User user = new User(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
 
         // Validate name is not null or empty
         if (name == null || name.trim().isEmpty()) {
@@ -167,7 +166,7 @@ public class ProfileFragment extends Fragment {
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users").document(uuid).set(attendee)
+        db.collection("Users").document(uuid).set(user)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(requireActivity(), "Profile Saved", Toast.LENGTH_SHORT).show();
                     redirectToMainActivity();
@@ -185,21 +184,21 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * Loads an attendee's profile from Firestore based on the provided UUID.
-     * @param uuid The unique identifier for the attendee.
+     * Loads an user's profile from Firestore based on the provided UUID.
+     * @param uuid The unique identifier for the user.
      */
     private void loadProfile(String uuid) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Users").document(uuid).get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    User attendee = documentSnapshot.toObject(User.class);
+                    User user = documentSnapshot.toObject(User.class);
 
                     Log.d("uuid added", "here");
-                    if (attendee != null) {
-                        etName.setText(attendee.getName());
-                        etPhoneNumber.setText(attendee.getPhone_number());
-                        etHomepage.setText(attendee.getHomepage());
-                        toggleLocation.setChecked(attendee.getLocation_enabled());
+                    if (user != null) {
+                        etName.setText(user.getName());
+                        etPhoneNumber.setText(user.getPhone_number());
+                        etHomepage.setText(user.getHomepage());
+                        toggleLocation.setChecked(user.getLocation_enabled());
                     }
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Error loading profile", e));

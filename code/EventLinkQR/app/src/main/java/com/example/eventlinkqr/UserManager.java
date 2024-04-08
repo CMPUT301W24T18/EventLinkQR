@@ -8,16 +8,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.function.Consumer;
 
 /**
- * Manages operations related to attendees in the database
+ * Manages operations related to users in the database
  */
 public class UserManager extends Manager {
     /**
-     * The Firestore collection path for attendees
+     * The Firestore collection path for users
      */
     private static final String COLLECTION_PATH = "Users";
 
     /**
-     * Provides a reference to the Firestore collection containing attendee data.
+     * Provides a reference to the Firestore collection containing user data.
      *
      * @return A reference to the Firestore 'Users' collection.
      */
@@ -45,7 +45,7 @@ public class UserManager extends Manager {
     }
 
     /**
-     *  Given a UUID, retrieve the attendee object from the database
+     *  Given a UUID, retrieve the user object from the database
      */
     public static void getUser(String uuid, Consumer<User> callback) {
         getCollection().document(uuid).get().addOnSuccessListener(documentSnapshot -> {

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +17,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 /**
- * Class that creates the organizer view and keeps track of events
+ * Class that displays the list of attendees for an event
  */
 //https://www.youtube.com/watch?v=LXl7D57fgOQ
 public class AttendeesPage extends Fragment  {
@@ -42,7 +41,6 @@ public class AttendeesPage extends Fragment  {
         event = ((UserMainActivity) requireActivity()).getCurrentEvent();
 
         // the tool bar on top of the page
-        /** the toolbar for the page*/
         Toolbar orgAttendeesToolbar = view.findViewById(R.id.org_attendees_tool_bar);
 
         // the tab layout that will allow to navigate though  all three lists of attendees

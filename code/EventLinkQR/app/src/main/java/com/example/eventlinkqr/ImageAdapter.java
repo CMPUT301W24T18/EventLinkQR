@@ -13,6 +13,9 @@ import androidx.annotation.Nullable;
 //import com.example.yourapp.R;
 import java.util.List;
 
+/**
+ * This class adapts a list of images to display them to the admin
+ */
 public class ImageAdapter extends ArrayAdapter<ImageModel> {
     private int resourceLayout;
 
