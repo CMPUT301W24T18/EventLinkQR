@@ -53,8 +53,8 @@ public class HomePage extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // the tab layout that will allow to navigate though  all three lists of attendees
-        TabLayout attendeesTabLayout = view.findViewById(R.id.events_tab_layout);
+        // the tab layout that will allow to navigate though  all three lists of events
+        TabLayout eventsTabLayout = view.findViewById(R.id.events_tab_layout);
 
         // view pager that allows to swipe across the tabs
         ViewPager2 eventsViewpager = view.findViewById(R.id.events_view_pager);
@@ -63,7 +63,7 @@ public class HomePage extends Fragment {
         eventsViewpager.setAdapter(pagerAdapter);
 
         // Connect TabLayout with ViewPager2
-        new TabLayoutMediator(attendeesTabLayout, eventsViewpager,
+        new TabLayoutMediator(eventsTabLayout, eventsViewpager,
                 (tab, position) -> tab.setText(TAB_TITLES[position])
         ).attach();
     }

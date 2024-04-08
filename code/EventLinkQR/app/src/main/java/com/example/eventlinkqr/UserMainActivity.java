@@ -25,7 +25,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * Main activity class for attendees in the event management application.
+ * Main activity class for users in the event management application.
  */
 public class UserMainActivity extends AppCompatActivity {
 
@@ -62,7 +62,7 @@ public class UserMainActivity extends AppCompatActivity {
         // Initialize scanner to work from this activity
         scanner = new QRCodeScanner(this);
 
-        // Set the content view to the attendee main layout
+        // Set the content view to the user main layout
         setContentView(R.layout.main_layout);
 
         // Initialize UI components
@@ -135,13 +135,13 @@ public class UserMainActivity extends AppCompatActivity {
                         Toast.makeText(UserMainActivity.this, "About to Enter Admin Mode", Toast.LENGTH_SHORT).show();
                     } else if (clickCount == 0) {
 
-                        UserManager.getUser(attUUID, attendee -> {
+                        UserManager.getUser(attUUID, user -> {
 
-                            System.out.println(attendee.isAdmin());
-                            System.out.println(attendee.getUuid());
-                            System.out.println(attendee.getFcmToken());
+                            System.out.println(user.isAdmin());
+                            System.out.println(user.getUuid());
+                            System.out.println(user.getFcmToken());
 
-                            if(attendee != null && attendee.isAdmin()) {
+                            if(user != null && user.isAdmin()) {
                                 startActivity(new Intent(UserMainActivity.this, AdmMainActivity.class));
                             } else {
                                 startActivity(new Intent(UserMainActivity.this, EnterPinActivity.class));
@@ -243,8 +243,8 @@ public class UserMainActivity extends AppCompatActivity {
                         SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
                         String uuid = prefs.getString("UUID", null);
 
-                        UserManager.getUser(uuid, attendee -> {
-                            if(attendee.getLocation_enabled()) {
+                        UserManager.getUser(uuid, user -> {
+                            if(user.getLocation_enabled()) {
                                 getLastLocation(location -> {
                                     EventManager.isSignedUp(uuid, code.getEventId(), isSignedUp -> {
                                         // Check if the user isn't signed up, check if there is space for the user to sign up first

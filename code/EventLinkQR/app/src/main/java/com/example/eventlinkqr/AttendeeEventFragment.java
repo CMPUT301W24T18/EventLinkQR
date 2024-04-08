@@ -16,11 +16,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
-import java.util.function.Consumer;
-
 /**
  * A {@link Fragment} subclass responsible for displaying an event's details from the perspective
  * of an attendee. This fragment allows attendees to view event information and sign up for the event.

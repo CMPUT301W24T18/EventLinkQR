@@ -39,7 +39,7 @@ public class CreateProfile extends Fragment {
     private EditText etName, etPhoneNumber, etHomepage;
     private Switch toggleLocation; // Used for location permission
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private String uuid; // Unique identifier for the attendee\
+    private String uuid; // Unique identifier for the user\
     private ImageView image;
 
     @Override
@@ -139,9 +139,9 @@ public class CreateProfile extends Fragment {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("UUID", uuid);
             editor.apply();
-            User attendee = new User(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
+            User user = new User(uuid, name, phoneNumber, homepage, fcmToken, locationEnabled, false);
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("Users").document(uuid).set(attendee)
+            db.collection("Users").document(uuid).set(user)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(requireActivity(), "Profile Saved", Toast.LENGTH_SHORT).show();
                         redirectToMainActivity();
@@ -152,7 +152,7 @@ public class CreateProfile extends Fragment {
 
     /**
      * Fetches the current FCM token. Upon successful retrieval, calls {@code saveProfile} to save the
-     * attendee's profile data along with the token.
+     * user's profile data along with the token.
      */
     private void fetchAndUpdateFCMToken() {
         FirebaseMessaging.getInstance().getToken()
